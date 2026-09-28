@@ -13,7 +13,7 @@ function isLocalApp(): boolean {
 export async function verifyTurnstile(input: { token?: unknown; remoteIp?: string | null }): Promise<void> {
   const secret = process.env.TURNSTILE_SECRET_KEY?.trim();
   if (!secret) {
-    if (isLocalApp()) return;
+    if (isLocalApp() || process.env.ALLOW_SIGNUP_WITHOUT_TURNSTILE === "true") return;
     throw new Error("Turnstile is not configured.");
   }
   const token = typeof input.token === "string" && input.token.trim() ? input.token.trim() : undefined;
