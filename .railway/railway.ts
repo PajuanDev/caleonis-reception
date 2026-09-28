@@ -1,13 +1,10 @@
-// LobbyStack platform infrastructure (staging and production). Secrets remain in Railway via preserve().
+// Caleonis Reception infrastructure (staging and production). Secrets remain in Railway via preserve().
 import { bucket, database, defineRailway, github, image, preserve, project, service, volume } from "railway/iac";
 
 export default defineRailway((ctx) => {
-  if (ctx.projectId !== "af0a130e-7b02-4fc0-94ef-b0ac45a0a0a6" || !["staging", "production"].includes(ctx.environment)) {
-    throw new Error("This infrastructure definition manages only the lobbystack staging or production environment.");
-  }
   const production = ctx.environment === "production";
-  const productionSource = production ? github("lobbystack/lobbystack", { branch: "main", checkSuites: true }) : undefined;
-  const stagingAdminUrl = "https://admin-staging-7e92.up.railway.app";
+  const source = github("PajuanDev/caleonis-reception", { branch: "main", checkSuites: false });
+  const region = "europe-west4-drams3a";
   // Watch paths (gitignore-style, anchored at the repo root) so a service only
   // redeploys when its app, shared workspace packages, or build inputs change.
   const sharedWatchPatterns = ["/package.json", "/pnpm-lock.yaml", "/pnpm-workspace.yaml", "/.npmrc", "/tsconfig.base.json", "/packages/**"];
@@ -20,28 +17,28 @@ export default defineRailway((ctx) => {
     OTEL_EXPORTER_OTLP_HEADERS: preserve(),
     SERVICE_VERSION: preserve(),
   };
-  const Redis = database(production ? "Redis-production" : "Redis", "redis", { image: "redis:7-alpine", region: "us-east4-eqdc4a", defaultMountPath: "/data" });
+  const Redis = database(production ? "Redis-production" : "Redis", "redis", { image: "redis:7-alpine", region, defaultMountPath: "/data" });
   Redis.deploy = { startCommand: "sh -c 'exec redis-server --bind :: 0.0.0.0 --appendonly yes --maxmemory-policy noeviction --requirepass \"$REDIS_PASSWORD\"'", ...(production ? {} : { sleepApplication: true }) };
   Redis.networking = { privateNetworkEndpoint: "redis" };
-  const postgresVolume = volume(production ? "postgres-volume-production" : "postgres-volume", { alerts: { usage: { "100": {}, "80": {}, "95": {} } }, allowOnlineResize: true, region: "us-east4-eqdc4a", sizeMB: 5000 });
+  const postgresVolume = volume(production ? "postgres-volume-production" : "postgres-volume", { alerts: { usage: { "100": {}, "80": {}, "95": {} } }, allowOnlineResize: true, region, sizeMB: 5000 });
   // Staging's existing database-owned volume already matches this resource name.
   // Production owns `redis-production-volume`; declaring another volume there
   // would create an unattached duplicate named `redis-volume-production`.
   const redisVolumes = production
     ? []
-    : [volume("redis-volume", { alerts: { usage: { "100": {}, "80": {}, "95": {} } }, allowOnlineResize: true, region: "us-east4-eqdc4a", sizeMB: 5000 })];
+    : [volume("redis-volume", { alerts: { usage: { "100": {}, "80": {}, "95": {} } }, allowOnlineResize: true, region, sizeMB: 5000 })];
   Redis.variables = { REDIS_PASSWORD: preserve() };
   // The database product owns its existing /data mount. Keep the staging volume
   // resource in the project, but do not manage either environment's attachment
   // here because that causes perpetual CLI drift.
-  const parityCertification = bucket(production ? "lobbystack-production" : "parity-certification", { region: "iad" });
+  const parityCertification = bucket(production ? "caleonis-reception-production" : "caleonis-reception-staging", { region: "ams" });
   const worker = service("worker", {
-    source: productionSource,
+    source,
     build: { buildEnvironment: "V3", builder: "DOCKERFILE", dockerfilePath: "Dockerfile.worker", watchPatterns: [...sharedWatchPatterns, "/apps/worker/**", "/Dockerfile.worker"] },
     healthcheck: "/health/ready",
     healthcheckTimeout: 300,
     preDeploy: [],
-    replicas: { "us-east4-eqdc4a": 1 },
+    replicas: { [region]: 1 },
     deploy: { restartPolicyMaxRetries: 3, ...(production ? {} : { sleepApplication: true }) },
     env: {
       ...observability,
@@ -87,7 +84,7 @@ export default defineRailway((ctx) => {
       TWILIO_ALERT_SMS_FROM: preserve(),
       TWILIO_ALERT_API_KEY_SID: preserve(),
       TWILIO_ALERT_API_KEY_SECRET: preserve(),
-      TWILIO_STATUS_CALLBACK_URL: production ? preserve() : `${stagingAdminUrl}/api/webhooks/twilio/status`,
+      TWILIO_STATUS_CALLBACK_URL: preserve(),
       NODE_ENV: "production",
       OTP_HASH_SECRET: preserve(),
       PORT: preserve(),
@@ -104,11 +101,11 @@ export default defineRailway((ctx) => {
     },
   });
   const admin = service("admin", {
-    source: productionSource,
+    source,
     build: { buildEnvironment: "V3", builder: "DOCKERFILE", dockerfilePath: "Dockerfile.admin", watchPatterns: [...sharedWatchPatterns, "/apps/admin/**", "/scripts/copy-widget-embed.mjs", "/Dockerfile.admin"] },
     healthcheck: "/api/health/ready",
     healthcheckTimeout: 300,
-    replicas: { "us-east4-eqdc4a": 1 },
+    replicas: { [region]: 1 },
     // Serverless (app sleeping): preserve the staging setting; production stays always-on.
     deploy: { restartPolicyMaxRetries: 3, ...(production ? {} : { sleepApplication: true }) },
     env: {
@@ -137,8 +134,8 @@ export default defineRailway((ctx) => {
       NEXT_PUBLIC_POSTHOG_HOST: preserve(),
       // The landing page's demo call starts at /api/voice/live/session with no
       // signed token; the admin only accepts it for this business, from these sites.
-      WEB_CALL_PUBLIC_BUSINESS_SLUG: production ? "lobbystack-mp35s9y1" : "lobbystack",
-      ...(production ? { WEB_CALL_ALLOWED_ORIGINS: "https://lobbystack.com,https://www.lobbystack.com" } : {}),
+      WEB_CALL_PUBLIC_BUSINESS_SLUG: preserve(),
+      WEB_CALL_ALLOWED_ORIGINS: preserve(),
       OPENAI_API_KEY: preserve(),
       NUMBER_CLAIM_TOKEN_SECRET: preserve(),
       POLAR_ACCESS_TOKEN: preserve(),
@@ -155,12 +152,12 @@ export default defineRailway((ctx) => {
       TWILIO_ACCOUNT_SID: preserve(),
       TWILIO_AUTH_TOKEN: preserve(),
       TWILIO_VERIFY_SERVICE_SID: preserve(),
-      TWILIO_SMS_WEBHOOK_URL: production ? preserve() : `${stagingAdminUrl}/api/webhooks/twilio/sms`,
+      TWILIO_SMS_WEBHOOK_URL: preserve(),
       TWILIO_ALERT_ACCOUNT_SID: preserve(),
       TWILIO_ALERT_SMS_FROM: preserve(),
       TWILIO_ALERT_WEBHOOK_KEY_ID: preserve(),
       TWILIO_ALERT_WEBHOOK_SECRET: preserve(),
-      TWILIO_STATUS_CALLBACK_URL: production ? preserve() : `${stagingAdminUrl}/api/webhooks/twilio/status`,
+      TWILIO_STATUS_CALLBACK_URL: preserve(),
       NODE_ENV: "production",
       OTP_HASH_SECRET: preserve(),
       PORT: preserve(),
@@ -194,7 +191,7 @@ export default defineRailway((ctx) => {
   });
   const Postgres = service("Postgres", {
     source: image("pgvector/pgvector:pg16"),
-    replicas: { "us-east4-eqdc4a": 1 },
+    replicas: { [region]: 1 },
     networking: { privateNetworkEndpoint: "postgres" },
     volumeMounts: { "/var/lib/postgresql/data": postgresVolume },
     // Preserve the staging serverless setting; production stays always-on.
@@ -207,11 +204,12 @@ export default defineRailway((ctx) => {
     },
   });
   const migrator = service("migrator", {
+    source,
     build: { buildEnvironment: "V3", builder: "DOCKERFILE", dockerfilePath: "Dockerfile.migrator", watchPatterns: migratorWatchPatterns },
     start: production
       ? "sh -c 'node_modules/.bin/tsx dist/cli.js migrate && node_modules/.bin/tsx dist/cli.js bootstrap && node_modules/.bin/tsx dist/cli.js check && VERIFY_RLS_BEHAVIOR=true node_modules/.bin/tsx dist/cli.js verify-rls'"
       : "sh -c 'node_modules/.bin/tsx dist/cli.js migrate && node_modules/.bin/tsx dist/cli.js migrate && node_modules/.bin/tsx dist/cli.js check && VERIFY_RLS_BEHAVIOR=true node_modules/.bin/tsx dist/cli.js verify-rls'",
-    replicas: { "us-east4-eqdc4a": 1 },
+    replicas: { [region]: 1 },
     deploy: { restartPolicyType: "NEVER" },
     env: {
       LOBBYSTACK_MIGRATOR_DATABASE_URL: preserve(),
@@ -229,7 +227,7 @@ export default defineRailway((ctx) => {
     },
   });
 
-  return project("lobbystack", {
+  return project("caleonis-reception", {
     resources: [Redis, worker, admin, Postgres, migrator, postgresVolume, ...redisVolumes, parityCertification],
   });
 });
