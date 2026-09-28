@@ -65,7 +65,7 @@ const footerSections = (locale: Locale) => {
       links: [
         {
           label: copy.helpCenter,
-          href: "https://docs.lobbystack.com/introduction",
+          href: "https://docs.reception.caleonis.com/introduction",
         },
         { label: copy.blog, href: "/blog/" },
         {
@@ -83,7 +83,7 @@ const footerSections = (locale: Locale) => {
       title: copy.company,
       links: [
         { label: copy.about, href: "/about/" },
-        { label: copy.contact, href: "mailto:support@lobbystack.com" },
+        { label: copy.contact, href: "mailto:support@caleonis.com" },
         { label: copy.privacy, href: "/privacy/" },
         { label: copy.cookiePolicy, href: "/cookie-policy/" },
         { label: copy.terms, href: "/terms/" },
@@ -109,7 +109,7 @@ export function Footer({ locale = "en" }: FooterProps) {
           >
             <img
               src="/lobbystack-logo.svg"
-              alt="LobbyStack"
+              alt="Caleonis Reception"
               width={155}
               height={43}
               decoding="async"
@@ -165,7 +165,7 @@ export function Footer({ locale = "en" }: FooterProps) {
       <div className="mx-auto max-w-7xl px-6 pb-8">
         <div className="flex flex-col items-center justify-between gap-4 text-xs text-muted-foreground md:flex-row">
           <p>
-            © {new Date().getFullYear()} LobbyStack. {copy.rights}
+            © {new Date().getFullYear()} Caleonis Reception. {copy.rights}
           </p>
           <div className="flex flex-wrap justify-center gap-6">
             <button
