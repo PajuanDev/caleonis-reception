@@ -136,7 +136,7 @@ const resourceLinks = (locale: MarketingLocale) =>
     { label: labels[locale].changelog, href: "/changelog/", icon: History },
     {
       label: labels[locale].helpCenter,
-      href: "https://docs.lobbystack.com/introduction",
+      href: "https://caleonis.com",
       external: true,
       icon: BookOpen,
     },
@@ -320,8 +320,8 @@ export function LandingNavbar({ locale = "en" }: LandingNavbarProps) {
           className="flex items-center focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
         >
           <img
-            src={versionedAssetUrl("/lobbystack-logo.svg")}
-            alt="LobbyStack"
+            src={versionedAssetUrl("/brand/logo-wordmark.svg")}
+            alt="Caleonis Reception"
             width={155}
             height={43}
             decoding="async"
