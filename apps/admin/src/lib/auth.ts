@@ -134,10 +134,10 @@ async function enqueueAuthEmail(input: {
 }): Promise<void> {
   const urlHash = createHash("sha256").update(input.url).digest("hex");
   const subject = input.purpose === "verification"
-    ? "Verify your LobbyStack email"
+    ? "Verify your Caleonis Reception email"
     : input.purpose === "password_reset"
-      ? "Reset your LobbyStack password"
-      : "Confirm your LobbyStack email change";
+      ? "Reset your Caleonis Reception password"
+      : "Confirm your Caleonis Reception email change";
   await withBusinessTransaction(getEmailDatabase().db, { actorType: "system" }, async (tx) => {
     await enqueueOutbox(tx, {
       topic: "email.send",
@@ -164,7 +164,7 @@ async function enqueueEmailVerificationCode(input: { userId: string; email: stri
       payload: {
         template: "verify_email",
         to: input.email,
-        subject: "Your LobbyStack verification code",
+        subject: "Your Caleonis Reception verification code",
         variables: { code: input.otp },
       },
     });
@@ -271,14 +271,14 @@ function createAuth(adapterDatabase?: Parameters<typeof drizzleAdapter>[0]) {
             aggregateType: "auth_email",
             aggregateId: user.id,
             dedupeKey: `auth-reset-code:${user.id}:${randomUUID()}`,
-            payload: { template: "password_reset", to: email, subject: "Reset your LobbyStack password", variables: { code: otp } },
+            payload: { template: "password_reset", to: email, subject: "Reset your Caleonis Reception password", variables: { code: otp } },
           });
         });
       },
     })],
     emailAndPassword: {
       enabled: true,
-      autoSignIn: false,
+      autoSignIn: process.env.REQUIRE_EMAIL_VERIFICATION !== "true",
       requireEmailVerification: process.env.REQUIRE_EMAIL_VERIFICATION === "true",
       onExistingUserSignUp: async ({ user }, request) => {
         const { assertEmailVerificationSendAllowed, EmailVerificationRateLimitError } = await import("./email-verification-policy");
@@ -297,7 +297,7 @@ function createAuth(adapterDatabase?: Parameters<typeof drizzleAdapter>[0]) {
               topic: "email.send", aggregateType: "auth_email", aggregateId: user.id,
               dedupeKey: `auth-existing-account:${user.id}:${randomUUID()}`,
               payload: { template: "existing_account", to: user.email,
-                subject: locale === "fr" ? "Votre compte LobbyStack existe déjà" : "You already have a LobbyStack account",
+                subject: locale === "fr" ? "Votre compte Caleonis Reception existe déjà" : "You already have a Caleonis Reception account",
                 variables: { locale, signInUrl: new URL(`/${locale}/login`, base).href, resetUrl: new URL(`/${locale}/forgot-password`, base).href } },
             });
           });
@@ -320,8 +320,8 @@ function createAuth(adapterDatabase?: Parameters<typeof drizzleAdapter>[0]) {
       },
     },
     emailVerification: {
-      sendOnSignUp: true,
-      sendOnSignIn: true,
+      sendOnSignUp: process.env.REQUIRE_EMAIL_VERIFICATION === "true",
+      sendOnSignIn: process.env.REQUIRE_EMAIL_VERIFICATION === "true",
       afterEmailVerification: async (user: { id: string; email: string }) => {
         await database.db.update(users).set({ normalizedEmail: user.email.trim().toLowerCase(), updatedAt: new Date() }).where(eq(users.id, user.id));
       },
