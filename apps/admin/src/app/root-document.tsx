@@ -4,8 +4,8 @@ import type { SupportedLocale } from "@/lib/locale";
 import type { LocaleSource } from "@/lib/locale-request";
 
 export const appMetadata = {
-  title: "LobbyStack",
-  description: "AI receptionist dashboard",
+  title: "Caleonis Reception",
+  description: "Caleonis Reception — réceptionniste IA pour entreprises",
 };
 
 export function RootDocument({
