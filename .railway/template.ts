@@ -1,4 +1,4 @@
-// Declares the published LobbyStack template (railway.com/deploy/lobbystack). Railway's CLI and
+// Declares the Caleonis Reception deployment template (Railway). Railway's CLI and
 // API can't apply to a template, so make each change in the dashboard template editor and keep
 // this file in step with it. In the template, generated secrets use ${{secret(64)}}; preserve()
 // marks them here. `randomString()` in the SDK is a public hash, so it must never produce a secret.
@@ -11,14 +11,14 @@ export default defineRailway((ctx) => {
   if (ctx.projectId !== TEMPLATE_ID) {
     throw new Error(`This file declares Railway template ${TEMPLATE_ID}. Change the template in the dashboard template editor.`);
   }
-  const repo = github("lobbystack/lobbystack", { branch: "main", checkSuites: true });
-  const region = "us-east4-eqdc4a";
+  const repo = github("PajuanDev/caleonis-reception", { branch: "main", checkSuites: false });
+  const region = "europe-west4-drams3a";
   const sharedWatchPatterns = ["/package.json", "/pnpm-lock.yaml", "/pnpm-workspace.yaml", "/.npmrc", "/tsconfig.base.json", "/packages/**"];
   const migratorWatchPatterns = ["/package.json", "/pnpm-lock.yaml", "/pnpm-workspace.yaml", "/.npmrc", "/tsconfig.base.json", "/packages/db/**", "/packages/contracts/**", "/packages/telemetry/**", "/Dockerfile.migrator"];
 
   const postgresVolume = volume("postgres-data", { region, sizeMB: 5000 });
   const redisVolume = volume("redis-volume", { region, sizeMB: 1000 });
-  const storage = bucket("lobbystack-template", { region: "iad" });
+  const storage = bucket("caleonis-reception-storage", { region: "ams" });
 
   // Stock image: the migrate service creates the roles (0000_roles.sql) and sets their logins
   // (`bootstrap`). The role passwords live here so every service references one copy.
@@ -57,11 +57,11 @@ export default defineRailway((ctx) => {
   const adminOrigin = "https://${{admin.RAILWAY_PUBLIC_DOMAIN}}";
   const s3 = {
     STORAGE_PROVIDER: "s3",
-    S3_BUCKET: "${{lobbystack-template.BUCKET}}",
-    S3_ENDPOINT: "${{lobbystack-template.ENDPOINT}}",
-    S3_REGION: "${{lobbystack-template.REGION}}",
-    S3_ACCESS_KEY_ID: "${{lobbystack-template.ACCESS_KEY_ID}}",
-    S3_SECRET_ACCESS_KEY: "${{lobbystack-template.SECRET_ACCESS_KEY}}",
+    S3_BUCKET: "${{caleonis-reception-storage.BUCKET}}",
+    S3_ENDPOINT: "${{caleonis-reception-storage.ENDPOINT}}",
+    S3_REGION: "${{caleonis-reception-storage.REGION}}",
+    S3_ACCESS_KEY_ID: "${{caleonis-reception-storage.ACCESS_KEY_ID}}",
+    S3_SECRET_ACCESS_KEY: "${{caleonis-reception-storage.SECRET_ACCESS_KEY}}",
     S3_FORCE_PATH_STYLE: "false",
   };
   const runtime = {
@@ -172,7 +172,7 @@ export default defineRailway((ctx) => {
     },
   });
 
-  return project("lobbystack-template", {
+  return project("caleonis-reception", {
     resources: [Postgres, Redis, migrate, admin, worker, postgresVolume, redisVolume, storage],
   });
 });
