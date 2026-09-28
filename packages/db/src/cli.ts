@@ -4,13 +4,14 @@ import { resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
 import { config as loadEnv } from "dotenv";
-import { sql } from "drizzle-orm";
+import { and, eq, sql } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/node-postgres";
 import { migrate } from "drizzle-orm/node-postgres/migrator";
 import type { PoolClient } from "pg";
 import { initializeTelemetry, shutdownTelemetry } from "@lobbystack/telemetry/node";
 
 import { createDatabaseClient, databaseHealthCheck } from "./client";
+import { enqueueOutbox } from "./outbox";
 import {
   concurrentIndexName,
   MIGRATION_JOURNAL_TABLE,
@@ -18,7 +19,7 @@ import {
   ROLE_MIGRATION,
   SCHEMA_MIGRATIONS,
 } from "./migrations/raw-migrations";
-import { businesses, schema } from "./schema";
+import { agentRules, businessHours, businesses, knowledgeSnippets, receptionistProfiles, schema, services, staff, staffServiceAssignments } from "./schema";
 
 const repositoryRoot = fileURLToPath(new URL("../../..", import.meta.url));
 if (process.env.LOBBYSTACK_SKIP_ENV_FILES !== "true") {
@@ -100,6 +101,162 @@ async function main(): Promise<void> {
         }).onConflictDoNothing({ target: businesses.slug });
         console.log("Deterministic seed applied.");
         break;
+      case "seed-caleonis-public-demo": {
+        if (process.env.CALEONIS_PUBLIC_DEMO_SEED !== "true") {
+          throw new Error("CALEONIS_PUBLIC_DEMO_SEED=true is required.");
+        }
+        const slug = "caleonis-reception-public-demo";
+        const now = new Date();
+        const [business] = await migrator.db.insert(businesses).values({
+          slug,
+          name: "Caleonis Reception Demo",
+          timezone: "Europe/Paris",
+          defaultLocale: "fr",
+          businessType: "service_company",
+          deploymentMode: "self_hosted_standard",
+          onboardingStage: "complete",
+          websiteUrl: "https://caleonis.com",
+          status: "active",
+        }).onConflictDoUpdate({
+          target: businesses.slug,
+          set: {
+            name: "Caleonis Reception Demo",
+            timezone: "Europe/Paris",
+            defaultLocale: "fr",
+            businessType: "service_company",
+            deploymentMode: "self_hosted_standard",
+            onboardingStage: "complete",
+            websiteUrl: "https://caleonis.com",
+            status: "active",
+            updatedAt: now,
+          },
+        }).returning({ id: businesses.id, slug: businesses.slug });
+        if (!business) throw new Error("Caleonis public demo business could not be created.");
+
+        await migrator.db.insert(receptionistProfiles).values({
+          businessId: business.id,
+          greeting: "Bonjour, je suis l’assistant virtuel de Caleonis Reception. Comment puis-je vous aider ?",
+          tone: "professional",
+          summary: "Réceptionniste IA de démonstration Caleonis Reception",
+          bookingPolicy: "Pour cette démonstration, ne réserver aucun rendez-vous. Prendre un message et les coordonnées du demandeur lorsque nécessaire.",
+          voiceInstructions: "Toujours préciser clairement que vous êtes un assistant virtuel. Répondre en français par défaut, de façon concise et professionnelle. Recueillir le nom, le numéro de téléphone et le motif de l’appel lorsque cela est utile. Ne jamais inventer un prix, un horaire ou une politique. Si une information manque, proposer de prendre un message pour un humain.",
+          transferMode: "never",
+          bookingMode: "off",
+        }).onConflictDoUpdate({
+          target: receptionistProfiles.businessId,
+          set: {
+            greeting: "Bonjour, je suis l’assistant virtuel de Caleonis Reception. Comment puis-je vous aider ?",
+            tone: "professional",
+            summary: "Réceptionniste IA de démonstration Caleonis Reception",
+            bookingPolicy: "Pour cette démonstration, ne réserver aucun rendez-vous. Prendre un message et les coordonnées du demandeur lorsque nécessaire.",
+            voiceInstructions: "Toujours préciser clairement que vous êtes un assistant virtuel. Répondre en français par défaut, de façon concise et professionnelle. Recueillir le nom, le numéro de téléphone et le motif de l’appel lorsque cela est utile. Ne jamais inventer un prix, un horaire ou une politique. Si une information manque, proposer de prendre un message pour un humain.",
+            transferMode: "never",
+            bookingMode: "off",
+            updatedAt: now,
+          },
+        });
+
+        for (const dayOfWeek of [1, 2, 3, 4, 5]) {
+          await migrator.db.insert(businessHours).values({
+            businessId: business.id,
+            dayOfWeek,
+            openMinutes: 9 * 60,
+            closeMinutes: 18 * 60,
+          }).onConflictDoUpdate({
+            target: [businessHours.businessId, businessHours.dayOfWeek],
+            set: { openMinutes: 9 * 60, closeMinutes: 18 * 60, updatedAt: now },
+          });
+        }
+
+        const [service] = await migrator.db.insert(services).values({
+          businessId: business.id,
+          name: "Démonstration Caleonis Reception",
+          slug: "demonstration-caleonis-reception",
+          durationMinutes: 30,
+          description: "Présentation de Caleonis Reception.",
+          active: true,
+        }).onConflictDoUpdate({
+          target: [services.businessId, services.slug],
+          set: {
+            name: "Démonstration Caleonis Reception",
+            durationMinutes: 30,
+            description: "Présentation de Caleonis Reception.",
+            active: true,
+            updatedAt: now,
+          },
+        }).returning({ id: services.id });
+        if (!service) throw new Error("Caleonis demo service could not be created.");
+
+        let [member] = await migrator.db.select({ id: staff.id })
+          .from(staff)
+          .where(and(eq(staff.businessId, business.id), eq(staff.name, "Caleonis Reception")))
+          .limit(1);
+        if (!member) {
+          [member] = await migrator.db.insert(staff).values({
+            businessId: business.id,
+            name: "Caleonis Reception",
+            timezone: "Europe/Paris",
+            active: true,
+          }).returning({ id: staff.id });
+        }
+        if (!member) throw new Error("Caleonis demo staff row could not be created.");
+        await migrator.db.insert(staffServiceAssignments).values({
+          businessId: business.id,
+          staffId: member.id,
+          serviceId: service.id,
+        }).onConflictDoNothing();
+
+        const existingSnippet = (await migrator.db.select({ id: knowledgeSnippets.id })
+          .from(knowledgeSnippets)
+          .where(and(eq(knowledgeSnippets.businessId, business.id), eq(knowledgeSnippets.title, "Présentation Caleonis Reception")))
+          .limit(1))[0];
+        const snippetValues = {
+          content: "Caleonis Reception est un service de réceptionniste IA disponible 24h/24 et 7j/7. Il répond aux appels, renseigne les clients à partir des informations fournies par l’entreprise, qualifie les demandes, recueille les coordonnées et peut prendre des messages. Lorsque des intégrations sont configurées, il peut aussi gérer les rendez-vous et transférer certaines demandes à un humain. Cette instance est une démonstration de Caleonis Reception.",
+          tags: ["demo", "caleonis", "reception"],
+          priority: 10,
+          active: true,
+        };
+        if (existingSnippet) {
+          await migrator.db.update(knowledgeSnippets).set({ ...snippetValues, updatedAt: now }).where(eq(knowledgeSnippets.id, existingSnippet.id));
+        } else {
+          await migrator.db.insert(knowledgeSnippets).values({
+            businessId: business.id,
+            title: "Présentation Caleonis Reception",
+            ...snippetValues,
+          });
+        }
+
+        const existingRule = (await migrator.db.select({ id: agentRules.id })
+          .from(agentRules)
+          .where(and(eq(agentRules.businessId, business.id), eq(agentRules.title, "Règle de sécurité")))
+          .limit(1))[0];
+        const ruleContent = "Ne jamais prétendre être humain. Ne jamais donner de conseil médical, juridique, financier ou d’urgence. Pour toute demande non couverte par les informations disponibles, prendre un message et indiquer qu’un membre de l’équipe pourra répondre.";
+        if (existingRule) {
+          await migrator.db.update(agentRules).set({ content: ruleContent, active: true, sortOrder: 0, updatedAt: now }).where(eq(agentRules.id, existingRule.id));
+        } else {
+          await migrator.db.insert(agentRules).values({
+            businessId: business.id,
+            title: "Règle de sécurité",
+            content: ruleContent,
+            active: true,
+            sortOrder: 0,
+          });
+        }
+
+        await migrator.db.transaction(async (tx) => {
+          await enqueueOutbox(tx, {
+            topic: "snapshot.refresh",
+            businessId: business.id,
+            aggregateType: "business",
+            aggregateId: business.id,
+            dedupeKey: `caleonis-public-demo:snapshot:${Date.now()}`,
+            payload: { businessId: business.id, reason: "caleonis_public_demo_seed" },
+          });
+        });
+
+        console.log(JSON.stringify({ status: "seeded", businessId: business.id, slug: business.slug }));
+        break;
+      }
       case "reset-test":
         if (process.env.NODE_ENV === "production") {
           throw new Error("db:reset:test is disabled in production.");
