@@ -1,6 +1,6 @@
 const LANDING_SITE_URL =
   process.env.NEXT_PUBLIC_LANDING_SITE_URL?.replace(/\/$/, "") ??
-  "https://lobbystack.com";
+  "https://caleonis.com";
 
 const DEFAULT_LOCALE = "en";
 
@@ -16,7 +16,7 @@ const translatedBasePaths = new Set([
   "/blog/",
   "/changelog/",
   "/blog/ai-receptionist-vs-virtual-receptionist/",
-  "/blog/lobbystack-is-live/",
+  "/blog/caleonis-reception-is-live/",
   "/blog/ai-receptionist-savings/",
   "/blog/how-to-choose-an-ai-receptionist/",
   "/blog/build-or-buy-ai-receptionist/",
