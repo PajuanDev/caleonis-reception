@@ -1,12 +1,12 @@
-export const SITE_URL = "https://lobbystack.com"
+export const SITE_URL = "https://reception.caleonis.com"
 
-export const SITE_NAME = "LobbyStack"
+export const SITE_NAME = "Caleonis Reception"
 
 export const DEFAULT_TITLE =
-  "AI Receptionist Software for Small Businesses | LobbyStack"
+  "AI Receptionist Software for Small Businesses | Caleonis Reception"
 
 export const DEFAULT_DESCRIPTION =
-  "LobbyStack answers your business calls 24/7, books appointments into your calendar, and transfers urgent calls to your team. Open source, with a free plan."
+  "Caleonis Reception answers your business calls 24/7, books appointments into your calendar, and transfers urgent calls to your team. Open source, with a free plan."
 
 export const DEFAULT_OG_IMAGE = "/og/index.jpg"
 
@@ -21,15 +21,15 @@ export const SEARCH_PATH = "/search/"
 const BRAND_ALIASES = [
   "lobbystack",
   "Lobby Stack",
-  "LobbyStack AI receptionist",
-  "LobbyStack open-source AI receptionist",
+  "Caleonis Reception AI receptionist",
+  "Caleonis Reception open-source AI receptionist",
 ]
 
 const BRAND_SAME_AS = [
   "https://github.com/lobbystack",
   "https://github.com/lobbystack/lobbystack",
-  "https://www.capterra.com/p/10046185/LobbyStack/",
-  "https://sourceforge.net/software/product/LobbyStack/",
+  "https://www.capterra.com/p/10046185/Caleonis Reception/",
+  "https://sourceforge.net/software/product/Caleonis Reception/",
   "https://www.g2.com/products/lobbystack/reviews",
   "https://alternativeto.net/software/lobbystack/about/",
   "https://www.saashub.com/lobbystack",
@@ -143,7 +143,7 @@ export const organizationJsonLd = (): JsonLd => ({
     height: 286,
   },
   description:
-    "LobbyStack is an open-source AI receptionist platform for small businesses that answers calls, books appointments, captures caller details, and routes urgent requests.",
+    "Caleonis Reception is an open-source AI receptionist platform for small businesses that answers calls, books appointments, captures caller details, and routes urgent requests.",
   sameAs: BRAND_SAME_AS,
   knowsAbout: [
     "AI receptionist software",
@@ -155,8 +155,8 @@ export const organizationJsonLd = (): JsonLd => ({
   contactPoint: {
     "@type": "ContactPoint",
     contactType: "customer support",
-    email: "support@lobbystack.com",
-    url: "https://docs.lobbystack.com",
+    email: "support@caleonis.com",
+    url: "https://docs.reception.caleonis.com",
   },
 })
 
@@ -268,7 +268,7 @@ export const softwareApplicationJsonLd = (
   inLanguage: localeLanguage(options.locale),
   isAccessibleForFree: true,
   keywords:
-    "LobbyStack, lobbystack, AI receptionist, open-source AI receptionist, AI phone answering, appointment scheduler",
+    "Caleonis Reception, lobbystack, AI receptionist, open-source AI receptionist, AI phone answering, appointment scheduler",
   brand: {
     "@id": absoluteUrl("/#organization"),
   },
@@ -285,7 +285,7 @@ export const softwareApplicationJsonLd = (
   codeRepository: "https://github.com/lobbystack/lobbystack",
   softwareHelp: {
     "@type": "CreativeWork",
-    url: "https://docs.lobbystack.com",
+    url: "https://docs.reception.caleonis.com",
   },
   featureList: [
     "AI phone answering",
@@ -401,7 +401,7 @@ export const blogJsonLd = ({
 }: LocaleInput & { path?: string } = {}): JsonLd => {
   const name =
     locale === "fr"
-      ? "Blog et mises a jour produit LobbyStack"
+      ? "Blog et mises a jour produit Caleonis Reception"
       : "AI Receptionist Blog and Product Updates"
   const description =
     locale === "fr"
