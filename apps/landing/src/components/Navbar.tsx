@@ -60,7 +60,7 @@ const labels = {
     resources: "Resources",
     pricing: "Pricing",
     login: "Log in",
-    github: "LobbyStack on GitHub",
+    github: "Caleonis Reception on GitHub",
     tryFree: "Try for free",
     blog: "Blog",
     changelog: "Changelog",
@@ -74,7 +74,7 @@ const labels = {
     resources: "Ressources",
     pricing: "Tarifs",
     login: "Connexion",
-    github: "LobbyStack sur GitHub",
+    github: "Caleonis Reception sur GitHub",
     tryFree: "Essayer gratuitement",
     blog: "Blog",
     changelog: "Journal des changements",
@@ -135,7 +135,7 @@ const resourceLinks = (locale: Locale) =>
     { label: labels[locale].changelog, href: "/changelog/", icon: History },
     {
       label: labels[locale].helpCenter,
-      href: "https://docs.lobbystack.com/introduction",
+      href: "https://docs.reception.caleonis.com/introduction",
       external: true,
       icon: BookOpen,
     },
@@ -310,7 +310,7 @@ export function Navbar({ locale = "en" }: NavbarProps) {
         >
           <img
             src="/lobbystack-logo.svg"
-            alt="LobbyStack"
+            alt="Caleonis Reception"
             width={155}
             height={43}
             decoding="async"
