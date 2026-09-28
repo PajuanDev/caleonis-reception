@@ -1,12 +1,11 @@
-# Railway infrastructure
+# Railway infrastructure — Caleonis Reception
 
 `railway.ts` owns the resources for the LobbyStack project (`lobbystack`, id `af0a130e-7b02-4fc0-94ef-b0ac45a0a0a6`) in the `staging` and `production` environments. It rejects any other project or environment. It uses the pinned `railway/iac` software development kit (SDK), not legacy per-service Config as Code.
 
 Link the target environment before you plan:
 
 ```sh
-railway link --project af0a130e-7b02-4fc0-94ef-b0ac45a0a0a6 --environment your_environment_id
-railway config plan
+railway link --project <caleonis-reception-project-id> --environment <environment-id>\nrailway config plan
 railway config apply --yes
 railway config plan --detailed-exit-code
 ```
@@ -24,7 +23,7 @@ Change these values only when you mean to. The setting applies on the next deplo
 
 ## Production application releases
 
-The production `admin` and `worker` services use `lobbystack/lobbystack` on `main` as their source. Railway builds each affected service from its existing Dockerfile and watch patterns. `checkSuites: true` makes Railway wait for the commit’s GitHub checks before deploying it.
+The production `admin`, `worker`, and migrator services use `PajuanDev/caleonis-reception` on `main` as their source. Railway builds each affected service from its existing Dockerfile and watch patterns. `checkSuites: true` makes Railway wait for the commit’s GitHub checks before deploying it.
 
 The `migrator` deliberately has no GitHub source. On every push to `main`, the `migrate-production` job uploads that exact checkout. The job waits for the run-once deployment to succeed. Railway blocks application deployments until the migration succeeds. Railway releases application containers after the migration.
 
