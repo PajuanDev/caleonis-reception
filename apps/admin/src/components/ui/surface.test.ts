@@ -22,7 +22,10 @@ const forbiddenSurfacePatterns = [
 const componentsDirectory = fileURLToPath(new URL("../", import.meta.url));
 const sourceModules = Object.fromEntries(readdirSync(componentsDirectory, { recursive: true })
   .filter((entry): entry is string => typeof entry === "string" && /\.tsx?$/.test(entry) && !entry.includes(".test."))
-  .map((entry) => [entry === "ui/surface.tsx" ? "./surface.tsx" : entry, readFileSync(join(componentsDirectory, entry), "utf8")]));
+  .map((entry) => {
+    const normalizedEntry = entry.replaceAll("\\", "/");
+    return [normalizedEntry === "ui/surface.tsx" ? "./surface.tsx" : normalizedEntry, readFileSync(join(componentsDirectory, entry), "utf8")];
+  }));
 
 describe("surface styling", () => {
   it("keeps operator surface outlines routed through shared primitives", () => {

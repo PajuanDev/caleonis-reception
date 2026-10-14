@@ -107,6 +107,7 @@ describe("affiliate page rendering", () => {
     const text = document.body.textContent ?? "";
     for (const key of usedKeys()) expect(text.includes(key) && !(lookup(bundle, key) as string).includes(key), key).toBe(false);
     const terms = screen.getByRole("link", { name: lookup(bundle, "terms.link") as string });
-    expect(terms.getAttribute("href")).toBe(locale === "fr" ? "https://lobbystack.com/fr/terms/#affiliate-program" : "https://lobbystack.com/terms/#affiliate-program");
+    expect(terms.textContent).toBe(locale === "fr" ? "Mentions légales" : "Legal Notice");
+    expect(terms.getAttribute("href")).toBe("https://www.caleonis.com/mentions-legales/");
   });
 });

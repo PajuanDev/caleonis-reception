@@ -58,6 +58,7 @@
     "trigger": "Appel test",
     "title": "Tester votre réceptionniste IA",
     "description": "Démarrez un appel en direct dans le navigateur avec votre réceptionniste configurée.",
+    "recordingNotice": "La conversation est enregistrée et transcrite, puis consultable dans l’historique de votre compte. Utilisez uniquement des informations fictives pour cette démonstration.",
     "connecting": "Connexion...",
     "hangUp": "Raccrocher",
     "status": {

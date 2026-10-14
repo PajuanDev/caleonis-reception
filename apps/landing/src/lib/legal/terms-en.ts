@@ -1,9 +1,9 @@
 import type { LegalDocument } from "./types"
 
-const support = `<a href="mailto:support@caleonis.com">support@caleonis.com</a>`
+const support = `<a href="mailto:contact@caleonis.com">contact@caleonis.com</a>`
 
 export const termsEn: LegalDocument = {
-  updated: "Last updated: September 26, 2026",
+  updated: "Operator identity updated: October 14, 2026",
   h1: "Terms of Service",
   intro: `These Terms of Service ("Terms") govern your use of Caleonis Reception's hosted service, websites, and support. Please read them before you use Caleonis Reception. They limit our liability, make you responsible for call recording consent and text message compliance, and set out how we handle disputes.`,
   sections: [
@@ -12,7 +12,7 @@ export const termsEn: LegalDocument = {
       nav: "Agreement",
       title: "1. Agreement and eligibility",
       blocks: [
-        `1.1 These Terms form a contract between you and Lobbystack Inc. ("Caleonis Reception," "we," "our," or "us"). You accept them when you create an account, check a box or click a button that refers to them, buy a plan, or use the Service. If you do not agree, do not use the Service.`,
+        `1.1 These Terms form a contract between you and William Fabrice GOSSE, a French sole trader (entrepreneur individuel, EI) trading as MrManiac ("we," "our," or "us"), SIREN 929 183 986, SIRET 929 183 986 00017, based at 10 rue Courbet, 59100 Roubaix, France. Caléonis and Caléonis Réception are services operated by this sole trader and are not a separate company. You accept them when you create an account, check a box or click a button that refers to them, buy a plan, or use the Service. If you do not agree, do not use the Service.`,
         `1.2 Caleonis Reception is for businesses only. You confirm that you use the Service for a business, trade, or profession, and not for personal, family, or household purposes. You are not a consumer under the Quebec Consumer Protection Act or any similar law when you use the Service.`,
         `1.3 If you accept these Terms for a company or other organization, you confirm that you have authority to bind it. "You" and "Customer" then mean that organization. You must be at least 18 years old and have reached the age of majority where you live.`,
         `1.4 If you and Caleonis Reception sign an order form or other written agreement for the Service ("Order"), the Order controls over these Terms where the two conflict, but only for the subject the Order covers.`,
@@ -375,7 +375,7 @@ export const termsEn: LegalDocument = {
       nav: "Contact",
       title: "32. Contact",
       blocks: [
-        `Send questions about these Terms to Lobbystack Inc. at ${support}.`,
+        `Send questions about these Terms to William Fabrice GOSSE, a French sole trader (entrepreneur individuel, EI) trading as MrManiac, at ${support}.`,
       ],
     },
   ],

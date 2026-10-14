@@ -37,6 +37,8 @@ Dashboard test calls, the website widget, prospect demos, and the landing site d
 
 The browser can only close the session. It can't change instructions or answer delegations. Prospect demos don't count against minutes, and their agent can only answer questions and take messages.
 
+Website widget voice normally requires a phone number in the snapshot. Set `WEB_WIDGET_VOICE_WITHOUT_PHONE_ENABLED=true` on admin to allow WebRTC voice independently of PSTN. A valid snapshot, signed widget session, active key, allowed origin, billing allowance and rate limits still apply. The default is false; new key issuance remains controlled separately by `WIDGET_KEY_ISSUANCE_ENABLED`.
+
 ## What the worker does during a call
 
 Once attached, the worker owns the call until OpenAI closes the session. It:
@@ -69,6 +71,7 @@ The admin and worker read these variables:
 | `INTERNAL_SERVICE_TOKEN` | admin, worker | Authenticates the admin's attach request to the worker. |
 | `WORKER_INTERNAL_URL` | admin | Private URL of the worker's HTTP port, for example `http://worker:3002`. |
 | `TWILIO_SIP_TRUNK_SID` | worker | Adds new phone numbers to the SIP trunk. The worker refuses to provision a number without it. |
+| `PHONE_NUMBER_PURCHASE_ENABLED` | admin, worker | Defaults to disabled. Only the exact value `true` enables new purchases after end-user compliance, final cost and purchase approval. Existing calls and the separate import of already owned numbers are unaffected. |
 | `WEB_CALL_MAX_DURATION_MS` | admin | Optional cap on browser call length. |
 | `WEB_CALL_PUBLIC_BUSINESS_SLUG`, `WEB_CALL_ALLOWED_ORIGINS` | admin | The business the landing demo calls, and the sites allowed to start it. |
 | `AI_CHAT_MODEL`, `AI_CHAT_REASONING_EFFORT` | admin, worker | The agent's model and, on OpenAI, its reasoning effort. Leave both blank for `gpt-6-luna` on `high`. |

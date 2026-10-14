@@ -1,19 +1,19 @@
 import type { LegalDocument } from "./types"
 
-const support = `<a href="mailto:support@caleonis.com">support@caleonis.com</a>`
+const support = `<a href="mailto:contact@caleonis.com">contact@caleonis.com</a>`
 
 export const privacyEn: LegalDocument = {
-  updated: "Last updated: September 26, 2026",
+  updated: "Operator identity updated: October 14, 2026",
   h1: "Privacy Policy",
-  intro: `This Privacy Policy explains how Lobbystack Inc. ("Caleonis Reception," "we," "our," or "us") collects, uses, shares, and protects personal information when you visit our websites, use the hosted Caleonis Reception service, call or chat with a business that uses Caleonis Reception, receive a text sent through Caleonis Reception, or contact us.`,
+  intro: `This Privacy Policy explains how William Fabrice GOSSE, a French sole trader (entrepreneur individuel, EI) trading as MrManiac ("we," "our," or "us"), collects, uses, shares, and protects personal information when you visit our websites, use the hosted Caleonis Reception service, call or chat with a business that uses Caleonis Reception, receive a text sent through Caleonis Reception, or contact us. Caléonis and Caléonis Réception are services operated by this sole trader and are not a separate company.`,
   sections: [
     {
       id: "scope",
       nav: "Scope",
       title: "1. Who we are and what this Policy covers",
       blocks: [
-        `1.1 Caleonis Reception is an AI receptionist for small businesses. Businesses use it to answer phone calls and browser calls, chat with website visitors, book appointments, take messages, and transfer calls to their staff. We are based in Canada.`,
-        `1.2 This Policy covers our websites, including lobbystack.com, the hosted Caleonis Reception service (the "Service"), our support, and our affiliate program.`,
+        `1.1 Caleonis Reception is an AI receptionist for small businesses. Businesses use it to answer phone calls and browser calls, chat with website visitors, book appointments, take messages, and transfer calls to their staff. The operator is based in France at 10 rue Courbet, 59100 Roubaix, SIREN 929 183 986, SIRET 929 183 986 00017.`,
+        `1.2 This Policy covers our websites, including caleonis.com, the hosted Caleonis Reception service (the "Service"), our support, and our affiliate program.`,
         `1.3 This Policy does not cover copies of Caleonis Reception that other people run on their own servers. See section 20.`,
       ],
     },
@@ -185,7 +185,7 @@ export const privacyEn: LegalDocument = {
       nav: "Transfers",
       title: "11. International transfers",
       blocks: [
-        `11.1 We are based in Canada. We and our providers process personal information in Canada, the United States, and other countries where our providers operate. These countries may have different privacy laws from where you live, and authorities there may be able to access the information under their laws.`,
+        `11.1 The operator is based in France. Providers may process personal information in the countries where they operate. These countries may have different privacy laws from where you live, and authorities there may be able to access the information under their laws.`,
         `11.2 Before we send personal information outside Quebec or Canada, we assess the risks and use contracts and other safeguards to protect it. Where the GDPR applies, we rely on adequacy decisions or on standard contractual clauses approved by the European Commission or the UK.`,
       ],
     },
@@ -246,7 +246,7 @@ export const privacyEn: LegalDocument = {
       title: "15. Canada and Quebec",
       blocks: [
         `15.1 We handle personal information under the Personal Information Protection and Electronic Documents Act (PIPEDA) and Quebec's Act respecting the protection of personal information in the private sector, as amended by Law 25.`,
-        `15.2 Our person in charge of the protection of personal information is Raphaël Morency, the person with the highest authority at Lobbystack Inc. You can reach him at ${support} or by mail at 4845 Chemin de la Côte-Saint-Luc, Montréal, Quebec H3W 2H4, Canada.`,
+        `15.2 For requests about personal data, contact William Fabrice GOSSE, a French sole trader (entrepreneur individuel, EI) trading as MrManiac, at ${support} or by mail at 10 rue Courbet, 59100 Roubaix, France.`,
         `15.3 You may ask to access or correct your information, withdraw consent, or, in Quebec, ask for your computerized information in a structured, commonly used technological format. If the AI receptionist makes a decision about you based only on automated processing, you may ask the business to tell you what information was used and to have a person review the decision.`,
         `15.4 If you are not satisfied with our answer, you may contact the Commission d'accès à l'information du Québec or the Office of the Privacy Commissioner of Canada.`,
       ],
@@ -312,7 +312,7 @@ export const privacyEn: LegalDocument = {
       nav: "Contact",
       title: "22. Contact us",
       blocks: [
-        `Send questions, requests, or complaints about this Policy to Lobbystack Inc. at ${support}. You can also write to us at 4845 Chemin de la Côte-Saint-Luc, Montréal, Quebec H3W 2H4, Canada. Our <a href="/terms/">Terms of Service</a> also govern your use of the Service.`,
+        `Send questions, requests, or complaints about this Policy to William Fabrice GOSSE, a French sole trader (entrepreneur individuel, EI) trading as MrManiac, at ${support}. You can also write to us at 10 rue Courbet, 59100 Roubaix, France. Our <a href="/terms/">Terms of Service</a> also govern your use of the Service.`,
       ],
     },
   ],

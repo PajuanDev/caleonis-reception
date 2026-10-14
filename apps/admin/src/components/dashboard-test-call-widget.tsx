@@ -149,6 +149,7 @@ function TestCallAura({
   onCallEnded,
   onRegisterControls,
 }: TestCallAuraProps) {
+  const { t } = useTranslation("common");
   const telemetry = useTelemetry();
   const handleVoiceEvent = useCallback((eventName: TelemetryEventName, properties?: Record<string, unknown>) => {
     if (!businessId) return;
@@ -156,16 +157,21 @@ function TestCallAura({
   }, [businessId, telemetry]);
 
   return (
-    <AuraVoiceDemo
-      auraTone="dark"
-      businessSlug={businessSlug}
-      className="w-full"
-      // The operator's login authorizes the call; the ID picks the workspace.
-      endpoint={businessId ? `${LIVE_WEB_CALL_ENDPOINT}?businessId=${encodeURIComponent(businessId)}` : LIVE_WEB_CALL_ENDPOINT}
-      onCallEnded={onCallEnded}
-      onEvent={handleVoiceEvent}
-      onRegisterControls={onRegisterControls}
-      widgetId="lobbystack-dashboard-test-call"
-    />
+    <div className="flex flex-col gap-4">
+      <p className="rounded-xl bg-background/95 px-4 py-3 text-center text-xs leading-5 text-muted-foreground">
+        {t("testCall.recordingNotice")}
+      </p>
+      <AuraVoiceDemo
+        auraTone="dark"
+        businessSlug={businessSlug}
+        className="w-full"
+        // The operator's login authorizes the call; the ID picks the workspace.
+        endpoint={businessId ? `${LIVE_WEB_CALL_ENDPOINT}?businessId=${encodeURIComponent(businessId)}` : LIVE_WEB_CALL_ENDPOINT}
+        onCallEnded={onCallEnded}
+        onEvent={handleVoiceEvent}
+        onRegisterControls={onRegisterControls}
+        widgetId="lobbystack-dashboard-test-call"
+      />
+    </div>
   );
 }

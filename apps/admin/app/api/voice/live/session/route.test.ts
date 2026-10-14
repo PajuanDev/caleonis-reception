@@ -1,4 +1,4 @@
-import { beforeEach, describe, expect, it, vi } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 const mocks = vi.hoisted(() => ({
   access: vi.fn(),
@@ -44,6 +44,7 @@ function start(widgetId: string, extra: Record<string, string> = {}) {
 
 beforeEach(() => {
   vi.clearAllMocks();
+  vi.stubEnv("WEB_WIDGET_VOICE_WITHOUT_PHONE_ENABLED", "");
   mocks.rateLimit.mockResolvedValue({ allowed: true });
   mocks.allowance.mockResolvedValue({ allowed: true });
   mocks.snapshot.mockResolvedValue(snapshot);
@@ -55,6 +56,8 @@ beforeEach(() => {
   mocks.recordProspectDemoCallStarted.mockResolvedValue(undefined);
   mocks.attach.mockResolvedValue(undefined);
 });
+
+afterEach(() => { vi.unstubAllEnvs(); });
 
 describe("POST /api/voice/live/session", () => {
   it("records a prospect demo call as intake-only and unbilled", async () => {
@@ -76,6 +79,7 @@ describe("POST /api/voice/live/session", () => {
   });
 
   it("keeps rate-limited callers away from the database", async () => {
+    vi.stubEnv("WEB_WIDGET_VOICE_WITHOUT_PHONE_ENABLED", "true");
     mocks.access.mockResolvedValue({ businessId: "biz_1", origin: "https://client.example", widgetId: "lobbystack-widget", dashboardTestCall: false });
     mocks.rateLimit.mockResolvedValue({ allowed: false, status: 429, code: "web_voice_rate_limited" });
     const response = await start("lobbystack-widget");
@@ -100,6 +104,53 @@ describe("POST /api/voice/live/session", () => {
     mocks.snapshot.mockResolvedValue({ ...snapshot, contactChannels: {} });
     const response = await start("lobbystack-widget");
     expect(response.status).toBe(403);
+    expect(mocks.create).not.toHaveBeenCalled();
+  });
+
+  it.each(["false", "1", "TRUE", " true "])("keeps numberless widget voice denied with %s", async (value) => {
+    vi.stubEnv("WEB_WIDGET_VOICE_WITHOUT_PHONE_ENABLED", value);
+    mocks.access.mockResolvedValue({ businessId: "biz_1", origin: "https://client.example", widgetId: "lobbystack-widget", dashboardTestCall: false });
+    mocks.snapshot.mockResolvedValue({ ...snapshot, contactChannels: {} });
+    expect((await start("lobbystack-widget")).status).toBe(403);
+    expect(mocks.create).not.toHaveBeenCalled();
+  });
+
+  it("starts a billed widget call without a number with the explicit opt-in", async () => {
+    vi.stubEnv("WEB_WIDGET_VOICE_WITHOUT_PHONE_ENABLED", "true");
+    mocks.access.mockResolvedValue({ businessId: "biz_1", origin: "https://client.example", widgetId: "lobbystack-widget", dashboardTestCall: false });
+    mocks.snapshot.mockResolvedValue({ ...snapshot, contactChannels: {} });
+    expect((await start("lobbystack-widget")).status).toBe(201);
+    expect(mocks.allowance).toHaveBeenCalledWith(expect.anything(), expect.objectContaining({ businessId: "biz_1" }));
+    expect(mocks.startLiveWebCall).toHaveBeenCalledWith(expect.anything(), expect.objectContaining({ widgetId: "lobbystack-widget", billable: true }));
+    expect(mocks.attach).toHaveBeenCalledWith(expect.objectContaining({ businessId: "biz_1", channel: "web_voice" }));
+  });
+
+  it("retains the billing denial for numberless widget calls", async () => {
+    vi.stubEnv("WEB_WIDGET_VOICE_WITHOUT_PHONE_ENABLED", "true");
+    mocks.access.mockResolvedValue({ businessId: "biz_1", origin: "https://client.example", widgetId: "lobbystack-widget", dashboardTestCall: false });
+    mocks.snapshot.mockResolvedValue({ ...snapshot, contactChannels: {} });
+    mocks.allowance.mockResolvedValue({ allowed: false, errorCode: "voice_limit_reached" });
+    expect((await start("lobbystack-widget")).status).toBe(402);
+    expect(mocks.create).not.toHaveBeenCalled();
+  });
+
+  it("still requires a snapshot with numberless voice enabled", async () => {
+    vi.stubEnv("WEB_WIDGET_VOICE_WITHOUT_PHONE_ENABLED", "true");
+    mocks.access.mockResolvedValue({ businessId: "biz_1", origin: "https://client.example", widgetId: "lobbystack-widget", dashboardTestCall: false });
+    mocks.snapshot.mockResolvedValue(null);
+    expect((await start("lobbystack-widget")).status).toBe(409);
+    expect(mocks.create).not.toHaveBeenCalled();
+  });
+
+  it.each(["web_voice_authorization_required", "widget_session_invalid", "widget_origin_denied"])("retains access denial %s with numberless voice enabled", async (code) => {
+    vi.stubEnv("WEB_WIDGET_VOICE_WITHOUT_PHONE_ENABLED", "true");
+    mocks.access.mockResolvedValue({ status: 403, code });
+    const response = await start("lobbystack-widget");
+    expect(response.status).toBe(403);
+    await expect(response.json()).resolves.toMatchObject({ code });
+    expect(mocks.rateLimit).not.toHaveBeenCalled();
+    expect(mocks.allowance).not.toHaveBeenCalled();
+    expect(mocks.snapshot).not.toHaveBeenCalled();
     expect(mocks.create).not.toHaveBeenCalled();
   });
 

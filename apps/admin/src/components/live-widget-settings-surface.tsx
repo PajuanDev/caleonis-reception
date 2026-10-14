@@ -36,7 +36,7 @@ function originsToText(origins: string[]): string {
 function embedSnippet(origin: string, key: string, config: WidgetKeyRecord["config"]): string {
   const position = config.position ?? "bottom-right";
   const color = config.color ?? "#0f766e";
-  return `<script src="${origin}/embed.js" data-widget-key="${key}" data-position="${position}" data-color="${color}" defer></script>`;
+  return `<script src="${origin}/embed.js" data-base-url="${origin}" data-widget-key="${key}" data-position="${position}" data-color="${color}" defer></script>`;
 }
 
 export function LiveWidgetSettingsSurface() {
