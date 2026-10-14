@@ -58,6 +58,7 @@
     "trigger": "Test Call",
     "title": "Test your AI receptionist",
     "description": "Start a live browser call with your configured receptionist.",
+    "recordingNotice": "The conversation is recorded and transcribed, then available in your account history. Use only fictional information for this demonstration.",
     "connecting": "Connecting...",
     "hangUp": "Hang up",
     "status": {

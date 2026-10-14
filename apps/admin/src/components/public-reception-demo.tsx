@@ -58,6 +58,10 @@ export function PublicReceptionDemo() {
             <div className="rounded-3xl border bg-card p-6 shadow-sm sm:p-8">
               <p className="text-center text-sm font-medium">Cliquez sur le téléphone pour commencer</p>
               <p className="mt-1 text-center text-xs text-muted-foreground">Votre navigateur vous demandera l’accès au microphone.</p>
+              <p className="mt-3 text-center text-xs leading-5 text-muted-foreground">
+                La conversation est enregistrée et transcrite, puis consultable dans l’historique du compte de démonstration.
+                Utilisez uniquement des informations fictives.
+              </p>
               <AuraVoiceDemo
                 auraTone="light"
                 businessSlug="caleonis-reception-public-demo"

@@ -10,6 +10,7 @@ import { attachWorkerToLiveSession, getLiveClient, requireLivePrototype } from "
 import { LIVE_WEB_CALL_WIDGET_IDS, liveSessionEndToken, publicCallCorsHeaders, resolveLiveWebCallAccess, type LiveWebCallRequest } from "@/lib/live-web-call";
 import { requestIpHash } from "@/lib/widget-keys";
 import { enforceWebVoiceRateLimits } from "@/lib/web-voice-policy";
+import { isWebWidgetVoiceEnabled } from "@/lib/web-widget-voice";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -93,8 +94,8 @@ export async function POST(request: Request) {
     timing.mark("checks");
     if (billing && !billing.allowed) return denied(402, billing.errorCode ?? "voice_limit_reached", cors);
     if (!snapshot) return denied(409, "snapshot_missing", cors);
-    // The widget offers voice only to businesses with a phone number.
-    if (access.widgetId === "lobbystack-widget" && !snapshot.contactChannels?.phoneNumber) return denied(403, "voice_unavailable", cors);
+    // Numberless website voice requires an explicit deployment opt-in.
+    if (access.widgetId === "lobbystack-widget" && !isWebWidgetVoiceEnabled(snapshot)) return denied(403, "voice_unavailable", cors);
     // Telemetry only; the call doesn't wait for it.
     void Promise.resolve(recordVoiceSnapshotLoaded(domain, { businessId: access.businessId, channel: "web_voice", provider: "openai_live" })).catch(() => undefined);
 

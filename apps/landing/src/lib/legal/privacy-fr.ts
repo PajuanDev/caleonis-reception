@@ -1,19 +1,19 @@
 import type { LegalDocument } from "./types"
 
-const support = `<a href="mailto:support@caleonis.com">support@caleonis.com</a>`
+const support = `<a href="mailto:contact@caleonis.com">contact@caleonis.com</a>`
 
 export const privacyFr: LegalDocument = {
-  updated: "Dernière mise à jour : 26 septembre 2026",
+  updated: "Identité de l’exploitant mise à jour : 14 octobre 2026",
   h1: "Politique de confidentialité",
-  intro: `La présente Politique de confidentialité explique comment Lobbystack Inc. (« Caleonis Reception », « nous », « notre » ou « nos ») recueille, utilise, communique et protège les renseignements personnels lorsque vous visitez nos sites Web, utilisez le service hébergé Caleonis Reception, appelez une entreprise qui utilise Caleonis Reception ou clavardez avec elle, recevez un SMS envoyé au moyen de Caleonis Reception ou communiquez avec nous.`,
+  intro: `La présente Politique de confidentialité explique comment William Fabrice GOSSE, entrepreneur individuel (EI), exploitant sous le nom commercial MrManiac (« nous », « notre » ou « nos »), recueille, utilise, communique et protège les renseignements personnels lorsque vous visitez nos sites Web, utilisez le service hébergé Caleonis Reception, appelez une entreprise qui utilise Caleonis Reception ou clavardez avec elle, recevez un SMS envoyé au moyen de Caleonis Reception ou communiquez avec nous. Caléonis et Caléonis Réception désignent les services de cette entreprise individuelle, sans constituer une société distincte.`,
   sections: [
     {
       id: "scope",
       nav: "Portée",
       title: "1. Qui nous sommes et portée de la présente Politique",
       blocks: [
-        `1.1 Caleonis Reception est un réceptionniste IA pour les petites entreprises. Les entreprises l’utilisent pour répondre aux appels téléphoniques et aux appels depuis le navigateur, clavarder avec les visiteurs de leur site Web, prendre des rendez-vous, prendre des messages et transférer des appels à leur personnel. Nous sommes établis au Canada.`,
-        `1.2 La présente Politique vise nos sites Web, dont lobbystack.com, le service hébergé Caleonis Reception (le « Service »), notre support et notre programme d’affiliation.`,
+        `1.1 Caleonis Reception est un réceptionniste IA pour les petites entreprises. Les entreprises l’utilisent pour répondre aux appels téléphoniques et aux appels depuis le navigateur, clavarder avec les visiteurs de leur site Web, prendre des rendez-vous, prendre des messages et transférer des appels à leur personnel. L’exploitant est domicilié en France, au 10 rue Courbet, 59100 Roubaix, SIREN 929 183 986, SIRET 929 183 986 00017.`,
+        `1.2 La présente Politique vise nos sites Web, dont caleonis.com, le service hébergé Caleonis Reception (le « Service »), notre support et notre programme d’affiliation.`,
         `1.3 La présente Politique ne vise pas les copies de Caleonis Reception que d’autres personnes exécutent sur leurs propres serveurs. Voir la section 20.`,
       ],
     },
@@ -185,7 +185,7 @@ export const privacyFr: LegalDocument = {
       nav: "Transferts",
       title: "11. Transferts internationaux",
       blocks: [
-        `11.1 Nous sommes établis au Canada. Nous et nos fournisseurs traitons des renseignements personnels au Canada, aux États-Unis et dans d’autres pays où nos fournisseurs exercent leurs activités. Les lois de ces pays sur la protection des renseignements personnels peuvent différer de celles de votre lieu de résidence, et les autorités de ces pays peuvent avoir accès aux renseignements en vertu de leurs lois.`,
+        `11.1 L’exploitant est domicilié en France. Les fournisseurs peuvent traiter des renseignements personnels dans les pays où ils exercent leurs activités. Les lois de ces pays sur la protection des renseignements personnels peuvent différer de celles de votre lieu de résidence, et les autorités de ces pays peuvent avoir accès aux renseignements en vertu de leurs lois.`,
         `11.2 Avant de communiquer des renseignements personnels à l’extérieur du Québec ou du Canada, nous évaluons les risques et utilisons des contrats et d’autres mesures pour les protéger. Lorsque le RGPD s’applique, nous nous appuyons sur des décisions d’adéquation ou sur des clauses contractuelles types approuvées par la Commission européenne ou le Royaume-Uni.`,
       ],
     },
@@ -246,7 +246,7 @@ export const privacyFr: LegalDocument = {
       title: "15. Canada et Québec",
       blocks: [
         `15.1 Nous traitons les renseignements personnels conformément à la Loi sur la protection des renseignements personnels et les documents électroniques (LPRPDE) et à la Loi sur la protection des renseignements personnels dans le secteur privé du Québec, telle que modifiée par la Loi 25.`,
-        `15.2 Le responsable de la protection des renseignements personnels est Raphaël Morency, la personne ayant la plus haute autorité au sein de Lobbystack Inc. Vous pouvez le joindre à ${support} ou par la poste au 4845 chemin de la Côte-Saint-Luc, Montréal (Québec)  H3W 2H4, Canada.`,
+        `15.2 Pour vos demandes relatives aux données personnelles, contactez William Fabrice GOSSE, entrepreneur individuel (EI), exploitant sous le nom commercial MrManiac, à ${support} ou par la poste au 10 rue Courbet, 59100 Roubaix, France.`,
         `15.3 Vous pouvez demander d’accéder à vos renseignements ou de les faire corriger, retirer votre consentement ou, au Québec, demander vos renseignements informatisés dans un format technologique structuré et couramment utilisé. Si le réceptionniste IA prend une décision à votre sujet fondée exclusivement sur un traitement automatisé, vous pouvez demander à l’entreprise de vous indiquer les renseignements utilisés et de faire réviser la décision par une personne.`,
         `15.4 Si notre réponse ne vous satisfait pas, vous pouvez vous adresser à la Commission d’accès à l’information du Québec ou au Commissariat à la protection de la vie privée du Canada.`,
       ],
@@ -312,7 +312,7 @@ export const privacyFr: LegalDocument = {
       nav: "Contact",
       title: "22. Nous joindre",
       blocks: [
-        `Envoyez vos questions, demandes ou plaintes au sujet de la présente Politique à Lobbystack Inc., à ${support}. Vous pouvez aussi nous écrire au 4845 chemin de la Côte-Saint-Luc, Montréal (Québec)  H3W 2H4, Canada. Nos <a href="/fr/terms/">Conditions d’utilisation</a> régissent aussi votre utilisation du Service.`,
+        `Envoyez vos questions, demandes ou plaintes au sujet de la présente Politique à William Fabrice GOSSE, entrepreneur individuel (EI), exploitant sous le nom commercial MrManiac, à ${support}. Vous pouvez aussi nous écrire au 10 rue Courbet, 59100 Roubaix, France. Nos <a href="/fr/terms/">Conditions d’utilisation</a> régissent aussi votre utilisation du Service.`,
       ],
     },
   ],

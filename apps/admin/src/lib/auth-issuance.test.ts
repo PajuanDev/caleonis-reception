@@ -86,6 +86,7 @@ it("deduplicates by issuance identity rather than repeated OTP digits", async ()
 });
 
 it("uses the shared issuance policy in signup/signin callbacks and forwards request IP", async () => {
+  vi.stubEnv("REQUIRE_EMAIL_VERIFICATION", "true");
   const { getAuth } = await import("./auth"); getAuth();
   expect(mocks.config.emailVerification.sendOnSignUp).toBe(true);
   expect(mocks.config.emailVerification.sendOnSignIn).toBe(true);

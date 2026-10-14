@@ -7,6 +7,7 @@ import { createWorkerDomainContext } from "@/lib/domain-context";
 import { resolveWidgetSessionAccess } from "@/lib/widget-access";
 import { requestIpHash, touchWidgetKeyLastUsed } from "@/lib/widget-keys";
 import { enforceWidgetRateLimits } from "@/lib/widget-policy";
+import { isWebWidgetVoiceEnabled } from "@/lib/web-widget-voice";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -39,7 +40,7 @@ export async function GET(request: Request) {
       greeting: session.config.greeting ?? snapshot?.greeting ?? undefined,
       snapshotPresent: snapshot !== null,
       businessSlug: session.businessSlug,
-      voiceEnabled: Boolean(snapshot?.contactChannels?.phoneNumber),
+      voiceEnabled: isWebWidgetVoiceEnabled(snapshot),
     });
   } catch (error) {
     return asApiResponse(error);

@@ -4,6 +4,7 @@ export { resolveOpenAiPricing } from "./aiPricing";
 export type { AiPricingRatesUsdPerMillionTokens, VersionedAiPricing } from "./aiPricing";
 export { isMaintenanceMode } from "./maintenance";
 export { isCertificationMode, assertCertificationRecipient, assertCertificationOperationAllowed, assertCertificationCalendar, assertCertificationBillingSandbox } from "./certification";
+export { assertPhoneNumberPurchaseEnabled } from "./phoneNumberPurchase";
 
 export type DeploymentMode = "cloud" | "self_hosted_standard" | "development";
 

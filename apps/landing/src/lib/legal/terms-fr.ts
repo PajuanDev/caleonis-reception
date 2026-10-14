@@ -1,9 +1,9 @@
 import type { LegalDocument } from "./types"
 
-const support = `<a href="mailto:support@caleonis.com">support@caleonis.com</a>`
+const support = `<a href="mailto:contact@caleonis.com">contact@caleonis.com</a>`
 
 export const termsFr: LegalDocument = {
-  updated: "Dernière mise à jour : 26 septembre 2026",
+  updated: "Identité de l’exploitant mise à jour : 14 octobre 2026",
   h1: "Conditions d’utilisation",
   intro: `Les présentes conditions d’utilisation (les « Conditions ») régissent votre utilisation du service hébergé, des sites Web et du support de Caleonis Reception. Lisez-les avant d’utiliser Caleonis Reception. Elles limitent notre responsabilité, vous rendent responsable du consentement à l’enregistrement des appels et de la conformité des SMS, et précisent comment nous réglons les litiges.`,
   sections: [
@@ -12,7 +12,7 @@ export const termsFr: LegalDocument = {
       nav: "Acceptation",
       title: "1. Acceptation et admissibilité",
       blocks: [
-        `1.1 Les présentes Conditions forment un contrat entre vous et Lobbystack Inc. (« Caleonis Reception », « nous », « notre » ou « nos »). Vous les acceptez lorsque vous créez un compte, cochez une case ou cliquez sur un bouton qui y renvoie, achetez un forfait ou utilisez le Service. Si vous ne les acceptez pas, n’utilisez pas le Service.`,
+        `1.1 Les présentes Conditions forment un contrat entre vous et William Fabrice GOSSE, entrepreneur individuel (EI), exploitant sous le nom commercial MrManiac (« nous », « notre » ou « nos »), SIREN 929 183 986, SIRET 929 183 986 00017, domicilié au 10 rue Courbet, 59100 Roubaix, France. Caléonis et Caléonis Réception désignent les services de cette entreprise individuelle, sans constituer une société distincte. Vous les acceptez lorsque vous créez un compte, cochez une case ou cliquez sur un bouton qui y renvoie, achetez un forfait ou utilisez le Service. Si vous ne les acceptez pas, n’utilisez pas le Service.`,
         `1.2 Caleonis Reception s’adresse uniquement aux entreprises. Vous confirmez utiliser le Service dans le cadre d’une entreprise, d’un métier ou d’une profession, et non à des fins personnelles, familiales ou domestiques. Lorsque vous utilisez le Service, vous n’êtes pas un consommateur au sens de la Loi sur la protection du consommateur du Québec ni d’une loi semblable.`,
         `1.3 Si vous acceptez les présentes Conditions pour une entreprise ou une autre organisation, vous confirmez avoir le pouvoir de la lier. « Vous » et « Client » désignent alors cette organisation. Vous devez avoir au moins 18 ans et avoir atteint l’âge de la majorité là où vous résidez.`,
         `1.4 Si vous et Caleonis Reception signez un bon de commande ou une autre entente écrite visant le Service (une « Commande »), la Commande prévaut sur les présentes Conditions en cas de conflit, mais seulement pour l’objet qu’elle vise.`,
@@ -375,7 +375,7 @@ export const termsFr: LegalDocument = {
       nav: "Contact",
       title: "32. Nous joindre",
       blocks: [
-        `Envoyez vos questions sur les présentes Conditions à Lobbystack Inc. à ${support}.`,
+        `Envoyez vos questions sur les présentes Conditions à William Fabrice GOSSE, entrepreneur individuel (EI), exploitant sous le nom commercial MrManiac, à ${support}.`,
       ],
     },
   ],

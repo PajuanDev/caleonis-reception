@@ -16,7 +16,7 @@
     "hold": "Holding period",
     "minimum": "Minimum payout",
     "days": "{{count}} days",
-    "link": "View Terms of Service",
+    "link": "Legal Notice",
     "reward": "Earn {{rate}} per sale for {{duration}}",
     "oneYear": "1 year",
     "months": "{{count}} months"

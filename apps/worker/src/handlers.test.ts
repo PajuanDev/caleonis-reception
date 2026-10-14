@@ -138,6 +138,7 @@ describe("worker handlers", () => {
     const businessId = randomUUID(); const claimId = randomUUID(); const phoneNumberId = randomUUID(); const domain = { db: undefined as never };
     vi.stubEnv("APP_BASE_URL", "https://app.example.test");
     vi.stubEnv("TWILIO_SIP_TRUNK_SID", "TK123");
+    vi.stubEnv("PHONE_NUMBER_PURCHASE_ENABLED", "false");
     vi.mocked(claimNumberProvisioning).mockResolvedValue({ id: claimId, e164: "+14165550199" });
     vi.mocked(completeNumberProvisioning).mockResolvedValue(phoneNumberId);
     const findOwnedPhoneNumber = vi.fn().mockResolvedValue({ providerPhoneId: "PN123", e164: "+14165550199" }); const purchasePhoneNumber = vi.fn();
@@ -153,6 +154,7 @@ describe("worker handlers", () => {
     const businessId = randomUUID(); const claimId = randomUUID(); const phoneNumberId = randomUUID(); const domain = { db: undefined as never };
     vi.stubEnv("APP_BASE_URL", "https://app.example.test/");
     vi.stubEnv("TWILIO_SIP_TRUNK_SID", "TK123");
+    vi.stubEnv("PHONE_NUMBER_PURCHASE_ENABLED", "true");
     vi.mocked(claimNumberProvisioning).mockResolvedValue({ id: claimId, e164: "+14165550199" });
     vi.mocked(completeNumberProvisioning).mockResolvedValue(phoneNumberId);
     const findOwnedPhoneNumber = vi.fn().mockResolvedValue(null);
@@ -174,6 +176,7 @@ describe("worker handlers", () => {
     const businessId = randomUUID(); const claimId = randomUUID(); const domain = { db: undefined as never };
     vi.stubEnv("APP_BASE_URL", "https://app.example.test");
     vi.stubEnv("TWILIO_SIP_TRUNK_SID", "TK123");
+    vi.stubEnv("PHONE_NUMBER_PURCHASE_ENABLED", "true");
     vi.mocked(claimNumberProvisioning).mockResolvedValue({ id: claimId, e164: "+14165550199" });
     const purchasePhoneNumber = vi.fn().mockResolvedValue({ providerPhoneId: "PN789", e164: "+14165550199" });
     const addNumberToSipTrunk = vi.fn().mockRejectedValue(new Error("trunk unavailable"));
@@ -182,6 +185,24 @@ describe("worker handlers", () => {
     await expect(handleJob({ jobId: randomUUID(), type: "phoneNumber.provision", queue: "critical", businessId, payload: { claimId }, trace: {}, idempotencyKey: `claim:${claimId}`, scheduled: false }, { domain, twilio: { sendSms: vi.fn(), findOwnedPhoneNumber: vi.fn().mockResolvedValue(null), purchasePhoneNumber, addNumberToSipTrunk, releasePhoneNumber } })).rejects.toThrow("trunk unavailable");
     expect(releasePhoneNumber).toHaveBeenCalledWith({ providerPhoneId: "PN789" });
     expect(failNumberProvisioning).toHaveBeenCalledWith(domain, expect.objectContaining({ businessId, claimId }));
+  });
+
+  it.each([undefined, "false", "TRUE", "1", " true "])("blocks a previously queued purchase before a carrier mutation when the flag is %s", async value => {
+    const businessId = randomUUID(); const claimId = randomUUID(); const domain = { db: undefined as never };
+    vi.stubEnv("TWILIO_SIP_TRUNK_SID", "TK123");
+    vi.stubEnv("PHONE_NUMBER_PURCHASE_ENABLED", value);
+    vi.mocked(claimNumberProvisioning).mockResolvedValue({ id: claimId, e164: "+14165550199" });
+    const findOwnedPhoneNumber = vi.fn().mockResolvedValue(null);
+    const purchasePhoneNumber = vi.fn(); const addNumberToSipTrunk = vi.fn(); const releasePhoneNumber = vi.fn();
+
+    await expect(handleJob({ jobId: randomUUID(), type: "phoneNumber.provision", queue: "critical", businessId, payload: { claimId }, trace: {}, idempotencyKey: `claim:${claimId}`, scheduled: false }, { domain, twilio: { sendSms: vi.fn(), findOwnedPhoneNumber, purchasePhoneNumber, addNumberToSipTrunk, releasePhoneNumber } })).rejects.toThrow("Phone number purchases are temporarily unavailable");
+
+    expect(findOwnedPhoneNumber).toHaveBeenCalledWith({ e164: "+14165550199" });
+    expect(purchasePhoneNumber).not.toHaveBeenCalled();
+    expect(addNumberToSipTrunk).not.toHaveBeenCalled();
+    expect(releasePhoneNumber).not.toHaveBeenCalled();
+    expect(completeNumberProvisioning).not.toHaveBeenCalled();
+    expect(failNumberProvisioning).toHaveBeenCalledWith(domain, { businessId, claimId, unavailable: false });
   });
 
   it("refuses to provision a number when no SIP trunk is configured", async () => {

@@ -1,4 +1,4 @@
-import { isPaidSubscription } from "@lobbystack/shared";
+import { assertPhoneNumberPurchaseEnabled, isPaidSubscription } from "@lobbystack/shared";
 import { createHash, createHmac, timingSafeEqual } from "node:crypto";
 
 import { and, eq, isNull, lt, or, sql } from "drizzle-orm";
@@ -70,6 +70,7 @@ export async function searchAvailableBusinessNumbers(...args: Parameters<typeof 
 export async function reserveOnboardingNumberClaim(context: DomainContext, input: { userId: string; businessId: string; claimToken: string; claimTokenSecret: string; idempotencyKey: string }): Promise<string> {
   const offer = verifyOffer(input.claimToken, input.claimTokenSecret);
   if (offer.purpose !== "onboarding" || offer.businessId !== input.businessId || offer.userId !== input.userId) throw new Error("Number claim token does not belong to this onboarding flow.");
+  assertPhoneNumberPurchaseEnabled();
   return await withBusinessTransaction(context.db, { ...input, actorType: "operator" }, async (tx) => {
     await requireBusinessAdmin(tx, input);
     const tokenHash = createHash("sha256").update(input.claimToken).digest("hex");
@@ -83,6 +84,7 @@ export async function reserveOnboardingNumberClaim(context: DomainContext, input
 export async function reserveReplacementNumberClaim(context: DomainContext, input: { userId: string; businessId: string; claimToken: string; claimTokenSecret: string; idempotencyKey: string }): Promise<string> {
   const offer = verifyOffer(input.claimToken, input.claimTokenSecret);
   if (offer.purpose !== "replacement" || offer.businessId !== input.businessId || offer.userId !== input.userId) throw new Error("Number claim token does not belong to this replacement flow.");
+  assertPhoneNumberPurchaseEnabled();
   return await withBusinessTransaction(context.db, { ...input, actorType: "operator" }, async (tx) => {
     await requireBusinessAdmin(tx, input);
     const tokenHash = createHash("sha256").update(input.claimToken).digest("hex");
