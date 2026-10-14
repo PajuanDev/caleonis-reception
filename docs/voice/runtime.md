@@ -37,6 +37,8 @@ Dashboard test calls, the website widget, prospect demos, and the landing site d
 
 The browser can only close the session. It can't change instructions or answer delegations. Prospect demos don't count against minutes, and their agent can only answer questions and take messages.
 
+Website widget voice normally requires a phone number in the snapshot. Set `WEB_WIDGET_VOICE_WITHOUT_PHONE_ENABLED=true` on admin to allow WebRTC voice independently of PSTN. A valid snapshot, signed widget session, active key, allowed origin, billing allowance and rate limits still apply. The default is false; new key issuance remains controlled separately by `WIDGET_KEY_ISSUANCE_ENABLED`.
+
 ## What the worker does during a call
 
 Once attached, the worker owns the call until OpenAI closes the session. It:
