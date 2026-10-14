@@ -1,12 +1,14 @@
 import { existsSync, readFileSync, readdirSync } from "node:fs"
 import { dirname, join, relative } from "node:path"
+import { fileURLToPath } from "node:url"
+import { SITE_URL } from "../src/lib/site-origin.mjs"
 import {
   decodeHtmlEntities,
   resolveHttpUrl,
 } from "./seo-validation-utils.mjs"
 
-const dist = new URL("../dist/", import.meta.url)
-const siteOrigin = "https://lobbystack.com"
+const distPath = fileURLToPath(new URL("../dist/", import.meta.url))
+const siteOrigin = new URL(SITE_URL).origin
 const errors = []
 
 const walk = (dir) =>
@@ -21,18 +23,18 @@ const attr = (tag, name) =>
   )
 
 const pathForHtml = (file) => {
-  const path = relative(dist.pathname, dirname(file)).replaceAll("\\", "/")
+  const path = relative(distPath, dirname(file)).replaceAll("\\", "/")
   return path ? `/${path}/` : "/"
 }
 
-const htmlFiles = walk(dist.pathname).filter((file) =>
+const htmlFiles = walk(distPath).filter((file) =>
   file.endsWith("index.html")
 )
 const htmlByPath = new Map(
   htmlFiles.map((file) => [pathForHtml(file), readFileSync(file, "utf8")])
 )
 
-const sitemapIndexPath = join(dist.pathname, "sitemap-index.xml")
+const sitemapIndexPath = join(distPath, "sitemap-index.xml")
 if (!existsSync(sitemapIndexPath)) {
   throw new Error("Missing sitemap-index.xml")
 }
@@ -46,7 +48,7 @@ if (childUrls.length === 0) errors.push("Sitemap index has no child sitemaps")
 const sitemapEntries = []
 for (const childUrl of childUrls) {
   const childName = new URL(childUrl).pathname.split("/").at(-1)
-  const childPath = join(dist.pathname, childName)
+  const childPath = join(distPath, childName)
   if (!existsSync(childPath)) {
     errors.push(`Missing child sitemap ${childName}`)
     continue
@@ -207,7 +209,7 @@ for (const entry of sitemapEntries) {
 
     const targetUrl = new URL(pathname, siteOrigin).toString()
     const generatedAssetPath = join(
-      dist.pathname,
+      distPath,
       target.pathname.replace(/^\/+/, "")
     )
     if (!htmlByPath.has(pathname) && !existsSync(generatedAssetPath)) {

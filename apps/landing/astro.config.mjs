@@ -7,9 +7,9 @@ import { defineConfig, fontProviders } from "astro/config"
 import { createLogger } from "vite"
 import { translatedBasePaths } from "./src/i18n/translated-base-paths.ts"
 import { indexNowChangedPages } from "./src/lib/indexnow.ts"
+import { SITE_URL } from "./src/lib/site-origin.mjs"
 import { stableLastmodForUrl } from "./src/lib/sitemap.ts"
 
-const SITE_URL = "https://lobbystack.com"
 const INDEXNOW_KEY = process.env.INDEXNOW_KEY
 const DEFAULT_LOCALE = "en"
 const translatedPathSet = new Set(translatedBasePaths)
@@ -187,7 +187,7 @@ export default defineConfig({
     }),
     indexNowChangedPages({
       key: INDEXNOW_KEY,
-      host: "lobbystack.com",
+      host: new URL(SITE_URL).hostname,
       siteUrl: SITE_URL,
       include: (url) => {
         const pathname = new URL(url).pathname
