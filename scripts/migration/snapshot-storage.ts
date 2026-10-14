@@ -78,7 +78,7 @@ export async function verifyLocalObjects(targetRoot: string, objects: PlannedObj
       if (entry.isSymbolicLink()) throw new Error("UNSAFE_TARGET_OBJECT");
       if (entry.isDirectory()) await visit(path);
       else if (path === join(root, ".migration-target.json")) continue;
-      else if (!entry.isFile() || !expected.delete(relative(root, path))) throw new Error("UNEXPECTED_TARGET_OBJECT");
+      else if (!entry.isFile() || !expected.delete(relative(root, path).split(sep).join("/"))) throw new Error("UNEXPECTED_TARGET_OBJECT");
     }
   }
   await visit(root);

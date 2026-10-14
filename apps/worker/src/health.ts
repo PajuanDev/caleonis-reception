@@ -1,4 +1,5 @@
 import { createServer, type IncomingMessage, type Server, type ServerResponse } from "node:http";
+import { backupHealthReport, type BackupHealthState } from "./backupHealth";
 
 export type WorkerHealthState = {
   ready: boolean;
@@ -6,6 +7,7 @@ export type WorkerHealthState = {
   database: boolean;
   storage: boolean;
   activeJobs: number;
+  backup?: BackupHealthState;
 };
 
 export type ExtraRouteHandler = (request: IncomingMessage, response: ServerResponse) => Promise<boolean>;
@@ -23,6 +25,12 @@ export function startHealthServer(port: number, state: WorkerHealthState, extraR
       const ok = state.ready && state.redis && state.database && state.storage;
       response.writeHead(ok ? 200 : 503, { "content-type": "application/json" });
       response.end(JSON.stringify({ ok, ...state }));
+      return;
+    }
+    if (path === "/health/backup") {
+      const report = backupHealthReport(state.backup);
+      response.writeHead(report.ok ? 200 : 503, { "content-type": "application/json" });
+      response.end(JSON.stringify(report));
       return;
     }
     response.writeHead(404);

@@ -167,6 +167,8 @@ export async function createBillingCheckoutRequest(
 ): Promise<string> {
   return await withBusinessTransaction(context.db, { ...input, actorType: "operator" }, async (tx) => {
     await requireBusinessAdmin(tx, input);
+    const [business] = await tx.select({ managedPilot: businesses.managedPilot }).from(businesses).where(eq(businesses.id, input.businessId)).limit(1);
+    if (business?.managedPilot) throw Object.assign(new Error("Billing is managed by your pilot contact. A paid subscription requires separate approval."), { status: 403, code: "managed_pilot_checkout_disabled" });
     await tx.insert(billingAccounts).values({ businessId: input.businessId, billingKey: `business:${input.businessId}` }).onConflictDoNothing({ target: billingAccounts.businessId });
     const [request] = await tx.insert(billingCheckoutRequests).values({
       businessId: input.businessId,

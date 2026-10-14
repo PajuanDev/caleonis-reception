@@ -2,6 +2,7 @@ import { createHash } from "node:crypto";
 import { chmod, mkdtemp, readFile, stat, writeFile, mkdir, rm, symlink } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
+import { hasPrivateFileAccess } from "../lib/private-artifact.ts";
 import { afterEach, describe, expect, it } from "vitest";
 
 import { auditSnapshot, writePrivateArtifact, type SnapshotManifest } from "./production-snapshot-audit.ts";
@@ -63,7 +64,7 @@ describe("production snapshot audit", () => {
     expect(reviewedExclusion.ready).toBe(true);
     const artifact = join(input.root, "audit.json");
     await writePrivateArtifact(artifact, reviewedExclusion);
-    expect((await stat(artifact)).mode & 0o777).toBe(0o600);
+    expect(await hasPrivateFileAccess(artifact)).toBe(true);
     await expect(writePrivateArtifact(artifact, reviewedExclusion)).rejects.toMatchObject({ code: "EEXIST" });
     await chmod(artifact, 0o600);
   });
@@ -86,7 +87,7 @@ describe("production snapshot audit", () => {
     expect(result.issues.map((issue) => issue.code)).toContain(expectedIssue);
     const artifact = join(input.root, `malformed-${expectedIssue}.json`);
     await writePrivateArtifact(artifact, result);
-    expect((await stat(artifact)).mode & 0o777).toBe(0o600);
+    expect(await hasPrivateFileAccess(artifact)).toBe(true);
   });
 
   it("fails closed when required users or businesses tables are absent and when input files cannot be read", async () => {

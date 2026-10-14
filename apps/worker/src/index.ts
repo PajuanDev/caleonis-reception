@@ -1,4 +1,4 @@
-import { assertDatabaseRole, businesses, createDatabaseClient, databaseHealthCheck, enqueueOutbox, withBusinessTransaction, withDispatcherTransaction } from "@lobbystack/db";
+import { assertDatabaseRole, businesses, completeOutboxExecution, createDatabaseClient, databaseHealthCheck, enqueueOutbox, startOutboxExecution, withBusinessTransaction, withDispatcherTransaction } from "@lobbystack/db";
 import { createCallSummarizer } from "@lobbystack/agent-core";
 import { assertProductionSecrets } from "@lobbystack/config";
 import type { OnboardingFollowupSender } from "@lobbystack/domain";
@@ -12,12 +12,15 @@ import { createStorageProvider } from "@lobbystack/providers/storage/provider";
 import { TwilioProvider } from "@lobbystack/providers/twilio/twilioProvider";
 import { getMeter, initializeTelemetry, redactOtelExceptionText, shutdownTelemetry, withSpan } from "@lobbystack/telemetry/node";
 import { redactJobError } from "./redactJobError";
-import { Worker } from "bullmq";
+import { UnrecoverableError, Worker } from "bullmq";
 
 import { handleJob, type WorkerDependencies } from "./handlers";
 import { startHealthServer } from "./health";
 import { createLiveCallHandler } from "./liveCalls";
 import { OutboxDispatcher } from "./outboxDispatcher";
+import { recoverOutboxDeliveries } from "./outboxRecovery";
+import { startPilotBackupScheduler } from "./pilotBackup";
+import type { BackupHealthState } from "./backupHealth";
 import { getWorkerStartupMode } from "./maintenance";
 import { configureSchedulers } from "./scheduler";
 import { getWorkerSnapshotCache } from "./snapshot-cache";
@@ -127,7 +130,8 @@ async function main(): Promise<void> {
   await refreshSchedulers();
   const schedulerRefresh = setInterval(() => void refreshSchedulers().catch((error) => console.error("scheduler refresh failed", redactOtelExceptionText(error instanceof Error ? error.message : String(error)))), 5 * 60_000);
   schedulerRefresh.unref();
-  const state = { ready: false, redis: false, database: false, storage: false, activeJobs: 0 };
+  const backup: BackupHealthState = { enabled: process.env.BACKUP_ENABLED === "true", running: false, lastSuccessAt: null, lastCheckedAt: null, lastFailureCode: null };
+  const state = { ready: false, redis: false, database: false, storage: false, activeJobs: 0, backup };
   const embeddings = createEmbeddingProvider();
   const liveCalls = createLiveCallHandler({ domain: { db: database.db, snapshotCache: getWorkerSnapshotCache(), ...(embeddings ? { embeddings } : {}) } });
   const health = startHealthServer(Number(process.env.PORT ?? 3002), state, liveCalls.handle);
@@ -156,6 +160,7 @@ async function main(): Promise<void> {
     }
   }
   await storage.ensureReady();
+  const stopBackupScheduler = startPilotBackupScheduler(process.env, backup);
   liveCalls.setStorage(storage);
   const dependencies: WorkerDependencies = {
     domain: { db: database.db, snapshotCache: getWorkerSnapshotCache(), ...(embeddings ? { embeddings } : {}) },
@@ -204,12 +209,18 @@ async function main(): Promise<void> {
       const type = isKnownJobType(job.data.type) ? job.data.type : "unknown";
       wait.record(Math.max(0, Date.now() - job.timestamp - (job.delay ?? 0)), { queue: queueName, type });
       try {
+        if (job.data.outboxId && !await startOutboxExecution(dispatcherDatabase.db, job.data.outboxId, job.data.idempotencyKey, job.data.outboxVersion)) return { status: "skipped" };
         const maxAttempts = job.opts.attempts ?? 1;
-        return await handleJob(job.data, dependencies, {
+        const result = await handleJob(job.data, dependencies, {
           isFinalAttempt: job.attemptsMade + 1 >= maxAttempts,
           ...(job.id ? { queueJobId: job.id } : {}),
           queuedAtMs: job.timestamp,
         });
+        if (job.data.outboxId) {
+          try { await completeOutboxExecution(dispatcherDatabase.db, job.data.outboxId, job.data.idempotencyKey, job.data.outboxVersion); }
+          catch { throw new UnrecoverableError("OUTBOX_ACKNOWLEDGEMENT_UNCERTAIN_REQUIRES_REVIEW"); }
+        }
+        return result;
       } catch (error) {
         outcome = "error";
         throw redactJobError(error);
@@ -225,9 +236,20 @@ async function main(): Promise<void> {
     }));
     return worker;
   });
-  const dispatcher = new OutboxDispatcher(dispatcherDatabase.db, new Map(queues));
+  const executionReceiptsEnabled = process.env.OUTBOX_EXECUTION_RECEIPTS_ENABLED === "true";
+  const dispatcher = new OutboxDispatcher(dispatcherDatabase.db, new Map(queues), { trackExecution: executionReceiptsEnabled });
   const abort = new AbortController();
   const dispatchLoop = dispatcher.run(abort.signal).catch((error) => console.error("outbox dispatcher stopped", redactOtelExceptionText(error instanceof Error ? error.message : String(error))));
+  let recoveryRunning = false;
+  let recoveryOperation: Promise<void> | undefined;
+  const recoveryRefresh = setInterval(() => {
+    if (!executionReceiptsEnabled || recoveryRunning) return;
+    recoveryRunning = true;
+    recoveryOperation = recoverOutboxDeliveries(dispatcherDatabase.db, new Map(queues)).then((result) => {
+      if (result.replayed || result.quarantined || result.acknowledged) console.info("outbox durable recovery", result);
+    }).catch((error) => console.error("outbox recovery failed", redactOtelExceptionText(error instanceof Error ? error.message : String(error)))).finally(() => { recoveryRunning = false; });
+  }, 60_000);
+  recoveryRefresh.unref();
   const redisChecks = await Promise.all([...queues.values()].map(async (queue) => {
     try { await queue.getJobCounts(); return true; } catch { return false; }
   }));
@@ -257,12 +279,16 @@ async function main(): Promise<void> {
 
   const shutdown = async () => {
     clearInterval(schedulerRefresh);
+    stopBackupScheduler();
+    clearInterval(recoveryRefresh);
     clearInterval(healthRefresh);
     abort.abort();
     dispatcher.stop();
     // Finalize live calls while the database pool is still open.
     await liveCalls.closeAll();
-    await Promise.allSettled([dispatchLoop, ...workers.map((worker) => worker.close()), ...[...queues.values()].map((queue) => queue.close()), realtime.quit(), database.pool.end(), dispatcherDatabase.pool.end(), new Promise<void>((resolve) => health.close(() => resolve())), shutdownTelemetry()]);
+    await Promise.allSettled([dispatchLoop, recoveryOperation ?? Promise.resolve(), ...workers.map((worker) => worker.close())]);
+    await Promise.allSettled([...queues.values()].map((queue) => queue.close()));
+    await Promise.allSettled([realtime.quit(), database.pool.end(), dispatcherDatabase.pool.end(), new Promise<void>((resolve) => health.close(() => resolve())), shutdownTelemetry()]);
   };
   process.once("SIGINT", () => void shutdown().finally(() => process.exit(0)));
   process.once("SIGTERM", () => void shutdown().finally(() => process.exit(0)));

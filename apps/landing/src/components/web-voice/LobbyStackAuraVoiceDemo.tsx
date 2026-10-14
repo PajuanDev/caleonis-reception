@@ -10,6 +10,7 @@ import {
   type WebVoiceWidgetStatus,
 } from "@/components/web-voice/useWebVoiceCall"
 import { useEffect, useRef } from "react"
+import { RecordingConsentDialog } from "./RecordingConsentDialog"
 
 // ------------------------------------------------------------------
 // Simple 1D noise for organic distortion
@@ -106,6 +107,8 @@ export function LobbyStackAuraVoiceDemo({
     endCall,
     isCallActive,
     isBusy,
+    recordingConsentOpen,
+    resolveRecordingConsent,
   } = useWebVoiceCall({
     locale,
     businessSlug,
@@ -380,6 +383,7 @@ export function LobbyStackAuraVoiceDemo({
   return (
     <div className="mx-auto flex w-full min-w-0 flex-col items-center text-center">
       <audio ref={remoteAudioRef} autoPlay playsInline />
+      <RecordingConsentDialog open={recordingConsentOpen} onDecision={resolveRecordingConsent} locale={locale} />
 
       <div
         ref={wrapRef}

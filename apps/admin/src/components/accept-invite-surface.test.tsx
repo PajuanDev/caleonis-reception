@@ -36,3 +36,24 @@ it("settles a failed preview into the original invalid-link state", async () => 
   await screen.findByText("acceptInvite.invalidLink");
   expect((await screen.findByRole("button", { name: "acceptInvite.submit" })).hasAttribute("disabled")).toBe(true);
 });
+
+it("activates an invited pilot through a private fragment, without public signup", async () => {
+  const token = "A".repeat(43);
+  window.history.replaceState({}, "", `/fr/accept-invite#pilot=${token}`);
+  const fetch = vi.fn(async (_url: string, init?: RequestInit) => {
+    const body = JSON.parse(String(init?.body));
+    return body.action === "preview" ? Response.json({ invitation: { businessName: "Clinic", email: "owner@example.invalid" } }) : Response.json({ ok: true });
+  });
+  vi.stubGlobal("fetch", fetch);
+  render(<AcceptInviteSurface />);
+  const password = await screen.findByLabelText("signup.password");
+  expect(window.location.hash).toBe("");
+  expect(screen.queryByRole("link", { name: "acceptInvite.createAccount" })).toBeNull();
+  const submit = screen.getByRole("button", { name: "pilotActivation.submit" });
+  expect(submit.hasAttribute("disabled")).toBe(true);
+  await userEvent.type(password, "Secure!42");
+  await userEvent.type(screen.getByLabelText("pilotActivation.confirmPassword"), "Secure!42");
+  await userEvent.click(submit);
+  await screen.findByText("pilotActivation.success");
+  expect(fetch).toHaveBeenLastCalledWith("/api/pilot/activate", expect.objectContaining({ body: JSON.stringify({ action: "activate", token, password: "Secure!42" }) }));
+});

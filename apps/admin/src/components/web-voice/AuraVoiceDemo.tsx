@@ -12,6 +12,7 @@ import {
   type WebVoiceWidgetStatus,
 } from "@/components/web-voice/useWebVoiceCall";
 import type { TelemetryEventName } from "@lobbystack/telemetry";
+import { VoiceRecordingConsentDialog } from "./VoiceRecordingConsentDialog";
 
 function makeNoise() {
   const size = 256;
@@ -151,6 +152,8 @@ export function AuraVoiceDemo({
     forceEndCall,
     isCallActive,
     isBusy,
+    recordingConsentOpen,
+    resolveRecordingConsent,
   } = useWebVoiceCall({
     businessSlug,
     ...(endpoint ? { endpoint } : {}),
@@ -457,6 +460,7 @@ export function AuraVoiceDemo({
       )}
     >
       <audio ref={remoteAudioRef} autoPlay playsInline />
+      <VoiceRecordingConsentDialog open={recordingConsentOpen} onDecision={(accepted) => { resolveRecordingConsent(accepted); if (!accepted) onCallEnded?.(); }} />
 
       <div
         ref={wrapRef}

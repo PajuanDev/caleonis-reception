@@ -1,6 +1,6 @@
 import { createHash, randomBytes, randomUUID } from "node:crypto";
 
-import { and, eq, sql } from "drizzle-orm";
+import { and, eq, ne, sql } from "drizzle-orm";
 
 import { enqueueOutbox, withBusinessTransaction, type Database, type DatabaseTransaction } from "@lobbystack/db";
 import { businessInvitations, businessMemberships, businesses, receptionistProfiles, staff, users } from "@lobbystack/db";
@@ -121,6 +121,21 @@ export async function listUserBusinesses(
   return result.rows.map((row) => { const detail = result.details.find((item) => item.id === String(row.business_id)); return { businessId: String(row.business_id), name: String(row.name), slug: String(row.slug), role: String(row.role), active: String(row.business_id) === result.activeBusinessId, ...(detail ? { timezone: detail.timezone, businessType: detail.businessType, defaultLocale: detail.defaultLocale, websiteUrl: detail.websiteUrl, onboardingStage: detail.onboardingStage } : {}) }; });
 }
 
+/** Public workspace creation must not let a managed pilot multiply free quotas
+ * or escape its operator-approved commercial activation. Trusted provisioning
+ * calls createBusiness directly and remains a separate operator workflow. */
+export async function canCreateAutonomousBusiness(context: DomainContext, userId: string): Promise<boolean> {
+  return withBusinessTransaction(context.db, { userId, actorType: "operator" }, async tx => {
+    const memberships = await tx.execute<{ business_id: string }>(sql`select business_id from app.list_user_businesses(${userId})`);
+    for (const membership of memberships.rows) {
+      await tx.execute(sql`select set_config('app.business_id', ${membership.business_id}, true)`);
+      const [business] = await tx.select({ managedPilot: businesses.managedPilot }).from(businesses).where(eq(businesses.id, membership.business_id)).limit(1);
+      if (business?.managedPilot) return false;
+    }
+    return true;
+  });
+}
+
 export async function updateBusiness(
   context: DomainContext,
   input: { userId: string; businessId: string; name?: string; timezone?: string; businessType?: string; defaultLocale?: string; websiteUrl?: string | null },
@@ -207,13 +222,19 @@ export async function acceptInvitation(
   const resolved = await context.db.execute<{ business_id: string }>(sql`select app.resolve_business_by_invitation(${input.tokenHash}) as business_id`);
   const businessId = resolved.rows[0]?.business_id;
   if (!businessId) {
-    throw new Error("Invitation is invalid or expired.");
+    throw Object.assign(new Error("Invitation is invalid or expired."), { status: 400 });
   }
   return await withBusinessTransaction(context.db, { userId: input.userId, actorType: "system", businessId }, async (tx) => {
-    const rows = await tx.select().from(businessInvitations).where(and(eq(businessInvitations.tokenHash, input.tokenHash), eq(businessInvitations.status, "pending"))).limit(1);
+    // Lock before checking and consuming: two requests must never redeem the
+    // same invitation, even when both resolved its workspace before this lock.
+    const rows = await tx.select().from(businessInvitations).where(and(eq(businessInvitations.tokenHash, input.tokenHash), eq(businessInvitations.status, "pending"))).limit(1).for("update");
     const invitation = rows[0];
     if (!invitation || invitation.expiresAt <= new Date()) {
-      throw new Error("Invitation is invalid or expired.");
+      throw Object.assign(new Error("Invitation is invalid or expired."), { status: 400 });
+    }
+    const [user] = await tx.select({ email: users.email }).from(users).where(eq(users.id, input.userId)).limit(1);
+    if (!user || normalizeAuthEmail(user.email) !== invitation.normalizedEmail) {
+      throw Object.assign(new Error("Sign in with the invited email address."), { status: 403 });
     }
     await tx.insert(businessMemberships).values({
       businessId: invitation.businessId,
@@ -223,9 +244,14 @@ export async function acceptInvitation(
     }).onConflictDoUpdate({
       target: [businessMemberships.businessId, businessMemberships.userId],
       set: { role: invitation.role, status: "active", updatedAt: new Date() },
+      // An old invitation must not downgrade an already-active owner/admin.
+      // Role changes go through the separate, authorized member-management flow.
+      setWhere: ne(businessMemberships.status, "active"),
     });
     await tx.update(businessInvitations).set({ status: "accepted", acceptedByUserId: input.userId, acceptedAt: new Date(), updatedAt: new Date() }).where(eq(businessInvitations.id, invitation.id));
-    return { businessId: invitation.businessId, role: invitation.role };
+    await tx.update(users).set({ activeBusinessId: invitation.businessId, updatedAt: new Date() }).where(eq(users.id, input.userId));
+    const [membership] = await tx.select({ role: businessMemberships.role }).from(businessMemberships).where(and(eq(businessMemberships.businessId, invitation.businessId), eq(businessMemberships.userId, input.userId))).limit(1);
+    return { businessId: invitation.businessId, role: membership!.role };
   });
 }
 

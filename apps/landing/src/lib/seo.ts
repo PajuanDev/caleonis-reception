@@ -1,4 +1,6 @@
-export const SITE_URL = "https://reception.caleonis.com"
+import { SITE_URL } from "./site-origin.mjs"
+
+export { SITE_URL }
 
 export const SITE_NAME = "Caleonis Reception"
 

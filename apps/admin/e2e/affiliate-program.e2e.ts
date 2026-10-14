@@ -20,6 +20,7 @@ import { completeSignupEmailVerification, isolateAuthRateLimit } from "./fixture
 // from pending to eligible to paid. No payment provider is contacted.
 
 const prefix = "affiliate-e2e";
+const payoutPrefix = "aff-e2e";
 const password = "Affiliate-Journey-Password-123!";
 const DAY = 24 * 60 * 60_000;
 type Bundle = Record<string, unknown>;
@@ -27,6 +28,13 @@ type Bundle = Record<string, unknown>;
 function databaseUrl(): string {
   const url = process.env.REPLACEMENT_E2E_DATABASE_URL;
   if (!url) throw new Error("The disposable E2E database is required.");
+  if (process.env.NODE_ENV === "production") throw new Error("Affiliate E2E fixtures cannot run in production.");
+  let target;
+  try { target = new URL(url); }
+  catch { throw new Error("Affiliate E2E fixtures require a valid loopback PostgreSQL URL."); }
+  if (!["postgres:", "postgresql:"].includes(target.protocol) || !["localhost", "127.0.0.1", "::1", "[::1]"].includes(target.hostname.toLowerCase()) || target.search || target.hash) {
+    throw new Error("Affiliate E2E fixtures require a loopback PostgreSQL URL.");
+  }
   return url;
 }
 
@@ -38,9 +46,12 @@ async function cleanupFixtures(): Promise<void> {
   const database = createDatabaseClient("lobbystack_migrator", { DATABASE_URL: databaseUrl() });
   try {
     const owned = database.db.select({ id: users.id }).from(users).where(like(users.email, `${prefix}-%@example.invalid`));
-    await database.db.execute(sql`delete from public.affiliate_payout_runs where id in (select payout_run_id from public.affiliate_payout_items where affiliate_profile_id in (select id from public.affiliate_profiles where user_id in ${owned}))`);
+    await database.db.execute(sql`delete from public.affiliate_payout_runs where period_key like ${`${payoutPrefix}-%`} or id in (select payout_run_id from public.affiliate_payout_items where affiliate_profile_id in (select id from public.affiliate_profiles where user_id in ${owned}))`);
+    // These rows use ON DELETE SET NULL, so remove owned fixture events before
+    // deleting the business; otherwise they become unidentifiable orphans.
+    await database.db.execute(sql`delete from public.outbox_messages where business_id in (select business_id from public.business_memberships where user_id in ${owned}) or aggregate_id in ${owned}`);
+    await database.db.execute(sql`delete from public.provider_events where business_id in (select business_id from public.business_memberships where user_id in ${owned})`);
     await database.db.execute(sql`delete from public.businesses where id in (select business_id from public.business_memberships where user_id in ${owned})`);
-    await database.db.execute(sql`delete from public.outbox_messages where aggregate_id in ${owned}`);
     await database.db.execute(sql`delete from public.verifications where identifier like ${`email-verification-otp-${prefix}-%@example.invalid`}`);
     await database.db.delete(users).where(like(users.email, `${prefix}-%@example.invalid`));
   } finally {
@@ -135,13 +146,14 @@ test("the affiliate program works from referral link to payout", async ({ browse
     await page.getByRole("link", { name: enNav.items.affiliate }).first().click();
     await expect(page).toHaveURL(/\/affiliate$/);
     await expectFullyTranslated(page, enAffiliate, enCommon.loading.retry);
+    await expect(page.getByRole("link", { name: enAffiliate.terms.link, exact: true })).toHaveAttribute("href", "https://www.caleonis.com/mentions-legales/");
     await page.screenshot({ path: testInfo.outputPath("affiliate-en.png"), fullPage: true });
 
     // A direct load gets the namespace from the server render.
     await page.goto("/affiliate?lng=fr");
     await expectFullyTranslated(page, frAffiliate, frCommon.loading.retry);
     await page.screenshot({ path: testInfo.outputPath("affiliate-fr.png"), fullPage: true });
-    await page.getByRole("link", { name: frAffiliate.terms.link }).evaluate((link) => (link as HTMLAnchorElement).href).then((href) => expect(href).toBe("https://lobbystack.com/fr/terms/#affiliate-program"));
+    await expect(page.getByRole("link", { name: frAffiliate.terms.link, exact: true })).toHaveAttribute("href", "https://www.caleonis.com/mentions-legales/");
 
     // Payout settings.
     await page.getByRole("tab", { name: frAffiliate.settings.open }).click();
@@ -188,7 +200,7 @@ test("the affiliate program works from referral link to payout", async ({ browse
     await expect(page.getByText(enAffiliate.stats.eligibleReady)).toBeVisible();
 
     // The monthly payout run picks it up once it has cleared, then it is paid.
-    const periodKey = `e2e-${randomUUID().slice(0, 8)}`;
+    const periodKey = `${payoutPrefix}-${randomUUID().slice(0, 8)}`;
     const early = await generateAffiliatePayoutRun({ db: worker.db }, { periodKey, createdAt: new Date(paidAt.getTime() + 29 * DAY).toISOString() });
     expect(early.assignedCommissions).toBe(0);
     const run = await generateAffiliatePayoutRun({ db: worker.db }, { periodKey, createdAt: new Date(paidAt.getTime() + 31 * DAY).toISOString() });

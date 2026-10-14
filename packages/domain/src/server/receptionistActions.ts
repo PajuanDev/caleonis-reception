@@ -1,7 +1,7 @@
-import { and, asc, eq, ilike, or } from "drizzle-orm";
+import { and, asc, eq, ilike, or, sql } from "drizzle-orm";
 import { DateTime } from "luxon";
 
-import { appointments, contacts, receptionistProfiles, services, withBusinessTransaction } from "@lobbystack/db";
+import { appointments, calls, contacts, conversations, receptionistProfiles, services, widgetVisitors, withBusinessTransaction, type Database, type DatabaseTransaction } from "@lobbystack/db";
 import { normalizeAppointmentChangePolicy, type HoursWindow } from "@lobbystack/shared";
 import { getPostHogDistinctIdForBusinessSystem } from "@lobbystack/telemetry";
 
@@ -13,6 +13,7 @@ import { appendMessage, getOrCreateConversation } from "./conversations";
 import { queueOperatorAlert } from "./notifications";
 import { recordProductEvent } from "./productEvents";
 import { createVoiceFollowUpTask } from "./voice";
+import { emitWebhookEventInTransaction } from "./publicApi/webhooks";
 
 // Actions the receptionist agent takes on a business's behalf, whatever the
 // channel. Each one opens its own tenant-scoped transaction.
@@ -136,7 +137,7 @@ export async function bookForCaller(
       ...(input.contactName ? { contactName: input.contactName } : {}),
     });
     await safeRecordProductEvent(context, { name: "appointment.booked", businessId: input.businessId, distinctId, properties: { appointmentId: appointment.appointmentId, channel: input.channel, serviceId: service.id, sourceChannel: input.channel } });
-    return { ok: true as const, appointmentId: appointment.appointmentId, serviceName: service.name, startsAt: input.startsAt };
+    return { ok: true as const, appointmentId: appointment.appointmentId, serviceName: service.name, startsAt: input.startsAt, status: "confirmed" as const, calendar: "internal" as const, notificationStatus: "queued_not_delivered" as const };
   } catch (error) {
     const reason = bookingFailureReason(error);
     await safeRecordProductEvent(context, { name: "appointment.booking_failed", businessId: input.businessId, distinctId, properties: { reason, serviceId: service.id, requestedServiceName: input.serviceName, channel: input.channel, sourceChannel: input.channel } });
@@ -193,31 +194,74 @@ export async function takeMessageForStaff(
   context: DomainContext,
   input: { businessId: string; message: string; channel: ReceptionistChannel; callerName?: string; callbackPhone?: string; urgency?: string; callbackWindow?: string; callId?: string; conversationId?: string },
 ) {
-  const alert = { eventKind: "voiceMessage" as const, subject: "New voice message", body: "A caller left a voice message. Open the inbox to review it." };
-  // A website chat's conversation is the visitor's own thread: a staff note
-  // there would show up to them, and to the agent, as if they had written it.
-  const inVisitorThread = input.channel === "web_chat" && input.conversationId !== undefined;
-  if (!inVisitorThread) {
-    const conversationId = input.conversationId ?? (await getOrCreateConversation(context, { businessId: input.businessId, contactPhone: input.callbackPhone ?? "unknown", channel: input.channel === "web_chat" ? "web_chat" : "voice" })).conversationId;
-    await appendMessage(context, {
+  if (!input.message.trim()) return { ok: false as const, reason: "A message is required." };
+  // The inbox task is the durable source of truth. Keep contact enrichment,
+  // the staff note and notification outbox in the same tenant transaction:
+  // none may report success while the others were rolled back.
+  return await withBusinessTransaction(context.db, { businessId: input.businessId, actorType: "worker" }, async (tx) => {
+    const transactionalContext = { ...context, db: tx as unknown as Database };
+    const call = input.callId ? (await tx.select({ conversationId: calls.conversationId }).from(calls).where(and(eq(calls.id, input.callId), eq(calls.businessId, input.businessId))).limit(1).for("update"))[0] : undefined;
+    if (input.callId && !call) throw new Error("Call not found in this business.");
+    if (input.conversationId && call?.conversationId && input.conversationId !== call.conversationId) throw new Error("The conversation does not belong to this call.");
+    const conversationId = input.conversationId ?? call?.conversationId ?? (await getOrCreateConversation(transactionalContext, { businessId: input.businessId, contactPhone: input.callbackPhone ?? "unknown", channel: input.channel === "web_chat" ? "web_chat" : "voice" })).conversationId;
+    await linkMessageContactInTransaction(tx, { ...input, conversationId });
+    const inVisitorThread = input.channel === "web_chat" && input.conversationId !== undefined;
+    if (!inVisitorThread) await appendMessage(transactionalContext, {
       businessId: input.businessId,
       conversationId,
-      body: input.message,
+      body: input.message.trim(),
       direction: "inbound",
       channel: "dashboard",
-      operatorAlert: alert,
+      ...(input.callId ? { providerMessageId: `receptionist-follow-up:${input.businessId}:${input.callId}` } : {}),
     });
-  }
-  const task = await createVoiceFollowUpTask(context, {
-    businessId: input.businessId,
-    message: input.message,
-    channel: input.channel,
-    ...(input.callId ? { callId: input.callId } : {}),
-    ...(input.callerName ? { callerName: input.callerName } : {}),
-    ...(input.callbackPhone ? { callbackPhone: input.callbackPhone } : {}),
-    ...(input.urgency ? { urgency: input.urgency } : {}),
-    ...(input.callbackWindow ? { callbackWindow: input.callbackWindow } : {}),
+    const task = await createVoiceFollowUpTask(transactionalContext, {
+      businessId: input.businessId,
+      message: input.message.trim(),
+      channel: input.channel,
+      ...(input.callId ? { callId: input.callId } : {}),
+      ...(input.callerName ? { callerName: input.callerName } : {}),
+      ...(input.callbackPhone ? { callbackPhone: input.callbackPhone } : {}),
+      ...(input.urgency ? { urgency: input.urgency } : {}),
+      ...(input.callbackWindow ? { callbackWindow: input.callbackWindow } : {}),
+    });
+    const deliveryIds = await queueOperatorAlert(transactionalContext, { businessId: input.businessId, eventKey: `voiceMessage:${task.inboxItemId}`, eventKind: "voiceMessage", subject: "New receptionist message", body: "A caller or visitor left a message. Open the inbox to review it." });
+    return { ok: true as const, inboxItemId: task.inboxItemId, status: "saved" as const, notificationStatus: deliveryIds.length ? "queued" as const : "not_requested" as const };
   });
-  if (inVisitorThread) await queueOperatorAlert(context, { businessId: input.businessId, eventKey: `${alert.eventKind}:${task.inboxItemId}`, ...alert });
-  return { ok: true as const, inboxItemId: task.inboxItemId };
+}
+
+async function linkMessageContactInTransaction(tx: DatabaseTransaction, input: { businessId: string; conversationId: string; callerName?: string; callbackPhone?: string }) {
+  const conversation = (await tx.select({ contactId: conversations.contactId, widgetVisitorId: conversations.widgetVisitorId }).from(conversations).where(and(eq(conversations.id, input.conversationId), eq(conversations.businessId, input.businessId))).limit(1).for("update"))[0];
+  if (!conversation) throw new Error("Conversation not found in this business.");
+  const name = input.callerName?.trim();
+  const phone = input.callbackPhone?.trim();
+  let contactId = conversation.contactId;
+  if (!contactId && conversation.widgetVisitorId) contactId = (await tx.select({ contactId: widgetVisitors.contactId }).from(widgetVisitors).where(and(eq(widgetVisitors.id, conversation.widgetVisitorId), eq(widgetVisitors.businessId, input.businessId))).limit(1))[0]?.contactId ?? null;
+  if (!contactId && (name || phone)) {
+    // A phone typed in a public widget is a callback detail, not proof of
+    // identity. Never attach it to another contact's historical conversations.
+    let created = (await tx.insert(contacts).values({ businessId: input.businessId, ...(name ? { name } : {}), ...(phone ? { phone } : {}) }).onConflictDoNothing().returning({ id: contacts.id }))[0];
+    if (!created) created = (await tx.insert(contacts).values({ businessId: input.businessId, ...(name ? { name } : {}) }).returning({ id: contacts.id }))[0];
+    if (!created) throw new Error("Contact could not be created.");
+    contactId = created.id;
+    await emitWebhookEventInTransaction(tx, { businessId: input.businessId, type: "contact.created", resourceId: contactId });
+  }
+  if (!contactId) return;
+  // Preserve known caller identity and numbers; alternate callback numbers
+  // remain in the staff task rather than overwriting the verified call contact.
+  if (name) await tx.update(contacts).set({ name, updatedAt: new Date() }).where(and(eq(contacts.id, contactId), eq(contacts.businessId, input.businessId), or(eq(contacts.name, ""), eq(contacts.name, "unknown"), sql`${contacts.name} is null`)));
+  if (phone) {
+    try {
+      // Browser voice starts with an anonymous contact. Fill its callback
+      // number, but isolate a uniqueness collision in a savepoint so it does
+      // not discard the message or attach the caller to someone else's record.
+      await tx.transaction(async (savepoint) => {
+        await savepoint.update(contacts).set({ phone, updatedAt: new Date() }).where(and(eq(contacts.id, contactId!), eq(contacts.businessId, input.businessId), sql`${contacts.phone} is null`));
+      });
+    } catch (error) {
+      const code = (error as { code?: string; cause?: { code?: string } })?.cause?.code ?? (error as { code?: string })?.code;
+      if (code !== "23505") throw error;
+    }
+  }
+  await tx.update(conversations).set({ contactId, updatedAt: new Date() }).where(and(eq(conversations.id, input.conversationId), eq(conversations.businessId, input.businessId)));
+  if (conversation.widgetVisitorId) await tx.update(widgetVisitors).set({ contactId, updatedAt: new Date() }).where(and(eq(widgetVisitors.id, conversation.widgetVisitorId), eq(widgetVisitors.businessId, input.businessId)));
 }

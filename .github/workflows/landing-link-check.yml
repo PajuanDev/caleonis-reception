@@ -6,6 +6,7 @@ on:
       - "apps/landing/src/**"
       - "apps/landing/functions/**"
       - "apps/landing/public/**"
+      - "apps/landing/scripts/**"
       - "apps/landing/astro.config.mjs"
       - ".github/workflows/landing-link-check.yml"
   schedule:
@@ -50,6 +51,7 @@ jobs:
             --verbose
             --no-progress
             --base-url http://127.0.0.1:4173
+            --remap '^https://reception\.caleonis\.com(.*) http://127.0.0.1:4173$1'
             --remap '^https://lobbystack\.com(.*) http://127.0.0.1:4173$1'
             --exclude '^https://app\.lobbystack\.com/'
             --exclude '^http://localhost:3000/api/voice/live/'

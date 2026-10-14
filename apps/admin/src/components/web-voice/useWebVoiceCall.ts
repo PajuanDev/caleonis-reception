@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 
 import type { TelemetryEventName } from "@lobbystack/telemetry";
+import { VOICE_RECORDING_CONSENT_VERSION } from "@lobbystack/shared";
 
 export type WebVoiceWidgetStatus =
   | "idle"
@@ -155,6 +156,8 @@ export function useWebVoiceCall({
   const [muted, setMuted] = useState(false);
   const [errorKey, setErrorKey] = useState<WebVoiceErrorKey | null>(null);
   const [remoteStream, setRemoteStream] = useState<MediaStream | null>(null);
+  const [recordingConsentOpen, setRecordingConsentOpen] = useState(false);
+  const pendingConsentRef = useRef<((accepted: boolean) => void) | null>(null);
   const peerConnectionRef = useRef<RTCPeerConnection | null>(null);
   const eventsChannelRef = useRef<RTCDataChannel | null>(null);
   const localStreamRef = useRef<MediaStream | null>(null);
@@ -197,6 +200,8 @@ export function useWebVoiceCall({
   const cleanup = (options: { resetState?: boolean } = {}) => {
     const resetState = options.resetState ?? true;
     invalidatePendingStart();
+    pendingConsentRef.current?.(false);
+    pendingConsentRef.current = null;
     localStreamRef.current?.getTracks().forEach((track) => track.stop());
     localStreamRef.current = null;
     eventsChannelRef.current = null;
@@ -206,6 +211,7 @@ export function useWebVoiceCall({
       remoteAudioRef.current.srcObject = null;
     }
     if (resetState) {
+      setRecordingConsentOpen(false);
       setRemoteStream(null);
       setMuted(false);
     }
@@ -256,11 +262,16 @@ export function useWebVoiceCall({
   };
 
   const startCall = async () => {
-    if (isBusy || isCallActive) {
+    if (isBusy || isCallActive || pendingConsentRef.current) {
       return;
     }
 
     const attemptId = ++startCallAttemptRef.current;
+    const accepted = await new Promise<boolean>((resolve) => {
+      pendingConsentRef.current = resolve;
+      setRecordingConsentOpen(true);
+    });
+    if (!accepted || attemptId !== startCallAttemptRef.current) return;
     let localStream: MediaStream | null = null;
     let peerConnection: RTCPeerConnection | null = null;
 
@@ -366,6 +377,8 @@ export function useWebVoiceCall({
           widgetId,
           visitorId,
           ...(getStartPayload ? await getStartPayload() : {}),
+          recordingConsent: true,
+          recordingConsentVersion: VOICE_RECORDING_CONSENT_VERSION,
           sdp: offer.sdp,
           pageUrl: `${window.location.origin}${window.location.pathname}`,
         }),
@@ -426,6 +439,13 @@ export function useWebVoiceCall({
   const isCallActive = status === "connecting" || status === "connected";
   const isBusy = status === "requesting_microphone" || status === "connecting";
 
+  const resolveRecordingConsent = (accepted: boolean) => {
+    const resolve = pendingConsentRef.current;
+    pendingConsentRef.current = null;
+    setRecordingConsentOpen(false);
+    resolve?.(accepted);
+  };
+
   return {
     status,
     muted,
@@ -433,6 +453,8 @@ export function useWebVoiceCall({
     remoteAudioRef,
     remoteStream,
     startCall,
+    recordingConsentOpen,
+    resolveRecordingConsent,
     endCall,
     forceEndCall,
     isCallActive,

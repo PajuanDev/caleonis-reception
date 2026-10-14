@@ -4,6 +4,7 @@ import { chmod, mkdir, mkdtemp, readFile, rm, writeFile } from "node:fs/promises
 import { dirname, join, resolve } from "node:path";
 import { tmpdir } from "node:os";
 import { pathToFileURL } from "node:url";
+import { writePrivateFile } from "./lib/private-artifact.ts";
 
 export type ReleaseMode = "local" | "staging";
 export type GateStatus = "planned" | "passed" | "failed" | "not-run";
@@ -339,8 +340,7 @@ export async function runReleaseReadiness(options: ReleaseReadinessOptions = {})
 
 export async function writeReleaseEvidence(filePath: string, releaseEvidence: ReleaseEvidence): Promise<void> {
   await mkdir(dirname(filePath), { recursive: true });
-  await writeFile(filePath, `${JSON.stringify(releaseEvidence, null, 2)}\n`, { encoding: "utf8", mode: 0o600, flag: "wx" });
-  await chmod(filePath, 0o600);
+  await writePrivateFile(filePath, `${JSON.stringify(releaseEvidence, null, 2)}\n`);
 }
 
 type CliOptions = { mode: ReleaseMode; plan: boolean; e2e: boolean; evidencePath?: string };

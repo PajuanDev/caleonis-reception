@@ -2,6 +2,7 @@ import { randomUUID } from "node:crypto";
 import { chmod, mkdir, writeFile } from "node:fs/promises";
 import { dirname } from "node:path";
 import { pathToFileURL } from "node:url";
+import { writePrivateFile } from "../lib/private-artifact.ts";
 
 export const ALERT_CONDITION_IDS = [
   "ReplacementOutboxDeadLettered",
@@ -302,8 +303,7 @@ export function renderAlertSmokePlan(): string {
 
 export async function writeAlertSmokeEvidence(filePath: string, evidence: AlertSmokeEvidence): Promise<void> {
   await mkdir(dirname(filePath), { recursive: true });
-  await writeFile(filePath, `${JSON.stringify(evidence, null, 2)}\n`, { encoding: "utf8", mode: 0o600, flag: "wx" });
-  await chmod(filePath, 0o600);
+  await writePrivateFile(filePath, `${JSON.stringify(evidence, null, 2)}\n`);
 }
 
 async function main(): Promise<void> {

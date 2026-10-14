@@ -12,6 +12,7 @@ import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 import { renderSafeMarkdown } from "@/lib/widget-markdown";
 import { useWebVoiceCall } from "@/components/web-voice/useWebVoiceCall";
+import { VoiceRecordingConsentDialog } from "@/components/web-voice/VoiceRecordingConsentDialog";
 
 type WidgetConfigPayload = {
   key: string;
@@ -343,7 +344,7 @@ function VoiceButton({ className, businessSlug, visitorId, sessionToken, parentO
   const { t } = useTranslation("widget");
   // The iframe runs on the app's own origin, so the call starts here with the
   // widget session token and the embedding page's origin as proof of access.
-  const { status, errorKey, remoteAudioRef, startCall, endCall } = useWebVoiceCall({
+  const { status, errorKey, remoteAudioRef, startCall, endCall, recordingConsentOpen, resolveRecordingConsent } = useWebVoiceCall({
     businessSlug,
     widgetId: "lobbystack-widget",
     getStartPayload: async () => ({ visitorId }),
@@ -359,6 +360,7 @@ function VoiceButton({ className, businessSlug, visitorId, sessionToken, parentO
   return (
     <>
       <audio ref={remoteAudioRef} autoPlay playsInline className="hidden" />
+      <VoiceRecordingConsentDialog open={recordingConsentOpen} onDecision={resolveRecordingConsent} chatAvailable />
       {active ? (
         <Button variant="destructive" size="icon" className="ml-auto" aria-label={t("chat.voiceEnd")} onClick={() => void endCall()}><PhoneOff /></Button>
       ) : (

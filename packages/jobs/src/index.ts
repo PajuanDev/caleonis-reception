@@ -54,6 +54,8 @@ export type EnqueueJobInput = {
   payload: JobPayload;
   trace?: { traceparent?: string | undefined; tracestate?: string | undefined };
   idempotencyKey: string;
+  outboxId?: string;
+  outboxVersion?: number;
   delayMs?: number;
   attempts?: number;
 };
@@ -93,12 +95,16 @@ export function createQueue(
   });
 }
 
+export function jobIdFor(type: JobType, idempotencyKey: string, outboxVersion = 0): string {
+  const digest = createHash("sha256").update(`${type}:${idempotencyKey}${outboxVersion > 0 ? `:outbox-replay:${outboxVersion}` : ""}`).digest("hex");
+  return `${digest.slice(0, 8)}-${digest.slice(8, 12)}-5${digest.slice(13, 16)}-${(parseInt(digest.slice(16, 18), 16) & 0x3f | 0x80).toString(16).padStart(2, "0")}${digest.slice(18, 20)}-${digest.slice(20, 32)}`;
+}
+
 export async function enqueueJob(
   queue: Queue<JobEnvelope>,
   input: EnqueueJobInput,
 ): Promise<string> {
-  const digest = createHash("sha256").update(`${input.type}:${input.idempotencyKey}`).digest("hex");
-  const jobId = `${digest.slice(0, 8)}-${digest.slice(8, 12)}-5${digest.slice(13, 16)}-${(parseInt(digest.slice(16, 18), 16) & 0x3f | 0x80).toString(16).padStart(2, "0")}${digest.slice(18, 20)}-${digest.slice(20, 32)}`;
+  const jobId = jobIdFor(input.type, input.idempotencyKey, input.outboxVersion);
   const envelope = jobEnvelopeSchema.parse({
     jobId,
     type: input.type,
@@ -107,6 +113,8 @@ export async function enqueueJob(
     payload: input.payload,
     trace: input.trace ?? {},
     idempotencyKey: input.idempotencyKey,
+    ...(input.outboxId ? { outboxId: input.outboxId } : {}),
+    ...(input.outboxId ? { outboxVersion: input.outboxVersion ?? 0 } : {}),
     scheduled: (input.delayMs ?? 0) > 0,
   });
   const options: JobsOptions = {

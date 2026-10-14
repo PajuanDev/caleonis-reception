@@ -1,5 +1,5 @@
 import { randomUUID } from "node:crypto";
-import { and, asc, eq, inArray, isNull, lte, or, sql } from "drizzle-orm";
+import { and, asc, eq, inArray, isNotNull, isNull, lte, or, sql } from "drizzle-orm";
 
 import type { TraceContextCarrier } from "@lobbystack/contracts";
 import { redactOtelExceptionText } from "@lobbystack/telemetry/node";
@@ -63,7 +63,7 @@ export type ClaimedOutboxMessage = typeof outboxMessages.$inferSelect;
 
 export async function claimOutboxBatch(
   db: Database,
-  options: { dispatcherId: string; limit?: number; lockForMs?: number } ,
+  options: { dispatcherId: string; limit?: number; lockForMs?: number; trackExecution?: boolean } ,
 ): Promise<Array<ClaimedOutboxMessage>> {
   const limit = options.limit ?? 50;
   const lockForMs = options.lockForMs ?? 60_000;
@@ -95,10 +95,70 @@ export async function claimOutboxBatch(
     const lockedBy = `${options.dispatcherId.slice(0, 200)}:${randomUUID()}`;
     const claimed = await tx
       .update(outboxMessages)
-      .set({ lockedAt: new Date(), lockedBy, attempts: sql`${outboxMessages.attempts} + 1` })
+      .set({
+        lockedAt: new Date(),
+        lockedBy,
+        // An old untracked attempt may already have reached an older consumer.
+        // Only first attempts can acquire receipts; retries keep their provenance.
+        ...(options.trackExecution ? { deliveryTracked: sql`${outboxMessages.deliveryTracked} OR ${outboxMessages.attempts} = 0` } : {}),
+        attempts: sql`${outboxMessages.attempts} + 1`,
+      })
       .where(inArray(outboxMessages.id, ids)).returning();
     const byId = new Map(claimed.map((row) => [row.id, row]));
     return ids.map((id) => byId.get(id)!);
+  });
+}
+
+/** A DB receipt is written before any provider side effect. */
+export async function startOutboxExecution(db: Database, id: string, dedupeKey: string, deliveryVersion = 0): Promise<boolean> {
+  return await withDispatcherTransaction(db, async (tx) => {
+    const rows = await tx.update(outboxMessages).set({ executionStartedAt: new Date() })
+      .where(and(eq(outboxMessages.id, id), eq(outboxMessages.dedupeKey, dedupeKey), eq(outboxMessages.deliveryVersion, deliveryVersion), eq(outboxMessages.deliveryTracked, true), isNull(outboxMessages.completedAt), isNull(outboxMessages.deadLetteredAt)))
+      .returning({ id: outboxMessages.id });
+    return rows.length > 0;
+  });
+}
+
+export async function completeOutboxExecution(db: Database, id: string, dedupeKey: string, deliveryVersion = 0): Promise<void> {
+  await withDispatcherTransaction(db, async (tx) => {
+    await tx.update(outboxMessages).set({ completedAt: new Date(), lastError: null, deadLetteredAt: null })
+      .where(and(eq(outboxMessages.id, id), eq(outboxMessages.dedupeKey, dedupeKey), eq(outboxMessages.deliveryVersion, deliveryVersion), eq(outboxMessages.deliveryTracked, true)));
+  });
+}
+
+/** Fence the original job BEFORE replay, while checking the current receipt. */
+export async function prepareOutboxReplay(db: Database, id: string, dedupeKey: string, expectedVersion = 0): Promise<{ state: "settled" | "quarantined" } | { state: "replay"; row: ClaimedOutboxMessage }> {
+  return await withDispatcherTransaction(db, async (tx) => {
+    const fence = and(eq(outboxMessages.id, id), eq(outboxMessages.dedupeKey, dedupeKey), eq(outboxMessages.deliveryVersion, expectedVersion), eq(outboxMessages.deliveryTracked, true), isNull(outboxMessages.completedAt), isNull(outboxMessages.deadLetteredAt));
+    const row = (await tx.select().from(outboxMessages).where(fence).limit(1).for("update"))[0];
+    if (!row) return { state: "settled" };
+    if (row.executionStartedAt) {
+      await tx.update(outboxMessages).set({ deadLetteredAt: new Date(), lastError: "REDIS_LOSS_AFTER_EXECUTION_STARTED" }).where(fence);
+      return { state: "quarantined" };
+    }
+    const [updated] = await tx.update(outboxMessages).set({ deliveryVersion: expectedVersion + 1, recoveryCheckedAt: new Date() }).where(fence).returning();
+    return { state: "replay", row: updated! };
+  });
+}
+
+/** Claim a bounded batch, so concurrent worker replicas share reconciliation. */
+export async function claimOutboxRecoveryBatch(db: Database, now = new Date()): Promise<ClaimedOutboxMessage[]> {
+  return await withDispatcherTransaction(db, async (tx) => {
+    const rows = await tx.select().from(outboxMessages).where(and(
+      eq(outboxMessages.deliveryTracked, true), isNotNull(outboxMessages.publishedAt),
+      isNull(outboxMessages.completedAt), isNull(outboxMessages.deadLetteredAt),
+      lte(outboxMessages.publishedAt, new Date(now.getTime() - 60_000)),
+      or(isNull(outboxMessages.recoveryCheckedAt), lte(outboxMessages.recoveryCheckedAt, new Date(now.getTime() - 60_000))),
+    )).orderBy(sql`${outboxMessages.recoveryCheckedAt} NULLS FIRST`, asc(outboxMessages.publishedAt), asc(outboxMessages.id)).limit(50).for("update", { skipLocked: true });
+    if (rows.length) await tx.update(outboxMessages).set({ recoveryCheckedAt: now }).where(inArray(outboxMessages.id, rows.map((row) => row.id)));
+    return rows;
+  });
+}
+
+export async function quarantineOutboxExecution(db: Database, id: string, reason: "REDIS_LOSS_AFTER_EXECUTION_STARTED" | "QUEUE_TERMINAL_FAILURE", deliveryVersion = 0): Promise<void> {
+  await withDispatcherTransaction(db, async (tx) => {
+    await tx.update(outboxMessages).set({ deadLetteredAt: new Date(), lastError: reason })
+      .where(and(eq(outboxMessages.id, id), eq(outboxMessages.deliveryVersion, deliveryVersion), isNull(outboxMessages.completedAt), isNull(outboxMessages.deadLetteredAt)));
   });
 }
 

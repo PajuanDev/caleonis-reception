@@ -2,6 +2,7 @@ import { Mic, MicOff, Phone, PhoneOff, Waves } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
+import { RecordingConsentDialog } from "./RecordingConsentDialog"
 import {
   useWebVoiceCall,
   webVoiceStatusLabel,
@@ -35,6 +36,8 @@ export function WebVoiceWidget({
     toggleMute,
     isCallActive,
     isBusy,
+    recordingConsentOpen,
+    resolveRecordingConsent,
   } = useWebVoiceCall({
     locale,
     businessSlug,
@@ -51,6 +54,7 @@ export function WebVoiceWidget({
       )}
     >
       <audio ref={remoteAudioRef} autoPlay playsInline />
+      <RecordingConsentDialog open={recordingConsentOpen} onDecision={resolveRecordingConsent} locale={locale} />
       <div className="flex min-w-0 flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
         <div className="min-w-0">
           <div className="flex items-center gap-2 text-sm font-medium">

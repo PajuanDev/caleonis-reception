@@ -1,6 +1,7 @@
 import { and, eq, isNull } from "drizzle-orm";
 
-import { calls, contacts, enqueueOutbox, withBusinessTransaction } from "@lobbystack/db";
+import { auditLogs, calls, contacts, enqueueOutbox, withBusinessTransaction, type Database } from "@lobbystack/db";
+import { VOICE_RECORDING_CONSENT_VERSION } from "@lobbystack/shared";
 
 import { reserveOutboundCallAttempt } from "./billing";
 import type { DomainContext } from "./context";
@@ -73,25 +74,29 @@ export async function startLivePhoneCall(context: DomainContext, input: { busine
  */
 export async function startLiveWebCall(
   context: DomainContext,
-  input: { businessId: string; sessionId: string; widgetId: string; billable: boolean; maxDurationMs?: number; sessionPurpose?: string; prospectDemoId?: string; originUrl?: string; userAgent?: string },
+  input: { businessId: string; sessionId: string; widgetId: string; billable: boolean; maxDurationMs?: number; sessionPurpose?: string; prospectDemoId?: string; originUrl?: string; userAgent?: string; recordingConsentVersion?: string },
 ) {
-  const call = await startCall(context, {
-    businessId: input.businessId,
-    provider: LIVE_CALL_PROVIDER,
-    providerCallId: input.sessionId,
-    from: "web",
-    to: "web",
-    transport: "web_voice",
-    gatewaySessionId: input.sessionId,
-    widgetId: input.widgetId,
-    billable: input.billable,
-    ...(input.maxDurationMs !== undefined ? { maxDurationMs: input.maxDurationMs } : {}),
-    ...(input.sessionPurpose ? { sessionPurpose: input.sessionPurpose } : {}),
-    ...(input.prospectDemoId ? { prospectDemoId: input.prospectDemoId } : {}),
-    ...(input.originUrl ? { originUrl: input.originUrl } : {}),
-    ...(input.userAgent ? { userAgent: input.userAgent } : {}),
+  if (input.recordingConsentVersion && input.recordingConsentVersion !== VOICE_RECORDING_CONSENT_VERSION) throw new Error("The current recording consent notice is required.");
+  return await withBusinessTransaction(context.db, { businessId: input.businessId, actorType: "worker" }, async (tx) => {
+    const call = await startCall({ ...context, db: tx as unknown as Database }, {
+      businessId: input.businessId,
+      provider: LIVE_CALL_PROVIDER,
+      providerCallId: input.sessionId,
+      from: "web",
+      to: "web",
+      transport: "web_voice",
+      gatewaySessionId: input.sessionId,
+      widgetId: input.widgetId,
+      billable: input.billable,
+      ...(input.maxDurationMs !== undefined ? { maxDurationMs: input.maxDurationMs } : {}),
+      ...(input.sessionPurpose ? { sessionPurpose: input.sessionPurpose } : {}),
+      ...(input.prospectDemoId ? { prospectDemoId: input.prospectDemoId } : {}),
+      ...(input.originUrl ? { originUrl: input.originUrl } : {}),
+      ...(input.userAgent ? { userAgent: input.userAgent } : {}),
+    });
+    if (input.recordingConsentVersion) await tx.insert(auditLogs).values({ businessId: input.businessId, eventType: "voice.recording_consent_accepted", entityType: "call", entityId: call.callId, payload: { noticeVersion: input.recordingConsentVersion, decision: "accepted", channel: "web_voice", widgetId: input.widgetId } });
+    return { callId: call.callId, conversationId: call.conversationId, maxDurationMs: call.webCallMaxDurationMs };
   });
-  return { callId: call.callId, conversationId: call.conversationId, maxDurationMs: call.webCallMaxDurationMs };
 }
 
 /** Marks when audio started flowing; test-call progress counts only calls that connected. */

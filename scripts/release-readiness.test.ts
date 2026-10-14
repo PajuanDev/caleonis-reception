@@ -1,6 +1,7 @@
 import { mkdtemp, rm, stat } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
+import { hasPrivateFileAccess } from "./lib/private-artifact.ts";
 
 import { describe, expect, it, vi } from "vitest";
 
@@ -100,7 +101,7 @@ describe("release readiness", () => {
     try {
       const result = await runReleaseReadiness({ plan: true, runId: "run-1", gitSha: "sha-1" });
       await writeReleaseEvidence(file, result);
-      expect((await stat(file)).mode & 0o777).toBe(0o600);
+      expect(await hasPrivateFileAccess(file)).toBe(true);
       await expect(writeReleaseEvidence(file, result)).rejects.toMatchObject({ code: "EEXIST" });
     } finally {
       await rm(directory, { recursive: true, force: true });

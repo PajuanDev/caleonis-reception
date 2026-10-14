@@ -13,6 +13,7 @@ import { Button } from "./ui/button";
 import { buildAuthPathWithReturnTo } from "@/lib/auth-return-to";
 import { resolveLocale } from "@/lib/locale";
 import { localizePublicPath } from "@/lib/locale-path";
+import { PilotActivationSurface } from "./pilot-activation-surface";
 
 type Invitation = { businessName: string; email: string; expired: boolean; status: string };
 
@@ -21,6 +22,7 @@ export function AcceptInviteSurface() {
   const locale = resolveLocale(i18n.resolvedLanguage, i18n.language);
   const router = useRouter();
   const [token, setToken] = useState("");
+  const [pilotToken, setPilotToken] = useState("");
   const [invitation, setInvitation] = useState<Invitation | null>(null);
   const [isPreviewLoading, setIsPreviewLoading] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -28,6 +30,14 @@ export function AcceptInviteSurface() {
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   useEffect(() => {
+    const activationToken = new URLSearchParams(window.location.hash.slice(1)).get("pilot");
+    if (activationToken) {
+      setPilotToken(activationToken);
+      // The fragment never reaches HTTP access logs. Remove it from browser
+      // history as soon as the client has captured the secret.
+      window.history.replaceState(window.history.state, "", `${window.location.pathname}${window.location.search}`);
+      return;
+    }
     const nextToken = new URLSearchParams(window.location.search).get("token")?.trim() ?? "";
     setToken(nextToken);
     const sessionController = new AbortController();
@@ -68,6 +78,8 @@ export function AcceptInviteSurface() {
   if (isPreviewLoading) description = t("acceptInvite.loading");
   else if (invitation?.expired) description = t("acceptInvite.expired");
   else if (isInvitationValid) description = t("acceptInvite.subtitle", { businessName: invitation!.businessName, email: invitation!.email });
+
+  if (pilotToken) return <PilotActivationSurface token={pilotToken} />;
 
   return <div className="ph-no-capture"><ReplacementOnboardingShell description={description} progress={null} title={t("acceptInvite.title")} width="sm"><div className="flex flex-col gap-6">
     {errorMessage ? <p className="text-center text-sm text-destructive">{errorMessage}</p> : null}

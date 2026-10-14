@@ -97,4 +97,16 @@ describe("enqueueJob job ids", () => {
     expect(options.attempts).toBe(5);
     expect(options).not.toHaveProperty("delay");
   });
+  it("uses a new delivery job ID for a fenced replay while preserving business idempotency", async () => {
+    const original = createQueueStub();
+    const replay = createQueueStub();
+    const input = { type: "email.send" as const, payload: {}, idempotencyKey: "stable-business-operation", outboxId: "00000000-0000-4000-8000-000000000001" };
+    const originalId = await enqueueJob(original.queue, { ...input, outboxVersion: 0 });
+    const replayId = await enqueueJob(replay.queue, { ...input, outboxVersion: 1 });
+    expect(replayId).not.toBe(originalId);
+    const [, originalEnvelope] = original.add.mock.calls[0] as unknown as [string, unknown];
+    const [, replayEnvelope] = replay.add.mock.calls[0] as unknown as [string, unknown];
+    expect(originalEnvelope).toMatchObject({ idempotencyKey: input.idempotencyKey, outboxVersion: 0 });
+    expect(replayEnvelope).toMatchObject({ idempotencyKey: input.idempotencyKey, outboxVersion: 1 });
+  });
 });
