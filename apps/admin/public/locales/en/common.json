@@ -55,6 +55,14 @@
     }
   },
   "testCall": {
+    "recordingConsent": {
+      "title": "Before speaking to the AI assistant",
+      "description": "I agree to this call being recorded and transcribed to answer my request and let this business's team follow up. OpenAI processes the audio and authorized workspace users can access the recording.",
+      "retention": "OpenAI makes stored recordings available for 30 days. Use fictional information in this pilot; obtain the business's privacy notice before using real personal data. You can refuse without enabling the microphone. Hanging up ends the conversation; contact the business to exercise your rights or request deletion.",
+      "accept": "I agree and start the call",
+      "refuse": "Refuse recording",
+      "refuseChat": "Refuse and keep chatting"
+    },
     "trigger": "Test Call",
     "title": "Test your AI receptionist",
     "description": "Start a live browser call with your configured receptionist.",

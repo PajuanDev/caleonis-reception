@@ -1,29 +1,11 @@
 #!/usr/bin/env node
 // Writes .env from .env.example with every internal secret generated. Provider credentials
 // (Twilio, Polar, ...) are cleared rather than generated: only the operator can supply them.
-import { randomBytes } from "node:crypto";
 import { existsSync, readFileSync, realpathSync, writeFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { fileURLToPath } from "node:url";
-
-const PROVIDER_CREDENTIALS = new Set(["TWILIO_AUTH_TOKEN", "POLAR_WEBHOOK_SECRET"]);
-const PLACEHOLDER_PREFIX = "replace-with-";
-
-export function generateEnv(example, random = () => randomBytes(32).toString("hex")) {
-  const generated = [];
-  const output = example
-    .split("\n")
-    .map((line) => {
-      const match = /^([A-Z0-9_]+)=(.*)$/.exec(line);
-      if (!match || !match[2].startsWith(PLACEHOLDER_PREFIX)) return line;
-      const [, key] = match;
-      if (PROVIDER_CREDENTIALS.has(key)) return `${key}=`;
-      generated.push(key);
-      return `${key}=${random()}`;
-    })
-    .join("\n");
-  return { output, generated };
-}
+import { generateEnv } from "./generate-env-core.mjs";
+export { generateEnv } from "./generate-env-core.mjs";
 
 function main() {
   const root = resolve(fileURLToPath(new URL("..", import.meta.url)));

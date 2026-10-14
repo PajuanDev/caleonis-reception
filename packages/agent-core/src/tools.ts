@@ -130,17 +130,21 @@ export function createReceptionistTools(context: AgentToolContext): ToolSet {
       }),
       execute: async (input) => {
         const callbackPhone = input.callbackPhone ?? context.callerPhone;
-        return await takeMessageForStaff(domain, {
-          businessId,
-          message: input.message,
-          channel,
-          ...(callbackPhone ? { callbackPhone } : {}),
-          ...(input.callerName ? { callerName: input.callerName } : {}),
-          ...(input.urgency ? { urgency: input.urgency } : {}),
-          ...(input.callbackWindow ? { callbackWindow: input.callbackWindow } : {}),
-          ...(context.callId ? { callId: context.callId } : {}),
-          ...(context.conversationId ? { conversationId: context.conversationId } : {}),
-        });
+        try {
+          return await takeMessageForStaff(domain, {
+            businessId,
+            message: input.message,
+            channel,
+            ...(callbackPhone ? { callbackPhone } : {}),
+            ...(input.callerName ? { callerName: input.callerName } : {}),
+            ...(input.urgency ? { urgency: input.urgency } : {}),
+            ...(input.callbackWindow ? { callbackWindow: input.callbackWindow } : {}),
+            ...(context.callId ? { callId: context.callId } : {}),
+            ...(context.conversationId ? { conversationId: context.conversationId } : {}),
+          });
+        } catch {
+          return { ok: false, reason: "The message could not be saved. Ask the caller to try again or contact the team directly." };
+        }
       },
     }),
   };
@@ -209,15 +213,20 @@ export function createReceptionistTools(context: AgentToolContext): ToolSet {
         const callbackPhone = input.callbackPhone ?? context.callerPhone;
         if (!callbackPhone) return { ok: false, reason: "Ask for a callback number first." };
         const message = [`Appointment request: ${input.serviceName}`, `Preferred time: ${input.preferredTime}`, input.notes ? `Notes: ${input.notes}` : ""].filter(Boolean).join("\n");
-        return await takeMessageForStaff(domain, {
-          businessId,
-          message,
-          channel,
-          callbackPhone,
-          callerName: input.callerName,
-          ...(context.callId ? { callId: context.callId } : {}),
-          ...(context.conversationId ? { conversationId: context.conversationId } : {}),
-        });
+        try {
+          const result = await takeMessageForStaff(domain, {
+            businessId,
+            message,
+            channel,
+            callbackPhone,
+            callerName: input.callerName,
+            ...(context.callId ? { callId: context.callId } : {}),
+            ...(context.conversationId ? { conversationId: context.conversationId } : {}),
+          });
+          return result.ok ? { ...result, bookingStatus: "requested_not_confirmed" } : result;
+        } catch {
+          return { ok: false, reason: "The appointment request could not be saved. It is not booked. Ask the caller to try again or contact the team directly." };
+        }
       },
     });
   }

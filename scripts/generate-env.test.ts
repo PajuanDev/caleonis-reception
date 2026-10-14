@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { generateEnv } from "./generate-env.mjs";
+import { generateEnv } from "./generate-env-core.mjs";
 
 describe("generateEnv", () => {
   it("replaces placeholder secrets and keeps other lines", () => {

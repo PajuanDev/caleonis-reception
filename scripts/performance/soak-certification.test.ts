@@ -1,6 +1,7 @@
 import { mkdtemp, rm, stat } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
+import { hasPrivateFileAccess } from "../lib/private-artifact.ts";
 
 import { describe, expect, it } from "vitest";
 
@@ -186,7 +187,7 @@ describe("soak evidence", () => {
     const file = join(directory, "evidence.json");
     try {
       await writeSoakEvidence(file, evidenceFixture());
-      expect((await stat(file)).mode & 0o777).toBe(0o600);
+      expect(await hasPrivateFileAccess(file)).toBe(true);
       await expect(writeSoakEvidence(file, evidenceFixture())).rejects.toMatchObject({ code: "EEXIST" });
     } finally {
       await rm(directory, { recursive: true, force: true });

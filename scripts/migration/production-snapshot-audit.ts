@@ -2,6 +2,7 @@ import { createHash } from "node:crypto";
 import { createReadStream, type Dirent } from "node:fs";
 import { chmod, lstat, open, readdir, readFile, stat } from "node:fs/promises";
 import { basename, join, relative, resolve, sep } from "node:path";
+import { writePrivateFile } from "../lib/private-artifact.ts";
 
 export type ManifestDisposition = "import" | "exclude";
 
@@ -429,11 +430,5 @@ export async function auditSnapshot(options: AuditOptions): Promise<AuditResult>
 }
 
 export async function writePrivateArtifact(path: string, value: unknown): Promise<void> {
-  const handle = await open(path, "wx", 0o600);
-  try {
-    await handle.writeFile(`${JSON.stringify(value, null, 2)}\n`, "utf8");
-    await chmod(path, 0o600);
-  } finally {
-    await handle.close();
-  }
+  await writePrivateFile(path, `${JSON.stringify(value, null, 2)}\n`);
 }

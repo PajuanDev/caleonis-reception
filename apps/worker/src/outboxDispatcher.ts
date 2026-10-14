@@ -29,7 +29,7 @@ export class OutboxDispatcher {
   private readonly publishAge = getMeter("lobbystack-worker").createHistogram("lobbystack.outbox.publish_age_ms", { unit: "ms" });
   private stopped = false;
 
-  constructor(private readonly db: Database, private readonly queues: Map<string, ReturnType<typeof createQueue>>) {}
+  constructor(private readonly db: Database, private readonly queues: Map<string, ReturnType<typeof createQueue>>, private readonly options: { trackExecution?: boolean } = {}) {}
 
   async dispatchOnce(): Promise<number> {
     // The dispatched failures below intentionally emit only OpenTelemetry
@@ -38,7 +38,7 @@ export class OutboxDispatcher {
     // grant on `product_events`, and a poll failure has no tenant to associate
     // with. Writing the event here would require an unsafe grant or a
     // null-business RLS bypass. See scripts/telemetry-registry-coverage.ts.
-    const rows = await claimOutboxBatch(this.db, { dispatcherId: this.dispatcherId, limit: 50 });
+    const rows = await claimOutboxBatch(this.db, { dispatcherId: this.dispatcherId, limit: 50, trackExecution: this.options.trackExecution === true });
     for (const row of rows) {
       const started = performance.now();
       let outcome = "success";
@@ -51,7 +51,7 @@ export class OutboxDispatcher {
         if (!queue) {
           throw new Error(`No queue configured for outbox topic ${payload.topic}.`);
         }
-        await enqueueJob(queue, { type, businessId: payload.businessId ?? undefined, payload: payload.payload, trace: payload.trace, idempotencyKey: payload.dedupeKey });
+        await enqueueJob(queue, { type, businessId: payload.businessId ?? undefined, payload: payload.payload, trace: payload.trace, idempotencyKey: payload.dedupeKey, ...(row.deliveryTracked ? { outboxId: row.id, outboxVersion: row.deliveryVersion } : {}) });
         // A false result means another dispatcher reclaimed the lease after ours
         // expired. The job is already enqueued and consumers stay idempotent, but
         // this dispatcher must not report the message as published.

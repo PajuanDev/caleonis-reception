@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 
 import { buildBrowserSessionConfig } from "@lobbystack/agent-core/live/session";
 import { finishLiveCall, getWebVoiceBillingAllowance, recordProspectDemoCallError, recordProspectDemoCallStarted, recordVoiceSnapshotLoaded, startLiveWebCall } from "@lobbystack/domain";
-import type { BusinessContextSnapshot } from "@lobbystack/shared";
+import { VOICE_RECORDING_CONSENT_VERSION, type BusinessContextSnapshot } from "@lobbystack/shared";
 import { asApiResponse, readJson } from "@/lib/api-helpers";
 import { loadValidBusinessSnapshot } from "@/lib/business-snapshot";
 import { createWorkerDomainContext } from "@/lib/domain-context";
@@ -26,7 +26,7 @@ function parse(body: unknown): LiveWebCallRequest | undefined {
   const widgetId = text("widgetId", 128);
   if (!sdp || !widgetId || !(LIVE_WEB_CALL_WIDGET_IDS as readonly string[]).includes(widgetId)) return undefined;
   const optional = { businessSlug: text("businessSlug", 128), visitorId: text("visitorId", 128), pageUrl: text("pageUrl"), prospectDemoToken: text("prospectDemoToken", 512) };
-  return { sdp, widgetId, ...Object.fromEntries(Object.entries(optional).filter(([, entry]) => entry !== undefined)) };
+  return { sdp, widgetId, recordingConsent: value.recordingConsent === true, ...(text("recordingConsentVersion", 128) ? { recordingConsentVersion: text("recordingConsentVersion", 128)! } : {}), ...Object.fromEntries(Object.entries(optional).filter(([, entry]) => entry !== undefined)) };
 }
 
 /**
@@ -67,6 +67,9 @@ export async function POST(request: Request) {
     requireLivePrototype();
     const body = parse(await readJson(request));
     if (!body) return denied(400, "invalid_request", cors);
+    // Enforce a deliberate, current consent before provider session creation
+    // or any microphone audio can leave the browser through this endpoint.
+    if (body.recordingConsent !== true || body.recordingConsentVersion !== VOICE_RECORDING_CONSENT_VERSION) return denied(403, "recording_consent_required", cors);
     const timing = createServerTiming();
     const access = await resolveLiveWebCallAccess(request, body);
     timing.mark("access");
@@ -110,6 +113,7 @@ export async function POST(request: Request) {
         sessionId,
         widgetId: access.widgetId,
         billable: !access.prospectDemoId,
+        recordingConsentVersion: VOICE_RECORDING_CONSENT_VERSION,
         ...(maxDurationMs ? { maxDurationMs } : {}),
         ...(access.prospectDemoId ? { sessionPurpose: "prospect_demo", prospectDemoId: access.prospectDemoId } : {}),
         // Prospect demos keep no page URL.

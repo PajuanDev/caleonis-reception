@@ -35,11 +35,12 @@ vi.mock("@/lib/live-prototype", () => ({
 vi.mock("@lobbystack/agent-core/live/session", () => ({ buildBrowserSessionConfig: () => ({ model: "gpt-live-1" }) }));
 
 import { POST } from "./route";
+import { VOICE_RECORDING_CONSENT_VERSION } from "@lobbystack/shared";
 
 const snapshot = { businessId: "biz_1", greeting: "Hi", contactChannels: { phoneNumber: "+15815020392" } };
 
-function start(widgetId: string, extra: Record<string, string> = {}) {
-  return POST(new Request("https://admin.lobbystack.test/api/voice/live/session", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ sdp: "v=0\r\n", widgetId, ...extra }) }));
+function start(widgetId: string, extra: Record<string, unknown> = {}) {
+  return POST(new Request("https://admin.lobbystack.test/api/voice/live/session", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ sdp: "v=0\r\n", widgetId, recordingConsent: true, recordingConsentVersion: VOICE_RECORDING_CONSENT_VERSION, ...extra }) }));
 }
 
 beforeEach(() => {
@@ -60,12 +61,26 @@ beforeEach(() => {
 afterEach(() => { vi.unstubAllEnvs(); });
 
 describe("POST /api/voice/live/session", () => {
+  it.each([undefined, false, "true", 1])("requires explicit recording consent (%s)", async (recordingConsent) => {
+    const response = await start("lobbystack-landing", { recordingConsent });
+    expect(response.status).toBe(403);
+    await expect(response.json()).resolves.toMatchObject({ code: "recording_consent_required" });
+    expect(mocks.access).not.toHaveBeenCalled();
+    expect(mocks.startLiveWebCall).not.toHaveBeenCalled();
+    expect(mocks.create).not.toHaveBeenCalled();
+  });
+  it.each([undefined, "outdated-notice"])("requires the current notice version (%s)", async (recordingConsentVersion) => {
+    const response = await start("lobbystack-landing", { recordingConsentVersion });
+    expect(response.status).toBe(403);
+    expect(mocks.access).not.toHaveBeenCalled();
+    expect(mocks.create).not.toHaveBeenCalled();
+  });
   it("records a prospect demo call as intake-only and unbilled", async () => {
     mocks.access.mockResolvedValue({ businessId: "biz_1", origin: "https://admin.lobbystack.test", widgetId: "lobbystack-prospect-demo", prospectDemoId: "demo_1", dashboardTestCall: false });
     const response = await start("lobbystack-prospect-demo", { businessSlug: "acme", prospectDemoToken: "secret" });
     expect(response.status).toBe(201);
     expect(mocks.allowance).not.toHaveBeenCalled();
-    expect(mocks.startLiveWebCall).toHaveBeenCalledWith(expect.anything(), expect.objectContaining({ sessionId: "live_1", billable: false, sessionPurpose: "prospect_demo", prospectDemoId: "demo_1" }));
+    expect(mocks.startLiveWebCall).toHaveBeenCalledWith(expect.anything(), expect.objectContaining({ sessionId: "live_1", billable: false, sessionPurpose: "prospect_demo", prospectDemoId: "demo_1", recordingConsentVersion: VOICE_RECORDING_CONSENT_VERSION }));
     expect(mocks.recordProspectDemoCallStarted).toHaveBeenCalledWith(expect.anything(), { businessId: "biz_1", prospectDemoId: "demo_1", callId: "call_1", channel: "web_voice", provider: "openai_live" });
     expect(mocks.attach).toHaveBeenCalledWith(expect.objectContaining({ sessionId: "live_1", callId: "call_1", channel: "web_voice", intakeOnly: true, maxDurationMs: 120_000 }));
   });

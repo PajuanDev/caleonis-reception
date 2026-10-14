@@ -59,6 +59,14 @@
     "title": "Tester votre réceptionniste IA",
     "description": "Démarrez un appel en direct dans le navigateur avec votre réceptionniste configurée.",
     "recordingNotice": "La conversation est enregistrée et transcrite, puis consultable dans l’historique de votre compte. Utilisez uniquement des informations fictives pour cette démonstration.",
+    "recordingConsent": {
+      "title": "Avant de parler à l’assistant IA",
+      "description": "J’accepte que cet appel soit enregistré et transcrit pour répondre à ma demande et permettre son suivi par l’équipe de cette entreprise. Le son est traité par OpenAI et l’enregistrement est accessible aux utilisateurs autorisés de l’espace entreprise.",
+      "retention": "OpenAI rend les enregistrements stockés disponibles pendant 30 jours. Cet essai pilote est réservé aux informations fictives ; demandez la notice de l’entreprise avant tout usage avec des données réelles. Vous pouvez refuser sans activer le micro. Raccrocher arrête l’échange ; contactez l’entreprise pour exercer vos droits ou demander l’effacement.",
+      "accept": "J’accepte et je démarre l’appel",
+      "refuse": "Je refuse l’enregistrement",
+      "refuseChat": "Je refuse et reste sur le chat"
+    },
     "connecting": "Connexion...",
     "hangUp": "Raccrocher",
     "status": {

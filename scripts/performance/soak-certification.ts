@@ -4,6 +4,7 @@ import { chmod, mkdir, readFile, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { dirname, join, resolve } from "node:path";
 import { pathToFileURL } from "node:url";
+import { writePrivateFile } from "../lib/private-artifact.ts";
 
 import { percentile } from "./metrics";
 
@@ -372,8 +373,7 @@ export function parseSoakArgs(args: string[]): SoakCliOptions {
 
 export async function writeSoakEvidence(filePath: string, evidence: SoakEvidence): Promise<void> {
   await mkdir(dirname(filePath), { recursive: true });
-  await writeFile(filePath, `${JSON.stringify(evidence, null, 2)}\n`, { encoding: "utf8", mode: 0o600, flag: "wx" });
-  await chmod(filePath, 0o600);
+  await writePrivateFile(filePath, `${JSON.stringify(evidence, null, 2)}\n`);
 }
 
 async function defaultRunSoak(

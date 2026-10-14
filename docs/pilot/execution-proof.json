@@ -1,0 +1,102 @@
+{
+  "verifiedAtUtc": "2026-10-14T23:06:50.120903+00:00",
+  "baseCommit": "cc7fd039901e9cf3bbbf5fca7c3b6b173f16ea83",
+  "phase": "P0 qualification; P1 independent preparation; P2 deferred",
+  "productionCodeChanged": false,
+  "productionPilotMigrationsApplied": false,
+  "backupSchedulerActivated": false,
+  "actualClientInvitationsSent": false,
+  "releaseChecks": {
+    "monorepoTypecheck": "PASS; final DB check and scripts recheck after final guards",
+    "monorepoBuild": "PASS; admin/prerender and worker dependency graph rebuilt after changes",
+    "workspaceTestsPassed": 1848,
+    "scriptTestsPassed": 162,
+    "automatedTestsPassed": 2010,
+    "finalTests": "PASS",
+    "ciYamlAndProductionTargetGuard": "PASS; empty and malformed target refused, valid UUID accepted; no GitHub production variable configured",
+    "changedAdminLintErrors": 0,
+    "knownLiveCredentialsAndOfflineKeyAbsentFromStagedPatch": "PASS"
+  },
+  "postgresql": {
+    "actionsAndInternalCalendarTestsPassed": 11,
+    "pilotIntegrationTestsPassed": 10,
+    "pilotHttpChecksPassed": 15,
+    "rlsTablesCheckedWithAppAndWorkerBehavior": 75,
+    "testFixturesCleaned": true,
+    "restore": {
+      "status": "PASS",
+      "tablesCompared": 77,
+      "rowsCompared": 907,
+      "allTableCountsMatched": true,
+      "rlsProbePassed": true,
+      "productionDatabaseUnchanged": true,
+      "rolesUnchanged": true,
+      "archiveSha256": "0b597dafa0608badd249b2cac74f8b8c7a2a6d8a04c2ba927243746c2732b91c"
+    },
+    "outboxRealIntegrationTestsPassed": 5,
+    "legacyProductionAudit": {
+      "pendingFirstAttempt": 0,
+      "pendingPreviouslyAttempted": 0,
+      "publishedHistoricalRows": 211,
+      "deadLettered": 0,
+      "automaticReplay": false
+    },
+    "pilotCliPrivateFileAclSmoke": "PASS real Windows ACL for create/reissue; old token invalidated; all fictional fixtures/files removed"
+  },
+  "encryptedBackup": {
+    "format": "v2 compressed shared objects; v1 restore compatible",
+    "twoActualGenerations": [
+      {
+        "generation": "20261014T223947Z-b8c79c09-0612-4031-8518-0fc2c0891e6c",
+        "uploadedBytes": 27643352,
+        "storedBytes": 27643352
+      },
+      {
+        "generation": "20261014T223949Z-81b5ceaf-e6a6-4cce-ba1d-7cc343dfb9d7",
+        "uploadedBytes": 523008,
+        "storedBytes": 28166360
+      }
+    ],
+    "sharedBlobs": 7,
+    "eachGenerationDecryptedFiles": 8,
+    "storedBytesAfterTwoGenerations": 28166360,
+    "storedBytesCap": 536870912,
+    "monthlyAdditionalBudgetAuthorizedUsd": 1,
+    "retentionAuthorizedDays": 7,
+    "sevenLatestCompleteGenerationsPreserved": true,
+    "privateRecoveryKeyInServer": false,
+    "conditionalS3ReservationActualTest": "PASS",
+    "dedicatedReadOnlyRoleActualLoginAndPgDump": "PASS",
+    "roleWritePermissions": 0,
+    "originalClientObjectsAndPriorBackupsPreserved": true,
+    "strictRestoreCliV1AndV2AfterFinalPathGuards": "PASS; eight files each"
+  },
+  "providers": {
+    "twilioTicket": "29942338",
+    "humanResponse": "Support reply received: RNE EI accepted, existing-line forwarding permitted for stated use case, dedicated customer number requires its own business documents; bundle approval still pending",
+    "frenchNumberPurchased": false,
+    "realPstnIncomingAndForwarding": "BLOCKED pending actual bundle submission/approval, explicit number purchase approval and real call/forwarding validation",
+    "externalEmail": "BLOCKED no SMTP/Resend credentials",
+    "googleCalendarOauth": "BLOCKED no Google credentials; internal calendar PG tested",
+    "customerBillingActivated": false,
+    "twilioSupportPricing": {
+      "localNumberUsdPerMonth": 1.35,
+      "sipIncomingApproxUsdPerMinute": 0.006,
+      "setupUsdAccordingToSupport": 0,
+      "exactTaxesAndCheckoutPreviewValidated": false
+    }
+  },
+  "humanGates": [
+    "Final production rollout confirmation required by Railway deploy tool",
+    "Human review of EI contractual/privacy/retention drafts before real customer data",
+    "No real pilots invited until user supplies verified recipient details",
+    "No paid voice test or phone purchase without separate spending approval"
+  ],
+  "operationalRisks": [
+    "Backup health endpoint exists; no external recurring failure notifier configured",
+    "Same private project bucket is not protection against whole-account deletion; verified private offline copy retained",
+    "Redis reconciliation unit tests use queue mocks plus real PostgreSQL fencing; full Redis-loss drill not claimed",
+    "External provider effects after an ambiguous crash require manual receipt review",
+    "Main GitHub production migration requires an explicitly configured project variable; no fallback project and no main merge performed"
+  ]
+}

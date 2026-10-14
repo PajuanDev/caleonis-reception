@@ -5,6 +5,7 @@ export type { AiPricingRatesUsdPerMillionTokens, VersionedAiPricing } from "./ai
 export { isMaintenanceMode } from "./maintenance";
 export { isCertificationMode, assertCertificationRecipient, assertCertificationOperationAllowed, assertCertificationCalendar, assertCertificationBillingSandbox } from "./certification";
 export { assertPhoneNumberPurchaseEnabled } from "./phoneNumberPurchase";
+export { VOICE_RECORDING_CONSENT_VERSION } from "./voiceRecordingConsent";
 
 export type DeploymentMode = "cloud" | "self_hosted_standard" | "development";
 

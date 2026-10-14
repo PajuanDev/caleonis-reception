@@ -1,7 +1,8 @@
 import { demoSnapshot, type BookingMode, type BusinessContextSnapshot } from "@lobbystack/shared";
-import { describe, expect, it, vi } from "vitest";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 
-vi.mock("@lobbystack/domain", () => ({}));
+const mocks = vi.hoisted(() => ({ takeMessageForStaff: vi.fn() }));
+vi.mock("@lobbystack/domain", () => ({ takeMessageForStaff: mocks.takeMessageForStaff }));
 
 import { createReceptionistTools, type AgentToolContext } from "./tools";
 
@@ -16,6 +17,8 @@ function toolNames(overrides: Partial<AgentToolContext> & { bookingMode?: Bookin
 }
 
 const callControl = { transfer: vi.fn(async () => true), hangup: vi.fn(async () => undefined) };
+
+beforeEach(() => { vi.clearAllMocks(); });
 
 describe("createReceptionistTools", () => {
   it("books directly by default", () => {
@@ -66,5 +69,31 @@ describe("createReceptionistTools", () => {
     expect(callControl.transfer).not.toHaveBeenCalled();
     await expect(execute({ callerRequested: true, urgent: false }, { toolCallId: "2", messages: [] })).resolves.toMatchObject({ ok: true });
     expect(callControl.transfer).toHaveBeenCalledWith("+14165550199");
+  });
+
+  it("returns saved task evidence and preserves pending notification status", async () => {
+    mocks.takeMessageForStaff.mockResolvedValue({ ok: true, inboxItemId: "task_1", status: "saved", notificationStatus: "queued" });
+    const tools = createReceptionistTools({ domain: { db: {} as never }, snapshot: demoSnapshot, channel: "web_chat", conversationId: "visitor_thread" });
+    const execute = tools.takeMessage!.execute! as (input: object, options: object) => Promise<unknown>;
+    await expect(execute({ callerName: "Alice", callbackPhone: "+33612345678", message: "A quote please" }, { toolCallId: "1", messages: [] })).resolves.toMatchObject({ ok: true, inboxItemId: "task_1", notificationStatus: "queued" });
+    expect(mocks.takeMessageForStaff).toHaveBeenCalledWith(expect.anything(), expect.objectContaining({ businessId: demoSnapshot.businessId, conversationId: "visitor_thread", channel: "web_chat" }));
+  });
+
+  it("reports storage failure without exposing errors or claiming a saved message", async () => {
+    mocks.takeMessageForStaff.mockRejectedValue(new Error("database-password-secret"));
+    const tools = createReceptionistTools({ domain: { db: {} as never }, snapshot: demoSnapshot, channel: "web_voice" });
+    const execute = tools.takeMessage!.execute! as (input: object, options: object) => Promise<unknown>;
+    const result = await execute({ message: "A quote please" }, { toolCallId: "1", messages: [] });
+    expect(result).toMatchObject({ ok: false, reason: expect.stringContaining("could not be saved") });
+    expect(JSON.stringify(result)).not.toContain("database-password-secret");
+  });
+
+  it("distinguishes an appointment request from a confirmed booking", async () => {
+    mocks.takeMessageForStaff.mockResolvedValue({ ok: true, inboxItemId: "task_2", status: "saved", notificationStatus: "not_requested" });
+    const tools = createReceptionistTools({ domain: { db: {} as never }, snapshot: { ...demoSnapshot, bookingMode: "request" }, channel: "web_chat" });
+    const execute = tools.requestAppointment!.execute! as (input: object, options: object) => Promise<unknown>;
+    await expect(execute({ callerName: "Alice", callbackPhone: "+33612345678", serviceName: "Consultation", preferredTime: "Tomorrow morning" }, { toolCallId: "1", messages: [] })).resolves.toMatchObject({ ok: true, bookingStatus: "requested_not_confirmed" });
+    mocks.takeMessageForStaff.mockRejectedValue(new Error("write failed"));
+    await expect(execute({ callerName: "Alice", callbackPhone: "+33612345678", serviceName: "Consultation", preferredTime: "Tomorrow morning" }, { toolCallId: "2", messages: [] })).resolves.toMatchObject({ ok: false, reason: expect.stringContaining("It is not booked") });
   });
 });

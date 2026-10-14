@@ -2,7 +2,7 @@ import { isWidgetKeyIssuanceEnabled, type HostedCheckoutPlanIntervals } from "@l
 import { NextResponse } from "next/server";
 import { and, desc, eq, sql } from "drizzle-orm";
 
-import { billingAccounts, billingTransactions, billingUsageEvents, billingUsageMonths } from "@lobbystack/db";
+import { billingAccounts, billingTransactions, billingUsageEvents, billingUsageMonths, businesses } from "@lobbystack/db";
 import { billingAccess, getKnowledgeStorageUsageBytes, requireBusinessMembership, setOverageSpendingCap } from "@lobbystack/domain";
 import { asApiResponse, businessIdFromRequest, readJson, requireApiSession, withOperatorTransaction } from "@/lib/api-helpers";
 import { createDomainContext } from "@/lib/domain-context";
@@ -22,7 +22,9 @@ export async function GET(request: Request) {
       const knowledgeStorageBytesUsed = await getKnowledgeStorageUsageBytes(tx, businessId);
       const month = usageMonth[0];
       const cap = account[0]?.overageSpendingCapCents ?? null;
-      const permissions = billingAccess(membership.role, account[0] ?? null, Boolean(process.env.POLAR_ACCESS_TOKEN && process.env.POLAR_ORGANIZATION_ID));
+      const [business] = await tx.select({ managedPilot: businesses.managedPilot }).from(businesses).where(eq(businesses.id, businessId)).limit(1);
+      const managedPilot = business?.managedPilot === true;
+      const permissions = billingAccess(membership.role, account[0] ?? null, !managedPilot && Boolean(process.env.POLAR_ACCESS_TOKEN && process.env.POLAR_ORGANIZATION_ID));
       const availableCheckoutIntervals: HostedCheckoutPlanIntervals = { starter: [], pro: [] };
       if (permissions.hasCheckoutAccess) for (const plan of ["starter", "pro"] as const) {
         for (const interval of ["monthly", "annual"] as const) {

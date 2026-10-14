@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react"
+import { VOICE_RECORDING_CONSENT_VERSION } from "@lobbystack/shared"
 
 export type WebVoiceWidgetStatus =
   | "idle"
@@ -131,6 +132,8 @@ export function useWebVoiceCall({
   const [muted, setMuted] = useState(false)
   const [errorMessage, setErrorMessage] = useState<string | null>(null)
   const [remoteStream, setRemoteStream] = useState<MediaStream | null>(null)
+  const [recordingConsentOpen, setRecordingConsentOpen] = useState(false)
+  const pendingConsentRef = useRef<((accepted: boolean) => void) | null>(null)
   const peerConnectionRef = useRef<RTCPeerConnection | null>(null)
   const eventsChannelRef = useRef<RTCDataChannel | null>(null)
   const localStreamRef = useRef<MediaStream | null>(null)
@@ -150,6 +153,8 @@ export function useWebVoiceCall({
   const cleanup = (options: { resetState?: boolean } = {}) => {
     const resetState = options.resetState ?? true
     startCallAttemptRef.current += 1
+    pendingConsentRef.current?.(false)
+    pendingConsentRef.current = null
     localStreamRef.current?.getTracks().forEach((track) => track.stop())
     localStreamRef.current = null
     eventsChannelRef.current = null
@@ -159,6 +164,7 @@ export function useWebVoiceCall({
       remoteAudioRef.current.srcObject = null
     }
     if (resetState) {
+      setRecordingConsentOpen(false)
       setRemoteStream(null)
       setMuted(false)
     }
@@ -203,12 +209,17 @@ export function useWebVoiceCall({
   }
 
   const startCall = async () => {
-    if (isBusy || isCallActive) {
+    if (isBusy || isCallActive || pendingConsentRef.current) {
       return
     }
 
     const attemptId = ++startCallAttemptRef.current
     const abandoned = () => attemptId !== startCallAttemptRef.current
+    const accepted = await new Promise<boolean>((resolve) => {
+      pendingConsentRef.current = resolve
+      setRecordingConsentOpen(true)
+    })
+    if (!accepted || abandoned()) return
     setErrorMessage(null)
     setStatus("requesting_microphone")
     emit("landing.web_voice_call_started")
@@ -285,6 +296,8 @@ export function useWebVoiceCall({
           businessSlug,
           widgetId,
           visitorId,
+          recordingConsent: true,
+          recordingConsentVersion: VOICE_RECORDING_CONSENT_VERSION,
           sdp: offer.sdp,
           pageUrl: window.location.href,
         }),
@@ -349,6 +362,13 @@ export function useWebVoiceCall({
   const isCallActive = status === "connecting" || status === "connected"
   const isBusy = status === "requesting_microphone" || status === "connecting"
 
+  const resolveRecordingConsent = (accepted: boolean) => {
+    const resolve = pendingConsentRef.current
+    pendingConsentRef.current = null
+    setRecordingConsentOpen(false)
+    resolve?.(accepted)
+  }
+
   return {
     status,
     muted,
@@ -356,6 +376,8 @@ export function useWebVoiceCall({
     remoteAudioRef,
     remoteStream,
     startCall,
+    recordingConsentOpen,
+    resolveRecordingConsent,
     endCall,
     toggleMute,
     isCallActive,

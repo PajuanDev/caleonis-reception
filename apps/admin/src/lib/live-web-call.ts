@@ -37,6 +37,8 @@ export type LiveWebCallRequest = {
   visitorId?: string;
   pageUrl?: string;
   prospectDemoToken?: string;
+  recordingConsent?: boolean;
+  recordingConsentVersion?: string;
 };
 
 /** Who is calling, and on whose behalf. Decides billing, limits and tools. */

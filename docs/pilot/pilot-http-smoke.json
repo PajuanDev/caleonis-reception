@@ -1,0 +1,77 @@
+{
+  "verifiedAtUtc": "2026-10-14T22:43:47Z",
+  "baseCommit": "cc7fd039901e9cf3bbbf5fca7c3b6b173f16ea83",
+  "target": "http://127.0.0.1:3010",
+  "databaseScope": "isolated restored test database; production dataset untouched",
+  "fixtures": "two fictional pilot owners; both removed after verification",
+  "checks": {
+    "privateActivationPreview": "PASS",
+    "operatorCliReissueWithHashAndPrivateFile": "PASS",
+    "oldLinkDeniedAfterReissue": "PASS",
+    "operatorCliRevocation": "PASS",
+    "activeAccountResetDenied": "PASS",
+    "activation": "PASS",
+    "replayDeniedHttp400": "PASS",
+    "actualBetterAuthPasswordLogin": "PASS",
+    "ownerDashboardHttp200": "PASS",
+    "additionalPilotWorkspaceDeniedHttp403": "PASS",
+    "onlyOwnBusinessListed": "PASS",
+    "crossTenantContactsDeniedHttp403": "PASS",
+    "jsonAuthorityInjectionDeniedHttp400": "PASS",
+    "managedPilotFlagInjectionDeniedHttp400": "PASS",
+    "crossTenantBusinessWriteDeniedHttp403": "PASS",
+    "unauthenticatedBusinessWriteDeniedHttp401": "PASS",
+    "paidCheckoutHidden": "PASS",
+    "paidCheckoutDeniedHttp403": "PASS",
+    "cleanupVerifiedNoRemainingFixtures": "PASS"
+  },
+  "publicSignupUsed": false,
+  "realInvitationsSent": false,
+  "outboundEmailSent": false,
+  "providerPurchases": false,
+  "productionModified": false,
+  "postgresqlIntegration": {
+    "verifiedAtUtc": "2026-10-14T22:30:35Z",
+    "testsPassed": 10,
+    "actualAuthAndAppRoles": true,
+    "concurrentActivationAndReissue": "PASS",
+    "concurrentReissuesLeaveOneValidLink": "PASS",
+    "activeCredentialsPreserved": "PASS",
+    "finalFixtureCleanup": "PASS",
+    "additionalPilotWorkspaceGuard": "PASS under actual PostgreSQL app role, API route tests and authenticated HTTP request",
+    "nonPilotAutonomousCreationPreserved": "PASS",
+    "runs": [
+      { "testsPassed": 9, "durationSeconds": 134.57 },
+      { "filter": "autonomous workspace creation", "testsPassed": 1, "durationSeconds": 16.51 }
+    ]
+  },
+  "databaseValidation": {
+    "verifiedAtUtc": "2026-10-14T22:43:47Z",
+    "migrationsInTestScope": ["0071_outbox_execution_receipts.sql", "0072_managed_pilot_access.sql"],
+    "dbCheck": "PASS",
+    "dbVerifyRls": "PASS",
+    "rlsEnabledAndForcedTables": 75,
+    "verifyRlsBehaviorEnabled": true,
+    "actualAppAndWorkerVisibilityProbes": "PASS",
+    "actorSpoofingDenied": "PASS",
+    "behaviorFixtures": "removed by the verification transaction",
+    "productionTargetUsed": false
+  },
+  "cleanup": {
+    "fictionalAccounts": "removed",
+    "privateLinkFile": "removed",
+    "localDevelopmentServer": "stopped",
+    "nextEnvironmentDeclaration": "restored to original production type paths"
+  },
+  "nextDevelopmentDiagnostics": {
+    "routeDiscovery": "PASS",
+    "configurationErrors": 0,
+    "buildErrors": 0,
+    "browserDiagnostic": "React development debugging asks for eval while the existing CSP forbids it; development-only console warning, production CSP preserved."
+  },
+  "limitations": [
+    "Validated through a local development server connected to the isolated test restore.",
+    "Production deployment and real pilot invitation delivery remain separate steps.",
+    "PSTN calling, Google Calendar and outbound notification delivery are outside this authentication check."
+  ]
+}

@@ -172,11 +172,18 @@ jobs:
       contents: read
     env:
       RAILWAY_TOKEN: ${{ secrets.RAILWAY_PRODUCTION_TOKEN }}
-      RAILWAY_PROJECT_ID: af0a130e-7b02-4fc0-94ef-b0ac45a0a0a6
+      RAILWAY_PROJECT_ID: ${{ vars.RAILWAY_PRODUCTION_PROJECT_ID }}
       RAILWAY_ENVIRONMENT: production
       RAILWAY_SERVICE: migrator
     steps:
       - uses: actions/checkout@v4
+      - name: Require an explicitly configured production project
+        shell: bash
+        run: |
+          if [[ ! "$RAILWAY_PROJECT_ID" =~ ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$ ]]; then
+            echo "::error::Set RAILWAY_PRODUCTION_PROJECT_ID only after verifying the target project and approving the production rollout. No default project is used."
+            exit 1
+          fi
       - name: Install Railway CLI
         run: npm install --global @railway/cli@5.57.9
       - name: Verify release is current

@@ -269,6 +269,8 @@ export const jobEnvelopeSchema = z.object({
   payload: z.record(z.string(), z.unknown()),
   trace: traceContextSchema,
   idempotencyKey: z.string().min(1).max(255),
+  outboxId: z.string().uuid().optional(),
+  outboxVersion: z.number().int().nonnegative().optional(),
   scheduled: z.boolean().default(false),
   recurring: z.boolean().optional(),
 });

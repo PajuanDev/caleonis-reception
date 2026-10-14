@@ -11,6 +11,8 @@
     "./migration/**/*.ts",
     "./release-readiness*.ts",
     "./seed-release-e2e.ts",
+    "./pilot-onboarding.ts",
+    "./replacement-pilot-onboarding-check.ts",
     "./seed-zapier-local.ts",
     "./production-migration-preflight.ts",
     "./query-plan-check.ts",

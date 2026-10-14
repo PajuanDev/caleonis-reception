@@ -67,6 +67,17 @@ describe("OutboxDispatcher", () => {
     expect(mocks.markOutboxFailed).toHaveBeenCalledWith(db, row, error, expect.any(Date));
     expect(mocks.markOutboxPublished).not.toHaveBeenCalled();
   });
+  it("keeps receipts disabled until the consumer rollout gate is activated", async () => {
+    const queues = new Map([["default", {} as never]]);
+    mocks.claimOutboxBatch.mockResolvedValue([{ ...row, deliveryTracked: false, deliveryVersion: 0 }]);
+    mocks.markOutboxPublished.mockResolvedValue(true);
+    await new OutboxDispatcher({} as Database, queues).dispatchOnce();
+    expect(mocks.claimOutboxBatch).toHaveBeenLastCalledWith(expect.anything(), expect.objectContaining({ trackExecution: false }));
+    expect(mocks.enqueueJob.mock.calls.at(-1)?.[1]).not.toHaveProperty("outboxId");
+    mocks.claimOutboxBatch.mockResolvedValue([{ ...row, deliveryTracked: true, deliveryVersion: 0 }]);
+    await new OutboxDispatcher({} as Database, queues, { trackExecution: true }).dispatchOnce();
+    expect(mocks.enqueueJob.mock.calls.at(-1)?.[1]).toMatchObject({ outboxId: row.id, outboxVersion: 0 });
+  });
 
   it("does not report a fenced claim as published", async () => {
     mocks.claimOutboxBatch.mockResolvedValue([row]);
@@ -76,6 +87,19 @@ describe("OutboxDispatcher", () => {
     expect(mocks.markOutboxPublished).toHaveBeenCalledWith(expect.anything(), row);
     expect(mocks.counterAdds.some((entry) => entry.name === "lobbystack.outbox.published")).toBe(false);
     expect(mocks.histogramRecords).toContainEqual({ name: "lobbystack.outbox.publish_duration_ms", attributes: { topic: "notification.dispatch", outcome: "fenced" } });
+  });
+
+  it("keeps a previously attempted legacy message untracked after receipt activation", async () => {
+    const legacyRetry = { ...row, attempts: 2, deliveryTracked: false, deliveryVersion: 0 };
+    mocks.claimOutboxBatch.mockResolvedValue([legacyRetry]);
+    mocks.markOutboxPublished.mockResolvedValue(true);
+    const queues = new Map([["default", {} as never]]);
+    await new OutboxDispatcher({} as Database, queues, { trackExecution: true }).dispatchOnce();
+    expect(mocks.claimOutboxBatch).toHaveBeenCalledWith(expect.anything(), expect.objectContaining({ trackExecution: true }));
+    const envelope = mocks.enqueueJob.mock.calls.at(-1)?.[1];
+    expect(envelope).toMatchObject({ idempotencyKey: legacyRetry.dedupeKey });
+    expect(envelope).not.toHaveProperty("outboxId");
+    expect(envelope).not.toHaveProperty("outboxVersion");
   });
 
   it("retries polling after a transient database failure", async () => {
