@@ -119,8 +119,16 @@ jobs:
           done
       - run: pnpm db:check
       - run: pnpm db:verify-rls
+      - name: Prove durable outbox recovery after isolated Redis queue loss
+        env:
+          LOBBYSTACK_OUTBOX_REDIS_RECOVERY_INTEGRATION: "true"
+        run: pnpm --filter @lobbystack/worker exec vitest run src/outboxRecovery.integration.test.ts
       - name: Test transactional reliability with PostgreSQL roles
         run: pnpm test:reliability
+      - name: Qualify managed pilots, receptionist actions and durable receipts
+        run: |
+          pnpm --filter @lobbystack/domain exec vitest run src/server/pilotActivation.integration.test.ts src/server/receptionistActions.integration.test.ts
+          pnpm --filter @lobbystack/db exec vitest run src/outbox.integration.test.ts
       - name: Test verification persistence and concurrent quotas
         run: pnpm --filter @lobbystack/admin exec vitest run src/lib/auth-issuance.integration.test.ts src/lib/email-verification-policy.test.ts
       - name: Test live-call presence against Redis

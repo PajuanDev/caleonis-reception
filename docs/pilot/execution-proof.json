@@ -17,6 +17,29 @@
     "changedAdminLintErrors": 0,
     "knownLiveCredentialsAndOfflineKeyAbsentFromStagedPatch": "PASS"
   },
+  "securityRemediation": {
+    "localVerificationAtUtc": "2026-10-14T23:43:21Z",
+    "nextVersion": "16.3.6",
+    "nextOfficialAdvisory": "GHSA-vcvr-r3jv-pc5j",
+    "nextBuildTypecheckAndFrozenInstall": "PASS; standalone runtime also resolves 16.3.6",
+    "nextTargetedRegressionTests": "86 PASS in 13 suites; reruns not added to the 2010 baseline count",
+    "runtimePerlMinimumVersion": "5.36.0-7+deb12u4",
+    "runtimePerlAdvisory": "Debian DLA-4821-1",
+    "allThreeImageBuildAndTrivyAfterFix": "PENDING new commit CI; scans remain enforced",
+    "imageWorkspaceProjectionIncludingFrozenOfflineFetch": "PASS; real Windows invocation, no shell fallback",
+    "previousHeadChecksDatabaseAndZapier": "PASS; prior image scans exposed the vulnerabilities now patched",
+    "landingSeo": "PASS; 108 indexable pages and two sitemaps",
+    "externalMarketingLinkJob": "FAIL inherited upstream repository/doc references; no internal pilot route failure claimed",
+    "mandatoryPilotPostgresqlCiGate": "Added; ten pilot, eight action and five outbox cases, existing three calendar cases retained",
+    "mandatoryRealRedisQueueLossCiGate": "Added; isolated TEST PostgreSQL/Redis only, unique queue prefix, no production FLUSH or provider calls; actual run pending"
+  },
+  "browserRegressionAfterNextFix": {
+    "authJourneysPassed": 5,
+    "affiliateJourney": "BLOCKED locally: no isolated Redis; email abuse policy preserved, CI isolated Redis qualification pending",
+    "testDatabaseGuardChecksPassed": 10,
+    "testFixturesCleaned": true,
+    "productionDataModified": false
+  },
   "postgresql": {
     "actionsAndInternalCalendarTestsPassed": 11,
     "pilotIntegrationTestsPassed": 10,
@@ -74,6 +97,9 @@
   "providers": {
     "twilioTicket": "29942338",
     "humanResponse": "Support reply received: RNE EI accepted, existing-line forwarding permitted for stated use case, dedicated customer number requires its own business documents; bundle approval still pending",
+    "officialRneRetrievedAndVerifiedLocally": true,
+    "officialRneUploadedToTwilio": false,
+    "bundleSubmissionPerformed": false,
     "frenchNumberPurchased": false,
     "realPstnIncomingAndForwarding": "BLOCKED pending actual bundle submission/approval, explicit number purchase approval and real call/forwarding validation",
     "externalEmail": "BLOCKED no SMTP/Resend credentials",

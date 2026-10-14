@@ -4,7 +4,7 @@ Version de travail du 14 octobre 2026. **DRAFT — validation humaine requise. A
 
 Exploitant : **William Fabrice GOSSE, entrepreneur individuel (EI), nom commercial MrManiac**, SIREN **929 183 986**, SIRET du siège **929 183 986 00017**, **10 rue Courbet, 59100 Roubaix, France**. Contact public existant : **contact@caleonis.com**. Caléonis Receptionist est la marque de service ; ne pas présenter Caléonis comme une société immatriculée distincte.
 
-Ces identifiants et l'adresse concordent entre l'avis de situation INSEE du 14 octobre 2026 fourni dans le dossier de travail et l'[Annuaire des entreprises — résultat public SIREN 929183986](https://recherche-entreprises.api.gouv.fr/search?q=929183986). Le contact provient des mentions du site existantes. Aucune attestation privée ni donnée d'accès n'est reproduite ici. L'avis INSEE n'est pas présenté comme un certificat de conformité juridique du service.
+Ces identifiants et l'adresse concordent entre l'avis de situation INSEE du 14 octobre 2026, l'attestation RNE officielle INPI téléchargée et vérifiée en privé, et l'[Annuaire des entreprises — fiche de l'EI](https://annuaire-entreprises.data.gouv.fr/entreprise/william-gosse-mrmaniac-929183986). Le contact provient des mentions du site existantes. Le PDF RNE original, daté du 15 octobre 2026 en France, reste hors Git ; aucune donnée de naissance ni d'accès n'est reproduite ici. Ces documents d'identité ne sont pas présentés comme un certificat de conformité juridique du service.
 
 Documents préparés : [contrat B2B pilote](./contrat-pilote-fr.md), [notice de confidentialité](./confidentialite-service-fr.md), [annonce IA et enregistrement](./information-appelant-fr.md). Les champs `[À COMPLÉTER]` sont bloquants avant signature ou publication.
 
@@ -23,6 +23,10 @@ Documents préparés : [contrat B2B pilote](./contrat-pilote-fr.md), [notice de 
 Les configurations GPT-Live dans `packages/agent-core/src/live/session.ts` définissent actuellement `store: true`. La salutation provient du snapshot de l'entreprise et est émise par le contrôleur d'appel. **La présence effective de l'annonce IA, le consentement lorsqu'il est choisi comme base de l'enregistrement, l'arrêt de collecte en cas de refus et l'effacement chez les fournisseurs doivent être vérifiés avant un pilote utilisant des données réelles.** L'essai vocal fonctionnel ne vaut pas preuve de ces contrôles.
 
 Les sauvegardes, rôles et filtres de locataire doivent être rapprochés des preuves d'exploitation. Ces documents définissent la cible contractuelle ; ils ne certifient pas la production.
+
+L'audit du code et des variables actuellement déployés confirme une rétention de contenu déjà active : un nouveau pilote géré, créé en mode cloud sans abonnement payant, relève du plan `free_cloud`, avec 30 jours pour les corps/messages multimédias, les transcriptions et les WAV. Le sweep horaire et les jobs de suppression S3 existent ; leurs tests ne constituent pas une preuve de purge réelle de production. Les expirations anciennes nulles ne sont pas rattrapées. Les résumés de conversations/sessions, contacts, rendez-vous et métadonnées restent hors de ce sweep : leurs durées et leur effacement doivent être définis et qualifiés avant des données réelles. Ne pas promettre que toutes les données disparaissent à 30 jours.
+
+Le stockage GPT-Live `store: true` conserve une copie fournisseur pendant 30 jours ; aucun endpoint public de suppression anticipée de ces sessions n'est documenté. Supprimer un WAV S3 ne supprime pas cette copie. Les sept dernières générations chiffrées sont protégées, avec une grâce supérieure à sept jours pour les blobs devenus sans référence : la politique de sauvegarde ne constitue pas un délai global d'effacement de sept jours. Les copies manuelles privées n'ont pas d'expiration automatique. Aucun de ces constats n'autorise une purge supplémentaire.
 
 ## Sources officielles consultées
 
