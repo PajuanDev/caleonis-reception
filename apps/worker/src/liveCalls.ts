@@ -224,12 +224,17 @@ export function createLiveCallHandler(input: { domain: DomainContext }) {
       } : {}),
     };
 
+    // Default off. A future reviewed pilot can opt in one exact business only.
+    const directVoiceReplies = request.channel === "voice"
+      && !!process.env.VOICE_BOOKING_DIRECT_REPLY_BUSINESS_ID
+      && process.env.VOICE_BOOKING_DIRECT_REPLY_BUSINESS_ID === request.businessId;
     const agent = createReceptionistAgent({
       model,
       context: {
         domain: input.domain,
         snapshot,
         channel: request.channel,
+        ...(directVoiceReplies ? { directVoiceReplies: true } : {}),
         callId: request.callId,
         ...(request.conversationId ? { conversationId: request.conversationId } : {}),
         callControl,
@@ -255,6 +260,7 @@ export function createLiveCallHandler(input: { domain: DomainContext }) {
       sessionId: request.sessionId,
       agent,
       greeting: snapshot.greeting,
+      ...(directVoiceReplies ? { bookingReplyTimezone: snapshot.timezone } : {}),
       silenceTimeoutMs: SILENCE_TIMEOUT_MS,
       maxDurationMs: phone ? MAX_PHONE_CALL_MS : request.maxDurationMs ?? MAX_PHONE_CALL_MS,
       onStarted: () => void markLiveCallMediaStarted(input.domain, call).catch(logError(request.sessionId, "media start not recorded")),
@@ -264,7 +270,7 @@ export function createLiveCallHandler(input: { domain: DomainContext }) {
         void hangup();
       },
       onDelegation: (timing) => {
-        console.info(JSON.stringify({ event: "live.delegation", sessionId: request.sessionId, agentMs: timing.agentMs, totalMs: timing.totalMs, tools: timing.tools, failed: timing.failed }));
+        console.info(JSON.stringify({ event: "live.delegation", sessionId: request.sessionId, agentMs: timing.agentMs, totalMs: timing.totalMs, tools: timing.tools, failed: timing.failed, ...(timing.execution ? { execution: timing.execution } : {}) }));
         recordLiveDelegation(input.domain, telemetryCall, timing);
       },
       onClose: (summary) => {

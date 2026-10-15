@@ -18,12 +18,13 @@ vi.mock("openai/resources/live/sideband/ws", () => ({
 
 import { LiveCallController, type LiveCallSummary, type LiveCallTurn } from "./callController";
 
-function setup(options: { silenceTimeoutMs?: number } = {}) {
+function setup(options: { silenceTimeoutMs?: number; bookingReplyTimezone?: string } = {}) {
   const generate = vi.fn(async () => ({ text: "We're open until 5.", steps: [{ toolCalls: [{ toolName: "getBusinessHours" }] }] }));
   const turns: LiveCallTurn[] = [];
   const closed: LiveCallSummary[] = [];
   const onTimeout = vi.fn();
   const hangup = vi.fn(async () => undefined);
+  const onDelegation = vi.fn();
   const controller = new LiveCallController({
     client: { live: { sessions: { hangup } } } as never,
     sessionId: "live_1",
@@ -32,10 +33,11 @@ function setup(options: { silenceTimeoutMs?: number } = {}) {
     ...options,
     onTurn: (turn) => turns.push(turn),
     onTimeout,
+    onDelegation,
     onClose: (summary) => closed.push(summary),
   });
   controller.start();
-  return { controller, socket: sockets.at(-1)!, generate, turns, closed, onTimeout, hangup };
+  return { controller, socket: sockets.at(-1)!, generate, turns, closed, onTimeout, hangup, onDelegation };
 }
 
 beforeEach(() => { sockets.length = 0; });
@@ -83,6 +85,23 @@ describe("LiveCallController", () => {
     socket.emit("session.delegation.created", { delegation: { id: "item_1" }, offset_ms: 900 });
     await vi.waitFor(() => expect(socket.sent).toContainEqual(expect.objectContaining({ type: "session.commentary.append", delegation_id: "item_1", content: "We're open until 5." })));
     expect(generate).toHaveBeenCalledWith(expect.objectContaining({ prompt: expect.stringContaining("Caller: Are you open today?") }));
+  });
+
+  it("returns verified booking data directly and records numeric SDK stage timings", async () => {
+    const { socket, generate, onDelegation } = setup({ bookingReplyTimezone: "Europe/Paris" });
+    generate.mockResolvedValueOnce({ text: "", steps: [{
+      toolCalls: [{ toolName: "bookAppointment", toolCallId: "book-1", input: { startsAt: "2030-01-08T09:00:00.000Z", finishVoiceReply: true } }],
+      toolResults: [{ toolName: "bookAppointment", toolCallId: "book-1", output: { ok: true, voiceReplyComplete: true, appointmentId: "private-id", serviceName: "Pilot callback", startsAt: "2030-01-08T09:00:00.000Z", status: "confirmed", calendar: "internal", notificationStatus: "queued_not_delivered", contactPhone: "PRIVATE_PHONE" } }],
+      performance: { responseTimeMs: 80, toolExecutionMs: { "book-1": 20 } },
+    }] } as never);
+    socket.emit("session.input_transcript.delta", { delta: "Yes, book it. No SMS.", end_ms: 1_000 });
+    socket.emit("session.delegation.created", { delegation: { id: "book-delegation" }, offset_ms: 900 });
+    await vi.waitFor(() => expect(onDelegation).toHaveBeenCalledOnce());
+    const reply = socket.sent.find((event) => (event as { delegation_id?: string }).delegation_id === "book-delegation") as { content: string };
+    expect(reply.content).toContain('"confirmedLocalTime":"2030-01-08 10:00"');
+    expect(reply.content).not.toMatch(/PRIVATE_PHONE|private-id/);
+    expect(reply.content.length).toBeLessThanOrEqual(1200);
+    expect(onDelegation).toHaveBeenCalledWith(expect.objectContaining({ execution: { modelSteps: 1, modelMs: 80, toolMs: 20, directToolReply: true, steps: [{ modelMs: 80, toolMs: 20 }] } }));
   });
 
   it("reports finished turns in order and the billed seconds on close", () => {

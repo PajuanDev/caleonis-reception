@@ -9,11 +9,12 @@ const mocks = vi.hoisted(() => ({
   snapshot: vi.fn(),
   recordProductEvent: vi.fn(async (..._args: unknown[]) => "event_1"),
   finishLiveCall: vi.fn(async (..._args: unknown[]) => false),
+  createReceptionistAgent: vi.fn((..._args: unknown[]) => ({})),
 }));
 
 vi.mock("@lobbystack/agent-core", () => ({
   createAgentModel: () => ({}),
-  createReceptionistAgent: () => ({}),
+  createReceptionistAgent: mocks.createReceptionistAgent,
   LiveCallController: class {
     constructor(options: Record<string, (...args: never[]) => unknown>) {
       mocks.controllers += 1;
@@ -44,7 +45,35 @@ function response(): ServerResponse {
 afterEach(() => { vi.unstubAllEnvs(); });
 
 describe("createLiveCallHandler", () => {
+  it.each([
+    { configured: undefined, channel: "voice", enabled: false },
+    { configured: "", channel: "voice", enabled: false },
+    { configured: "true", channel: "voice", enabled: false },
+    { configured: "biz_2", channel: "voice", enabled: false },
+    { configured: "biz_1,biz_2", channel: "voice", enabled: false },
+    { configured: "biz_1", channel: "voice", enabled: true },
+    { configured: "biz_1", channel: "web_voice", enabled: false },
+  ])("enables verified replies only for the explicitly selected PSTN business: $configured/$channel", async ({ configured, channel, enabled }) => {
+    vi.stubEnv("LIVE_PROTOTYPE_ENABLED", "true");
+    vi.stubEnv("INTERNAL_SERVICE_TOKEN", "token");
+    vi.stubEnv("OPENAI_API_KEY", "sk-test");
+    vi.stubEnv("VOICE_BOOKING_DIRECT_REPLY_BUSINESS_ID", configured);
+    mocks.snapshot.mockResolvedValue({ businessId: "biz_1", greeting: "Hi", timezone: "Europe/Paris" });
+    const handler = createLiveCallHandler({ domain: { db: {} as never } });
+    await handler.handle(attachRequest({ sessionId: `opt-in-${channel}`, businessId: "biz_1", callId: "call_1", channel }), response());
+    const options = mocks.controllerOptions.at(-1)!;
+    if (enabled) {
+      expect(options.bookingReplyTimezone).toBe("Europe/Paris");
+      expect(mocks.createReceptionistAgent).toHaveBeenLastCalledWith(expect.objectContaining({ context: expect.objectContaining({ channel, directVoiceReplies: true }) }));
+    } else {
+      expect(options).not.toHaveProperty("bookingReplyTimezone");
+      const context = (mocks.createReceptionistAgent.mock.calls.at(-1)![0] as { context: object }).context;
+      expect(context).not.toHaveProperty("directVoiceReplies");
+    }
+  });
+
   it("opens one sideband when two attaches for a session overlap", async () => {
+    const previousControllers = mocks.controllers;
     vi.stubEnv("LIVE_PROTOTYPE_ENABLED", "true");
     vi.stubEnv("INTERNAL_SERVICE_TOKEN", "token");
     vi.stubEnv("OPENAI_API_KEY", "sk-test");
@@ -57,7 +86,7 @@ describe("createLiveCallHandler", () => {
     await new Promise((resolve) => setTimeout(resolve, 10));
     release({ businessId: "biz_1", greeting: "Hi" });
     await Promise.all([first, second]);
-    expect(mocks.controllers).toBe(1);
+    expect(mocks.controllers - previousControllers).toBe(1);
     expect(handler.activeCalls()).toBe(1);
   });
 });
@@ -88,6 +117,18 @@ describe("live call latency telemetry", () => {
       properties: { callId: "call_2", channel: "web_voice", provider: "openai_live", conversationId: "conv_2", agentMs: 1_800, totalMs: 1_812, tools: ["getBusinessHours"], toolCount: 2, failed: false },
     });
     expect(JSON.stringify(mocks.recordProductEvent.mock.calls)).not.toMatch(/open until|4165550100/);
+  });
+
+  it("logs numeric model/tool stage timings without the delegated answer or caller data", async () => {
+    const info = vi.spyOn(console, "info").mockImplementation(() => undefined);
+    try {
+      const options = await startCall();
+      const execution = { modelSteps: 2, modelMs: 120, toolMs: 30, directToolReply: false, steps: [{ modelMs: 80, toolMs: 30 }, { modelMs: 40, toolMs: 0 }] };
+      options.onDelegation!({ ...delegation, execution } as never);
+      const event = JSON.parse(info.mock.calls.at(-1)![0] as string);
+      expect(event).toMatchObject({ event: "live.delegation", execution });
+      expect(JSON.stringify(event)).not.toMatch(/open until|4165550100/);
+    } finally { info.mockRestore(); }
   });
 
   it("records one voice.call_latency_recorded summary when the call closes", async () => {
