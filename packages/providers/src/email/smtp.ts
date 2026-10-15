@@ -13,7 +13,8 @@ export type SmtpConfig = {
   replyTo?: string;
 };
 
-type TemplateName = "existing_account" | "verify_email" | "password_reset" | "invitation" | "operator_alert" | "feedback_submission" | "onboarding_followup";
+export type TemplateName = "existing_account" | "verify_email" | "password_reset" | "invitation" | "operator_alert" | "feedback_submission" | "onboarding_followup";
+export type EmailTemplateInput = { template: TemplateName; to: string; subject: string; variables: Record<string, string>; idempotencyKey?: string; idempotencyCreatedAtMs?: number; from?: string; replyTo?: string };
 
 export class SmtpEmailProvider {
   private readonly transporter: Transporter;
@@ -29,7 +30,7 @@ export class SmtpEmailProvider {
     this.transporter = transporter;
   }
 
-  async sendTemplate(input: { template: TemplateName; to: string; subject: string; variables: Record<string, string>; idempotencyKey?: string; from?: string; replyTo?: string }): Promise<{ messageId: string }> {
+  async sendTemplate(input: EmailTemplateInput): Promise<{ messageId: string }> {
     assertCertificationRecipient("email", input.to);
     const email = renderTemplate(input.template, input.subject, input.variables);
     // A per-message sender (the founder check-in) replaces the default reply-to
@@ -48,7 +49,7 @@ export class SmtpEmailProvider {
   }
 }
 
-function renderTemplate(template: TemplateName, subject: string, variables: Record<string, string>): { text: string; html?: string } {
+export function renderTemplate(template: TemplateName, subject: string, variables: Record<string, string>): { text: string; html?: string } {
   const text = templateBody(template, variables);
 
   if (template !== "verify_email" || !variables.code) {

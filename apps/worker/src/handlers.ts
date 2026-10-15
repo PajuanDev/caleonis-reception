@@ -11,12 +11,15 @@ import { claimOperatorNotificationDelivery, correctAlertSmsUsage, estimateSmsSeg
 import { claimNumberProvisioning, completeNumberProvisioning, failNumberProvisioning } from "@lobbystack/domain";
 import { createWebhookSender, processWebhookDelivery, pruneApiHistory, type WebhookSender } from "@lobbystack/domain";
 import type { DomainContext } from "@lobbystack/domain";
+import { loadNotificationDeliveryClaimState } from "@lobbystack/domain";
+import { ResendEmailProvider } from "@lobbystack/providers";
 import type { SmtpEmailProvider } from "@lobbystack/providers/email/smtp";
 import type { RuntimeStorageProvider } from "@lobbystack/providers/storage/provider";
 import type { TwilioProvider } from "@lobbystack/providers/twilio/twilioProvider";
 import { extractDocumentText } from "./documentExtraction";
 import { reconcileBusinessCalendar, syncAppointmentCalendar, type CalendarOperations } from "./calendarJobs";
 import { getMeter } from "@lobbystack/telemetry/node";
+import { EmailDeliveryClaimStateError, EmailDeliveryReceiptPersistenceError, persistEmailReceipt, releaseEmailClaimAfterError } from "./emailDeliveryReceipt";
 import { bucketOutboxBacklog, getPostHogDistinctIdForBusinessSystem, redactTelemetryProperties, type TelemetryProperties } from "@lobbystack/telemetry";
 
 const ragMeter = getMeter("lobbystack-rag");
@@ -70,6 +73,18 @@ export type WorkerDependencies = {
 };
 
 export type JobResult = { status: "completed" | "skipped"; entityId?: string };
+
+async function verifyUnclaimedResendDelivery(dependencies: WorkerDependencies, input: { businessId: string; deliveryId: string; kind: "operator" | "appointment" }): Promise<void> {
+  if (!(dependencies.email instanceof ResendEmailProvider)) return;
+  let state;
+  try { state = await loadNotificationDeliveryClaimState(dependencies.domain, input); }
+  catch { throw new EmailDeliveryClaimStateError(); }
+  if (state?.channel === "sms") return;
+  if (state?.channel === "email" && (state.status === "skipped" || state.status === "sent" && Boolean(state.providerMessageId))) return;
+  // A crashed attempt may still own the SQL lease without a known receipt.
+  // Never turn that processing/unknown state into a successful outbox ACK.
+  throw new EmailDeliveryClaimStateError();
+}
 
 function businessIdOrThrow(job: JobEnvelope): string {
   if (!job.businessId) {
@@ -410,15 +425,17 @@ async function dispatchJob(job: JobEnvelope, dependencies: WorkerDependencies, e
             subject: String(job.payload.subject ?? "LobbyStack notification"),
             variables,
             idempotencyKey: job.idempotencyKey,
+            ...(execution.queuedAtMs !== undefined ? { idempotencyCreatedAtMs: execution.queuedAtMs } : {}),
             ...(typeof job.payload.from === "string" && job.payload.from ? { from: job.payload.from } : {}),
           });
-          if (feedbackSubmissionId) await markFeedbackEmailSent(dependencies.domain, { feedbackSubmissionId, ...(businessId ? { businessId } : {}), providerMessageId: sent.messageId });
+          if (feedbackSubmissionId) await persistEmailReceipt(sent.messageId, () => markFeedbackEmailSent(dependencies.domain, { feedbackSubmissionId, ...(businessId ? { businessId } : {}), providerMessageId: sent.messageId }));
+          return { status: "completed", entityId: sent.messageId };
         } catch (error) {
+          if (error instanceof EmailDeliveryReceiptPersistenceError) throw error;
           if (feedbackSubmissionId) await markFeedbackEmailFailed(dependencies.domain, { feedbackSubmissionId, ...(businessId ? { businessId } : {}), error: error instanceof Error ? error.message : String(error) }).catch(() => undefined);
           throw error;
         }
       }
-      return { status: "completed" };
     case "email.reconcileDelivery": {
       const providerEventId = String(job.payload.providerEventId ?? "");
       if (!providerEventId) return { status: "skipped" };
@@ -591,7 +608,10 @@ async function dispatchJob(job: JobEnvelope, dependencies: WorkerDependencies, e
       const operatorDeliveryId = String(job.payload.operatorDeliveryId ?? "");
       if (operatorDeliveryId) {
         const businessId = businessIdOrThrow(job);
-        if (!await claimOperatorNotificationDelivery(dependencies.domain, { businessId, deliveryId: operatorDeliveryId })) return { status: "skipped", entityId: operatorDeliveryId };
+        if (!await claimOperatorNotificationDelivery(dependencies.domain, { businessId, deliveryId: operatorDeliveryId })) {
+          await verifyUnclaimedResendDelivery(dependencies, { businessId, deliveryId: operatorDeliveryId, kind: "operator" });
+          return { status: "skipped", entityId: operatorDeliveryId };
+        }
         const delivery = await loadOperatorNotificationDelivery(dependencies.domain, { businessId, deliveryId: operatorDeliveryId });
         if (!delivery) {
           await markOperatorNotificationSkipped(dependencies.domain, { businessId, deliveryId: operatorDeliveryId, error: "SMS consent or destination changed before delivery." });
@@ -614,15 +634,17 @@ async function dispatchJob(job: JobEnvelope, dependencies: WorkerDependencies, e
             providerMessageId = (await sender.sendSms({ to: delivery.destination, from: delivery.sender, body: delivery.body, ...twilioStatusCallbackOption({ operatorDeliveryId: delivery.id }) })).providerMessageId;
           } else {
             if (!dependencies.email) throw new Error("Operator email delivery is not configured.");
-            providerMessageId = (await dependencies.email.sendTemplate({ template: "operator_alert", to: delivery.destination, subject: delivery.subject, variables: { message: delivery.body }, idempotencyKey: `operator-notification:${delivery.id}` })).messageId;
+            providerMessageId = (await dependencies.email.sendTemplate({ template: "operator_alert", to: delivery.destination, subject: delivery.subject, variables: { message: delivery.body }, idempotencyKey: `operator-notification:${delivery.id}`, ...(execution.queuedAtMs !== undefined ? { idempotencyCreatedAtMs: execution.queuedAtMs } : {}) })).messageId;
           }
-          await markOperatorNotificationSent(dependencies.domain, { businessId, deliveryId: delivery.id, providerMessageId });
+          if (delivery.channel === "email") await persistEmailReceipt(providerMessageId, () => markOperatorNotificationSent(dependencies.domain, { businessId, deliveryId: delivery.id, providerMessageId }));
+          else await markOperatorNotificationSent(dependencies.domain, { businessId, deliveryId: delivery.id, providerMessageId });
           if (usageEventId) await enqueueBillingUsageSync(dependencies.domain, { businessId, usageEventId });
           return { status: "completed", entityId: delivery.id };
         } catch (error) {
+          if (error instanceof EmailDeliveryReceiptPersistenceError) throw error;
           await recordNotificationDeliveryFailed(dependencies, { businessId, kind: delivery.eventKind });
           if (delivery.channel === "sms" && dependencies.domain.db) await correctAlertSmsUsage(dependencies.domain, { businessId, sourceKey: `alert_sms:operator_notification:${delivery.id}`, segments: 0 }).catch(() => undefined);
-          await releaseOperatorNotificationDelivery(dependencies.domain, { businessId, deliveryId: delivery.id, error: "Provider delivery failed." });
+          await releaseEmailClaimAfterError(error, () => releaseOperatorNotificationDelivery(dependencies.domain, { businessId, deliveryId: delivery.id, error: "Provider delivery failed." }));
           throw error;
         }
       }
@@ -631,6 +653,7 @@ async function dispatchJob(job: JobEnvelope, dependencies: WorkerDependencies, e
       if (!notificationId) return { status: "skipped" };
       const businessId = businessIdOrThrow(job);
       if (!await claimNotificationDelivery(dependencies.domain, { businessId, notificationId })) {
+        await verifyUnclaimedResendDelivery(dependencies, { businessId, deliveryId: notificationId, kind: "appointment" });
         return { status: "skipped", entityId: notificationId };
       }
       const resolution = await resolveNotificationDelivery(dependencies.domain, { businessId, notificationId });
@@ -666,16 +689,18 @@ async function dispatchJob(job: JobEnvelope, dependencies: WorkerDependencies, e
             await markNotificationSkipped(dependencies.domain, { businessId, notificationId: delivery.notificationId });
             return { status: "skipped", entityId: delivery.notificationId };
           }
-          const sent = await dependencies.email.sendTemplate({ template: "operator_alert", to: delivery.to, subject: delivery.subject, variables: { message: delivery.body }, idempotencyKey: `notification:${delivery.notificationId}` });
+          const sent = await dependencies.email.sendTemplate({ template: "operator_alert", to: delivery.to, subject: delivery.subject, variables: { message: delivery.body }, idempotencyKey: `notification:${delivery.notificationId}`, ...(execution.queuedAtMs !== undefined ? { idempotencyCreatedAtMs: execution.queuedAtMs } : {}) });
           providerMessageId = sent.messageId;
         }
-        await markNotificationSent(dependencies.domain, { businessId: delivery.businessId, notificationId: delivery.notificationId, providerMessageId });
+        if (delivery.channel === "email") await persistEmailReceipt(providerMessageId, () => markNotificationSent(dependencies.domain, { businessId: delivery.businessId, notificationId: delivery.notificationId, providerMessageId }));
+        else await markNotificationSent(dependencies.domain, { businessId: delivery.businessId, notificationId: delivery.notificationId, providerMessageId });
         if (usageEventId) await enqueueBillingUsageSync(dependencies.domain, { businessId, usageEventId });
         return { status: "completed", entityId: delivery.notificationId };
       } catch (error) {
+        if (error instanceof EmailDeliveryReceiptPersistenceError) throw error;
         await recordNotificationDeliveryFailed(dependencies, { businessId, kind: delivery.kind, ...(delivery.relatedId ? { appointmentId: delivery.relatedId } : {}) });
         if (delivery.channel === "sms" && dependencies.domain.db) await correctAlertSmsUsage(dependencies.domain, { businessId, sourceKey: `alert_sms:notification:${delivery.notificationId}`, segments: 0 }).catch(() => undefined);
-        await releaseNotificationDelivery(dependencies.domain, { businessId, notificationId: delivery.notificationId });
+        await releaseEmailClaimAfterError(error, () => releaseNotificationDelivery(dependencies.domain, { businessId, notificationId: delivery.notificationId }));
         throw error;
       }
       }

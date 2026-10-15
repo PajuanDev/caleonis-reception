@@ -84,6 +84,15 @@ export type NotificationDeliveryResolution =
 
 const notificationLeaseMs = 5 * 60_000;
 
+/** Read-only proof for a queue retry that did not acquire its delivery claim. */
+export async function loadNotificationDeliveryClaimState(context: DomainContext, input: { businessId: string; deliveryId: string; kind: "operator" | "appointment" }) {
+  return await withBusinessTransaction(context.db, { businessId: input.businessId, actorType: "worker" }, async (tx) => {
+    const table = input.kind === "operator" ? operatorNotificationDeliveries : notifications;
+    return (await tx.select({ channel: table.channel, status: table.status, providerMessageId: table.providerMessageId }).from(table)
+      .where(and(eq(table.id, input.deliveryId), eq(table.businessId, input.businessId))).limit(1))[0] ?? null;
+  });
+}
+
 export async function claimNotificationDelivery(
   context: DomainContext,
   input: { businessId: string; notificationId: string },
@@ -479,8 +488,8 @@ export async function loadOperatorNotificationDelivery(context: DomainContext, i
   });
 }
 
-export async function markOperatorNotificationSent(context: DomainContext, input: { businessId: string; deliveryId: string; providerMessageId: string }): Promise<void> {
-  await withBusinessTransaction(context.db, { businessId: input.businessId, actorType: "worker" }, async (tx) => { await tx.update(operatorNotificationDeliveries).set({ status: "sent", providerMessageId: input.providerMessageId, sentAt: new Date(), updatedAt: new Date() }).where(and(eq(operatorNotificationDeliveries.id, input.deliveryId), eq(operatorNotificationDeliveries.businessId, input.businessId), eq(operatorNotificationDeliveries.status, "processing"))); });
+export async function markOperatorNotificationSent(context: DomainContext, input: { businessId: string; deliveryId: string; providerMessageId: string }): Promise<boolean> {
+  return await withBusinessTransaction(context.db, { businessId: input.businessId, actorType: "worker" }, async (tx) => (await tx.update(operatorNotificationDeliveries).set({ status: "sent", providerMessageId: input.providerMessageId, sentAt: new Date(), updatedAt: new Date() }).where(and(eq(operatorNotificationDeliveries.id, input.deliveryId), eq(operatorNotificationDeliveries.businessId, input.businessId), eq(operatorNotificationDeliveries.status, "processing"))).returning({ id: operatorNotificationDeliveries.id })).length > 0);
 }
 
 export async function markOperatorNotificationSkipped(context: DomainContext, input: { businessId: string; deliveryId: string; error?: string }): Promise<void> {
@@ -506,6 +515,6 @@ export async function updateOperatorNotificationDeliveryStatus(context: DomainCo
   });
 }
 
-export async function releaseOperatorNotificationDelivery(context: DomainContext, input: { businessId: string; deliveryId: string; error?: string }): Promise<void> {
-  await withBusinessTransaction(context.db, { businessId: input.businessId, actorType: "worker" }, async (tx) => { await tx.update(operatorNotificationDeliveries).set({ status: "pending", lastError: input.error ?? null, updatedAt: new Date() }).where(and(eq(operatorNotificationDeliveries.id, input.deliveryId), eq(operatorNotificationDeliveries.businessId, input.businessId), eq(operatorNotificationDeliveries.status, "processing"))); });
+export async function releaseOperatorNotificationDelivery(context: DomainContext, input: { businessId: string; deliveryId: string; error?: string }): Promise<boolean> {
+  return await withBusinessTransaction(context.db, { businessId: input.businessId, actorType: "worker" }, async (tx) => (await tx.update(operatorNotificationDeliveries).set({ status: "pending", lastError: input.error ?? null, updatedAt: new Date() }).where(and(eq(operatorNotificationDeliveries.id, input.deliveryId), eq(operatorNotificationDeliveries.businessId, input.businessId), eq(operatorNotificationDeliveries.status, "processing"))).returning({ id: operatorNotificationDeliveries.id })).length > 0);
 }
