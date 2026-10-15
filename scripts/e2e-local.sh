@@ -39,6 +39,7 @@ TESTS=(
   e2e/onboarding-pending.e2e.ts
   e2e/operator-auth.e2e.ts
   e2e/performance-startup.e2e.ts
+  e2e/single-host-gateway.e2e.ts
   e2e/supported-journeys.e2e.ts
 )
 
@@ -88,12 +89,17 @@ export SMTP_HOST=127.0.0.1
 export SMTP_PORT="$MAILPIT_SMTP_PORT"
 export SMTP_SECURE=false
 export EMAIL_FROM="LobbyStack <no-reply@example.test>"
+export E2E_SINGLE_HOST_GATEWAY_REHEARSAL="loopback-disposable"
 
 if [[ "$SKIP_BUILD" -eq 0 ]]; then
   echo "==> Building workspace packages and the admin standalone server"
   pnpm -r --filter "./packages/**" build
   pnpm --filter @lobbystack/admin build
+  # Real static surfaces for the loopback-only single-host rehearsal. This
+  # output is copied/rebased in a temporary test directory, never published.
+  pnpm --filter @lobbystack/landing build
 fi
+node scripts/build-help-preview.mjs apps/landing/dist/aide
 
 echo "==> Applying migrations and seed data with unprivileged roles"
 pnpm --filter @lobbystack/db exec tsx src/cli.ts migrate
