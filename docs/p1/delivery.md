@@ -11,7 +11,7 @@ Base : `e8e23bae4955f64fa3f99cb525faad908439077e`, version admin/worker vérifi�
 - [Adaptation des guides et limites des vérificateurs](docs-adaptation.md).
 - [Relecture du site marketing](../../apps/landing/V1-LAUNCH-REVIEW.md).
 
-L'aperçu contient le site et l'aide. Il ne déploie pas la version candidate du dashboard : les CTA ouvrent l'application existante. Il reste privé et noindex, avec les prix sur demande et une simple notice d'attente pour les textes juridiques non validés. Le site corporate n'a pas été remplacé. Le paquet statique est une copie du build vérifié ; le dépôt source du preview a pour commit `df533f234a1c270f606b6c0872207f2144dbfe6a`.
+L'aperçu contient le site et l'aide. Il ne déploie pas la version candidate du dashboard : les CTA ouvrent l'application existante. Il reste privé et noindex, avec les prix sur demande et une simple notice d'attente pour les textes juridiques non validés. Le site corporate n'a pas été remplacé. Chaque paquet statique est une copie du build vérifié. La première version du preview avait pour commit source `df533f234a1c270f606b6c0872207f2144dbfe6a` ; le relevé final accompagne les versions suivantes et leurs preuves.
 
 ## Changements essentiels
 
@@ -30,7 +30,7 @@ Le site réutilise Astro, ses composants et styles, avec les assets Caléonis pr
 | Site | 85 tests PASS ; Astro check sans erreur, warning ou hint ; lint PASS ; 74 pages générées |
 | SEO | 20 URLs de preview relues : canonical, hreflang, sitemap et noindex PASS |
 | Aide native | Mintlify build validation PASS ; check:content PASS, 51 pages et 99 liens internes |
-| Export site + aide | 125 HTML, 6 236 références locales, 137 cibles, aucune cible absente |
+| Export site + aide | 125 HTML, 6 244 références locales, 139 cibles, aucune cible absente après ajout des captures |
 | Navigateur site + aide | 22 cas desktop 1440×1000 et mobile 390×844 PASS : menu, recherche d'aide, contrôles nommés, images et débordements |
 | Types, lint et compilation globale | PASS dans la CI `f50075f`, y compris le build admin final, l'export de l'aide et ses liens |
 | Tests globaux locaux | Lots interrompus pour laisser la fenêtre CPU à P0 ; un timeout worker sous charge et l'écart OpenAPI hérité ont été conservés dans les logs, sans les présenter comme PASS |

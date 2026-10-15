@@ -24,6 +24,13 @@ try {
       page.on("pageerror", (error) => errors.push(error.message));
       const response = await page.goto(`${base}${path}`, { waitUntil: "networkidle" });
       await page.evaluate(() => document.fonts.ready);
+      // Product captures below the fold are intentionally lazy-loaded. Visit
+      // them as a reader would before checking whether the images decoded.
+      for (const lazyImage of await page.locator('img[loading="lazy"]').all()) {
+        await lazyImage.scrollIntoViewIfNeeded();
+        await lazyImage.evaluate(image => image.decode().catch(() => undefined));
+      }
+      await page.evaluate(() => scrollTo(0, 0));
       const layout = await page.evaluate(() => ({
         h1: document.querySelectorAll("h1").length,
         main: document.querySelectorAll("main").length,
