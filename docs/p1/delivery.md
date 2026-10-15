@@ -38,6 +38,8 @@ Le site réutilise Astro, ses composants et styles, avec les assets Caléonis pr
 
 La [CI de la branche](https://github.com/PajuanDev/caleonis-reception/actions?query=branch%3Acodex%2Freceptionist-v1-parity-2026-10-15) porte le statut courant du SHA proposé. Les résultats doivent être relus sur le HEAD de la PR. Les captures du dashboard proviennent des fixtures de cette CI, identifiées comme données de test, sans fausse capture produit générée.
 
+La fixture Playwright jetable active explicitement le programme d'affiliation hérité pour conserver son scénario de régression. Cela ne l'active pas en production ; les tests de routes vérifient séparément le défaut fermé et l'absence d'effets de bord.
+
 Sur Windows, `mint broken-links` émet quatre faux positifs sur les chemins imbriqués ; la cause séparateurs `\\` contre `/`, les cibles présentes et le contrôle indépendant sont documentés. La CI exécute aussi le vérificateur natif sur Linux. Le contrôle navigateur est un smoke d'accessibilité et de responsive, pas une certification WCAG exhaustive.
 
 Commandes de revue : `pnpm typecheck`, `pnpm test`, `pnpm build`, `pnpm docs:validate`, `pnpm --filter @lobbystack/docs check:content`, `pnpm --filter @lobbystack/landing seo:validate`. Pour exporter l'aide : `node scripts/build-help-preview.mjs apps/landing/dist/aide`, puis `node scripts/verify-v1-preview.mjs apps/landing/dist`. Le smoke navigateur accepte une URL locale et, si nécessaire, `PLAYWRIGHT_CHROMIUM_EXECUTABLE` vers un navigateur installé. Les machines locales partagées doivent exécuter les gros lots en séquence.
