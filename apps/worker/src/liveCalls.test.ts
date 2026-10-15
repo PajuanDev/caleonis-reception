@@ -9,11 +9,12 @@ const mocks = vi.hoisted(() => ({
   snapshot: vi.fn(),
   recordProductEvent: vi.fn(async (..._args: unknown[]) => "event_1"),
   finishLiveCall: vi.fn(async (..._args: unknown[]) => false),
+  createReceptionistAgent: vi.fn((..._args: unknown[]) => ({})),
 }));
 
 vi.mock("@lobbystack/agent-core", () => ({
-  createAgentModel: () => ({}),
-  createReceptionistAgent: () => ({}),
+  createAgentModel: () => ({ provider: "openai.responses", modelId: "gpt-6-luna" }),
+  createReceptionistAgent: mocks.createReceptionistAgent,
   LiveCallController: class {
     constructor(options: Record<string, (...args: never[]) => unknown>) {
       mocks.controllers += 1;
@@ -44,7 +45,28 @@ function response(): ServerResponse {
 afterEach(() => { vi.unstubAllEnvs(); });
 
 describe("createLiveCallHandler", () => {
+  it.each([
+    { configured: undefined, channel: "voice", intakeOnly: false, enabled: false },
+    { configured: "true", channel: "voice", intakeOnly: false, enabled: false },
+    { configured: "8bceb812-e851-433d-90a8-7f4e467cd32c", channel: "voice", intakeOnly: false, enabled: true },
+    { configured: "8bceb812-e851-433d-90a8-7f4e467cd32c", channel: "voice", intakeOnly: true, enabled: false },
+    { configured: "8bceb812-e851-433d-90a8-7f4e467cd32c", channel: "web_voice", intakeOnly: false, enabled: false },
+  ])("applies the server Medium decision only to the exact pilot: %j", async ({ configured, channel, intakeOnly, enabled }) => {
+    vi.stubEnv("LIVE_PROTOTYPE_ENABLED", "true"); vi.stubEnv("INTERNAL_SERVICE_TOKEN", "token"); vi.stubEnv("OPENAI_API_KEY", "fictional-key");
+    vi.stubEnv("VOICE_PLANNER_MEDIUM_BUSINESS_ID", configured);
+    vi.stubEnv("AI_CHAT_MODEL", "gpt-6-luna"); vi.stubEnv("AI_CHAT_REASONING_EFFORT", "high"); vi.stubEnv("AI_CHAT_PROVIDER_NAME", "openai");
+    vi.stubEnv("AI_CHAT_BASE_URL", "https://api.openai.com/v1"); vi.stubEnv("OPENAI_BASE_URL", "");
+    const businessId = "8bceb812-e851-433d-90a8-7f4e467cd32c";
+    mocks.snapshot.mockResolvedValue({ businessId, greeting: "Hi" });
+    const handler = createLiveCallHandler({ domain: { db: {} as never } });
+    await handler.handle(attachRequest({ sessionId: `medium-${channel}-${intakeOnly}`, businessId, callId: "fictional-call", channel, intakeOnly }), response());
+    const args = mocks.createReceptionistAgent.mock.calls.at(-1)![0];
+    if (enabled) expect(args).toMatchObject({ voicePlannerReasoningEffort: "medium" });
+    else expect(args).not.toHaveProperty("voicePlannerReasoningEffort");
+    expect(mocks.controllerOptions.at(-1)).toMatchObject({ requestedPlannerEffort: enabled ? "medium" : "high" });
+  });
   it("opens one sideband when two attaches for a session overlap", async () => {
+    const previousControllers = mocks.controllers;
     vi.stubEnv("LIVE_PROTOTYPE_ENABLED", "true");
     vi.stubEnv("INTERNAL_SERVICE_TOKEN", "token");
     vi.stubEnv("OPENAI_API_KEY", "sk-test");
@@ -57,7 +79,7 @@ describe("createLiveCallHandler", () => {
     await new Promise((resolve) => setTimeout(resolve, 10));
     release({ businessId: "biz_1", greeting: "Hi" });
     await Promise.all([first, second]);
-    expect(mocks.controllers).toBe(1);
+    expect(mocks.controllers - previousControllers).toBe(1);
     expect(handler.activeCalls()).toBe(1);
   });
 });
@@ -88,6 +110,20 @@ describe("live call latency telemetry", () => {
       properties: { callId: "call_2", channel: "web_voice", provider: "openai_live", conversationId: "conv_2", agentMs: 1_800, totalMs: 1_812, tools: ["getBusinessHours"], toolCount: 2, failed: false },
     });
     expect(JSON.stringify(mocks.recordProductEvent.mock.calls)).not.toMatch(/open until|4165550100/);
+  });
+
+  it("persists and logs numerical execution without the answer or caller data", async () => {
+    const info = vi.spyOn(console, "info").mockImplementation(() => undefined);
+    try {
+      const options = await startCall();
+      const execution = { modelSteps: 2, modelMs: 120, toolMs: 30, requestedEffort: "high", inputTokens: 60, outputTokens: 20, totalTokens: 80, cachedInputTokens: null, reasoningTokens: null, estimatedCostUsd: null,
+        steps: [{ modelMs: 80, toolMs: 30, actualTier: "default", inputTokens: 30, outputTokens: 10, totalTokens: 40, cachedInputTokens: null, reasoningTokens: null },
+          { modelMs: 40, toolMs: 0, actualTier: null, inputTokens: 30, outputTokens: 10, totalTokens: 40, cachedInputTokens: null, reasoningTokens: null }] };
+      options.onDelegation!({ ...delegation, execution } as never);
+      expect(mocks.recordProductEvent).toHaveBeenCalledWith(expect.anything(), expect.objectContaining({ name: "voice.delegation_completed", properties: expect.objectContaining({ execution }) }));
+      expect(JSON.parse(info.mock.calls.at(-1)![0] as string)).toMatchObject({ event: "live.delegation", execution });
+      expect(JSON.stringify(info.mock.calls)).not.toMatch(/open until|4165550100/);
+    } finally { info.mockRestore(); }
   });
 
   it("records one voice.call_latency_recorded summary when the call closes", async () => {
