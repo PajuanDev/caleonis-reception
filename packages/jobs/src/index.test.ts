@@ -97,6 +97,17 @@ describe("enqueueJob job ids", () => {
     expect(options.attempts).toBe(5);
     expect(options).not.toHaveProperty("delay");
   });
+
+  it.each([[undefined, 12], [30, 12], [3, 3]])("bounds call pricing retries while leaving the job identity stable (%s)", async (attempts, expectedAttempts) => {
+    const { queue, add } = createQueueStub("critical");
+    const input = { type: "call.syncPrice" as const, payload: { callId: "call-1", providerCallStatus: "completed" }, idempotencyKey: "call:call-1:live-price" };
+    const jobId = await enqueueJob(queue, { ...input, ...(attempts !== undefined ? { attempts } : {}) });
+    const [, envelope, options] = add.mock.calls[0] as unknown as [string, unknown, { attempts: number; backoff: unknown; jobId: string }];
+    expect(options).toMatchObject({ jobId, attempts: expectedAttempts, backoff: { type: "fixed", delay: 300_000 } });
+    expect(envelope).toMatchObject({ idempotencyKey: input.idempotencyKey, scheduled: false });
+    expect(await enqueueJob(queue, input)).toBe(jobId);
+  });
+
   it("uses a new delivery job ID for a fenced replay while preserving business idempotency", async () => {
     const original = createQueueStub();
     const replay = createQueueStub();

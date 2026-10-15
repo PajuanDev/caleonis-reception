@@ -117,10 +117,14 @@ export async function enqueueJob(
     ...(input.outboxId ? { outboxVersion: input.outboxVersion ?? 0 } : {}),
     scheduled: (input.delayMs ?? 0) > 0,
   });
+  // A completed call can still have no Twilio price. Give only this read-only
+  // reconciliation 55 minutes of scheduled backoff (12 attempts), then
+  // retain the normal terminal failure for manual review. Never invent a cost.
+  const callPricing = input.type === "call.syncPrice";
   const options: JobsOptions = {
     jobId,
-    attempts: input.attempts ?? 5,
-    backoff: { type: "exponential", delay: 1000 },
+    attempts: callPricing ? Math.min(input.attempts ?? 12, 12) : input.attempts ?? 5,
+    backoff: callPricing ? { type: "fixed", delay: 5 * 60_000 } : { type: "exponential", delay: 1000 },
     ...(input.delayMs !== undefined ? { delay: input.delayMs } : {}),
   };
   await queue.add(input.type, envelope, options);

@@ -676,6 +676,31 @@ describe("worker handlers", () => {
     expect(recordCallProviderPricing).toHaveBeenCalledWith({ db: undefined as never }, expect.objectContaining({ providerCallId: "CA777", callId: "call_1", providerCostUsd: 0.02 }));
   });
 
+  it("leaves an unavailable call price unknown, then records a later receipt for the same Twilio call", async () => {
+    const job = pricingJob("call.syncPrice", { callId: "call_1", providerCallStatus: "completed" });
+    const startedAt = new Date("2026-09-26T12:00:00Z");
+    vi.stubEnv("TWILIO_SIP_TRUNK_SID", "TK123");
+    vi.mocked(loadLiveCallForPricing).mockResolvedValue({ startedAt, callerPhone: "+14165550134" });
+    vi.mocked(recordCallProviderPricing).mockResolvedValue(true);
+    const findTrunkCall = vi.fn().mockResolvedValue("CA777");
+    const getCallPricing = vi.fn()
+      .mockResolvedValueOnce({ providerPriceUnit: "usd" })
+      .mockResolvedValueOnce({ providerPrice: -0.012, providerPriceUnit: "usd", providerCostUsd: 0.012 });
+    const domain = { db: undefined as never };
+    const dependencies = { domain, twilio: { sendSms: vi.fn(), getCallPricing, findTrunkCall } };
+    try {
+      vi.mocked(recordCallProviderPricing).mockClear();
+      await expect(handleJob(job, dependencies)).rejects.toThrow("Twilio call pricing is incomplete for CA777.");
+      expect(recordCallProviderPricing).not.toHaveBeenCalled();
+      await expect(handleJob(job, dependencies)).resolves.toEqual({ status: "completed", entityId: "call_1" });
+      expect(getCallPricing.mock.calls).toEqual([[{ providerCallId: "CA777" }], [{ providerCallId: "CA777" }]]);
+      expect(recordCallProviderPricing).toHaveBeenCalledExactlyOnceWith(domain, { businessId: job.businessId, callId: "call_1", providerCallId: "CA777", providerPrice: -0.012, providerPriceUnit: "usd", providerCostUsd: 0.012 });
+      expect(dependencies.twilio.sendSms).not.toHaveBeenCalled();
+    } finally {
+      vi.unstubAllEnvs();
+    }
+  });
+
   it("delivers a resolved SMS notification and records the provider id", async () => {
     const businessId = randomUUID();
     const notificationId = randomUUID();
