@@ -32,13 +32,18 @@ Le site réutilise Astro, ses composants et styles, avec les assets Caléonis pr
 | Aide native | Mintlify build validation PASS ; check:content PASS, 51 pages et 99 liens internes |
 | Export site + aide | 125 HTML, 6 236 références locales, 137 cibles, aucune cible absente |
 | Navigateur site + aide | 22 cas desktop 1440×1000 et mobile 390×844 PASS : menu, recherche d'aide, contrôles nommés, images et débordements |
-| Types et compilation globale | Une première passe types a réussi ; les derniers changements et le build admin final doivent être qualifiés par les checks CI du commit livré |
+| Types, lint et compilation globale | PASS dans la CI `f50075f`, y compris le build admin final, l'export de l'aide et ses liens |
 | Tests globaux locaux | Lots interrompus pour laisser la fenêtre CPU à P0 ; un timeout worker sous charge et l'écart OpenAPI hérité ont été conservés dans les logs, sans les présenter comme PASS |
-| PostgreSQL/RLS et navigateur dashboard | Environnement CI Linux isolé ; aucun accès à une base ou à un provider de production depuis cette passe |
+| Tests globaux CI | 2 107 PASS, 110 ignorés sur `f50075f` ; aucun test ignoré présenté comme exécuté |
+| PostgreSQL/RLS | 113 tests PASS dans la CI Linux isolée ; aucun accès à une base de production depuis cette passe |
+| Images Docker | Admin, worker et migrateur construits et scannés avec succès sur `f50075f` |
+| Navigateur dashboard | Première CI : 12 PASS, 2 ignorés, 2 échecs. Les fixtures ont été corrigées ; résultat final à lire sur le HEAD de la PR |
 
-La [CI de la branche](https://github.com/PajuanDev/caleonis-reception/actions?query=branch%3Acodex%2Freceptionist-v1-parity-2026-10-15) porte le statut courant du SHA proposé. Les résultats doivent être relus sur le HEAD de la PR. Les captures du dashboard proviennent des fixtures de cette CI, identifiées comme données de test, sans fausse capture produit générée.
+La [CI de la branche](https://github.com/PajuanDev/caleonis-reception/actions?query=branch%3Acodex%2Freceptionist-v1-parity-2026-10-15) porte le statut courant du SHA proposé. La description de PR et le relevé de livraison final identifient le SHA et les résultats acquis. Les captures du dashboard doivent provenir des fixtures de cette CI, identifiées comme données de test. L'artefact de la première CI contient uniquement trois captures d'affiliation : aucune capture Messages n'en est déduite.
 
 La fixture Playwright jetable active explicitement le programme d'affiliation hérité pour conserver son scénario de régression. Cela ne l'active pas en production ; les tests de routes vérifient séparément le défaut fermé et l'absence d'effets de bord.
+
+La reprise des E2E corrige le nom accessible de la marque, utilise l'entrée de langue explicite `/calls?lng=fr` et des identités uniques à chaque tentative pour éviter le cooldown Redis laissé par une précédente vérification d'e-mail. Les attentes Voice-only, le composer désactivé et les contrôles d'isolation restent en place. Les captures d'échec sont désormais conservées pour distinguer un problème de fixture d'un défaut visible.
 
 Sur Windows, `mint broken-links` émet quatre faux positifs sur les chemins imbriqués ; la cause séparateurs `\\` contre `/`, les cibles présentes et le contrôle indépendant sont documentés. La CI exécute aussi le vérificateur natif sur Linux. Le contrôle navigateur est un smoke d'accessibilité et de responsive, pas une certification WCAG exhaustive.
 

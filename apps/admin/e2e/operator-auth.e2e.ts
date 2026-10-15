@@ -10,6 +10,12 @@ import { createDatabaseClient } from "@lobbystack/db";
 const password = "Replacement-E2E-Password-123!";
 const prefix = "replacement-e2e";
 
+function fixtureIdentity(name: string, testInfo: TestInfo): string {
+  // Database cleanup does not reset Redis's per-recipient verification limits.
+  // Every attempt must be a fresh signup, including retries after a UI failure.
+  return `${name}-${testInfo.workerIndex}-${testInfo.retry}-${Date.now().toString(36)}`;
+}
+
 async function cleanupFixtures(): Promise<void> {
   const databaseUrl = process.env.REPLACEMENT_E2E_DATABASE_URL;
   if (databaseUrl) {
@@ -145,10 +151,12 @@ async function completeOnboardingBySkippingOptionalInputs(page: Page): Promise<v
 async function verifyVoiceOnlyMessages(page: Page, businessId: string, testInfo: TestInfo): Promise<void> {
   let hasThread = false;
   let outboundRequests = 0;
+  let phoneRequests = 0;
   const phoneRoute = "**/api/phone-numbers?*";
   const messagesRoute = "**/api/messages?*";
   await page.route(phoneRoute, async route => {
     expect(new URL(route.request().url()).searchParams.get("businessId")).toBe(businessId);
+    phoneRequests += 1;
     await route.fulfill({ json: { phoneNumbers: [{ id: "voice-only-fixture", e164: "+33900000000", voiceEnabled: true, smsEnabled: false, status: "active", reclaimScheduledAt: null }], activeClaim: null, replacement: { usedAt: null, activeClaim: null } } });
   });
   await page.route(messagesRoute, async route => {
@@ -159,7 +167,6 @@ async function verifyVoiceOnlyMessages(page: Page, businessId: string, testInfo:
   const locale = async (value: "fr" | "en") => {
     const status = await page.evaluate(async value => {
       const response = await fetch("/api/preferences/locale", { method: "PATCH", credentials: "include", headers: { "content-type": "application/json" }, body: JSON.stringify({ locale: value }) });
-      localStorage.setItem("lobbystack.locale", value);
       return response.status;
     }, value);
     expect(status).toBe(200);
@@ -167,9 +174,13 @@ async function verifyVoiceOnlyMessages(page: Page, businessId: string, testInfo:
   try {
     await locale("fr");
     await page.setViewportSize({ width: 1440, height: 1000 });
-    await page.goto("/calls");
+    // Use the supported explicit locale entry point so server-rendered copy and
+    // the client namespace loader start in French before sidebar navigation.
+    await page.goto("/calls?lng=fr");
+    await expect(page.locator("html")).toHaveAttribute("lang", "fr");
     await page.getByRole("link", { name: "Messages", exact: true }).click();
     await expect(page).toHaveURL("/messages");
+    await expect.poll(() => phoneRequests, { message: "The Messages page must load this workspace's Voice-only capability fixture." }).toBeGreaterThan(0);
     await expect(page.getByText("Numéro Voice-only : appels uniquement", { exact: true })).toBeVisible();
     await expect(page.getByText("Aucune conversation pour le moment", { exact: true })).toBeVisible();
     await expect(page.getByRole("link", { name: "Voir les réglages du numéro" })).toHaveAttribute("href", "/settings/phone-number");
@@ -207,7 +218,7 @@ async function verifyVoiceOnlyMessages(page: Page, businessId: string, testInfo:
     await page.unroute(messagesRoute);
     await locale("en");
     await page.setViewportSize({ width: 1280, height: 720 });
-    await page.goto("/");
+    await page.goto("/?lng=en");
   }
 }
 
@@ -223,8 +234,10 @@ test("operator authentication, workspace access, isolation, and revocation", asy
   await page.goto("/");
   await expect(page).toHaveURL(/\/en\/login$/);
 
-  await signUp(page, "owner-a", testInfo);
-  const ownBusinessId = await createWorkspace(page, "owner-a");
+  const ownerIdentity = fixtureIdentity("owner-a", testInfo);
+  const ownerEmail = `${prefix}-${ownerIdentity}@example.invalid`;
+  await signUp(page, ownerIdentity, testInfo);
+  const ownBusinessId = await createWorkspace(page, ownerIdentity);
   await completeOnboardingBySkippingOptionalInputs(page);
   await page.goto("/");
   await expect(page.getByRole("button", { name: /Replacement E2E owner-a/ })).toBeVisible();
@@ -240,10 +253,10 @@ test("operator authentication, workspace access, isolation, and revocation", asy
   await expect(page.getByText("Prepare a demo", { exact: true })).toBeVisible();
   await expect(page.getByRole("button", { name: "Create isolated demo", exact: true })).toBeVisible();
 
-  await page.getByRole("button", { name: `${prefix}-owner-a@example.invalid` }).click();
+  await page.getByRole("button", { name: ownerEmail }).click();
   await page.getByRole("menuitem", { name: "Sign out" }).click();
   await expect(page).toHaveURL(/\/en\/login$/);
-  await page.getByLabel("Email").fill(`${prefix}-owner-a@example.invalid`);
+  await page.getByLabel("Email").fill(ownerEmail);
   await page.locator('input[type="password"]').fill(password);
   await page.getByRole("button", { name: "Sign in" }).click();
   await expect(page).toHaveURL("/");
@@ -251,8 +264,9 @@ test("operator authentication, workspace access, isolation, and revocation", asy
   const foreignContext = await browser.newContext();
   try {
     const foreignPage = await foreignContext.newPage();
-    await signUp(foreignPage, "owner-b", testInfo);
-    const foreignBusinessId = await createWorkspace(foreignPage, "owner-b");
+    const foreignIdentity = fixtureIdentity("owner-b", testInfo);
+    await signUp(foreignPage, foreignIdentity, testInfo);
+    const foreignBusinessId = await createWorkspace(foreignPage, foreignIdentity);
 
     const isolation = await page.evaluate(async ({ own, foreign }) => {
       const [ownResponse, foreignResponse] = await Promise.all([
@@ -266,7 +280,7 @@ test("operator authentication, workspace access, isolation, and revocation", asy
     await close(foreignContext);
   }
 
-  await page.getByRole("button", { name: `${prefix}-owner-a@example.invalid` }).click();
+  await page.getByRole("button", { name: ownerEmail }).click();
   await page.getByRole("menuitem", { name: "Sign out" }).click();
   await expect(page).toHaveURL(/\/en\/login$/);
   const revokedStatus = await page.evaluate(async () => (await fetch("/api/businesses", { credentials: "include" })).status);
@@ -277,7 +291,7 @@ test("operator authentication, workspace access, isolation, and revocation", asy
 test("French signup retains the chosen locale through onboarding and reload", async ({ page }, testInfo) => {
   test.setTimeout(180_000);
   await page.addInitScript(() => localStorage.setItem("lobbystack.locale", "fr"));
-  await signUp(page, "french-owner", testInfo);
+  await signUp(page, fixtureIdentity("french-owner", testInfo), testInfo);
   expect(await page.evaluate(async () => (await (await fetch("/api/preferences/locale")).json()).locale)).toBe("fr");
   await page.reload();
   await expect.poll(() => page.evaluate(() => localStorage.getItem("lobbystack.locale"))).toBe("fr");

@@ -53,7 +53,7 @@ Date : 15 octobre 2026 UTC. Base de travail : production vérifiée par la coord
 - **NOT_TESTED localement** rendu navigateur public/authentifié : le serveur de développement a été arrêté pendant la compilation de l'instrumentation pour réduire la saturation mémoire Windows, avant navigation réussie. Ne pas présenter la tentative locale comme preuve de rendu.
 - **Ajouté, à exécuter en CI** : `e2e/operator-auth.e2e.ts` vérifie en session réelle de test la sidebar FR et Messages desktop/mobile, intercepte uniquement les lectures numéro/messages avec fixtures Voice-only, interdit toute requête d'envoi, contrôle l'absence de débordement horizontal et attache trois captures PNG. Le test utilise une DB éphémère et ne prouve ni SMS ni PSTN réels.
 - **NOT_TESTED localement** PostgreSQL/RLS complet et E2E authentifié : Docker Desktop n'a pas exposé de backend utilisable à la coordination racine. Les mocks de route prouvent l'ordre des gardes ; ils ne remplacent pas la certification RLS en CI.
-- **En cours de qualification racine** : build complet, lint/test globaux, CI et récupération des captures. Ce rapport doit être complété par le statut de ces jobs et le SHA final de la PR.
+- **PASS CI `f50075f`** : types, lint, build complet, 2 107 tests (110 ignorés), 113 tests PostgreSQL et trois images Docker/scans. Les deux échecs navigateur (ancien libellé de marque et fixture de langue/capacité Messages) sont corrigés dans la suite, sans retirer les attentes de sécurité ; le résultat de leur relance et les captures effectivement acquises sont indiqués dans la PR et le relevé final de livraison.
 
 ## Configuration et garde-fous
 
