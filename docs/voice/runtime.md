@@ -66,6 +66,7 @@ The admin and worker read these variables:
 | Variable | Service | Purpose |
 | --- | --- | --- |
 | `LIVE_PROTOTYPE_ENABLED` | admin, worker | Set to `true` to accept GPT-Live calls. Browser calls fail without it. |
+| `VOICE_BOOKING_DIRECT_REPLY_BUSINESS_ID` | worker | Defaults to disabled. Only an exact business ID enables the experimental verified booking handoff for that business's PSTN calls. Leave blank until the planner and a real pilot call qualify the path; neither `true` nor a comma-separated list enables it. |
 | `OPENAI_API_KEY` | admin, worker | Creates, accepts, and ends sessions, and downloads recordings. |
 | `OPENAI_WEBHOOK_SECRET` | admin | Verifies OpenAI's incoming-call webhook. Phone path only. |
 | `INTERNAL_SERVICE_TOKEN` | admin, worker | Authenticates the admin's attach request to the worker. |
@@ -78,6 +79,27 @@ The admin and worker read these variables:
 | `AI_SUMMARY_MODEL`, `AI_SUMMARY_REASONING_EFFORT` | worker | The model and reasoning effort for the one-line summary written after each call. Leave both blank to use the agent's model on `low`. |
 
 The worker listens on its health port for `/internal/live/attach`. Keep that port on the private network.
+
+### Measure delegated booking work
+
+When the SDK reports stage timings, `live.delegation.execution` records logical
+`modelSteps`, `modelMs`, `toolMs`, and numeric per-step timings. It contains no
+prompt, tool arguments, tool results, or caller text. Model time includes the
+SDK's response wait and may include retries/backoff; tool durations can overlap
+when tools run in parallel.
+
+The experimental handoff can omit a final text-model rewrite only for one
+successful, validated availability or booking receipt that the planner explicitly
+marks complete. Failed, partial, parallel, mismatched, or oversized results keep
+the normal loop. Confirming an internal booking never confirms notification
+delivery or Google Calendar completion.
+
+The October 2026 synthetic real-model check did not qualify this path: both the
+baseline and candidate stopped after availability without performing the requested
+booking. No latency gain or candidate-caused regression was established. The
+feature therefore stays off by default, with no production activation implied by
+the SDK mock tests. A future pilot needs an explicit single-business opt-in and
+end-to-end acceptance before a wider rollout.
 
 ## Set up the phone path
 

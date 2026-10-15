@@ -38,6 +38,8 @@ export type AgentToolContext = {
   callControl?: CallControl;
   /** Prospect demos only answer questions and take messages: no booking, no transfers. */
   intakeOnly?: boolean;
+  /** The PSTN consumer can speak verified tool results without a text rewrite. */
+  directVoiceReplies?: boolean;
 };
 
 const DAY_NAMES = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
@@ -63,6 +65,7 @@ function snapshotKnowledgeMatches(snapshot: BusinessContextSnapshot, query: stri
 }
 
 const phone = z.string().describe("Phone number in E.164 format, for example +14165550134.");
+const finishVoiceReply = z.boolean().optional().describe("Phone only: true only if a successful result of this tool completes EVERYTHING requested in this delegation. False or omit when further tools/actions remain, especially when checking a time before booking it. This changes only how the verified result is spoken; it never grants permission or confirmation.");
 
 export function createReceptionistTools(context: AgentToolContext): ToolSet {
   const { domain, snapshot } = context;
@@ -156,10 +159,11 @@ export function createReceptionistTools(context: AgentToolContext): ToolSet {
         serviceName: z.string().describe("One of the business's services."),
         date: z.string().describe("Date as YYYY-MM-DD in the business's timezone."),
         preferredTime: z.string().optional().describe("Preferred start time as HH:mm (24-hour)."),
+        ...(channel === "voice" && context.directVoiceReplies ? { finishVoiceReply } : {}),
       }),
-      execute: async ({ serviceName, date, preferredTime }) => {
+      execute: async ({ serviceName, date, preferredTime, finishVoiceReply: finishReply }) => {
         const [hour, minute] = (preferredTime ?? "").split(":").map(Number);
-        return await findOpenings(domain, {
+        const result = await findOpenings(domain, {
           businessId,
           serviceName,
           date,
@@ -168,6 +172,7 @@ export function createReceptionistTools(context: AgentToolContext): ToolSet {
           ...(Number.isFinite(hour) ? { preferredHour24: hour, preferredMinute: Number.isFinite(minute) ? minute : 0 } : {}),
           ...(context.callId ? { callId: context.callId } : {}),
         });
+        return channel === "voice" && context.directVoiceReplies && finishReply === true && result.ok ? { ...result, voiceReplyComplete: true } : result;
       },
     });
     tools.bookAppointment = tool({
@@ -178,13 +183,14 @@ export function createReceptionistTools(context: AgentToolContext): ToolSet {
         contactName: z.string().optional(),
         contactPhone: phone.optional().describe("Required when the caller's number isn't already known."),
         smsConsentGranted: z.boolean().describe("True only if the caller agreed to receive a confirmation and reminder text."),
+        ...(channel === "voice" && context.directVoiceReplies ? { finishVoiceReply } : {}),
       }),
       execute: async (input) => {
         const contactPhone = input.contactPhone ?? context.callerPhone;
         if (!contactPhone) return { ok: false, reason: "Ask for a phone number before booking." };
         const opening = await checkOpening(domain, { businessId, serviceName: input.serviceName, startsAt: input.startsAt, timezone, ...(context.callId ? { callId: context.callId } : {}) });
         if (!opening.ok || !opening.available) return { ok: false, reason: "That time is no longer available. Offer another opening." };
-        return await bookForCaller(domain, {
+        const result = await bookForCaller(domain, {
           businessId,
           serviceName: input.serviceName,
           startsAt: input.startsAt,
@@ -195,6 +201,7 @@ export function createReceptionistTools(context: AgentToolContext): ToolSet {
           ...(input.contactName ? { contactName: input.contactName } : {}),
           ...(context.callId ? { callId: context.callId } : {}),
         });
+        return channel === "voice" && context.directVoiceReplies && input.finishVoiceReply === true && result.ok ? { ...result, voiceReplyComplete: true } : result;
       },
     });
   }

@@ -3,6 +3,7 @@ import type { DelegationCreatedEvent } from "openai/resources/live/live";
 import { SidebandWS } from "openai/resources/live/sideband/ws";
 
 import type { ReceptionistAgent } from "../agent";
+import { voiceBookingReply } from "../voiceBookingReply";
 import { LiveLatencyTracker, type LiveCallLatency } from "./latency";
 
 type Turn = { role: "caller" | "receptionist"; text: string; endMs: number };
@@ -16,6 +17,9 @@ export type DelegationTiming = {
   tools: string[];
   answer: string;
   failed: boolean;
+  /** Logical SDK steps; toolMs sums execution times and may overlap for parallel tools.
+   * Never includes prompts, tool inputs/results, or a count of physical retries. */
+  execution?: { modelSteps: number; modelMs: number; toolMs: number; directToolReply: boolean; steps: Array<{ modelMs: number; toolMs: number }> };
 };
 
 export type LiveCallSummary = {
@@ -40,6 +44,8 @@ export type LiveCallControllerOptions = {
   agent: ReceptionistAgent;
   /** Spoken as soon as the call connects, so the caller doesn't have to speak first. */
   greeting?: string;
+  /** PSTN only; enables verified booking results without a text-model rewrite. */
+  bookingReplyTimezone?: string;
   /** Hang up after this long without either side speaking. */
   silenceTimeoutMs?: number;
   /** Hang up when the call runs this long. */
@@ -237,13 +243,20 @@ export class LiveCallController {
     let answer = FALLBACK_ANSWER;
     let tools: string[] = [];
     let failed = false;
+    let execution: DelegationTiming["execution"];
     try {
       const result = await this.options.agent.generate({
         prompt: this.delegationPrompt(),
         abortSignal: this.abort.signal,
       });
       tools = result.steps.flatMap((step) => step.toolCalls.map((call) => call.toolName));
-      if (result.text.trim()) answer = result.text.trim().slice(0, MAX_ANSWER_CHARS);
+      const directReply = this.options.bookingReplyTimezone ? voiceBookingReply(result.steps, this.options.bookingReplyTimezone) : undefined;
+      if (directReply || result.text.trim()) answer = (directReply || result.text.trim()).slice(0, MAX_ANSWER_CHARS);
+      const measurements = result.steps.map((step) => ({ modelMs: step.performance?.responseTimeMs, toolMs: Object.values(step.performance?.toolExecutionMs ?? {}).reduce((sum, duration) => sum + duration, 0) }));
+      if (measurements.every((step) => typeof step.modelMs === "number" && Number.isFinite(step.modelMs) && step.modelMs >= 0 && Number.isFinite(step.toolMs) && step.toolMs >= 0)) {
+        const steps = measurements.map((step) => ({ modelMs: Math.round(step.modelMs!), toolMs: Math.round(step.toolMs) }));
+        execution = { modelSteps: result.steps.length, modelMs: steps.reduce((sum, step) => sum + step.modelMs, 0), toolMs: steps.reduce((sum, step) => sum + step.toolMs, 0), directToolReply: Boolean(directReply), steps };
+      }
     } catch (error) {
       failed = true;
       if (this.abort.signal.aborted) return;
@@ -262,6 +275,7 @@ export class LiveCallController {
       tools,
       answer,
       failed,
+      ...(execution ? { execution } : {}),
     };
     this.delegations.push(timing);
     this.options.onDelegation?.(timing);
