@@ -19,7 +19,7 @@ export const OG_IMAGE_HEIGHT = 675
 
 export const SEARCH_PATH = "/search/"
 
-const BRAND_ALIASES = ["Caleonis Receptionist"]
+const BRAND_ALIASES = ["Caléonis Receptionist"]
 
 export type JsonLd = Record<string, unknown>
 
@@ -68,9 +68,9 @@ export const plainTextFromMarkdown = (markdown = "", limit = 10000) =>
   markdown
     .replace(/^---[\s\S]*?---/m, "")
     .replace(/```[\s\S]*?```/g, " ")
-    .replace(/`([^`]+)`/g, "$1")
+    .replace(/`([^`]+)`/g, "€1")
     .replace(/!\[[^\]]*]\([^)]*\)/g, " ")
-    .replace(/\[([^\]]+)]\([^)]*\)/g, "$1")
+    .replace(/\[([^\]]+)]\([^)]*\)/g, "€1")
     .replace(/^#{1,6}\s+/gm, "")
     .replace(/^>\s?/gm, "")
     .replace(/[*_~>#-]/g, " ")
@@ -296,7 +296,7 @@ export const blogJsonLd = ({
 }: LocaleInput & { path?: string } = {}): JsonLd => {
   const name =
     locale === "fr"
-      ? "Blog et mises a jour produit Caleonis Reception"
+      ? "Blog et mises a jour produit Caléonis Receptionist"
       : "AI Receptionist Blog and Product Updates"
   const description =
     locale === "fr"

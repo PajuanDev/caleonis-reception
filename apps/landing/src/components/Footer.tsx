@@ -1,81 +1,158 @@
+import { GithubIcon } from "@/components/GithubIcon"
 import { Separator } from "@/components/ui/separator"
-import { localizePath, type Locale } from "@/i18n"
-export function Footer({ locale = "fr" }: { locale?: Locale }) {
-  const sections =
-    locale === "fr"
-      ? [
-          [
-            "Produit",
-            [
-              ["Fonctionnalités", "/features/"],
-              ["Solutions", "/solutions/"],
-              ["Tarifs sur demande", "/pricing/"],
-            ],
-          ],
-          [
-            "Ressources",
-            [
-              ["Aide et limites du pilote", "/resources/"],
-              ["Centre d’aide", "/aide/"],
-              ["Confidentialité SaaS et Google — projet", "/confidentialite/"],
-              ["Conditions — en préparation", "/terms/"],
-            ],
-          ],
-        ]
-      : [
-          [
-            "Product",
-            [
-              ["Features", "/features/"],
-              ["Solutions", "/solutions/"],
-              ["Pricing on request", "/pricing/"],
-            ],
-          ],
-          [
-            "Resources",
-            [
-              ["Pilot help and limitations", "/resources/"],
-              ["Help centre (French)", "/aide/"],
-              ["Privacy — under review", "/privacy/"],
-              ["Terms — under review", "/terms/"],
-            ],
-          ],
-        ]
+import { localizeHref, localizePath, type Locale } from "@/lib/i18n"
+
+const footerCopy = {
+  en: {
+    product: "Product",
+    features: "Features",
+    howItWorks: "How it Works",
+    pricing: "Pricing",
+    resources: "Resources",
+    helpCenter: "Help Center",
+    blog: "Blog",
+    calculator: "Missed Call Calculator",
+    affiliateProgram: "Affiliate Program",
+    company: "Company",
+    about: "About",
+    contact: "Contact",
+    privacy: "Privacy Policy",
+    cookiePolicy: "Cookie Policy",
+    terms: "Terms of Service",
+    rights: "All rights reserved.",
+    privacyShort: "Privacy",
+    cookiePolicyShort: "Cookie Policy",
+    termsShort: "Terms",
+    cookiePreferences: "Cookie preferences",
+  },
+  fr: {
+    product: "Produit",
+    features: "Fonctionnalités",
+    howItWorks: "Fonctionnement",
+    pricing: "Tarifs",
+    resources: "Ressources",
+    helpCenter: "Centre d'aide",
+    blog: "Blog",
+    calculator: "Calculateur d'appels manqués",
+    affiliateProgram: "Programme d'affiliation",
+    company: "Entreprise",
+    about: "À propos",
+    contact: "Contact",
+    privacy: "Politique de confidentialité",
+    cookiePolicy: "Politique relative aux cookies",
+    terms: "Conditions d'utilisation",
+    rights: "Tous droits réservés.",
+    privacyShort: "Confidentialité",
+    cookiePolicyShort: "Cookies",
+    termsShort: "Conditions",
+    cookiePreferences: "Préférences cookies",
+  },
+} satisfies Record<Locale, Record<string, string>>
+
+const footerSections = (locale: Locale) => {
+  const copy = footerCopy[locale]
+
+  return [
+    {
+      title: copy.product,
+      links: [
+        { label: copy.features, href: "/features/" },
+        { label: copy.howItWorks, href: "/#how-it-works" },
+        { label: copy.pricing, href: "/pricing/" },
+      ],
+    },
+    {
+      title: copy.resources,
+      links: [
+        {
+          label: copy.helpCenter,
+          href: locale === "fr" ? "/aide/" : "/aide/en/",
+        },
+        { label: copy.blog, href: "/blog/" },
+        {
+          label: copy.calculator,
+          href: "/missed-call-revenue-calculator/",
+        },
+        {
+          label: copy.affiliateProgram,
+          href: "/affiliate-program/",
+        },
+        {
+          label: locale === "fr" ? "Source d’origine MIT" : "Upstream MIT source",
+          href: "https://gitlab.com/lobbystack-group/lobbystack",
+        },
+      ],
+    },
+    {
+      title: copy.company,
+      links: [
+        { label: copy.about, href: "/about/" },
+        { label: copy.contact, href: "mailto:contact@caleonis.com" },
+        { label: copy.privacy, href: "/privacy/" },
+        { label: copy.cookiePolicy, href: "/cookie-policy/" },
+        { label: copy.terms, href: "/terms/" },
+      ],
+    },
+  ]
+}
+
+type FooterProps = {
+  locale?: Locale
+}
+
+export function Footer({ locale = "en" }: FooterProps) {
+  const copy = footerCopy[locale]
+
   return (
     <footer className="border-t border-border/60 bg-background">
       <div className="mx-auto max-w-7xl px-6 pt-16">
-        <div className="grid gap-10 md:grid-cols-3">
-          <div>
-            <a href={localizePath(locale, "/")}>
-              <img
-                src="/caleonis-logo.svg"
-                width="220"
-                height="40"
-                alt="Caléonis Receptionist"
-                className="h-8 w-auto"
-              />
+        <div className="mb-12 flex flex-col items-start justify-between gap-6 sm:flex-row sm:items-center">
+          <a
+            href={localizePath(locale, "/")}
+            className="flex items-center rounded-md focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
+          >
+            <img
+              src="/caleonis-logo.svg"
+              alt="Caléonis Receptionist"
+              width={155}
+              height={43}
+              decoding="async"
+              className="h-7 w-auto"
+            />
+          </a>
+
+          <div className="flex items-center gap-4">
+            <a
+              href="https://gitlab.com/lobbystack-group/lobbystack"
+              className="text-muted-foreground transition-colors hover:text-foreground"
+              aria-label={locale === "fr" ? "Source d’origine MIT" : "Upstream MIT source"}
+              data-ph-capture-attribute-section="footer_social"
+              data-ph-capture-attribute-action="view_github"
+              data-ph-capture-attribute-destination="https://gitlab.com/lobbystack-group/lobbystack"
+            >
+              <GithubIcon className="size-5" />
             </a>
-            <p className="mt-5 max-w-sm text-sm leading-relaxed text-muted-foreground">
-              {locale === "fr"
-                ? "Marque de service exploitée par William Fabrice Gosse, entrepreneur individuel, sous le nom commercial MrManiac."
-                : "A service brand operated by William Fabrice Gosse, sole proprietor, under the MrManiac trade name."}
-            </p>
           </div>
-          {sections.map(([title, links]) => (
-            <div key={String(title)}>
+        </div>
+
+        <div className="grid grid-cols-2 gap-8 md:grid-cols-4">
+          {footerSections(locale).map((section) => (
+            <div key={section.title}>
               <p className="mb-4 text-xs font-semibold text-muted-foreground">
-                {String(title)}
+                {section.title}
               </p>
-              <ul className="space-y-3">
-                {(links as string[][]).map(([label, path]) => (
-                  <li key={path}>
+              <ul className="space-y-2.5">
+                {section.links.map((link) => (
+                  <li key={link.label}>
                     <a
-                      className="text-sm text-muted-foreground hover:text-foreground hover:underline"
-                      href={
-                        path === "/aide/" ? path : localizePath(locale, path)
-                      }
+                      href={localizeHref(locale, link.href)}
+                      data-ph-capture-attribute-section="footer"
+                      data-ph-capture-attribute-action="navigate"
+                      data-ph-capture-attribute-destination={link.href}
+                      data-ph-capture-attribute-label={link.label}
+                      className="text-sm text-muted-foreground transition-colors hover:text-foreground focus-visible:text-foreground focus-visible:outline-none"
                     >
-                      {label}
+                      {link.label}
                     </a>
                   </li>
                 ))}
@@ -83,30 +160,42 @@ export function Footer({ locale = "fr" }: { locale?: Locale }) {
             </div>
           ))}
         </div>
-        <Separator className="my-8" />
-        <div className="flex flex-col gap-4 pb-8 text-xs leading-relaxed text-muted-foreground md:flex-row md:justify-between">
+      </div>
+
+      <Separator className="my-8" />
+
+      <div className="mx-auto max-w-7xl px-6 pb-8">
+        <div className="flex flex-col items-center justify-between gap-4 text-xs text-muted-foreground md:flex-row">
           <p>
-            © {new Date().getFullYear()} Caléonis Receptionist · MrManiac
-            <br />
-            {locale === "fr"
-              ? "Socle LobbyStack sous licence MIT, copyright LobbyStack contributors conservé."
-              : "Built on LobbyStack under the MIT license; LobbyStack contributors copyright retained."}{" "}
-            <a
-              href="/third-party-notices.txt"
-              className="underline underline-offset-4"
-            >
-              {locale === "fr"
-                ? "Attribution et licence"
-                : "Attribution and license"}
-            </a>
+            © {new Date().getFullYear()} Caléonis Receptionist. {copy.rights}
           </p>
-          <button
-            type="button"
-            data-cookie-preferences-trigger
-            className="self-start underline underline-offset-4"
-          >
-            {locale === "fr" ? "Préférences cookies" : "Cookie preferences"}
-          </button>
+          <div className="flex flex-wrap justify-center gap-6">
+            <button
+              type="button"
+              data-cookie-preferences-trigger
+              className="hover:text-foreground"
+            >
+              {copy.cookiePreferences}
+            </button>
+            <a
+              href={localizePath(locale, "/privacy/")}
+              className="hover:text-foreground"
+            >
+              {copy.privacyShort}
+            </a>
+            <a
+              href={localizePath(locale, "/cookie-policy/")}
+              className="hover:text-foreground"
+            >
+              {copy.cookiePolicyShort}
+            </a>
+            <a
+              href={localizePath(locale, "/terms/")}
+              className="hover:text-foreground"
+            >
+              {copy.termsShort}
+            </a>
+          </div>
         </div>
       </div>
     </footer>

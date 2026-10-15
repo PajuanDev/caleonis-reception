@@ -18,7 +18,7 @@ beforeEach(() => {
   route.pathname = "/"; window.innerWidth = 1440;
   vi.stubGlobal("matchMedia", vi.fn(query => ({ matches: false, media: query, addEventListener: vi.fn(), removeEventListener: vi.fn() })));
 });
-afterEach(() => { cleanup(); clients.forEach(client => client.clear()); clients.length = 0; vi.unstubAllGlobals(); vi.clearAllMocks(); });
+afterEach(() => { cleanup(); clients.forEach(client => client.clear()); clients.length = 0; vi.unstubAllGlobals(); vi.unstubAllEnvs(); vi.clearAllMocks(); });
 function setup(role = "business_owner") {
   const client = new QueryClient({ defaultOptions: { queries: { retry: false, staleTime: Infinity } } }); clients.push(client);
   client.setQueryData(["businesses"], { businesses: [{ businessId: "business", name: "Tenant name", active: true, role }] });
@@ -30,6 +30,14 @@ function setup(role = "business_owner") {
   return { ...view, navigate(pathname: string) { route.pathname = pathname; view.rerender(content()); } };
 }
 describe("original shared navigation", () => {
+  it("points Home to the gated staging dashboard while preserving Messages and legacy deep links", () => {
+    vi.stubEnv("NEXT_PUBLIC_P1_SINGLE_HOST_STAGING", "true");
+    route.pathname = "/dashboard";
+    setup();
+    expect(screen.getByRole("link", { name: "nav:items.home" }).getAttribute("href")).toBe("/dashboard");
+    expect(screen.getByRole("link", { name: "nav:items.messages" }).getAttribute("href")).toBe("/messages");
+    expect(screen.getByRole("link", { name: "nav:items.calls" }).getAttribute("href")).toBe("/calls");
+  });
   it("keeps the original group ordering and integrations link", () => {
     setup();
     // The sidebar header carries the workspace switcher alone; no brand mark.

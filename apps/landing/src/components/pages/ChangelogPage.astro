@@ -41,15 +41,15 @@ const renderedEntries = await Promise.all(
 
 const pageCopy = {
   en: {
-    h1: "LobbyStack changelog: AI receptionist product updates",
+    h1: "Caléonis Receptionist changelog: AI receptionist product updates",
     intro:
-      "Follow new AI receptionist features, dashboard improvements, integrations, and shipped changes from the LobbyStack team.",
+      "Follow new AI receptionist features, dashboard improvements, integrations, and shipped changes from the Caléonis Receptionist team.",
     breadcrumb: "Changelog",
   },
   fr: {
-    h1: "Journal LobbyStack: mises à jour du réceptionniste IA",
+    h1: "Journal Caléonis Receptionist: mises à jour du réceptionniste IA",
     intro:
-      "Suivez les nouveautés du réceptionniste IA, les améliorations du tableau de bord, les intégrations et les changements publiés par l'équipe LobbyStack.",
+      "Suivez les nouveautés du réceptionniste IA, les améliorations du tableau de bord, les intégrations et les changements publiés par l'équipe Caléonis Receptionist.",
     breadcrumb: "Journal des changements",
   },
 } satisfies Record<
@@ -130,6 +130,15 @@ const changelogItemListJsonLd = {
     </header>
 
     <section class="mx-auto max-w-7xl px-6 pt-16 pb-24 md:pt-20 md:pb-32">
+      <p
+        class="mb-12 rounded-xl border border-border/70 bg-muted/25 p-5 text-sm leading-relaxed"
+      >
+        {
+          locale === "fr"
+            ? "Historique du socle LobbyStack sous licence MIT. Ces entrées conservées ne signifient pas que chaque fonction est activée sur le pilote Caléonis. Les SMS sont indisponibles sur le numéro Voice-only ; les transferts restent à qualifier."
+            : "History of the MIT-licensed LobbyStack foundation. Retaining these entries does not mean every feature is enabled on the Caléonis pilot. SMS is unavailable on its Voice-only number; transfers remain to be qualified."
+        }
+      </p>
       <div class="space-y-20 md:space-y-24">
         {
           renderedEntries.map(({ entry, Content }, index) => {

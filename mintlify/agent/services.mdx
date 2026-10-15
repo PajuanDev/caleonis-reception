@@ -1,38 +1,61 @@
 ---
-title: "Décrire vos services"
-description: "Préparer des prestations compréhensibles et les conditions de réservation."
+title: "Ajouter des services réservables"
+description: "Ajoutez des services pour que les appelants comprennent ce que vous offrez et demandent le bon rendez-vous."
+sidebarTitle: "Services"
+contentType: "How-to"
 ---
-Les **Services** décrivent ce que propose votre entreprise. Une description claire aide l’agent à renseigner l’appelant et à recueillir une demande.
 
-## Ajouter ou corriger un service
+La page **Services** contient les types de rendez-vous ou les prestations dont votre réceptionniste peut parler avec les appelants. Vous gérez les services avec le même tableau d'entrées que les Connaissances et les Règles : un titre, un contenu, des étiquettes facultatives, un statut et des actions.
 
-1. Ouvrez **Agent > Services**.
-2. Utilisez l’action d’ajout proposée.
-3. Donnez un nom employé par vos clients.
-4. Décrivez le contenu et les conditions de la prestation.
-5. Renseignez les champs de durée ou de réservation disponibles.
-6. Enregistrez, puis vérifiez la réponse de l’agent dans un nouveau test.
+Les services aident Caléonis Receptionist à expliquer ce que vous offrez, à recueillir les bons renseignements auprès des appelants et à guider les demandes de rendez-vous quand votre calendrier est connecté.
 
-Pour un artisan, « Rappel pour devis » est souvent plus précis qu’une promesse d’intervention immédiate.
+## Ajouter un service
 
-## Informations utiles
+<Steps>
+  <Step title="Ouvrez Services">
+    Allez dans **Agent** > **Services**.
+  </Step>
+  <Step title="Ajoutez un service">
+    Cliquez sur **Ajouter un service**.
+  </Step>
+  <Step title="Décrivez le service">
+    Entrez un titre clair, comme « Consultation initiale », et décrivez ce que comprend le service. Au besoin, ajoutez des étiquettes qui reprennent les mots de vos appelants.
+  </Step>
+  <Step title="Enregistrez">
+    Cliquez sur **Enregistrer**. Le service apparaît dans le tableau Services.
+  </Step>
+</Steps>
 
-| Information | Exemple à adapter |
+## Aider les appelants à réserver le bon service
+
+Rédigez vos services avec les mots qu'emploient les appelants :
+
+- Utilisez le nom du service tel que vos clients le disent.
+- Indiquez la durée, l'admissibilité, les consignes de préparation et les prix seulement si ces détails sont stables.
+- Ajoutez des synonymes dans les étiquettes quand les appelants désignent le même service par des mots différents.
+- Laissez désactivés les services indisponibles ou saisonniers.
+
+## Exemples de services
+
+| Service | Détails utiles à inclure |
 | --- | --- |
-| Périmètre | Demande de devis pour une installation électrique. |
-| Durée | Créneau de rappel de 15 minutes, si c’est votre pratique. |
-| Zone | Communes réellement desservies. |
-| Tarif | Sur devis si aucun prix n’est approuvé. |
-| Conditions | Photos ou détails à fournir ultérieurement à votre équipe. |
+| Consultation initiale | À qui elle s'adresse, sa durée habituelle, si elle peut être réservée en ligne et ce que l'appelant doit préparer. |
+| Réparation d'urgence | Ce qui est considéré comme urgent, si un service le jour même est possible et quand la réceptionniste doit transférer l'appelant. |
+| Rendez-vous de suivi | Qui doit le réserver, sa durée habituelle et s'il doit avoir lieu avec un membre précis de l'équipe. |
+| Service saisonnier | Les mois où il est offert, la période de réservation éventuelle et ce que les appelants doivent savoir avant de le demander. |
 
-Ne promettez pas une disponibilité d’urgence, un tarif ou une intervention que votre équipe n’a pas validés.
+## Réservation dans le calendrier
 
-## Rendre un service réservable
+Connectez Google Calendar si vous voulez que Caléonis Receptionist vérifie les disponibilités et ajoute les réservations à votre calendrier.
 
-Vérifiez le mode de réservation, les horaires, la durée et l’[agenda sélectionné](/integrations/google-calendar). La présence d’une description de service ne garantit pas à elle seule une réservation.
+<Card title="Connecter Google Calendar" icon="calendar" href="/integrations/google-calendar">
+  Connectez un compte Google et sélectionnez le calendrier que Caléonis Receptionist doit utiliser pour les réservations.
+</Card>
 
-Pour un cabinet médical, restez sur l’accueil administratif sans motif clinique ni donnée de santé tant que le cadre d’usage n’est pas qualifié.
+{/* Caléonis qualification */}
 
-## Retirer une prestation
+## Qualifier une prestation Caléonis
 
-Utilisez les actions de désactivation proposées pour une prestation temporairement indisponible. Vérifiez ensuite que l’agent ne la propose plus dans un nouvel échange.
+Un service peut être un rappel pour devis de 15 minutes ; cela ne promet ni intervention ni appel sortant automatique. Vérifiez sa durée, le mode de réservation, les horaires, les fermetures et le fuseau Europe/Paris avant le test. La description seule ne garantit pas une place disponible.
+
+N'annoncez pas de prix, d'urgence ou d'intervention que votre équipe n'a pas validés. Les cabinets médicaux restent limités à l'accueil administratif sans données de santé.

@@ -1,41 +1,64 @@
 ---
-title: "Utiliser Messages"
-description: "Comprendre la boîte Messages et les limites SMS d’un numéro Voice-only."
+title: "Gérer les conversations avec vos clients"
+description: "Consultez les conversations SMS et de chat du site Web, envoyez des réponses et contrôlez la prise en charge par l'IA pour le chat du site Web."
+sidebarTitle: "Messages"
+contentType: "How-to"
 ---
-**Général > Messages** donne accès aux conversations autorisées de votre entreprise. Un espace peut afficher cette page sans disposer d’un numéro SMS ou d’un widget actif.
 
-<Note>
-Le numéro pilote français est Voice-only. Il n’envoie ni ne reçoit de SMS. Une boîte vide est donc normale en l’absence d’autre source de conversation active.
-</Note>
+La page **Messages** regroupe les SMS et le chat du site Web de l'entreprise active. Vous pouvez y consulter les messages entrants et sortants, chercher des conversations, envoyer des réponses et contrôler la prise en charge par l'IA pour le chat du site Web.
 
-## Distinguer les demandes
+L'IA ne répond pas aux SMS. Les textos envoyés à votre numéro d'entreprise attendent ici une réponse manuelle. Le chat du site Web est restreint et n'apparaît que pour les espaces de travail qui ont déjà des clés de widget.
 
-| Élément | Où le retrouver |
-| --- | --- |
-| Conversation SMS, si numéro et service compatibles | Messages, filtre SMS |
-| Conversation du widget existant et activé | Messages, filtre Web |
-| Demande de rappel prise pendant un appel | Fiche d’appel et suivi du tableau de bord |
-| Email ou messagerie sociale | Aucun canal V1 annoncé dans cette boîte |
 
-La page **Messages** ne transforme pas un message vocal en SMS. L’IA ne répond pas automatiquement aux SMS entrants.
+## Trouver une conversation
 
-## Rechercher et lire
+Le panneau de gauche affiche les conversations et leur dernière activité. Filtrez la liste avec **Tous**, **Web** ou **SMS**.
 
-1. Ouvrez [Messages](https://receptionist.caleonis.com/messages).
-2. Vérifiez l’entreprise et le filtre **Tous**, **Web** ou **SMS** lorsqu’il est proposé.
-3. Sélectionnez une conversation.
-4. Relisez le fil et les horaires avant de répondre.
+Chaque élément affiche :
 
-## Répondre quand le canal le permet
+- Le contact, le visiteur, le numéro de téléphone ou l'adresse email.
+- L'aperçu du dernier message.
+- L'heure de la dernière activité.
+- Un repère de chat Web quand la conversation vient du widget.
 
-La réponse manuelle nécessite un canal actif et les droits correspondants. Une action désactivée ou un état « SMS indisponible » doit être respecté.
+Utilisez la recherche pour trouver des conversations selon les coordonnées du contact ou le dernier message.
 
-Pour un fil Web autorisé, la prise en charge humaine permet de suspendre les réponses IA puis de les reprendre. Ce contrôle ne s’applique pas aux SMS.
+## Consulter une conversation
 
-Une réponse soumise n’est pas nécessairement livrée : vérifiez l’état retourné. Ne promettez pas de confirmation SMS depuis un numéro Voice-only.
+Ouvrez une conversation pour voir le fil des messages. Le fil affiche les messages entrants des clients, les messages sortants de l'IA ou d'un membre de l'équipe, et l'heure de chaque message.
 
-## Entrée absente ou boîte vide
+## Envoyer une réponse
 
-L’entrée peut dépendre de la version déployée et des permissions. Si elle manque, signalez le problème avec l’URL, l’entreprise et votre rôle ; n’achetez pas un numéro pour la faire apparaître.
+<Steps>
+  <Step title="Ouvrez une conversation">
+    Sélectionnez une conversation SMS ou de chat du site Web dans la liste.
+  </Step>
+  <Step title="Rédigez votre réponse">
+    Utilisez la zone de saisie au bas du fil.
+  </Step>
+  <Step title="Envoyez le message">
+    Cliquez sur **Envoyer**.
+  </Step>
+</Steps>
 
-Les nouvelles activations de [widget](/settings/widget) sont restreintes. Consultez aussi les [capacités et limites](/support/availability).
+## Prendre le relais ou réactiver l'IA
+
+Les fils de chat du site Web affichent leur état d'automatisation dans l'en-tête. Cliquez sur **Prendre en charge** quand un membre de l'équipe doit gérer la conversation. Cliquez sur **Réactiver l'IA** quand l'assistante du site Web doit de nouveau répondre.
+
+Les fils SMS n'affichent pas ce contrôle de prise en charge. Les réponses envoyées depuis cette page sont manuelles.
+
+{/* Caléonis qualification */}
+
+## Numéro français Voice-only
+
+Le numéro pilote ne reçoit ni n'envoie de SMS. La boîte Messages reste accessible mais peut être vide. La réponse manuelle est possible uniquement sur un canal réellement actif et avec les permissions requises ; respectez les états désactivés et SMS indisponible.
+
+Une demande de rappel prise par téléphone se retrouve dans la fiche d'appel et le suivi, pas automatiquement dans un fil SMS. Les nouvelles clés de widget restent désactivées par défaut.
+
+<Frame caption="Messages dans la vraie application candidate Caléonis, données fictives, ordinateur.">
+  <img src="/images/screenshots/caleonis-messages-desktop.png" alt="Messages Caléonis avec indication Voice-only sur ordinateur" width="1440" height="1000" />
+</Frame>
+
+<Frame caption="Même page Messages de la candidate, vue mobile.">
+  <img src="/images/screenshots/caleonis-messages-mobile.png" alt="Messages Caléonis sur mobile, SMS indisponible" width="390" height="844" />
+</Frame>

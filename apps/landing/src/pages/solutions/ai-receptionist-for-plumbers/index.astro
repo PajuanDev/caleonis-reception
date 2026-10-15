@@ -1,4 +1,8 @@
 ---
-import LaunchSolutionPage from "@/components/pages/LaunchSolutionPage.astro"
+import SeoLandingPage from "@/components/SeoLandingPage.astro"
+import { seoLandingPageByPath } from "@/lib/seo-landing-pages"
+const page = seoLandingPageByPath("/solutions/ai-receptionist-for-plumbers/")
+if (!page) throw new Error("Missing original trade page")
 ---
-<LaunchSolutionPage locale="en" slug="ai-receptionist-for-plumbers"/>
+
+<SeoLandingPage page={page} />

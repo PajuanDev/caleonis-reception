@@ -1,3 +1,4 @@
+import { qualifyPilotText, qualifyPilotLabel } from "@/lib/pilot-qualification"
 import { buttonVariants } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
 import {
@@ -38,8 +39,9 @@ export function BusinessFit() {
             Built for call-heavy small businesses
           </h2>
           <p className="section-intro">
-            LobbyStack works best when phone calls turn into appointments,
-            quotes, jobs, consultations, or urgent service requests.
+            Caléonis Receptionist works best when phone calls turn into
+            appointments, quotes, jobs, consultations, or urgent service
+            requests.
           </p>
         </div>
 
@@ -56,8 +58,8 @@ export function BusinessFit() {
         </div>
 
         <p className="mt-12 text-center text-sm font-medium text-muted-foreground">
-          If a missed call can mean a missed customer, LobbyStack can help you
-          answer faster and give your team the details they need.
+          If a missed call can mean a missed customer, Caléonis Receptionist can
+          help you answer faster and give your team the details they need.
         </p>
       </div>
     </section>
@@ -80,19 +82,19 @@ export function Capabilities() {
     },
     {
       title: "Knowledge base answers",
-      copy: "LobbyStack can answer from your services, policies, FAQs, hours, pricing guidance, and business instructions.",
+      copy: "Caléonis Receptionist can answer from your services, policies, FAQs, hours, pricing guidance, and business instructions.",
     },
     {
       title: "Appointment booking",
-      copy: "Book appointments directly and send confirmation details to the caller.",
+      copy: "Book in a connected Google Calendar and review confirmation internally; no Voice-only SMS.",
     },
     {
       title: "Call transfers",
-      copy: "Transfer calls to a person when the situation needs judgment, urgency, or approval.",
+      copy: "Human transfers require qualification. On the pilot, collect the reason and contact details for a human callback.",
     },
     {
       title: "Follow-up capture",
-      copy: "Send confirmation details, summaries, alerts, and next-step notes after a call.",
+      copy: "Review summaries and next steps internally; external confirmations and alerts require a separately qualified integration.",
     },
     {
       title: "Call summaries",
@@ -128,10 +130,10 @@ export function Capabilities() {
               className="rounded-2xl border border-border/70 bg-background p-6"
             >
               <h3 className="text-base font-medium tracking-tight text-foreground">
-                {c.title}
+                {qualifyPilotLabel(c.title, "en")}
               </h3>
               <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
-                {c.copy}
+                {qualifyPilotText(c.copy, "en")}
               </p>
             </div>
           ))}
@@ -207,10 +209,10 @@ export function OpenSource() {
               Open-source phone automation you can actually inspect
             </h2>
             <p className="mt-6 text-lg leading-relaxed text-background/80">
-              LobbyStack is built for businesses that want practical automation
-              without mystery. You can start with the hosted product, review how
-              the system works, and choose a setup that fits your team, volume,
-              and technical needs.
+              Caléonis Receptionist is built for businesses that want practical
+              automation without mystery. You can start with the hosted product,
+              review how the system works, and choose a setup that fits your
+              team, volume, and technical needs.
             </p>
             <div className="mt-10 grid gap-6 sm:grid-cols-2">
               <div className="flex gap-3">

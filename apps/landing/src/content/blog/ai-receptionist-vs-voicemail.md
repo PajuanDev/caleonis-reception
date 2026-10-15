@@ -29,6 +29,8 @@ Voicemail still has a place. It costs little, works with almost any phone system
 | Cost | Subscription and usage | Often included with the phone system |
 | Staff work | Review outcomes and exceptions | Listen, interpret, call back, and complete the work |
 
+If you're also weighing a phone tree or voicemail-to-text, our [automated answering service guide](/blog/automated-answering-service/) compares both with an AI receptionist.
+
 ## Voicemail works when waiting carries little risk
 
 Voicemail remains adequate for low-urgency calls from people who already know the business:
@@ -45,7 +47,7 @@ Keep the greeting short. State the business name, expected response time, and an
 
 ## New-customer calls behave differently
 
-A new caller may have a list of businesses open in search results. If the first call reaches voicemail, the caller can try the next listing within seconds. The business may never know because many people hang up without leaving a message.
+A new caller may have a list of businesses open in search results. If the first call reaches voicemail, the caller can try the next listing within seconds. The business may never know because many people hang up without leaving a message. Our guide to [Google Business Profile calls](/blog/google-business-profile-calls/) shows how to track the calls your listing sends.
 
 The effect depends on urgency and local competition. A caller looking for emergency plumbing has less patience than a customer leaving routine accounting paperwork questions.
 
@@ -121,7 +123,7 @@ Voicemail has spam too. Staff still spend time deleting robocalls and empty mess
 
 [LobbyStack](/features/) can answer every inbound call, after-hours calls, or only the calls your team misses. It can work from business knowledge, collect intake, book appointments, transfer urgent calls, and send summaries.
 
-Businesses can use the managed cloud or [self-host the open-source stack](https://github.com/lobbystack/lobbystack). The self-hosted route gives infrastructure control and adds operational responsibility.
+Businesses can use the managed cloud or [self-host the open-source stack](https://gitlab.com/lobbystack-group/lobbystack). The self-hosted route gives infrastructure control and adds operational responsibility.
 
 ## Verdict
 

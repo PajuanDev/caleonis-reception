@@ -29,9 +29,9 @@ Quand un appelant atteint LobbyStack, il peut :
 - répondre aux questions à partir de vos connaissances d'entreprise ;
 - collecter le nom, le numéro, le besoin, la zone et l'urgence ;
 - prendre des rendez‑vous selon votre disponibilité ;
-- envoyer une confirmation de rendez‑vous par texto sur les forfaits payants ;
-- alerter votre équipe avec un résumé d'appel par courriel ou SMS ;
-- transférer les appels urgents avec contexte ;
+- envoyer une confirmation de rendez‑vous par SMS sur les forfaits payants ;
+- alerter votre équipe avec un résumé d'appel par e-mail ou SMS ;
+- transférer les appels urgents vers le numéro de votre choix ;
 - conserver les transcriptions, enregistrements, résumés et résultats dans un tableau de bord.
 
 ## Pourquoi nous l'avons construit
@@ -62,7 +62,7 @@ LobbyStack ne vous fait pas payer pour le bruit. Les appels spam et les appels d
 
 ## Open source par conception
 
-LobbyStack est [open source](https://github.com/lobbystack/lobbystack) parce que les appels contiennent de vraies données clients. Les entreprises ne devraient pas traiter leur accueil téléphonique comme une boîte noire.
+LobbyStack est [open source](https://gitlab.com/lobbystack-group/lobbystack) parce que les appels contiennent de vraies données clients. Les entreprises ne devraient pas traiter leur accueil téléphonique comme une boîte noire.
 
 La version hébergée est la manière la plus rapide de commencer. Créez un compte, connectez les éléments, ajoutez vos connaissances d'entreprise et passez en production.
 
@@ -97,6 +97,6 @@ Nous sommes en ligne maintenant, et ce n'est que le début. Le produit continuer
 
 **Répondre à l'appel. Comprendre le client. Prendre la prochaine étape utile. Garder l'entreprise en contrôle.**
 
-Si les appels manqués vous coûtent de bonnes opportunités, [essayez LobbyStack gratuitement](https://app.lobbystack.com/signup) et laissez le prochain appelant joindre quelqu'un, même quand votre équipe est occupée.
+Si les appels manqués vous coûtent de bonnes opportunités, [essayez LobbyStack gratuitement](https://receptionist.caleonis.com/signup) et laissez le prochain appelant joindre quelqu'un, même quand votre équipe est occupée.
 
 Pour une vue plus détaillée de la pile produit, consultez la [vue d'ensemble de la pile open source](/fr/blog/open-source-ai-receptionist-stack/). Si vous évaluez des fournisseurs, commencez par [comment choisir un réceptionniste IA](/fr/blog/how-to-choose-an-ai-receptionist/) ou [combien un réceptionniste IA peut vous faire économiser](/fr/blog/ai-receptionist-savings/).

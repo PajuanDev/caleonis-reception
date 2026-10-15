@@ -1,36 +1,79 @@
 ---
-title: "API développeur : périmètre"
-description: "Utiliser l’API existante avec des droits limités, séparément des parcours du SaaS."
+title: "API Caléonis Receptionist"
+description: "Lisez les appels, les contacts, les rendez-vous et les messages, réservez des rendez-vous et recevez des webhooks."
+sidebarTitle: "Vue d'ensemble"
+contentType: "Conceptual"
 ---
-La base de l’API du SaaS est `https://receptionist.caleonis.com/api/v1`. Le code expose des ressources pour l’entreprise associée à la clé.
 
-Cette documentation décrit les routes présentes. L’accès, les droits et le parcours complet doivent être vérifiés dans votre environnement avant une intégration client.
+L'API Caléonis Receptionist permet à vos propres outils de travailler avec les données de réceptionniste d'une entreprise. Zapier, un serveur MCP ou un script peuvent lire les appels et les messages, synchroniser les contacts, réserver des rendez-vous, ajouter des connaissances et s'abonner à des webhooks.
 
-## Ressources
+## URL de base
 
-| Ressource | Routes principales |
-| --- | --- |
-| Connexion | `GET /me` |
-| Entreprise | `GET /business`, `PATCH /business` |
-| Services et intervenants | `GET /services`, `GET /staff` |
-| Appels | `GET /calls`, `GET /calls/{call_id}` |
-| Contacts | `GET /contacts`, `POST /contacts`, lecture et modification par identifiant |
-| Rendez-vous | Liste, lecture, création, annulation et déplacement |
-| Disponibilités | `GET /availability` |
-| Messages pris pour l’équipe | `GET /messages` |
-| Connaissances | `POST /knowledge` |
-| Webhooks | Liste, création, modification, suppression et test |
+```text
+https://receptionist.caleonis.com/api/v1
+```
 
-La ressource API **messages** correspond aux messages de suivi pris pour l’équipe. Ne la confondez pas avec une promesse d’envoi SMS ni avec toutes les conversations de la page **Messages**.
+Sur un déploiement auto-hébergé, utilisez votre `APP_BASE_URL` suivie de `/api/v1`.
 
-## Premier contrôle sans écriture
+## Faire votre première requête
 
-Créez une clé de lecture limitée, puis interrogez `GET /me`. Vérifiez l’entreprise retournée. Utilisez ensuite une route autorisée en lecture.
+<Steps>
+  <Step title="Créer une clé API">
+    Dans le tableau de bord, allez dans **Réglages** > **Clés API** et cliquez sur **Créer une clé API**. Choisissez l'accès dont la clé a besoin. Consultez [Authentification](/api/authentication).
+  </Step>
+  <Step title="Appeler l'API">
+    ```bash
+    curl https://receptionist.caleonis.com/api/v1/business \
+      -H "Authorization: Bearer $LOBBYSTACK_API_KEY"
+    ```
+  </Step>
+</Steps>
 
-Ne créez pas de rendez-vous, de contact ou de webhook sur un espace client simplement pour tester la connexion.
+La réponse place la ressource dans `data` :
 
-## Référence
+```json
+{
+  "data": {
+    "id": "75795511-9ee2-4cb2-a89d-f173ec1dd82d",
+    "name": "Maple Salon",
+    "timezone": "America/Toronto",
+    "locale": "en",
+    "website_url": null,
+    "booking_mode": "instant",
+    "hours": [{ "day": "monday", "open": "09:00", "close": "17:00" }],
+    "created_at": "2026-09-27T16:57:28.333Z",
+    "updated_at": "2026-09-27T16:57:28.333Z"
+  }
+}
+```
 
-Consultez [Authentification](/api/authentication), [Requêtes et erreurs](/api/requests) et [Webhooks](/api/webhooks). La référence OpenAPI conserve les identifiants et certains libellés techniques en anglais.
+## Conventions
 
-Le [MCP](/ai/mcp) expose des actions existantes aux clients compatibles. Il s’agit d’une intégration développeur, sans nouveau système multi-agents métier en V1.
+- Les requêtes et les réponses utilisent JSON. Les noms de champs sont en `snake_case`.
+- Les identifiants sont des UUID et ne changent jamais.
+- Les horodatages suivent la norme ISO 8601 en UTC, par exemple `2026-09-29T13:30:00.000Z`. Le corps des requêtes accepte aussi un décalage numérique comme `-04:00`.
+- Les listes renvoient `data`, `next_cursor` et `has_more`. Consultez [Requêtes et erreurs](/api/requests).
+- Chaque clé appartient à une seule entreprise. Vous ne transmettez jamais d'identifiant d'entreprise.
+
+## OpenAPI
+
+L'API publie un document OpenAPI 3.1 à `GET /api/v1/openapi.json`, sans clé requise. Caléonis Receptionist le génère à partir des mêmes schémas que ceux qu'utilise le serveur pour valider les requêtes. Il correspond donc toujours à la version en service. Importez-le dans Postman, générez un client ou parcourez la section **Référence de l'API** de cette documentation, que Caléonis Receptionist construit à partir du même fichier.
+
+## Gestion des versions
+
+La version fait partie du chemin : `/api/v1`. Dans la v1, Caléonis Receptionist n'apporte que des ajouts :
+
+- De nouveaux points de terminaison, de nouveaux champs de requête facultatifs et de nouveaux champs de réponse.
+- De nouvelles valeurs dans des listes comme les types d'événements webhook et les codes d'erreur.
+
+Concevez des clients qui ignorent les champs et les types d'événements qu'ils ne reconnaissent pas.
+
+Caléonis Receptionist publie les changements incompatibles uniquement dans une nouvelle version, comme `/api/v2`. Supprimer ou renommer un champ, changer un type ou ajouter un champ de requête obligatoire constitue un changement incompatible. Quand une nouvelle version sort, la v1 continue de fonctionner en parallèle. Les charges utiles des webhooks contiennent `api_version` pour que vous sachiez quelle forme vous avez reçue.
+
+{/* Caléonis qualification */}
+
+## Périmètre du déploiement Caléonis
+
+Cette référence décrit le code et ses contrats. L'accès à chaque environnement et les actions d'écriture demandent l'autorisation du responsable de l'entreprise. Commencez par `GET /me` et une permission de lecture.
+
+La ressource `messages` décrit les messages de suivi pris pour l'équipe ; elle ne constitue pas une API d'envoi SMS. Voir les [fiches complètes par opération](/api-reference/business/check-an-api-key) et [Capacités](/support/availability).

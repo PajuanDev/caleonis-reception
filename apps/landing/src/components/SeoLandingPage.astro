@@ -1,4 +1,5 @@
 ---
+import { qualifyPilotPage } from "@/lib/pilot-qualification"
 import Layout from "@/layouts/main.astro"
 import { Navbar } from "@/components/Navbar"
 import { Footer } from "@/components/Footer"
@@ -49,8 +50,9 @@ interface Props {
   locale?: Locale
 }
 
-const { page } = Astro.props
+const { page: sourcePage } = Astro.props
 const locale = assertLocale(Astro.props.locale ?? Astro.currentLocale)
+const page = qualifyPilotPage(sourcePage, locale)
 const copy = getCopy(locale)
 const canonicalPath = localizePath(locale, page.path)
 
@@ -92,10 +94,10 @@ const faqJsonLd =
     : undefined
 const reassurance =
   locale === "fr"
-    ? "Aucune carte bancaire requise. Fonctionne avec votre numero professionnel actuel."
+    ? "Accès pilote sur validation. Tout renvoi depuis votre numéro doit être testé avec votre opérateur."
     : isSelfHosted
       ? "Free to self-host under the MIT License. You pay your own hosting, Twilio, and OpenAI bills."
-      : "No credit card required. Works with your existing business number."
+      : "Pilot access requires approval. Existing-number forwarding must be tested with your carrier."
 ---
 
 <Layout
@@ -274,11 +276,11 @@ const reassurance =
         isTradePage && (
           <figure class="mx-auto mb-16 max-w-5xl overflow-hidden rounded-2xl border border-border/60 bg-muted shadow-sm">
             <img
-              src="/screenshots/dashboard.webp"
+              src="/screenshots/messages-voice-only-fr-desktop.png"
               alt={
                 locale === "fr"
-                  ? "Page d’accueil du tableau de bord LobbyStack avec les appels du mois, les suivis, les rendez-vous à venir et les appels récents"
-                  : "LobbyStack dashboard Home page with monthly calls, follow-ups, upcoming appointments, and recent calls"
+                  ? "Page d’accueil du tableau de bord Caléonis Receptionist avec les appels du mois, les suivis, les rendez-vous à venir et les appels récents"
+                  : "Caléonis Receptionist dashboard Home page with monthly calls, follow-ups, upcoming appointments, and recent calls"
               }
               width="3020"
               height="1898"
@@ -288,8 +290,8 @@ const reassurance =
             />
             <figcaption class="border-t border-border/50 px-5 py-4 text-sm text-muted-foreground">
               {locale === "fr"
-                ? "Le tableau de bord LobbyStack affiche chaque appel répondu avec son résultat, ainsi que les suivis et les rendez-vous que votre équipe doit traiter."
-                : "The LobbyStack dashboard shows each answered call with its outcome, plus the follow-ups and appointments your team needs to handle."}
+                ? "Le tableau de bord Caléonis Receptionist affiche chaque appel répondu avec son résultat, ainsi que les suivis et les rendez-vous que votre équipe doit traiter."
+                : "The Caléonis Receptionist dashboard shows each answered call with its outcome, plus the follow-ups and appointments your team needs to handle."}
             </figcaption>
           </figure>
         )
@@ -303,7 +305,7 @@ const reassurance =
         <>
           <CallRouting
             details={afterHoursRouting}
-            intro="You decide what LobbyStack does with each kind of call. Here's a typical after-hours setup."
+            intro="You decide what Caléonis Receptionist does with each kind of call. Here's a typical after-hours setup."
             callHeading="The call"
           />
           <CoverageSchedule />
@@ -473,7 +475,7 @@ const reassurance =
         <p class="section-intro mx-auto max-w-lg">
           {
             page.ctaBody ??
-              "Try LobbyStack with included voice minutes, configure your custom trade and call rules, and see how much revenue you can recover."
+              "Try Caléonis Receptionist with included voice minutes, configure your custom trade and call rules, and see how much revenue you can recover."
           }
         </p>
         <div class="mt-8 flex flex-wrap items-center justify-center gap-4">

@@ -1,0 +1,28 @@
+{
+  "checkedAt": "2026-10-15T21:53:54.393090+00:00",
+  "method": "Public GET via web tool; no forms, accounts or provider actions",
+  "linkChanges": [
+    {
+      "source": "https://consumer.ftc.gov/articles/robocalls",
+      "replacement": "https://consumer.ftc.gov/articles/how-block-unwanted-calls#what-about-robocalls",
+      "files": [
+        "apps/landing/src/content/blog/phone-answering-script.md",
+        "apps/landing/src/content/blog/fr/phone-answering-script.md"
+      ],
+      "reason": "Original source href returned 404. Official current FTC page contains What About Robocalls, hang up and do not press numbers guidance. Only href changed; article prose retained."
+    }
+  ],
+  "headFalseNegatives": [
+    {
+      "url": "https://support.google.com/business/answer/14919056?hl=en",
+      "result": "GET accessible; exact primary Google historical call/chat discontinuation article read",
+      "action": "Preserved source href"
+    },
+    {
+      "url": "https://support.google.com/business/answer/14919056?hl=fr",
+      "result": "GET accessible; exact primary Google FR historical call/chat discontinuation article read",
+      "action": "Preserved source href"
+    }
+  ],
+  "homepageEditorialException": "Same upstream sections, card counts, composition, icons and responsive classes. FeatureGrid, product extension, phone tools, workflow and CTA use concise truthful Caléonis copy instead of repeated source-target report prefixes. Callback preparation and internal Google Calendar record replace unqualified live transfer or SMS claims. Original upstream copy remains in licensed GitLab commit and source manifests; archives retain complete prose."
+}

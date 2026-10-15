@@ -5,6 +5,7 @@ import posthog from "posthog-js";
 import { createBrowserTelemetry } from "@lobbystack/telemetry/browser";
 import { requestJson } from "@/lib/request-json";
 import { selectActiveBusiness } from "@/lib/active-business";
+import { appHomePath } from "@/lib/app-home";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -134,7 +135,7 @@ function ReplacementSidebar({ user }: Pick<DashboardShellProps, "user">) {
   const pathname = usePathname();
   const { t } = useTranslation(["nav", "settings", "agent"]);
   const general: NavigationItem[] = [
-    { label: t("nav:items.home"), href: "/", icon: HomeIcon },
+    { label: t("nav:items.home"), href: appHomePath(), icon: HomeIcon },
     { label: t("nav:items.calls"), href: "/calls", icon: PhoneAnimatedIcon },
     { label: t("nav:items.messages"), href: "/messages", icon: MessageSquareMoreIcon },
     { label: t("nav:items.contacts"), href: "/contacts", icon: UsersIcon },

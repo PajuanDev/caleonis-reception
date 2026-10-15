@@ -1,31 +1,126 @@
 ---
-title: "Préparer un client Claude"
-description: "Vérifier la compatibilité MCP du client avant de connecter une entreprise."
+title: "Connecter Claude"
+description: "Ajoutez Caléonis Receptionist à Claude comme connecteur, ou à Claude Code, Claude Desktop et l'API Claude avec une clé API."
+sidebarTitle: "Claude"
+contentType: "How-to"
 ---
-Cette page concerne une intégration technique facultative. Aucun abonnement tiers ni connecteur Caléonis préinstallé n’est promis.
 
-## Avant de connecter
+L'URL du serveur est `https://receptionist.caleonis.com/api/mcp`. Si vous auto-hébergez Caléonis Receptionist, remplacez `receptionist.caleonis.com` par votre propre domaine. Claude s'y connecte depuis Internet : un Caléonis Receptionist auto-hébergé a donc besoin d'une adresse HTTPS publique.
 
-Vérifiez dans votre version du client Claude qu’il accepte un serveur MCP distant avec le mécanisme d’authentification prévu. Les possibilités varient selon le client et l’offre.
+Consultez [Serveur MCP](/ai/mcp) pour savoir quels outils chaque autorisation débloque.
 
-Préparez un espace de test, les permissions nécessaires et l’accord de votre organisation sur le partage de données avec ce client.
+## Connecteurs Claude et Claude Desktop
 
-## Paramètres à vérifier
+<Steps>
+  <Step title="Ajouter le connecteur">
+    Dans Claude, allez dans **Customize** > **Connectors**, cliquez sur **+**, puis sur **Add custom connector**. Nommez-le `Caléonis Receptionist`, collez l'URL du serveur et cliquez sur **Add**. Laissez **Advanced settings** vide.
 
-- Serveur : `https://receptionist.caleonis.com/api/mcp`.
-- Transport : Streamable HTTP.
-- Accès : OAuth si proposé et qualifié, ou clé API si le client accepte un en-tête sécurisé.
+    Avec les forfaits Team et Enterprise, un propriétaire l'ajoute dans **Organization settings** > **Connectors**, puis chaque membre le connecte depuis **Customize** > **Connectors**.
+  </Step>
+  <Step title="Connecter et se connecter">
+    Cliquez sur **Connect**. Claude ouvre Caléonis Receptionist. Connectez-vous si ce n'est pas déjà fait.
+  </Step>
+  <Step title="Choisir l'entreprise et les autorisations">
+    Choisissez l'entreprise, décochez ce que Claude ne doit pas faire et cliquez sur **Autoriser l'accès**. Vous revenez dans Claude, connecté.
+  </Step>
+</Steps>
 
-Ne placez pas une clé d’API dans une instruction de conversation ou une URL.
+Pour déconnecter Claude, allez dans **Réglages** > **Applications connectées** dans Caléonis Receptionist et cliquez sur **Déconnecter** à côté de Claude.
 
-## Premier essai
+## Claude Code
 
-Demandez seulement la lecture du nom de l’entreprise. Comparez le résultat au tableau de bord. Testez ensuite le refus d’une action hors permissions.
+Ajoutez le serveur, puis connectez-vous depuis Claude Code :
 
-N’utilisez pas la création de rendez-vous comme premier test. Une action réussie peut avoir un effet réel sur l’agenda.
+```bash
+claude mcp add --transport http lobbystack https://receptionist.caleonis.com/api/mcp
+```
 
-## Déconnecter
+Lancez Claude Code, exécutez `/mcp`, sélectionnez `lobbystack` et choisissez de vous authentifier. Votre navigateur ouvre la page de connexion et d'autorisation de Caléonis Receptionist.
 
-Supprimez la connexion du client et révoquez la clé ou l’autorisation côté Caléonis lorsque le contrôle est proposé. Vérifiez que l’ancien accès échoue.
+Pour utiliser plutôt une clé API, passez-la dans un en-tête :
 
-Voir le [serveur MCP](/ai/mcp) pour les outils et limites.
+```bash
+claude mcp add --transport http lobbystack https://receptionist.caleonis.com/api/mcp \
+  --header "Authorization: Bearer $LOBBYSTACK_API_KEY"
+```
+
+## Claude Desktop avec une clé API
+
+Si vous préférez utiliser une clé API plutôt que le connecteur, exécutez [`mcp-remote`](https://www.npmjs.com/package/mcp-remote) depuis le fichier de configuration de Claude Desktop. Il transmet les requêtes à Caléonis Receptionist avec votre clé. Node.js doit être installé sur votre ordinateur.
+
+<Steps>
+  <Step title="Ouvrir le fichier de configuration">
+    Dans Claude Desktop, allez dans **Settings** > **Developer** et cliquez sur **Edit Config**.
+  </Step>
+  <Step title="Ajouter Caléonis Receptionist">
+    Ajoutez cette entrée sous `mcpServers` et collez votre clé à la place de `lsk_...` :
+
+    ```json claude_desktop_config.json
+    {
+      "mcpServers": {
+        "lobbystack": {
+          "command": "npx",
+          "args": [
+            "-y",
+            "mcp-remote",
+            "https://receptionist.caleonis.com/api/mcp",
+            "--header",
+            "Authorization:${LOBBYSTACK_AUTH}"
+          ],
+          "env": {
+            "LOBBYSTACK_AUTH": "Bearer lsk_..."
+          }
+        }
+      }
+    }
+    ```
+
+    La valeur de l'en-tête se trouve dans `env`, car certains systèmes découpent les arguments au niveau des espaces.
+  </Step>
+  <Step title="Redémarrer Claude Desktop">
+    Quittez puis rouvrez l'application. Les outils de Caléonis Receptionist apparaissent dans le menu des outils d'une nouvelle conversation.
+  </Step>
+</Steps>
+
+## API Claude
+
+L'API Messages se connecte aux serveurs MCP distants avec le connecteur MCP. Envoyez une clé API, ou un jeton d'accès OAuth obtenu par votre application, dans `authorization_token` :
+
+```bash
+curl https://api.anthropic.com/v1/messages \
+  -H "x-api-key: $ANTHROPIC_API_KEY" \
+  -H "anthropic-version: 2023-06-01" \
+  -H "anthropic-beta: mcp-client-2025-11-20" \
+  -H "content-type: application/json" \
+  -d '{
+    "model": "claude-opus-5",
+    "max_tokens": 4096,
+    "mcp_servers": [{
+      "type": "url",
+      "url": "https://receptionist.caleonis.com/api/mcp",
+      "name": "lobbystack",
+      "authorization_token": "'"$LOBBYSTACK_API_KEY"'"
+    }],
+    "tools": [{ "type": "mcp_toolset", "mcp_server_name": "lobbystack" }],
+    "messages": [{ "role": "user", "content": "Which messages are still open?" }]
+  }'
+```
+
+## Vérifier la connexion
+
+Demandez à Claude d'appeler `get_business`. Il doit répondre avec le nom de votre entreprise, son fuseau horaire et son mode de réservation. Si l'appel échoue :
+
+| Symptôme | Solution |
+| --- | --- |
+| La page de connexion indique que vous ne pouvez pas connecter d'applications | Demandez à un propriétaire de l'entreprise de connecter Claude ou de vous nommer administrateur. |
+| `401` ou « unauthorized » | Reconnectez-vous. Avec une clé API, vérifiez que vous avez copié la clé en entier et que personne ne l'a révoquée. |
+| `403` ou « insufficient_scope » | Reconnectez-vous et accordez au moins une autorisation. Avec une clé API, créez-en une avec une portée autre que `webhooks:manage`. |
+| Un outil est absent | Reconnectez-vous et accordez l'autorisation dont cet outil a besoin. |
+
+{/* Caléonis qualification */}
+
+## Avant une utilisation réelle
+
+Les configurations ci-dessus sont des exemples à adapter à la version de votre client, à son offre et au mode d'accès autorisé. Aucun abonnement tiers ni connecteur préinstallé n'est inclus par cette documentation. Vérifiez d'abord `get_business`, une action refusée et la révocation sur un espace de test.
+
+Gardez les clés dans un gestionnaire de secrets ou une variable d'environnement, jamais dans une instruction de conversation. Les opérations d'écriture doivent être autorisées pour leurs effets réels.

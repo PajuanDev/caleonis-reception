@@ -31,7 +31,7 @@ When a caller reaches LobbyStack, it can:
 - **book appointments** from your calendar availability
 - **send a booking confirmation** by text on paid plans
 - **alert your team** with a call summary by email or SMS
-- **transfer urgent calls** to the right person with context attached
+- **transfer urgent calls** to the number you choose
 - **keep the record** with transcripts, recordings, summaries, callers, and outcomes in one dashboard
 
 It is not trying to replace the people who run the business. It is there to cover the moments when those people are with customers, closed for the night, or finally trying to eat lunch without holding a phone in one hand.
@@ -68,7 +68,7 @@ There is another difference: LobbyStack does not make you pay for junk. Spam cal
 
 ## Open source by design
 
-LobbyStack is [open source](https://github.com/lobbystack/lobbystack) because phone calls contain real customer data, and businesses should not have to treat their front desk like a black box.
+LobbyStack is [open source](https://gitlab.com/lobbystack-group/lobbystack) because phone calls contain real customer data, and businesses should not have to treat their front desk like a black box.
 
 For many teams, the hosted version is the fastest way to get started. Create an account, connect the pieces, add your business knowledge, and go live.
 
@@ -103,6 +103,6 @@ We are live now, and this is still the beginning. The product will keep getting 
 
 **Answer the call. Understand the customer. Take the next useful step. Keep the business in control.**
 
-If missed calls are costing you good work, [try LobbyStack for free](https://app.lobbystack.com/signup) and let the next caller reach someone, even when your team is busy.
+If missed calls are costing you good work, [try LobbyStack for free](https://app.lobbystack.com/en/signup) and let the next caller reach someone, even when your team is busy.
 
 For a deeper look at the product stack, read the [open-source AI receptionist stack overview](/blog/open-source-ai-receptionist-stack/). If you are evaluating vendors, start with [how to choose an AI receptionist](/blog/how-to-choose-an-ai-receptionist/) or [how much an AI receptionist can save](/blog/ai-receptionist-savings/).

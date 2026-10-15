@@ -40,20 +40,19 @@ type Tier = {
 
 type BillingInterval = "monthly" | "annual"
 
-const enterpriseContactHref =
-  "mailto:support@lobbystack.com?subject=LobbyStack%20enterprise%20inquiry"
+const enterpriseContactHref = APP_SIGNUP_URL
 
 const tiers: Tier[] = [
   {
     name: "Free",
     price: {
-      monthly: "$0",
-      annual: "$0",
+      monthly: "€0",
+      annual: "€0",
     },
     period: "",
     description: {
-      monthly: "Test voice in your browser",
-      annual: "Test voice in your browser",
+      monthly: "Source: 14-day trial — French availability unapproved",
+      annual: "Source: 14-day trial — French availability unapproved",
     },
     cta: {
       monthly: "Start free",
@@ -63,15 +62,16 @@ const tiers: Tier[] = [
     highlight: false,
     highlights: [
       `${freeVoiceMinutes} browser voice minutes included`,
-      ...(freePlanFacts.browserVoiceOnly ? ["No telephone number"] : []),
+      "Source: 1 number free for 14 days — not included in French pilot",
+      "Source: 10 SMS segments, 2 transfers — not enabled in French pilot",
       "Community support",
     ],
   },
   {
     name: "Starter",
     price: {
-      monthly: "$30",
-      annual: "$24",
+      monthly: "€30",
+      annual: "€24",
     },
     period: "/mo",
     description: {
@@ -87,18 +87,18 @@ const tiers: Tier[] = [
     highlights: [
       {
         label: "150 voice minutes included",
-        sublabel: "Then $0.20/min",
+        sublabel: "Then €0.20/min",
       },
-      "1 dedicated business number",
-      "50 alert SMS segments",
+      "1 number — subject to lawful French allocation",
+      "50 alert SMS segments — target, unavailable Voice-only",
       "Email support",
     ],
   },
   {
     name: "Pro",
     price: {
-      monthly: "$100",
-      annual: "$80",
+      monthly: "€100",
+      annual: "€80",
     },
     period: "/mo",
     description: {
@@ -114,10 +114,10 @@ const tiers: Tier[] = [
     highlights: [
       {
         label: "500 voice minutes included",
-        sublabel: "Then $0.18/min",
+        sublabel: "Then €0.18/min",
       },
-      "1 dedicated business number",
-      "200 alert SMS segments",
+      "1 number — subject to lawful French allocation",
+      "200 alert SMS segments — target, unavailable Voice-only",
       "Priority email support",
     ],
   },
@@ -140,7 +140,7 @@ const tiers: Tier[] = [
     ctaVariant: "outline" as const,
     highlight: false,
     highlights: [
-      "Multiple dedicated numbers",
+      "Multiple numbers — target, subject to approval",
       "Custom usage limits",
       "Dedicated implementation support",
     ],
@@ -151,13 +151,13 @@ const tiersFr: Tier[] = [
   {
     name: "Free",
     price: {
-      monthly: "$0",
-      annual: "$0",
+      monthly: "€0",
+      annual: "€0",
     },
     period: "",
     description: {
-      monthly: "Testez la voix dans votre navigateur",
-      annual: "Testez la voix dans votre navigateur",
+      monthly: "Source : essai 14 jours — non approuvé en France",
+      annual: "Source : essai 14 jours — non approuvé en France",
     },
     cta: {
       monthly: "Commencer gratuitement",
@@ -167,15 +167,16 @@ const tiersFr: Tier[] = [
     highlight: false,
     highlights: [
       `${freeVoiceMinutes} minutes vocales dans le navigateur`,
-      ...(freePlanFacts.browserVoiceOnly ? ["Aucun numéro de téléphone"] : []),
+      "Source : 1 numéro gratuit 14 jours — non inclus sur le pilote FR",
+      "Source : 10 SMS, 2 transferts — indisponibles sur le pilote FR",
       "Support communautaire",
     ],
   },
   {
     name: "Starter",
     price: {
-      monthly: "$30",
-      annual: "$24",
+      monthly: "€30",
+      annual: "€24",
     },
     period: "/mois",
     description: {
@@ -191,18 +192,18 @@ const tiersFr: Tier[] = [
     highlights: [
       {
         label: "150 minutes vocales incluses",
-        sublabel: "Puis 0,20 $/min",
+        sublabel: "Puis 0,20 €/min",
       },
-      "1 numéro d'entreprise dédié",
-      "50 segments SMS d'alerte",
+      "1 numéro — attribution FR conforme à valider",
+      "50 segments SMS — cible, indisponible Voice-only",
       "Support par courriel",
     ],
   },
   {
     name: "Pro",
     price: {
-      monthly: "$100",
-      annual: "$80",
+      monthly: "€100",
+      annual: "€80",
     },
     period: "/mois",
     description: {
@@ -218,10 +219,10 @@ const tiersFr: Tier[] = [
     highlights: [
       {
         label: "500 minutes vocales incluses",
-        sublabel: "Puis 0,18 $/min",
+        sublabel: "Puis 0,18 €/min",
       },
-      "1 numéro d'entreprise dédié",
-      "200 segments SMS d'alerte",
+      "1 numéro — attribution FR conforme à valider",
+      "200 segments SMS — cible, indisponible Voice-only",
       "Support prioritaire par courriel",
     ],
   },
@@ -244,7 +245,7 @@ const tiersFr: Tier[] = [
     ctaVariant: "outline" as const,
     highlight: false,
     highlights: [
-      "Plusieurs numéros dédiés",
+      "Plusieurs numéros — cible à valider",
       "Limites d'utilisation sur mesure",
       "Accompagnement dédié à l’implémentation",
     ],
@@ -286,34 +287,34 @@ const comparisonGroupsEn: ComparisonGroup[] = [
       {
         feature: "Voice minutes",
         free: { included: `${freeVoiceMinutes} browser minutes` },
-        starter: { included: "150 included", then: "then $0.20/min" },
-        pro: { included: "500 included", then: "then $0.18/min" },
+        starter: { included: "150 included", then: "then €0.20/min" },
+        pro: { included: "500 included", then: "then €0.18/min" },
         enterprise: "Custom",
       },
       {
-        feature: "Transfer attempts",
-        free: false,
-        starter: { included: "20 included", then: "then $0.02/attempt" },
-        pro: { included: "100 included", then: "then $0.02/attempt" },
+        feature: "Transfer attempts — unqualified pilot",
+        free: "2 source; pilot unavailable",
+        starter: { included: "20 included", then: "then €0.02/attempt" },
+        pro: { included: "100 included", then: "then €0.02/attempt" },
         enterprise: "Custom",
       },
       {
-        feature: "Alert SMS segments",
-        free: false,
-        starter: { included: "50 included", then: "then $0.02/segment" },
-        pro: { included: "200 included", then: "then $0.02/segment" },
+        feature: "Alert SMS segments — unavailable Voice-only",
+        free: "10 source; unavailable Voice-only",
+        starter: { included: "50 included", then: "then €0.02/segment" },
+        pro: { included: "200 included", then: "then €0.02/segment" },
         enterprise: "Custom",
       },
       {
         feature: "Knowledge base",
-        free: "25 MB",
-        starter: "100 MB",
-        pro: "500 MB",
+        free: "1 MB",
+        starter: "5 MB",
+        pro: "20 MB",
         enterprise: "Custom",
       },
       {
-        feature: "Phone numbers",
-        free: false,
+        feature: "Phone numbers — French allocation unapproved",
+        free: "14 days source; not included FR",
         starter: "1 dedicated",
         pro: "1 dedicated",
         enterprise: "Multiple",
@@ -378,9 +379,9 @@ const comparisonGroupsEn: ComparisonGroup[] = [
     rows: [
       {
         feature: "Appointment booking",
-        free: "Unlimited",
-        pro: "Unlimited",
-        enterprise: "Unlimited",
+        free: "Unlimited source target — no Caléonis commitment",
+        pro: "Unlimited source target — no Caléonis commitment",
+        enterprise: "Unlimited source target — no Caléonis commitment",
       },
       {
         feature: "Appointment confirmation texts",
@@ -441,15 +442,16 @@ const comparisonGroupsEn: ComparisonGroup[] = [
     rows: [
       {
         feature: "Call summaries and transcripts",
-        free: "Unlimited",
-        pro: "Unlimited",
-        enterprise: "Unlimited",
+        free: "Unlimited source target — no Caléonis commitment",
+        pro: "Unlimited source target — no Caléonis commitment",
+        enterprise: "Unlimited source target — no Caléonis commitment",
       },
       {
         feature: "Call history and recordings",
-        free: "Unlimited",
-        pro: "Unlimited",
-        enterprise: "Unlimited",
+        free: "30 days source target — Caléonis retention pending",
+        starter: "90 days source target — Caléonis retention pending",
+        pro: "90 days source target — Caléonis retention pending",
+        enterprise: "Custom source target — pending",
       },
       {
         feature: "Caller profiles and notes",
@@ -459,9 +461,9 @@ const comparisonGroupsEn: ComparisonGroup[] = [
       },
       {
         feature: "Contacts",
-        free: "Unlimited",
-        pro: "Unlimited",
-        enterprise: "Unlimited",
+        free: "Unlimited source target — no Caléonis commitment",
+        pro: "Unlimited source target — no Caléonis commitment",
+        enterprise: "Unlimited source target — no Caléonis commitment",
       },
       {
         feature: "Website knowledge import",
@@ -504,34 +506,34 @@ const comparisonGroupsFr: ComparisonGroup[] = [
       {
         feature: "Minutes vocales",
         free: { included: `${freeVoiceMinutes} minutes dans le navigateur` },
-        starter: { included: "150 incluses", then: "puis 0,20 $/min" },
-        pro: { included: "500 incluses", then: "puis 0,18 $/min" },
+        starter: { included: "150 incluses", then: "puis 0,20 €/min" },
+        pro: { included: "500 incluses", then: "puis 0,18 €/min" },
         enterprise: "Sur mesure",
       },
       {
-        feature: "Tentatives de transfert",
-        free: false,
-        starter: { included: "20 incluses", then: "puis 0,02 $/tentative" },
-        pro: { included: "100 incluses", then: "puis 0,02 $/tentative" },
+        feature: "Tentatives de transfert — pilote non qualifié",
+        free: "2 source ; indisponibles pilote",
+        starter: { included: "20 incluses", then: "puis 0,02 €/tentative" },
+        pro: { included: "100 incluses", then: "puis 0,02 €/tentative" },
         enterprise: "Sur mesure",
       },
       {
-        feature: "Segments SMS d'alerte",
-        free: false,
-        starter: { included: "50 inclus", then: "puis 0,02 $/segment" },
-        pro: { included: "200 inclus", then: "puis 0,02 $/segment" },
+        feature: "Segments SMS — indisponibles Voice-only",
+        free: "10 source ; indisponibles Voice-only",
+        starter: { included: "50 inclus", then: "puis 0,02 €/segment" },
+        pro: { included: "200 inclus", then: "puis 0,02 €/segment" },
         enterprise: "Sur mesure",
       },
       {
         feature: "Base de connaissances",
-        free: "25 Mo",
-        starter: "100 Mo",
-        pro: "500 Mo",
+        free: "1 Mo",
+        starter: "5 Mo",
+        pro: "20 Mo",
         enterprise: "Sur mesure",
       },
       {
-        feature: "Numéros de téléphone",
-        free: false,
+        feature: "Numéros — attribution FR à valider",
+        free: "14 jours source ; non inclus FR",
         starter: "1 dédié",
         pro: "1 dédié",
         enterprise: "Plusieurs",
@@ -596,9 +598,9 @@ const comparisonGroupsFr: ComparisonGroup[] = [
     rows: [
       {
         feature: "Prise de rendez‑vous",
-        free: "Illimitée",
-        pro: "Illimitée",
-        enterprise: "Illimitée",
+        free: "Illimitée cible source — aucun engagement Caléonis",
+        pro: "Illimitée cible source — aucun engagement Caléonis",
+        enterprise: "Illimitée cible source — aucun engagement Caléonis",
       },
       {
         feature: "SMS de confirmation de rendez‑vous",
@@ -659,15 +661,16 @@ const comparisonGroupsFr: ComparisonGroup[] = [
     rows: [
       {
         feature: "Résumés et transcriptions d’appels",
-        free: "Illimités",
-        pro: "Illimités",
-        enterprise: "Illimités",
+        free: "Illimités cible source — aucun engagement Caléonis",
+        pro: "Illimités cible source — aucun engagement Caléonis",
+        enterprise: "Illimités cible source — aucun engagement Caléonis",
       },
       {
         feature: "Historique et enregistrements d'appels",
-        free: "Illimités",
-        pro: "Illimités",
-        enterprise: "Illimités",
+        free: "30 jours cible source — conservation Caléonis à valider",
+        starter: "90 jours cible source — conservation Caléonis à valider",
+        pro: "90 jours cible source — conservation Caléonis à valider",
+        enterprise: "Cible sur mesure — à valider",
       },
       {
         feature: "Profils et notes d'appelants",
@@ -677,9 +680,9 @@ const comparisonGroupsFr: ComparisonGroup[] = [
       },
       {
         feature: "Contacts",
-        free: "Illimités",
-        pro: "Illimités",
-        enterprise: "Illimités",
+        free: "Illimités cible source — aucun engagement Caléonis",
+        pro: "Illimités cible source — aucun engagement Caléonis",
+        enterprise: "Illimités cible source — aucun engagement Caléonis",
       },
       {
         feature: "Import de connaissances depuis le site web",
@@ -781,13 +784,13 @@ const pricingSectionCopy = {
   en: {
     heading: "Plans for businesses of every size",
     intro:
-      "Start free, then upgrade to Starter or Pro for more included minutes and transparent overages.",
+      "Compare the draft Free, Starter and Pro target packages. Pilot access and every commercial entitlement require approval.",
     monthly: "Monthly",
     annual: "Annual",
     save: "Save 20%",
     compareHeading: "Compare plans in detail",
     compareIntro:
-      "Free includes 30 browser voice minutes with no telephone number. Starter and Pro include a dedicated number, monthly usage allowances, and usage-based overages.",
+      "Source Free: 30 minutes and a 14-day number trial. French number allocation is not included or approved. Starter/Pro target quotas below remain draft.",
     billingLabel: "Billing interval",
     tableLabel: "Plan comparison table",
     caption:
@@ -799,13 +802,13 @@ const pricingSectionCopy = {
   fr: {
     heading: "Des forfaits pour entreprises de toute taille",
     intro:
-      "Commencez gratuitement, puis passez à Starter ou Pro pour plus de minutes incluses et des dépassements transparents.",
+      "Comparez les forfaits cibles Free, Starter et Pro. L’accès au pilote et chaque droit commercial exigent une validation.",
     monthly: "Mensuel",
     annual: "Annuel",
     save: "Économisez 20 %",
     compareHeading: "Comparer les forfaits en détail",
     compareIntro:
-      "Free comprend 30 minutes vocales dans le navigateur, sans numéro de téléphone. Starter et Pro comprennent un numéro dédié, des volumes mensuels et des dépassements facturés à l’usage.",
+      "Free source : 30 minutes et essai de numéro 14 jours. Attribution française non incluse et non approuvée. Les quotas Starter/Pro ci-dessous restent en projet.",
     billingLabel: "Intervalle de facturation",
     tableLabel: "Tableau de comparaison des forfaits",
     caption:
@@ -825,9 +828,7 @@ export function PricingSection({ locale = "en" }: PricingSectionProps) {
   })
   // Measured position of the selected tab. Until hydration measures it, the
   // selected tab paints its own background so the server HTML still shows state.
-  const [thumb, setThumb] = useState<{ x: number; width: number } | null>(
-    null
-  )
+  const [thumb, setThumb] = useState<{ x: number; width: number } | null>(null)
 
   useLayoutEffect(() => {
     const tab = tabRefs.current[billingInterval]
@@ -840,12 +841,46 @@ export function PricingSection({ locale = "en" }: PricingSectionProps) {
     // Watch every tab: a late font swap can resize the one before this tab
     // and shift it without changing its own size.
     const observer = new ResizeObserver(measure)
-    Object.values(tabRefs.current).forEach((node) => node && observer.observe(node))
+    Object.values(tabRefs.current).forEach(
+      (node) => node && observer.observe(node)
+    )
     return () => observer.disconnect()
   }, [billingInterval])
   const copy = pricingSectionCopy[locale]
-  const localizedTiers = tiersByLocale[locale]
-  const localizedComparisonGroups = comparisonGroupsByLocale[locale]
+  const localizedTiers = tiersByLocale[locale].map((tier) => ({
+    ...tier,
+    ctaHref: APP_SIGNUP_URL,
+    cta: {
+      monthly: locale === "fr" ? "Examiner le projet" : "Review draft",
+      annual: locale === "fr" ? "Examiner le projet" : "Review draft",
+    },
+  }))
+  const localizedComparisonGroups = comparisonGroupsByLocale[locale].map((group) => ({
+    ...group,
+    rows: group.rows.map((row) => {
+      const smsCapability = /confirmation texts|SMS de confirmation|SMS notifications|Notifications SMS/i.test(row.feature)
+      const transferCapability = /urgent call handoff|call transfers|transfert des appels|transferts d'appel/i.test(row.feature)
+      const unlimitedCapacity = /unlimited concurrent|appels simultanés illimités/i.test(row.feature)
+      const phoneAllocation = /phone numbers|numéros/i.test(row.feature)
+      const pendingExternal = /email notifications|notifications par courriel/i.test(row.feature)
+      const state = smsCapability
+        ? locale === "fr" ? "Indisponible Voice-only" : "Unavailable Voice-only"
+        : transferCapability || unlimitedCapacity || pendingExternal
+          ? locale === "fr" ? "À qualifier pour Caléonis" : "Requires Caléonis qualification"
+          : undefined
+      const feature = /indisponible|unavailable|non qualifi|unqualified|à valider/i.test(row.feature)
+        ? row.feature
+        : smsCapability ? `${row.feature} — ${locale === "fr" ? "indisponible Voice-only" : "unavailable Voice-only"}`
+          : transferCapability || unlimitedCapacity ? `${row.feature} — ${locale === "fr" ? "à qualifier" : "requires qualification"}`
+          : row.feature
+      return {
+        ...row,
+        feature,
+        ...(state ? {free: state, starter: state, pro: state, enterprise: state} : {}),
+        ...(phoneAllocation ? {starter: locale === "fr" ? "1 cible — attribution FR à valider" : "1 target — French allocation unapproved", pro: locale === "fr" ? "1 cible — attribution FR à valider" : "1 target — French allocation unapproved", enterprise: locale === "fr" ? "Plusieurs cibles — à valider" : "Multiple targets — approval required"} : {}),
+      }
+    }),
+  }))
 
   return (
     <>
@@ -855,15 +890,22 @@ export function PricingSection({ locale = "en" }: PricingSectionProps) {
           <h1 className="animate-fade-up display-heading-compact stagger-1">
             {copy.heading}
           </h1>
-          <p className="animate-fade-up body-copy mx-auto mt-5 max-w-[60ch] stagger-2 md:text-lg">
+          <p className="animate-fade-up body-copy stagger-2 mx-auto mt-5 max-w-[60ch] md:text-lg">
             {copy.intro}
           </p>
         </div>
       </section>
 
+      <aside className="mx-auto max-w-7xl px-6" data-pricing-draft>
+        <p className="rounded-xl border border-border/70 bg-muted/25 p-5 text-sm leading-relaxed">
+          {locale === "fr"
+            ? "PROJET NON SOUSCRIPTIBLE — mêmes nombres que le catalogue source, libellés en EUR, sans conversion de change. Free 0 €, Starter 30 €/mois ou 288 €/an, Pro 100 €/mois ou 960 €/an. TVA, statut HT/TTC, marge, attribution des numéros et CGV restent à valider avant toute vente. Les quotas ci-dessous décrivent le catalogue cible ; ils n’activent aucun droit ni débit. SMS indisponibles sur le pilote français Voice-only ; transferts non qualifiés."
+            : "DRAFT — NO PURCHASE AVAILABLE. Source catalogue numbers displayed in EUR, without currency conversion. Free €0, Starter €30/month or €288/year, Pro €100/month or €960/year. VAT, tax-inclusive/exclusive status, margin, number allocation and terms require approval before sale. Quotas below describe the target catalogue and do not activate entitlements or payments. SMS is unavailable on the French Voice-only pilot; transfers remain unqualified."}
+        </p>
+      </aside>
       {/* ── Tier cards ── */}
       <section className="mx-auto max-w-7xl px-6 pt-8 pb-8 md:pt-10 md:pb-10 lg:pt-12 lg:pb-12">
-        <div className="animate-fade-up mb-8 flex justify-center stagger-3">
+        <div className="animate-fade-up stagger-3 mb-8 flex justify-center">
           <div
             aria-label={copy.billingLabel}
             className="relative inline-flex rounded-full border border-border bg-input/30 p-1"
@@ -909,7 +951,7 @@ export function PricingSection({ locale = "en" }: PricingSectionProps) {
           </div>
         </div>
 
-        <div className="animate-fade-up grid gap-6 stagger-3 md:grid-cols-2 xl:grid-cols-4">
+        <div className="animate-fade-up stagger-3 grid gap-6 md:grid-cols-2 xl:grid-cols-4">
           {localizedTiers.map((tier) => (
             <div
               key={tier.name}

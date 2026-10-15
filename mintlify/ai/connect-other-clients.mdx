@@ -1,33 +1,109 @@
 ---
-title: "Connecter un autre client MCP"
-description: "Vérifier transport, authentification, permissions et révocation."
+title: "Connecter d'autres clients MCP"
+description: "Ajoutez le serveur MCP de Caléonis Receptionist à Cursor, VS Code ou tout client compatible Streamable HTTP, et testez-le avec MCP Inspector."
+sidebarTitle: "Autres clients"
+contentType: "How-to"
 ---
-Un client doit prendre en charge le transport Streamable HTTP et le mécanisme d’accès retenu. Aucun client externe n’est déclaré compatible sans test.
 
-## Paramètres
+Tout client MCP compatible avec Streamable HTTP peut se connecter. Les clients compatibles avec OAuth pour MCP se connectent seuls avec Caléonis Receptionist ; les autres ont besoin d'une clé API dans un en-tête.
 
-| Élément | Valeur |
+| Paramètre | Valeur |
 | --- | --- |
-| Serveur SaaS | `https://receptionist.caleonis.com/api/mcp` |
-| Transport | Streamable HTTP |
-| Clé API | En-tête `Authorization: Bearer <clé>` |
-| OAuth | Seulement si le parcours proposé est disponible et qualifié |
+| URL | `https://receptionist.caleonis.com/api/mcp` |
+| Transport | Streamable HTTP (parfois appelé `http`) |
+| Authentification | OAuth, ou l'en-tête `Authorization: Bearer <API key>` |
 
-Sur une installation auto-hébergée, remplacez le domaine par celui de votre installation. Ne recopiez pas les secrets du SaaS.
+Le serveur est sans état. Il prend en charge la révision 2026-07-28 du protocole et revient à Streamable HTTP pour les clients de 2025. Il ne prend pas en charge l'ancien transport HTTP+SSE : les clients qui ne proposent que SSE ne peuvent pas se connecter.
 
-## Séquence de qualification
+## Cursor
 
-1. Utilisez une entreprise de test autorisée.
-2. Accordez une permission minimale en lecture.
-3. Vérifiez le nom de l’entreprise et une lecture simple.
-4. Vérifiez qu’une permission absente est refusée.
-5. Vérifiez la gestion des limites et erreurs.
-6. Révoquez l’accès puis contrôlez le refus.
+Ajoutez Caléonis Receptionist à `~/.cursor/mcp.json`, ou à `.cursor/mcp.json` dans un projet :
 
-Un succès HTTP ne prouve pas qu’un rendez-vous externe est synchronisé ni qu’une notification a été livrée.
+```json mcp.json
+{
+  "mcpServers": {
+    "lobbystack": {
+      "url": "https://receptionist.caleonis.com/api/mcp",
+      "headers": {
+        "Authorization": "Bearer ${env:LOBBYSTACK_API_KEY}"
+      }
+    }
+  }
+}
+```
 
-## Écritures
+## VS Code
 
-Ajoutez progressivement les seules permissions nécessaires. Confirmez les effets de chaque action, utilisez l’idempotence disponible et ne traitez pas une demande d’outil comme une autorisation générale.
+Ajoutez Caléonis Receptionist à `.vscode/mcp.json`. VS Code demande la clé au premier démarrage du serveur et la conserve pour vous :
 
-Voir [MCP](/ai/mcp) et [Requêtes et erreurs](/api/requests).
+```json .vscode/mcp.json
+{
+  "inputs": [
+    { "type": "promptString", "id": "lobbystack-key", "description": "Caléonis Receptionist API key", "password": true }
+  ],
+  "servers": {
+    "lobbystack": {
+      "type": "http",
+      "url": "https://receptionist.caleonis.com/api/mcp",
+      "headers": { "Authorization": "Bearer ${input:lobbystack-key}" }
+    }
+  }
+}
+```
+
+## Clients sans prise en charge des en-têtes
+
+Si un client ne peut lancer que des serveurs locaux, exécutez [`mcp-remote`](https://www.npmjs.com/package/mcp-remote) comme serveur local et laissez-le ajouter l'en-tête. Le guide [Claude Desktop](/ai/connect-claude#claude-desktop-avec-une-clé-api) montre la configuration.
+
+## Tester avec MCP Inspector
+
+L'outil en ligne de commande [MCP Inspector](https://github.com/modelcontextprotocol/inspector) se connecte sans modèle d'IA dans la boucle. Sans clé, il se connecte avec OAuth : il affiche un lien, vous l'ouvrez, vous vous connectez et autorisez l'accès, puis il liste les outils :
+
+```bash
+npx @modelcontextprotocol/inspector --cli https://receptionist.caleonis.com/api/mcp \
+  --transport http --method tools/list
+```
+
+Avec une clé API :
+
+```bash
+npx @modelcontextprotocol/inspector --cli https://receptionist.caleonis.com/api/mcp \
+  --transport http \
+  --header "Authorization: Bearer $LOBBYSTACK_API_KEY" \
+  --method tools/list
+```
+
+Appelez un outil de la même façon :
+
+```bash
+npx @modelcontextprotocol/inspector --cli https://receptionist.caleonis.com/api/mcp \
+  --transport http \
+  --header "Authorization: Bearer $LOBBYSTACK_API_KEY" \
+  --method tools/call --tool-name get_business
+```
+
+## Créer votre propre client
+
+Les SDK MCP officiels se connectent en quelques lignes. En TypeScript :
+
+```ts
+import { Client, StreamableHTTPClientTransport } from "@modelcontextprotocol/client";
+
+const client = new Client({ name: "my-app", version: "1.0.0" });
+await client.connect(new StreamableHTTPClientTransport(new URL("https://receptionist.caleonis.com/api/mcp"), {
+  requestInit: { headers: { Authorization: `Bearer ${process.env.LOBBYSTACK_API_KEY}` } },
+}));
+
+const result = await client.callTool({ name: "list_messages", arguments: { status: "open" } });
+console.log(result.structuredContent);
+```
+
+Si vous écrivez du code plutôt qu'un assistant, l'[API REST](/api/overview) vous donne les mêmes données en HTTP simple.
+
+{/* Caléonis qualification */}
+
+## Vérifier le client et ses dépendances
+
+Ces extraits conservent la structure de la documentation amont et doivent être adaptés aux versions installées. Ne lancez pas une commande `npx` sans vérifier la dépendance tierce retenue. Un client non compatible avec le transport et l'authentification de l'espace doit être refusé, pas contourné.
+
+Une intégration réussie lit le bon espace, respecte les permissions et cesse de fonctionner après révocation. Un succès d'outil ne prouve ni événement Google synchronisé ni notification livrée.

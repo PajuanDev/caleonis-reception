@@ -1,0 +1,44 @@
+---
+title: "Connect and verify Google Calendar"
+description: "Choose a writable calendar, confirm the external result and qualify renewal separately."
+sidebarTitle: "Google Calendar"
+---
+
+Google Calendar supplies availability and appointment synchronization when configured. Begin with a dedicated test calendar and add services before relying on booking.
+
+## How it works
+
+The application uses Google OAuth. You authorize an account, select a calendar and save that selection. The application can use busy-time information when offering slots and queues event synchronization for appointments. The database appointment and the Google event have separate status.
+
+## Connect an account
+
+1. Verify the business and your administrator role.
+2. Open **Manage > Integrations**.
+3. Select **Google Calendar**, then **Connect**.
+4. Sign in to the intended Google account and review the requested permissions.
+5. Return to Caléonis, open the Google card and choose the target calendar.
+6. Save the calendar and inspect the connection state.
+
+Choose a calendar where the account can create events. A calendar merely visible in the list may be read-only.
+
+## Verify a booking
+
+Configure the service, opening hours, duration, booking mode and **Europe/Paris** time zone. Make one authorized fictitious booking. Open the event directly in Google and compare the day, local time, duration and selected calendar.
+
+A booking can be created without an attendee, SMS, email or operator alert. Do not infer a notification from an event. The successful pilot booking is evidence for that tested configuration, not every workspace.
+
+## Durable authorization
+
+Successful authorization immediately after consent does not demonstrate renewal. At the 15 October 2026 review, the pilot's Google OAuth project was reported in Testing with a seven-day renewal restriction still requiring operational work and requalification.
+
+Have the operator verify refreshed access and another read or booking after renewal before promising durable service. Do not change the Google project or bypass its policy to hide a reconnection error.
+
+## Change the selected calendar
+
+Open Integrations, select the Google card, choose another writable calendar and save. The new selection affects future operations; it does not automatically move historical events. Notify the team before changing the calendar.
+
+## Reconnect or disconnect
+
+If the card requests reconnection, use the offered Reconnect action and authorize the correct account again. Check permissions and calendar selection, then verify a test operation before restoring customer booking.
+
+Disconnecting removes the current connection; it must not be interpreted as deleting every existing Google event. Arrange manual handling during the interruption. Do not repeatedly recreate a booking while its external result is unknown.

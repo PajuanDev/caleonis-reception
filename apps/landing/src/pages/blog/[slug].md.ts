@@ -25,6 +25,8 @@ export const GET = createMarkdownEndpoint({
             description: post.data.description,
             categories: post.data.category ? [post.data.category] : undefined,
           },
-          body: post.body ?? "",
+          body:
+            "Editorial archive from the MIT-licensed LobbyStack source. Source prices, capabilities and legal references are historical, not an activated Caléonis offer. French pilot: Voice-only, no SMS; human transfers unqualified; no real health-data use.\n\n" +
+            (post.body ?? ""),
         },
 })

@@ -1,0 +1,391 @@
+---
+title: "List appointments"
+description: "GET /api/v1/appointments: parameters, permissions and full schemas."
+---
+
+`GET https://receptionist.caleonis.com/api/v1/appointments`
+
+This page describes the Caléonis runtime contract. Schema field names and technical descriptions are preserved verbatim for integration accuracy.
+
+Newest booking first.
+
+## Authentication and permissions
+Send `Authorization: Bearer <API key>`. Required scope: `appointments:read`.
+
+Respect booking mode, hours, availability, time zone and permissions. An application result does not prove Google synchronization or a notification. The French Voice-only line cannot send SMS.
+
+## Parameters
+| Field | Location | Type | Required | Description |
+| --- | --- | --- | --- | --- |
+| `limit` | query | integer | No | Items per page, 1 to 100. Defaults to 25. |
+| `cursor` | query | string | No | The next_cursor value from the previous page. |
+| `status` | query | string | No | confirmed or cancelled. |
+| `starts_after` | query | string (date-time) | No | Only appointments starting at or after this time. |
+| `starts_before` | query | string (date-time) | No | Only appointments starting before this time. |
+| `contact_id` | query | string (uuid) | No | Only this contact's appointments. |
+
+## Responses
+| HTTP | Description |
+| --- | --- |
+| `200` | OK |
+| `400` | The request is invalid (invalid_request). |
+| `401` | The API key is missing, invalid, or revoked (unauthorized). |
+| `403` | The API key lacks the appointments:read scope (insufficient_scope). |
+| `429` | Too many requests (rate_limited). Wait for the Retry-After header's number of seconds. |
+
+Errors use error.code, error.message and sometimes error.details. Respect Retry-After and reuse the same idempotency key and body when retrying a supported creation.
+
+## HTTP example
+
+```http
+GET /api/v1/appointments HTTP/1.1
+Host: receptionist.caleonis.com
+Authorization: Bearer <server-side key>
+```
+
+## Full contract and schemas
+
+The block retains all fields, unions, formats, constraints and responses for this operation. Each $ref resolves in components.schemas included in the same block.
+
+```json
+{
+  "method": "GET",
+  "path": "/api/v1/appointments",
+  "operation": {
+    "operationId": "listAppointments",
+    "summary": "List appointments",
+    "description": "Newest booking first.",
+    "tags": [
+      "Appointments"
+    ],
+    "security": [
+      {
+        "bearerAuth": []
+      }
+    ],
+    "x-required-scope": "appointments:read",
+    "parameters": [
+      {
+        "name": "limit",
+        "in": "query",
+        "description": "Items per page, 1 to 100. Defaults to 25.",
+        "schema": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 100
+        }
+      },
+      {
+        "name": "cursor",
+        "in": "query",
+        "description": "The next_cursor value from the previous page.",
+        "schema": {
+          "type": "string"
+        }
+      },
+      {
+        "name": "status",
+        "in": "query",
+        "description": "confirmed or cancelled.",
+        "schema": {
+          "type": "string",
+          "enum": [
+            "confirmed",
+            "cancelled"
+          ]
+        }
+      },
+      {
+        "name": "starts_after",
+        "in": "query",
+        "description": "Only appointments starting at or after this time.",
+        "schema": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      {
+        "name": "starts_before",
+        "in": "query",
+        "description": "Only appointments starting before this time.",
+        "schema": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      {
+        "name": "contact_id",
+        "in": "query",
+        "description": "Only this contact's appointments.",
+        "schema": {
+          "type": "string",
+          "format": "uuid"
+        }
+      }
+    ],
+    "responses": {
+      "200": {
+        "description": "OK",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "required": [
+                "data",
+                "next_cursor",
+                "has_more"
+              ],
+              "properties": {
+                "data": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Appointment"
+                  }
+                },
+                "next_cursor": {
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "description": "Pass as cursor to get the next page. Null on the last page."
+                },
+                "has_more": {
+                  "type": "boolean"
+                }
+              }
+            }
+          }
+        }
+      },
+      "400": {
+        "description": "The request is invalid (invalid_request).",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Error"
+            }
+          }
+        }
+      },
+      "401": {
+        "description": "The API key is missing, invalid, or revoked (unauthorized).",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Error"
+            }
+          }
+        }
+      },
+      "403": {
+        "description": "The API key lacks the appointments:read scope (insufficient_scope).",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Error"
+            }
+          }
+        }
+      },
+      "429": {
+        "description": "Too many requests (rate_limited). Wait for the Retry-After header's number of seconds.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Error"
+            }
+          }
+        },
+        "headers": {
+          "Retry-After": {
+            "schema": {
+              "type": "integer"
+            },
+            "description": "Seconds to wait."
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Appointment": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "description": "Stable identifier (UUID).",
+            "type": "string",
+            "format": "uuid"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "confirmed",
+              "cancelled"
+            ]
+          },
+          "starts_at": {
+            "description": "ISO 8601 timestamp in UTC.",
+            "type": "string",
+            "format": "date-time"
+          },
+          "ends_at": {
+            "description": "ISO 8601 timestamp in UTC.",
+            "type": "string",
+            "format": "date-time"
+          },
+          "timezone": {
+            "type": "string"
+          },
+          "service_id": {
+            "description": "Stable identifier (UUID).",
+            "type": "string",
+            "format": "uuid"
+          },
+          "service_name": {
+            "type": "string"
+          },
+          "staff_id": {
+            "description": "Stable identifier (UUID).",
+            "type": "string",
+            "format": "uuid"
+          },
+          "staff_name": {
+            "type": "string"
+          },
+          "contact_id": {
+            "description": "Stable identifier (UUID).",
+            "type": "string",
+            "format": "uuid"
+          },
+          "contact_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "contact_phone": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "source": {
+            "description": "Where the booking came from, for example voice, web_chat, dashboard or api.",
+            "type": "string"
+          },
+          "calendar_sync_status": {
+            "type": "string",
+            "enum": [
+              "pending",
+              "synced",
+              "failed",
+              "not_required"
+            ]
+          },
+          "created_at": {
+            "description": "ISO 8601 timestamp in UTC.",
+            "type": "string",
+            "format": "date-time"
+          },
+          "updated_at": {
+            "description": "ISO 8601 timestamp in UTC.",
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "required": [
+          "id",
+          "status",
+          "starts_at",
+          "ends_at",
+          "timezone",
+          "service_id",
+          "service_name",
+          "staff_id",
+          "staff_name",
+          "contact_id",
+          "contact_name",
+          "contact_phone",
+          "source",
+          "calendar_sync_status",
+          "created_at",
+          "updated_at"
+        ],
+        "additionalProperties": false
+      },
+      "Error": {
+        "type": "object",
+        "properties": {
+          "error": {
+            "type": "object",
+            "properties": {
+              "code": {
+                "type": "string",
+                "enum": [
+                  "invalid_request",
+                  "unauthorized",
+                  "forbidden",
+                  "insufficient_scope",
+                  "not_found",
+                  "conflict",
+                  "idempotency_key_reused",
+                  "idempotency_request_in_progress",
+                  "booking_disabled",
+                  "booking_requires_confirmation",
+                  "slot_unavailable",
+                  "rate_limited",
+                  "rate_limit_unavailable",
+                  "method_not_allowed",
+                  "internal_error"
+                ]
+              },
+              "message": {
+                "type": "string"
+              },
+              "details": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "path": {
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "path",
+                    "message"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            },
+            "required": [
+              "code",
+              "message"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "required": [
+          "error"
+        ],
+        "additionalProperties": false
+      }
+    }
+  }
+}
+```
+
+Download the [complete OpenAPI document](/api-reference/openapi.json). See [Authentication](/en/api/authentication), [Requests and errors](/en/api/requests) and [Webhooks](/en/api/webhooks).

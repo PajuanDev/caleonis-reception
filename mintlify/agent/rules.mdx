@@ -1,35 +1,68 @@
 ---
-title: "Écrire les règles de l’agent"
-description: "Donner des consignes précises pour les demandes, les incertitudes et le suivi humain."
+title: "Rédiger les règles de la réceptionniste"
+description: "Utilisez des règles en texte simple pour définir comment votre agent doit agir pendant les appels et les conversations."
+sidebarTitle: "Règles"
+contentType: "How-to"
 ---
-Les **Règles** indiquent comment agir. Utilisez les [Connaissances](/agent/knowledge) pour les faits et les [Services](/agent/services) pour les prestations.
+
+La page **Règles** vous permet de façonner le comportement de votre agent en texte simple. Pas besoin de créer des flux de travail ni de maintenir des arbres de décision : écrivez la consigne comme vous l'expliqueriez à un collègue.
+
+Les règles servent aux actions, aux politiques et aux décisions qui demandent du jugement : quand transférer un appelant, quand prendre un message de rappel, quoi faire hors des heures d'ouverture et comment traiter les questions qui exigent une réponse humaine.
+
+## Quoi mettre dans les règles
+
+Une bonne règle est précise et orientée vers l'action :
+
+- « Si un appelant signale une urgence, transférer l'appel au numéro de transfert par défaut. »
+- « Si l'appelant demande à parler à un humain et que le transfert est impossible, prendre un message de rappel avec son nom, son numéro de téléphone et le moment où il préfère être rappelé. »
+- « Si la réceptionniste n'est pas sûre d'une réponse, dire que l'équipe fera un suivi au lieu de deviner. »
+- « Pour les appels hors des heures d'ouverture, prendre un message et noter la plage horaire de rappel que préfère l'appelant. »
+
+<Note>
+  Les règles vous permettent de définir le comportement de l'agent en langage clair. Mettez chaque règle à jour quand votre façon de faire change.
+</Note>
+
+## Modèles de règles
+
+| Situation | Modèle |
+| --- | --- |
+| Transfert en direct | Si un appelant demande à parler à un humain ou décrit un problème urgent, transférer l'appel au numéro de transfert par défaut. |
+| Rappel | Si l'appelant veut être rappelé, recueillir son nom, son numéro de téléphone, le motif de l'appel et la plage horaire de rappel qu'il préfère. |
+| Réponse incertaine | Si la réceptionniste n'est pas sûre de la réponse, prendre un message pour l'équipe au lieu de deviner. |
+| Hors des heures d'ouverture | En dehors des heures d'ouverture, prendre un message et dire à l'appelant que l'équipe fera un suivi le jour ouvrable suivant. |
+| Questions sur les prix | Si le prix dépend de la situation du client, donner le prix de départ et proposer que l'équipe le recontacte avec les détails. |
 
 ## Ajouter une règle
 
-1. Ouvrez **Agent > Règles**.
-2. Ajoutez un titre court et une consigne concrète.
-3. Précisez le cas qui déclenche la consigne.
-4. Enregistrez puis testez un nouvel échange qui correspond à ce cas.
-5. Vérifiez le résultat dans la fiche d’appel.
+<Steps>
+  <Step title="Ouvrez Règles">
+    Dans la barre latérale du tableau de bord, allez dans **Agent** > **Règles**.
+  </Step>
+  <Step title="Ajoutez une règle">
+    Cliquez sur **Ajouter une règle**.
+  </Step>
+  <Step title="Rédigez la consigne">
+    Ajoutez un titre court et la consigne complète dans le champ de contenu. Utilisez des étiquettes si elles vous aident à retrouver la règle plus tard.
+  </Step>
+  <Step title="Enregistrez">
+    Cliquez sur **Enregistrer**. La réceptionniste peut utiliser la règle une fois qu'elle est enregistrée et indexée.
+  </Step>
+</Steps>
 
-## Exemples à adapter
+## Transferts et rappels
 
-| Situation | Instruction |
-| --- | --- |
-| Réponse incertaine | Si l’information manque, dites-le et prenez un message pour l’équipe. |
-| Devis | Recueillez le nom, le numéro et l’objet général de la demande. Ne promettez pas de prix non validé. |
-| Rappel | Demandez le créneau de rappel souhaité sans promettre un appel automatique. |
-| Hors horaires | Prenez un message et indiquez les horaires validés de l’entreprise. |
-| Refus SMS | Respectez le refus et ne promettez pas d’envoi de confirmation. |
+Les transferts utilisent le numéro de transfert par défaut défini dans **Agent** > **Paramètres IA**. Quand un transfert en direct n'est pas la bonne solution, la réceptionniste peut créer une tâche de suivi avec les coordonnées pour le rappel. Ces tâches apparaissent dans le tableau de bord et sur les pages de détail des appels.
 
-Évitez les consignes contradictoires et les règles trop longues. Un cas et une action par règle sont plus faciles à vérifier.
+## Enregistrements et transcriptions
 
-## Les règles ne débloquent pas les capacités
+Caléonis Receptionist conserve les transcriptions des appels et peut conserver les enregistrements. Vous pouvez écouter les enregistrements depuis la page **Appels** quand ils sont disponibles.
 
-Une règle ne peut pas activer un numéro SMS, un transfert téléphonique, une intégration désactivée ou un créneau indisponible.
+Utilisez les règles pour le traitement des appels. Gérez la politique d'enregistrement et de conservation avec les réglages de votre espace de travail et de conformité.
 
-Les politiques structurées de réservation, de vérification et de transfert restent prioritaires. Écrire « transfère toujours » ne qualifie pas la chaîne téléphonique.
+{/* Caléonis qualification */}
 
-## Qualifier une règle
+## Limites de capacité et qualification
 
-Testez le cas nominal et un cas où l’action doit être refusée. Si l’action échoue, l’agent doit expliquer qu’elle n’a pas été réalisée et proposer une prise de message appropriée.
+Une règle n'active ni SMS sur une ligne Voice-only ni transfert SIP. Les exemples de transfert ne s'appliquent qu'après qualification du parcours téléphonique ; dans le pilote, prenez un message pour l'équipe. Les politiques structurées de réservation et d'identité restent prioritaires.
+
+Pour vérifier une règle, testez le cas attendu puis le refus d'une action non autorisée. La réponse de l'agent doit annoncer le résultat réel. Ne promettez aucun rappel automatique ni livraison d'une notification sans preuve.

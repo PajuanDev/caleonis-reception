@@ -1,34 +1,50 @@
 ---
-title: "Prepare your first test"
-description: "Set up a safe pilot scenario before forwarding customer calls."
+title: "Set up Caléonis Receptionist"
+description: "Follow the complete preparation and controlled-test sequence before opening a line to customers."
+sidebarTitle: "Setup guide"
 ---
-Use fictional details, your own contact information and a test calendar. A telephone call may incur provider charges.
 
-## Set up
+This tutorial follows the existing onboarding and dashboard workflow. The operator must authorize access to the pilot; a working signup form does not itself grant a production service or a phone number.
 
-1. Open [Caléonis Receptionist](https://receptionist.caleonis.com) and verify the active business.
-2. Review **Agent > AI settings** and write your business greeting.
-3. Add accurate opening hours, location, service area and answers under **Knowledge**.
-4. Review **Services** and **Rules**.
-5. Start a new browser test call when that control is available and allow the microphone.
-6. Review the call record, transcript and summary after ending the call.
+## Before you begin
 
-Configuration changes apply to new conversations; an active call may keep its original context.
+Prepare your own email address, a unique password, the exact business name, public contact details, opening hours and service area. Prepare a public website or documents you may legally use. For booking, use a Google account with write access to a dedicated test calendar.
 
-## Test booking separately
+Have a test telephone you control and a short, fictitious scenario. Do not enter health data or customer records for a first test. Account phone verification and the business reception number are separate.
 
-Connect Google Calendar, select a writable test calendar and verify the business time zone. Check the booking mode and service duration.
+## Onboarding steps
 
-Make an authorised fictional booking, then read it in both the dashboard and Google Calendar. A pending request or sync is not an externally confirmed booking.
+<Steps>
+  <Step title="Create or open the authorized account">Use [signup](https://receptionist.caleonis.com/signup) when registrations are open, or use your invitation. Sign in at [login](https://receptionist.caleonis.com/login). If access is closed, contact the workspace operator rather than creating another account.</Step>
+  <Step title="Name the business">Enter the name callers should hear. Check the active business before saving anything. The business name and a custom greeting are separate settings.</Step>
+  <Step title="Import your website">Enter a public URL you control or are authorized to use, or choose Skip for now. Services, hours, FAQ and contact pages are useful. Private pages, internal addresses and login-only pages are excluded.</Step>
+  <Step title="Add knowledge documents">Upload accepted documents or add factual text. Wait for processing and review the extracted content in Agent > Knowledge. An entry marked queued, indexing or error is not a ready source.</Step>
+  <Step title="Set the greeting">Write a short opening line naming the business and explaining the help available. Prepare the required information about AI and recording with the responsible operator.</Step>
+  <Step title="Verify account details">Complete any email or mobile verification the authorized flow requests. A verification code is not permission to send appointment or operator SMS.</Step>
+  <Step title="Review service and number conditions">Confirm the approved offer and number assignment with the operator. The inherited Free, Starter and Pro flow does not establish Caléonis pricing or a right to a French number. Do not complete a paid checkout for a review.</Step>
+  <Step title="Finish onboarding">Review AI settings, Knowledge, Services and Rules. Configure a realistic callback service and booking mode; leave unqualified actions unavailable.</Step>
+</Steps>
 
-A booking may exist without an email, SMS or invited guest. Respect a refusal of notifications.
+## Prepare booking
 
-## Before telephone use
+1. Add the service name and its duration. A 15-minute quote callback is different from an onsite job.
+2. Set opening hours, closures, booking policy and the **Europe/Paris** business time zone.
+3. Connect [Google Calendar](/en/integrations/google-calendar) and select a writable test calendar.
+4. Check a slot against both the dashboard and Google before the voice test.
 
-Verify that the number belongs to the correct business and is ready for inbound calls. The French pilot number is Voice-only, so do not promise SMS.
+## Make your first controlled call
 
-Test the full scenario before customer forwarding. Keep a human fallback and a way to disable forwarding with your operator.
+Use the dashboard test call only if enabled for your business, or call the assigned business number from your own phone. Ask one factual question and make one authorized test booking. Refuse SMS if testing the no-notification path.
 
-Human transfer and durable Google OAuth renewal need explicit qualification. Do not test writes, calls or messages involving a third party without authorisation.
+After the call, check [Calls](/en/dashboard/calls): greeting, summary, transcript, audio availability and action result. Open the event directly in Google and compare the date, local time, duration and selected calendar. A confirmed booking does not establish SMS, email or operator-alert delivery.
 
-See the [complete French help](/introduction), [forwarding guide](/support/phone-forwarding) and [troubleshooting](/support/troubleshooting).
+## Before real callers
+
+Check the number's voice/SMS capabilities, privacy information, team access, opening hours, callback process, calendar renewal and operational support. Do not enable transfer or appointment changes on the strength of a booking test alone. Keep a manual fallback and a reversible call-forwarding plan.
+
+<CardGroup cols={2}>
+  <Card title="AI settings" icon="comment-dots" href="/en/agent/ai-settings/overview">Greeting, language and booking policy.</Card>
+  <Card title="Knowledge" icon="book-open" href="/en/agent/knowledge">Texts, documents, website import and processing.</Card>
+  <Card title="Services" icon="calendar-check" href="/en/agent/services">Descriptions, durations and booking prerequisites.</Card>
+  <Card title="Usage" icon="credit-card" href="/en/billing/usage">Consumption, unknown costs and approved limits.</Card>
+</CardGroup>

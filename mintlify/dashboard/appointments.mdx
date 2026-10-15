@@ -1,35 +1,39 @@
 ---
-title: "Contrôler les rendez-vous"
-description: "Distinguer demande, confirmation et synchronisation Google Calendar."
+title: "Consulter les rendez-vous à venir"
+description: "Consultez les rendez-vous à venir de l'entreprise active et vérifiez leur état de synchronisation avec le calendrier."
+sidebarTitle: "Rendez-vous"
+contentType: "How-to"
 ---
-Un rendez-vous doit correspondre à un service, une personne, un horaire et un fuseau. La confirmation dans l’application et la synchronisation chez Google sont deux vérifications distinctes.
 
-## Les modes de réservation
+La page **Rendez-vous** liste les réservations à venir de l'entreprise active. Utilisez-la pour consulter l'horaire et vérifier que chaque réservation a bien été ajoutée au calendrier connecté.
 
-| Mode | Comportement attendu |
-| --- | --- |
-| Réservation désactivée | L’agent ne doit pas confirmer de rendez-vous. |
-| Prise de demandes | Votre équipe doit confirmer la demande. |
-| Réservation directe | Un créneau peut être confirmé si toutes les conditions sont remplies. |
+## Consulter l'horaire
 
-Vérifiez le mode dans **Agent > Paramètres IA**. N’annoncez pas une réservation sur la seule demande de l’appelant.
+Chaque ligne affiche :
 
-## Vérifier une réservation
+- L'heure du rendez-vous
+- Le nom du client
+- Le service
+- Le membre de l'équipe assigné
+- Le statut du rendez-vous
+- L'état de synchronisation avec le calendrier
 
-1. Retrouvez la fiche d’appel et le résultat de l’action.
-2. Ouvrez les rendez-vous depuis les vues qui les proposent.
-3. Vérifiez le nom, le service, la date, l’heure et le fuseau.
-4. Vérifiez l’état de synchronisation.
-5. Ouvrez l’agenda sélectionné dans Google et retrouvez l’événement.
+Caléonis Receptionist affiche chaque rendez-vous dans le fuseau horaire enregistré avec celui-ci.
 
-Pour la France métropolitaine, utilisez **Europe/Paris** : son décalage avec UTC varie dans l’année.
+## Actualiser les rendez-vous
 
-## Notifications
+Cliquez sur **Actualiser** pour récupérer la liste à jour des rendez-vous. La page se met aussi à jour quand Caléonis Receptionist reçoit un événement lié à un rendez-vous.
 
-Une réservation peut être confirmée sans SMS ni email. L’état interne « skipped » signifie que l’envoi a été ignoré ; il ne représente pas une livraison.
+## Résoudre un problème de calendrier
 
-Un refus SMS doit être respecté. Un numéro Voice-only ne permet pas de confirmation SMS.
+Si la colonne **Calendrier** signale un problème de synchronisation, vérifiez la connexion Google Calendar dans **Intégrations**. Corrigez tout problème de compte ou d'autorisation avant de vous fier aux disponibilités en direct.
 
-## Déplacement et annulation
+Connectez [Google Calendar](/integrations/google-calendar) avant de laisser la réceptionniste proposer des créneaux. Configurez l'annulation et le déplacement de rendez-vous par les appelants dans [Modifications de rendez-vous](/agent/ai-settings/appointment-changes).
 
-Consultez le guide [Changements de rendez-vous](/agent/ai-settings/appointment-changes). Ces parcours nécessitent leur propre test ; un test de création réussi ne qualifie pas automatiquement l’annulation ou le déplacement.
+{/* Caléonis qualification */}
+
+## Demande, confirmation et résultat Google
+
+Le mode `request` produit une demande à confirmer par l'équipe ; `off` interdit la réservation directe ; `instant` permet une confirmation si les conditions sont réunies. Une création dans l'application et une synchronisation Google sont distinctes : ouvrez l'événement directement dans l'agenda choisi et comparez le jour, l'heure, la durée et le fuseau.
+
+Utilisez Europe/Paris, dont le décalage UTC varie selon la saison. Une réservation peut réussir sans invité, SMS, email ni alerte opérateur. Les changements de rendez-vous doivent être qualifiés séparément.

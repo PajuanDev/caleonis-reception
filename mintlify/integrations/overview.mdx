@@ -1,26 +1,37 @@
 ---
-title: "Comprendre les intégrations"
-description: "Connecter les outils disponibles et distinguer une connexion d’un parcours vérifié."
+title: "Choisir une intégration"
+description: "Connectez Google Calendar pour les réservations et envoyez des événements à vos propres outils avec des webhooks."
+sidebarTitle: "Intégrations"
+contentType: "Conceptual"
 ---
-La page **Gestion > Intégrations** regroupe les connecteurs proposés pour l’entreprise active.
 
-| Intégration | Usage | Limite |
-| --- | --- | --- |
-| [Google Calendar](/integrations/google-calendar) | Disponibilités et événements de réservation. | Compte, droits, agenda et synchronisation à contrôler. |
-| [Webhooks](/integrations/webhooks) | Événements vers un service technique autorisé. | Configuration et test du destinataire nécessaires. |
-| [SMS](/integrations/sms) | Messages ou alertes selon capacités. | Indisponibles sur le numéro pilote Voice-only. |
-| [Widget](/settings/widget) | Chat et voix Web avec clés existantes autorisées. | Nouvelles activations restreintes. |
+La page **Intégrations** connecte Caléonis Receptionist à Google Calendar et envoie des événements à vos propres outils avec des webhooks. Pour connecter un CRM ou Zapier, utilisez les webhooks et l'[API Caléonis Receptionist](/api/overview).
 
-L’API et le MCP existants sont documentés dans la partie développeurs. Leur présence ne vaut pas validation de l’accès ou de chaque action en production.
+Chaque guide d'intégration explique ce que fait la connexion, de quels accès elle a besoin et comment vérifier qu'elle fonctionne.
 
-## Connecter avec le bon rôle
+<CardGroup cols={1}>
+  <Card title="Connecter Google Calendar" icon="calendar" href="/integrations/google-calendar">
+    Permettez à Caléonis Receptionist de lire vos plages occupées et de créer des rendez-vous dans le calendrier choisi.
+  </Card>
+  <Card title="Configurer les webhooks" icon="webhook" href="/integrations/webhooks">
+    Envoyez les appels, les réservations, les messages et les nouveaux contacts à vos propres outils dès qu'ils arrivent.
+  </Card>
+</CardGroup>
 
-Utilisez un compte propriétaire ou administrateur lorsque la gestion du connecteur l’exige. Vérifiez l’entreprise sélectionnée avant d’autoriser un compte externe.
+## Google Calendar
 
-Accordez uniquement les droits nécessaires. Ne copiez pas de secret dans une conversation, une capture d’écran ou le navigateur.
+Connectez Google Calendar si vous voulez que Caléonis Receptionist aide les appelants à prendre rendez-vous. Après avoir autorisé Google, choisissez le calendrier qui doit recevoir les réservations.
 
-## Vérifier le résultat
+## Webhooks
 
-Une carte « connecté » indique un état de connexion. Qualifiez ensuite l’action métier : événement relu chez Google, requête API autorisée ou webhook effectivement reçu.
+Ajoutez un webhook quand un autre outil doit réagir à Caléonis Receptionist, par exemple pour consigner chaque appel terminé dans votre CRM.
 
-Aucune intégration email IA, WhatsApp ou réseau social n’est annoncée dans la V1. Un service d’email transactionnel n’est pas une boîte email gérée par l’agent.
+## Où la trouver
+
+Ouvrez **Gestion** > **Intégrations** dans la barre latérale du tableau de bord.
+
+{/* Caléonis qualification */}
+
+## Disponibilité de chaque intégration
+
+La réservation Google a été vérifiée dans un agenda de test ; la durabilité OAuth nécessite son propre contrôle. Les webhooks et l'API doivent être ouverts et testés pour votre intégration. Aucun SMS n'est disponible sur la ligne française Voice-only. Un adaptateur présent ne prouve pas une livraison à un tiers.

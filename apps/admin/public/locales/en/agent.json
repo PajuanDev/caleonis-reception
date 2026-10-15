@@ -238,7 +238,8 @@
     },
     "summary": {
       "label": "Business summary",
-      "hint": "The essential context your receptionist should know about the business."
+      "hint": "What your receptionist tells callers about the business.",
+      "placeholder": "Describe your business, its services, and the area it serves."
     },
     "bookingPolicy": {
       "label": "Booking policy",
@@ -301,6 +302,9 @@
     }
   },
   "actions": {
+    "edit": "Edit",
+    "editField": "Edit: {{field}}",
+    "cancel": "Cancel",
     "save": "Save",
     "saveChanges": "Save changes",
     "saving": "Saving…",

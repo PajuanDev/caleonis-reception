@@ -238,7 +238,8 @@
     },
     "summary": {
       "label": "Résumé de l'entreprise",
-      "hint": "Le contexte essentiel que votre réceptionniste doit connaître."
+      "hint": "Ce que votre réceptionniste dit aux appelants au sujet de l'entreprise.",
+      "placeholder": "Présentez votre activité, vos services et la zone desservie."
     },
     "bookingPolicy": {
       "label": "Politique de réservation",
@@ -301,6 +302,9 @@
     }
   },
   "actions": {
+    "edit": "Modifier",
+    "editField": "Modifier : {{field}}",
+    "cancel": "Annuler",
     "save": "Enregistrer",
     "saveChanges": "Enregistrer les modifications",
     "saving": "Enregistrement…",

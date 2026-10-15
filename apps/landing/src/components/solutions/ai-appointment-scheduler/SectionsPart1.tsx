@@ -1,3 +1,4 @@
+import { qualifyPilotText, qualifyPilotLabel } from "@/lib/pilot-qualification"
 import { buttonVariants } from "@/components/ui/button"
 import { APP_SIGNUP_URL } from "@/lib/app-links"
 import { cn } from "@/lib/utils"
@@ -26,13 +27,13 @@ export function Hero() {
             </span>
           </h1>
 
-          <p className="animate-fade-up body-copy mx-auto mt-6 max-w-[65ch] stagger-2 md:text-lg">
-            LobbyStack answers calls, collects the details your team needs,
-            offers available times, books appointments, and sends confirmations
-            before the caller moves on.
+          <p className="animate-fade-up body-copy stagger-2 mx-auto mt-6 max-w-[65ch] md:text-lg">
+            Caléonis Receptionist answers calls, collects the details your team
+            needs, offers available times, books appointments, and sends
+            confirmations before the caller moves on.
           </p>
 
-          <div className="animate-fade-up mt-8 flex items-center justify-center gap-4 stagger-3">
+          <div className="animate-fade-up stagger-3 mt-8 flex items-center justify-center gap-4">
             <a
               href={APP_SIGNUP_URL}
               className={cn(
@@ -40,7 +41,7 @@ export function Hero() {
                 "h-11 rounded-full px-7 text-sm"
               )}
             >
-              Try for free
+              Request a trial
               <ArrowRight className="ml-1 size-4" />
             </a>
             <a
@@ -51,19 +52,18 @@ export function Hero() {
             </a>
           </div>
 
-          <p className="animate-fade-up fine-print mt-5 stagger-4">
-            No credit card required. Works with Google Calendar and sends
-            confirmation texts.
+          <p className="animate-fade-up fine-print stagger-4 mt-5">
+            Pilot access requires approval. Google bookings require a configured connection. No SMS on Voice-only.
           </p>
 
-          <div className="animate-fade-up mt-12 flex flex-wrap items-center justify-center gap-x-8 gap-y-4 text-sm font-medium text-muted-foreground stagger-5">
+          <div className="animate-fade-up stagger-5 mt-12 flex flex-wrap items-center justify-center gap-x-8 gap-y-4 text-sm font-medium text-muted-foreground">
             <div className="flex items-center gap-2">
               <Check className="size-4 text-primary" />
               <span>Books appointments by phone</span>
             </div>
             <div className="flex items-center gap-2">
               <Check className="size-4 text-primary" />
-              <span>Sends confirmation texts</span>
+              <span>SMS unavailable on Voice-only</span>
             </div>
             <div className="flex items-center gap-2">
               <Check className="size-4 text-primary" />
@@ -170,10 +170,10 @@ export function Solution() {
               Let callers book while they are still on the phone
             </h2>
             <p className="section-intro text-left">
-              LobbyStack gives your business an AI appointment scheduler that
-              can answer the call, understand what the caller needs, check your
-              rules, offer times, and book the appointment in the same
-              conversation.
+              Caléonis Receptionist gives your business an AI appointment
+              scheduler that can answer the call, understand what the caller
+              needs, check your rules, offer times, and book the appointment in
+              the same conversation.
             </p>
             <ul className="mt-8 space-y-4">
               {points.map((point, i) => (
@@ -184,7 +184,7 @@ export function Solution() {
                   <div className="mt-1 flex size-5 shrink-0 items-center justify-center rounded-full bg-primary/10">
                     <Check className="size-3 text-primary" />
                   </div>
-                  <span>{point}</span>
+                  <span>{qualifyPilotText(point, "en")}</span>
                 </li>
               ))}
             </ul>
@@ -200,7 +200,7 @@ export function Solution() {
                     <div>
                       <p className="text-sm font-medium">Booking Request</p>
                       <p className="text-xs text-muted-foreground">
-                        LobbyStack AI
+                        Caléonis Receptionist AI
                       </p>
                     </div>
                   </div>
@@ -217,9 +217,7 @@ export function Solution() {
                     Thursday at 2:00 PM would be great.
                   </div>
                   <div className="mr-8 rounded-2xl rounded-tl-sm bg-muted p-3 text-sm text-foreground/80">
-                    Perfect. I've booked you for Thursday at 2:00 PM. I'll send
-                    a confirmation text right now with all the details. We'll
-                    see you then!
+                    In this fictional example, the appointment is recorded for Thursday at 2:00 PM. No SMS is sent on the French Voice-only pilot.
                   </div>
                 </div>
               </div>
@@ -271,8 +269,8 @@ export function UseCases() {
             Use AI scheduling where speed matters
           </h2>
           <p className="section-intro">
-            LobbyStack helps with the scheduling moments that usually create
-            delays, missed bookings, and extra admin work.
+            Caléonis Receptionist helps with the scheduling moments that usually
+            create delays, missed bookings, and extra admin work.
           </p>
         </div>
 
@@ -283,10 +281,10 @@ export function UseCases() {
               className="flex flex-col rounded-2xl border border-border/70 bg-muted/30 p-6 transition-colors hover:bg-muted/50"
             >
               <h3 className="text-lg font-medium tracking-tight text-foreground">
-                {c.title}
+                {qualifyPilotLabel(c.title, "en")}
               </h3>
               <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
-                {c.copy}
+                {qualifyPilotText(c.copy, "en")}
               </p>
             </div>
           ))}
@@ -304,15 +302,15 @@ export function HowItWorks() {
   const steps = [
     {
       title: "Connect your phone and calendar",
-      copy: "Use a dedicated LobbyStack number or forward calls from your existing business number. Connect the Google Calendar your team already uses for appointments.",
+      copy: "Use a dedicated Caléonis Receptionist number or forward calls from your existing business number. Connect the Google Calendar your team already uses for appointments.",
     },
     {
       title: "Add your booking rules",
       copy: "Set your hours, services, appointment types, service areas, availability rules, required questions, and handoff instructions.",
     },
     {
-      title: "Let LobbyStack handle the call",
-      copy: "When someone calls to book, LobbyStack answers, asks the right questions, offers available times, and confirms the appointment.",
+      title: "Let Caléonis Receptionist handle the call",
+      copy: "When someone calls to book, Caléonis Receptionist answers, asks the right questions, offers available times, and confirms the appointment.",
     },
     {
       title: "Review the appointment details",
@@ -325,7 +323,7 @@ export function HowItWorks() {
       <div className="mx-auto max-w-7xl px-6">
         <div className="mx-auto max-w-3xl text-center">
           <h2 className="section-heading">
-            How LobbyStack schedules appointments
+            How Caléonis Receptionist schedules appointments
           </h2>
         </div>
         <div className="mx-auto mt-16 max-w-4xl">
@@ -343,7 +341,7 @@ export function HowItWorks() {
                           {step.title}
                         </h3>
                         <p className="mt-2 leading-relaxed text-muted-foreground">
-                          {step.copy}
+                          {qualifyPilotText(step.copy, "en")}
                         </p>
                       </div>
                     ) : null}
@@ -358,7 +356,7 @@ export function HowItWorks() {
                       {step.title}
                     </h3>
                     <p className="mt-2 leading-relaxed text-muted-foreground md:hidden">
-                      {step.copy}
+                      {qualifyPilotText(step.copy, "en")}
                     </p>
 
                     {i % 2 !== 0 ? (
@@ -367,7 +365,7 @@ export function HowItWorks() {
                           {step.title}
                         </h3>
                         <p className="mt-2 leading-relaxed text-muted-foreground">
-                          {step.copy}
+                          {qualifyPilotText(step.copy, "en")}
                         </p>
                       </div>
                     ) : null}
@@ -407,7 +405,7 @@ export function Comparison() {
       limit: "Every routine booking takes time from your team.",
     },
     {
-      option: "LobbyStack",
+      option: "Caléonis Receptionist",
       what: "Answers the call, collects details, schedules, confirms, and hands off when needed.",
       bestFor: "Callers who want to talk, ask questions, and book instantly.",
       limit: "Complex scheduling situations should still go to a human.",
@@ -422,8 +420,8 @@ export function Comparison() {
             Faster booking without more scheduling work
           </h2>
           <p className="section-intro">
-            LobbyStack helps callers schedule in the moment, instead of forcing
-            them into voicemail, forms, or manual callbacks.
+            Caléonis Receptionist helps callers schedule in the moment, instead
+            of forcing them into voicemail, forms, or manual callbacks.
           </p>
         </div>
 
@@ -441,7 +439,7 @@ export function Comparison() {
                 className="grid grid-cols-4 gap-4 border-b border-border/70 p-4 text-sm last:border-0"
               >
                 <div className="font-medium text-foreground">{c.option}</div>
-                <div className="text-muted-foreground">{c.what}</div>
+                <div className="text-muted-foreground">{qualifyPilotText(c.what, "en")}</div>
                 <div className="text-muted-foreground">{c.bestFor}</div>
                 <div className="text-muted-foreground">{c.limit}</div>
               </div>

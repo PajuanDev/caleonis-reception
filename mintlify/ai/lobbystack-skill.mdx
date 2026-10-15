@@ -1,30 +1,106 @@
 ---
-title: "Consignes pour une intégration MCP"
-description: "Règles d’usage du serveur existant, avec les identifiants techniques hérités."
+title: "Consignes MCP complètes pour les assistants IA"
+description: "Outils, recherches, réservations, horaires, idempotence et traitement des erreurs."
 ---
-Cette route historique est conservée pour les anciens liens. Le produit présenté aux utilisateurs s’appelle **Caléonis Receptionist**.
 
-## Consignes à donner au client
+Cette route historique conserve les instructions du socle MIT sous marque Caléonis Receptionist. Une connexion MCP voit une seule entreprise et seulement les outils permis par la clé ou le consentement OAuth. Ce guide développeur ne crée pas de nouveaux agents métier dans l'application.
 
-- Vérifier l’entreprise avant toute lecture ou écriture.
-- Utiliser seulement les outils et permissions accordés.
-- Commencer par les lectures nécessaires au contexte.
-- Obtenir l’autorisation de l’opérateur pour une écriture qui produit un effet réel.
-- Ne jamais présenter une demande de rendez-vous comme une réservation confirmée.
-- Ne jamais déduire un SMS, un email ou un transfert d’un simple succès métier.
-- Respecter les refus de capacité et de consentement.
-- Utiliser la même clé d’idempotence pour reprendre une création dont le résultat est inconnu.
-- Répondre à une erreur avec son résultat réel, sans annoncer de succès.
-- Ne pas transmettre de secret ou de donnée de santé dans le pilote.
+## Avant toute action
 
-## Exemple de séquence
+- Appelez `get_business` pour connaître `timezone`, `hours` et `booking_mode`.
+- Les réponses utilisent ISO 8601 en UTC. Affichez l'heure dans le fuseau de l'entreprise et renvoyez le `starts_at` du résultat sans l'inventer.
+- Avant une écriture ayant un effet réel, faites confirmer client, service, date et heure locale, et action autorisée.
+- N'inventez aucun identifiant ; obtenez chaque `*_id` d'un résultat précédent.
+- Respectez les limites de capacité : pas de SMS sur Voice-only, pas de transfert ou de modification non qualifiés, aucun rappel automatique implicite.
 
-Pour rechercher un créneau, lisez le service et le mode de réservation, puis interrogez les disponibilités. Ne réservez que sur demande autorisée, avec les coordonnées vérifiées et une confirmation du créneau.
+## Outils et permissions
 
-Après l’action, vérifiez le résultat retourné et l’état de synchronisation. Le message oral ou écrit de l’assistant ne constitue pas une preuve externe.
+| Outil | Permission | Utilité |
+| --- | --- | --- |
+| `get_business` | `business:read` | Nom, fuseau, horaires et mode de réservation. |
+| `list_services` | `business:read` | Identifiants et durées des services. |
+| `list_staff` | `business:read` | Intervenants et services pris en charge. |
+| `update_business_hours` | `business:write` | Remplacer les horaires de la semaine entière. |
+| `list_calls` | `calls:read` | Lister les appels par date de début. |
+| `get_call` | `calls:read` | Lire un appel et sa transcription. |
+| `search_contacts` | `contacts:read` | Chercher téléphone, email ou partie d'un nom. |
+| `get_contact` | `contacts:read` | Lire un contact identifié. |
+| `create_contact` | `contacts:write` | Ajouter un contact. |
+| `update_contact` | `contacts:write` | Corriger ou vider les champs permis d'un contact. |
+| `list_appointments` | `appointments:read` | Filtrer les rendez-vous par statut, heure ou contact. |
+| `get_appointment` | `appointments:read` | Lire un rendez-vous. |
+| `check_availability` | `appointments:read` | Obtenir des débuts de créneaux disponibles. |
+| `book_appointment` | `appointments:write` | Réserver un créneau autorisé. |
+| `cancel_appointment` | `appointments:write` | Annuler le rendez-vous confirmé par l'opérateur. |
+| `reschedule_appointment` | `appointments:write` | Déplacer vers un autre créneau disponible. |
+| `list_messages` | `messages:read` | Lire les messages de suivi pris pour l'équipe. |
+| `add_knowledge` | `knowledge:write` | Ajouter une FAQ ou un texte factuel. |
 
-## Conserver les identifiants
+Les listes paginées renvoient `data`, `next_cursor` et `has_more`. Tant que `has_more` vaut vrai, répétez les mêmes filtres avec `cursor` égal au `next_cursor` retourné.
 
-Les packages `@lobbystack/*`, préfixes de clés et noms internes restent inchangés tant que leur migration n’est pas prévue. Ne renommez pas les paramètres attendus par l’API.
+## Rechercher un appelant
 
-Voir les [outils MCP](/ai/mcp), [permissions](/api/authentication) et [erreurs](/api/requests).
+1. Avec un téléphone, appelez `search_contacts` en format E.164, par exemple `+33600000000` comme valeur fictive de syntaxe.
+2. Sinon, recherchez une partie du nom, sans distinguer majuscules et minuscules.
+3. Si plusieurs personnes correspondent, demandez laquelle. Utilisez les appels ou rendez-vous pour les distinguer sans fusionner par supposition.
+4. Utilisez uniquement l'identifiant effectivement retourné.
+
+## Vérifier puis réserver un créneau
+
+1. Lisez l'entreprise ; `booking_mode` doit être `instant` pour réserver directement.
+2. Lisez les services et choisissez celui demandé par l'opérateur.
+3. Appelez `check_availability` avec `service_id` et `start_date` au format `YYYY-MM-DD` dans le fuseau de l'entreprise. La plage avec `end_date` ne dépasse pas sept jours.
+4. Si une personne précise est demandée, lisez `list_staff`, puis passez le même `staff_id` à la disponibilité et à la réservation.
+5. Proposez quelques créneaux en heure locale. Après choix et confirmation autorisés, utilisez leur `starts_at` exact et le `contact_id` ou `contact_phone` vérifié.
+6. Ne mettez `sms_consent` à vrai qu'après accord réel du client ; cela ne débloque pas un SMS Voice-only et ne prouve aucun envoi.
+7. Envoyez une `idempotency_key` unique. Après un timeout, reprenez avec la même clé et les mêmes paramètres pour éviter un doublon.
+8. Contrôlez le résultat applicatif et la synchronisation Google. N'annoncez pas de notification sans résultat distinct.
+
+Pour déplacer, vérifiez à nouveau les disponibilités du service et de l'intervenant, puis appelez `reschedule_appointment` après autorisation. Sans nouveau `staff_id`, l'intervenant reste le même. Pour les réservations d'un contact, filtrez `list_appointments` sur `contact_id`.
+
+## Retrouver les appels d'hier à suivre
+
+1. Lisez le fuseau via `get_business`.
+2. Calculez les deux minuits locaux entourant hier avec leur décalage UTC, en tenant compte des changements d'heure.
+3. Listez les appels avec `started_after` et `started_before`, puis toutes les pages utiles.
+4. Les résultats `message_taken`, `booking_incomplete` et `none` peuvent demander un suivi. `appointment_booked` désigne le résultat applicatif enregistré, pas une notification livrée.
+5. Lisez `list_messages` avec `status: open` et rapprochez les messages avec `call_id`.
+6. Ouvrez `get_call` seulement pour les transcriptions nécessaires : elles peuvent être longues.
+
+Une demande de rappel constitue une tâche humaine, sans appel sortant automatique.
+
+## Mettre à jour les horaires
+
+Lisez d'abord `hours`, modifiez seulement les jours demandés et renvoyez la semaine complète dans `update_business_hours`. Un jour omis devient fermé. Utilisez `HH:MM` sur 24 heures dans le fuseau de l'entreprise et `24:00` pour minuit. Faites confirmer l'ensemble avant remplacement.
+
+## Ajouter une FAQ
+
+Pour `type: faq`, utilisez une `question` comme la poserait un appelant et une `answer` factuelle. Pour une politique ou un texte plus long, utilisez `type: text`, `title` et `content`. N'inventez pas de faits, tarifs ou conditions absents des informations de l'opérateur. Les instructions de comportement appartiennent aux règles, pas à une FAQ.
+
+## Modes de réservation
+
+| Mode | Comportement |
+| --- | --- |
+| `instant` | Réservation directe seulement après disponibilité, permissions et confirmation. |
+| `request` | L'équipe confirme les demandes ; ne réservez pas par contournement. |
+| `off` | Réservation désactivée ; expliquez le refus. |
+
+La création et le déplacement refusent respectivement avec `booking_requires_confirmation` ou `booking_disabled`. L'annulation existe pour tous les modes mais reste une écriture à autoriser et qualifier.
+
+## Traiter les erreurs
+
+Une erreur d'outil est marquée comme telle et contient le JSON `{ "error": { "code": "...", "message": "..." } }`.
+
+| Code | Action |
+| --- | --- |
+| `invalid_request` | Corriger les arguments à partir de `message` et `details`. |
+| `not_found` | Rechercher dans la bonne entreprise ; ne pas deviner d'identifiant. |
+| `conflict` | Lire le conflit, par exemple un téléphone déjà enregistré. |
+| `slot_unavailable` | Rechercher de nouvelles disponibilités et les reproposer. |
+| `booking_requires_confirmation`, `booking_disabled` | Arrêter et expliquer le mode de réservation. |
+| `idempotency_key_reused` | Une opération différente a besoin d'une nouvelle clé ; une reprise garde son contenu initial. |
+| `rate_limited` | Attendre le délai demandé puis reprendre une fois. |
+| `rate_limit_unavailable` | Attendre puis reprendre une fois sans désactiver les protections. |
+| `internal_error` | Reprendre une fois ; en cas de nouvel échec, transmettre la référence au responsable. |
+
+Un outil absent peut indiquer une permission manquante. Expliquez la portée requise ; ne cherchez pas à contourner les droits. Faites reconnecter le client avec l'accès autorisé ou créer une clé appropriée dans Réglages > Clés API. Voir [MCP](/ai/mcp), [Authentification](/api/authentication) et [Erreurs](/api/requests).

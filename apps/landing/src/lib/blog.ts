@@ -14,10 +14,13 @@ export const blogPath = (entry: BlogEntry, locale = blogLocale(entry)) =>
   localizePath(locale, `/blog/${blogCanonicalSlug(entry)}/`)
 
 export const getBlogPosts = async (locale: Locale) => {
-  const posts = await getCollection("blog", (entry) => blogLocale(entry) === locale)
-  void posts
-  // Upstream articles remain in source pending a factual and rights review.
-  return [] as BlogEntry[]
+  const posts = await getCollection(
+    "blog",
+    (entry) => blogLocale(entry) === locale
+  )
+  return posts.sort(
+    (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
+  )
 }
 
 export const getBlogPostBySlug = async (locale: Locale, slug: string) => {

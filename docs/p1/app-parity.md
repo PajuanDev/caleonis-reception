@@ -1,5 +1,7 @@
 # Caléonis Receptionist V1.1 — application et parité
 
+> Rapport historique du candidat `c054d96`. Pour l’état de la reprise, les contrôles en lecture seule actuels, la préparation du domaine unique et le résumé manuel restauré, consulter `delivery.md`, `reprise-qualification.json` et `app-settings-parity.md`. Les résultats ci-dessous restent attribués à la livraison initiale.
+
 Date : 15 octobre 2026 UTC. Base de travail : production vérifiée par la coordination P0, `e8e23bae4955f64fa3f99cb525faad908439077e`. Cette passe ne déploie aucun service, ne modifie aucun paquet P0, ne fait aucun appel, envoi SMS/e-mail ni réservation réelle. Les vérifications de production citées ci-dessous viennent du compte rendu P0 ; elles n'ont pas été répétées dans cette passe.
 
 ## Résultat livré

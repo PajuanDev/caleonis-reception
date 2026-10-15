@@ -1,0 +1,2806 @@
+{
+  "checkedAt": "2026-10-15T21:34:45.477841+00:00",
+  "licensedUpstream": {
+    "repository": "https://gitlab.com/lobbystack-group/lobbystack",
+    "commit": "46b217807cb251a6679a5e64b8142d2441ccecd3",
+    "license": "MIT",
+    "copyright": "Copyright (c) 2026 LobbyStack contributors",
+    "licenseFile": "LICENSE"
+  },
+  "counts": {
+    "assets": 91,
+    "assetsByStatus": {
+      "OPERATOR_BRAND": 2,
+      "FONT_SOURCE": 1,
+      "UNUSED_RIGHTS_PENDING": 3,
+      "REUSED_MIT_ILLUSTRATION": 22,
+      "EDITORIAL_ARCHIVE_SOURCE": 41,
+      "ORIGINAL_VECTOR_REPLACEMENT": 5,
+      "RETAINED_NOT_REFERENCED": 15,
+      "REAL_PRODUCT_CAPTURE": 2
+    },
+    "articlesByLocale": {
+      "en": 42,
+      "fr": 42
+    },
+    "allArticlesRetainedInFull": true
+  },
+  "exceptions": [
+    {
+      "source": "/screenshots/dashboard.webp",
+      "replacement": "/screenshots/messages-voice-only-fr-desktop.png",
+      "reason": "Original screenshot shows upstream brand; actual Caléonis Messages capture uses synthetic test data. Actual dashboard capture to integrate after isolated browser CI."
+    },
+    {
+      "source": "/illustrations/call-capture.webp",
+      "replacement": "/illustrations/call-capture-caleonis.svg",
+      "reason": "Original embeds LobbyStack name/logo; recreated as an original SVG diagram with corresponding routing composition."
+    },
+    {
+      "source": "/illustrations/capabilities-receptionist.webp",
+      "replacement": "/illustrations/capabilities-network.webp",
+      "reason": "Original embeds a portrait without separately evidenced photo provenance; neutral MIT repository illustration reused."
+    },
+    {
+      "source": "/illustrations/missed-calls-booked-work.webp",
+      "replacement": "/illustrations/missed-calls-booked-work-caleonis.svg",
+      "reason": "Portrait provenance not separately established; original vector composition with no portrait and no unsupported external confirmation."
+    },
+    {
+      "source": "/illustrations/booking-flow.webp",
+      "replacement": "/illustrations/booking-flow-caleonis.svg",
+      "reason": "Original implies confirmation sent to caller; recreated to show a Google booking and explicit no-SMS pilot scope."
+    },
+    {
+      "source": "/illustrations/call-routing-team.webp",
+      "replacement": "/illustrations/call-routing-team-caleonis.svg",
+      "reason": "Embedded portraits omitted; corresponding source composition uses original text and card diagram."
+    },
+    {
+      "source": "/illustrations/human-handoff.webp",
+      "replacement": "/illustrations/human-handoff-caleonis.svg",
+      "reason": "Unknown portrait rights and unqualified direct transfer; callback diagram labels real pilot boundary."
+    },
+    {
+      "source": "/illustrations/call-playback-demo.webp",
+      "replacement": "/screenshots/messages-voice-only-fr-desktop.png",
+      "reason": "Source product representation replaced by actual Caléonis application capture; Calls screenshot pending isolated CI."
+    },
+    {
+      "source": "/illustrations/missed-calls.webp",
+      "replacement": "/illustrations/missed-calls-v4.webp",
+      "reason": "Embedded source brand replaced by neutral existing MIT illustration."
+    }
+  ],
+  "assets": [
+    {
+      "path": "/caleonis-logo.svg",
+      "sha256": "560d1dd275ae8bd734e5f13f880aba6ae6df0691f4dedc790ae52864e8d2a29f",
+      "size": 11137,
+      "upstreamPath": null,
+      "upstreamSha256": null,
+      "sameBytesAsCurrentUpstream": null,
+      "status": "OPERATOR_BRAND",
+      "licenseBasis": "Existing operator-owned Caléonis brand asset, final rights confirmation pending",
+      "references": [
+        "apps/landing/src/components/Footer.tsx",
+        "apps/landing/src/components/Navbar.tsx",
+        "apps/landing/src/lib/seo.ts"
+      ],
+      "finalFileSha256": "560d1dd275ae8bd734e5f13f880aba6ae6df0691f4dedc790ae52864e8d2a29f"
+    },
+    {
+      "path": "/favicon.svg",
+      "sha256": "66bf812e110af1984e75fd12f537cee2adc0269f2b87ad3fcd44c68d4c9c64a0",
+      "size": 229,
+      "upstreamPath": "apps/landing/public/favicon.svg",
+      "upstreamSha256": "261074e977b48f58df4a3b0e9cda6cb3990a9632347e578a38cc18b922ecf1a9",
+      "sameBytesAsCurrentUpstream": false,
+      "status": "OPERATOR_BRAND",
+      "licenseBasis": "Existing operator-owned Caléonis brand asset, final rights confirmation pending",
+      "references": [
+        "apps/landing/src/layouts/main.astro"
+      ],
+      "finalFileSha256": "66bf812e110af1984e75fd12f537cee2adc0269f2b87ad3fcd44c68d4c9c64a0"
+    },
+    {
+      "path": "/fonts/geist-mono/geist-mono-400.woff2",
+      "sha256": "e9fb088eeacced307860d82ceedb0ae9ad2ebfa07a7c0a7279c8c961dd9d5fd3",
+      "size": 31368,
+      "upstreamPath": "apps/landing/public/fonts/geist-mono/geist-mono-400.woff2",
+      "upstreamSha256": "e9fb088eeacced307860d82ceedb0ae9ad2ebfa07a7c0a7279c8c961dd9d5fd3",
+      "sameBytesAsCurrentUpstream": true,
+      "status": "FONT_SOURCE",
+      "licenseBasis": "Geist SIL OFL 1.1 /licenses/geist-ofl.txt",
+      "references": [],
+      "finalFileSha256": "e9fb088eeacced307860d82ceedb0ae9ad2ebfa07a7c0a7279c8c961dd9d5fd3"
+    },
+    {
+      "path": "/fonts/general-sans/general-sans-400.woff2",
+      "sha256": "3ec2be771caf168b077ca05af4df1dace77088e2b3a27da570036e61be58a039",
+      "size": 23084,
+      "upstreamPath": "apps/landing/public/fonts/general-sans/general-sans-400.woff2",
+      "upstreamSha256": "3ec2be771caf168b077ca05af4df1dace77088e2b3a27da570036e61be58a039",
+      "sameBytesAsCurrentUpstream": true,
+      "status": "UNUSED_RIGHTS_PENDING",
+      "licenseBasis": "Separate font rights not established; retained unused",
+      "references": [],
+      "finalFileSha256": "3ec2be771caf168b077ca05af4df1dace77088e2b3a27da570036e61be58a039"
+    },
+    {
+      "path": "/fonts/general-sans/general-sans-500.woff2",
+      "sha256": "c30377df1de8444d07161725c751f458beec07c28034df2fd275d1aa587a239f",
+      "size": 22904,
+      "upstreamPath": "apps/landing/public/fonts/general-sans/general-sans-500.woff2",
+      "upstreamSha256": "c30377df1de8444d07161725c751f458beec07c28034df2fd275d1aa587a239f",
+      "sameBytesAsCurrentUpstream": true,
+      "status": "UNUSED_RIGHTS_PENDING",
+      "licenseBasis": "Separate font rights not established; retained unused",
+      "references": [],
+      "finalFileSha256": "c30377df1de8444d07161725c751f458beec07c28034df2fd275d1aa587a239f"
+    },
+    {
+      "path": "/fonts/general-sans/general-sans-700.woff2",
+      "sha256": "a29eab9b114f3c631cb24d537400dfb8d0ceea8cc9fb514864a68c4ead960490",
+      "size": 21180,
+      "upstreamPath": "apps/landing/public/fonts/general-sans/general-sans-700.woff2",
+      "upstreamSha256": "a29eab9b114f3c631cb24d537400dfb8d0ceea8cc9fb514864a68c4ead960490",
+      "sameBytesAsCurrentUpstream": true,
+      "status": "UNUSED_RIGHTS_PENDING",
+      "licenseBasis": "Separate font rights not established; retained unused",
+      "references": [],
+      "finalFileSha256": "a29eab9b114f3c631cb24d537400dfb8d0ceea8cc9fb514864a68c4ead960490"
+    },
+    {
+      "path": "/illustrations/after-hours/furnace.webp",
+      "sha256": "5a1464c3ff24a926b2e46ac550484b474b4b6aa522c2cad7f425f0344d40bfb9",
+      "size": 18740,
+      "upstreamPath": "apps/landing/public/illustrations/after-hours/furnace.webp",
+      "upstreamSha256": "5a1464c3ff24a926b2e46ac550484b474b4b6aa522c2cad7f425f0344d40bfb9",
+      "sameBytesAsCurrentUpstream": true,
+      "status": "REUSED_MIT_ILLUSTRATION",
+      "licenseBasis": "MIT repository illustration; no separate conflicting license found at source snapshot",
+      "references": [
+        "apps/landing/src/lib/solution-details.ts"
+      ],
+      "finalFileSha256": "5a1464c3ff24a926b2e46ac550484b474b4b6aa522c2cad7f425f0344d40bfb9"
+    },
+    {
+      "path": "/illustrations/after-hours/invoice.webp",
+      "sha256": "163826da58fd79a18c6dc3485b0de93e743e941ac8555ae674f736fc00e60e9e",
+      "size": 11508,
+      "upstreamPath": "apps/landing/public/illustrations/after-hours/invoice.webp",
+      "upstreamSha256": "163826da58fd79a18c6dc3485b0de93e743e941ac8555ae674f736fc00e60e9e",
+      "sameBytesAsCurrentUpstream": true,
+      "status": "REUSED_MIT_ILLUSTRATION",
+      "licenseBasis": "MIT repository illustration; no separate conflicting license found at source snapshot",
+      "references": [
+        "apps/landing/src/lib/solution-details.ts"
+      ],
+      "finalFileSha256": "163826da58fd79a18c6dc3485b0de93e743e941ac8555ae674f736fc00e60e9e"
+    },
+    {
+      "path": "/illustrations/after-hours/no-heat.webp",
+      "sha256": "4c85bba392305314fce6f239e0cb893ab9bedd9e732314be319f9519b860159f",
+      "size": 9364,
+      "upstreamPath": "apps/landing/public/illustrations/after-hours/no-heat.webp",
+      "upstreamSha256": "4c85bba392305314fce6f239e0cb893ab9bedd9e732314be319f9519b860159f",
+      "sameBytesAsCurrentUpstream": true,
+      "status": "REUSED_MIT_ILLUSTRATION",
+      "licenseBasis": "MIT repository illustration; no separate conflicting license found at source snapshot",
+      "references": [
+        "apps/landing/src/lib/solution-details.ts"
+      ],
+      "finalFileSha256": "4c85bba392305314fce6f239e0cb893ab9bedd9e732314be319f9519b860159f"
+    },
+    {
+      "path": "/illustrations/after-hours/running-toilet.webp",
+      "sha256": "cb45592334ee145f3f8ae7331d174d1afc0aee3c54f7b3b9aab629a9b284c85a",
+      "size": 14076,
+      "upstreamPath": "apps/landing/public/illustrations/after-hours/running-toilet.webp",
+      "upstreamSha256": "cb45592334ee145f3f8ae7331d174d1afc0aee3c54f7b3b9aab629a9b284c85a",
+      "sameBytesAsCurrentUpstream": true,
+      "status": "REUSED_MIT_ILLUSTRATION",
+      "licenseBasis": "MIT repository illustration; no separate conflicting license found at source snapshot",
+      "references": [
+        "apps/landing/src/lib/solution-details.ts"
+      ],
+      "finalFileSha256": "cb45592334ee145f3f8ae7331d174d1afc0aee3c54f7b3b9aab629a9b284c85a"
+    },
+    {
+      "path": "/illustrations/after-hours/service-area.webp",
+      "sha256": "56b3543034270e0aaefbbbbd22517af3d26e9d5b2f0d7ef34dcab4bb5e3f0b74",
+      "size": 15612,
+      "upstreamPath": "apps/landing/public/illustrations/after-hours/service-area.webp",
+      "upstreamSha256": "56b3543034270e0aaefbbbbd22517af3d26e9d5b2f0d7ef34dcab4bb5e3f0b74",
+      "sameBytesAsCurrentUpstream": true,
+      "status": "REUSED_MIT_ILLUSTRATION",
+      "licenseBasis": "MIT repository illustration; no separate conflicting license found at source snapshot",
+      "references": [
+        "apps/landing/src/lib/solution-details.ts"
+      ],
+      "finalFileSha256": "56b3543034270e0aaefbbbbd22517af3d26e9d5b2f0d7ef34dcab4bb5e3f0b74"
+    },
+    {
+      "path": "/illustrations/after-hours/spam.webp",
+      "sha256": "fd6fd7f077a170b22a900c8d6a32878e544615745caaf8cd0a2db32d9ffade9b",
+      "size": 11310,
+      "upstreamPath": "apps/landing/public/illustrations/after-hours/spam.webp",
+      "upstreamSha256": "fd6fd7f077a170b22a900c8d6a32878e544615745caaf8cd0a2db32d9ffade9b",
+      "sameBytesAsCurrentUpstream": true,
+      "status": "REUSED_MIT_ILLUSTRATION",
+      "licenseBasis": "MIT repository illustration; no separate conflicting license found at source snapshot",
+      "references": [
+        "apps/landing/src/lib/solution-details.ts"
+      ],
+      "finalFileSha256": "fd6fd7f077a170b22a900c8d6a32878e544615745caaf8cd0a2db32d9ffade9b"
+    },
+    {
+      "path": "/illustrations/ai-phone-system-small-business-hero.webp",
+      "sha256": "ed3a0f2d0df32141cfe29da912890b9f72085e82ffb387cc2e380d900cf740b5",
+      "size": 41656,
+      "upstreamPath": "apps/landing/public/illustrations/ai-phone-system-small-business-hero.webp",
+      "upstreamSha256": "ed3a0f2d0df32141cfe29da912890b9f72085e82ffb387cc2e380d900cf740b5",
+      "sameBytesAsCurrentUpstream": true,
+      "status": "EDITORIAL_ARCHIVE_SOURCE",
+      "licenseBasis": "MIT repository illustration reproduced within attributed source editorial archive; trademark ownership retained by original owners",
+      "references": [
+        "apps/landing/src/content/blog/ai-phone-system-small-business.md",
+        "apps/landing/src/content/blog/fr/ai-phone-system-small-business.md"
+      ],
+      "finalFileSha256": "ed3a0f2d0df32141cfe29da912890b9f72085e82ffb387cc2e380d900cf740b5"
+    },
+    {
+      "path": "/illustrations/ai-receptionist-savings-hero.webp",
+      "sha256": "6498388de341653e24f2245b2723d35bd1bc984ee526c6c16a3d3151c8653823",
+      "size": 44428,
+      "upstreamPath": "apps/landing/public/illustrations/ai-receptionist-savings-hero.webp",
+      "upstreamSha256": "6498388de341653e24f2245b2723d35bd1bc984ee526c6c16a3d3151c8653823",
+      "sameBytesAsCurrentUpstream": true,
+      "status": "EDITORIAL_ARCHIVE_SOURCE",
+      "licenseBasis": "MIT repository illustration reproduced within attributed source editorial archive; trademark ownership retained by original owners",
+      "references": [
+        "apps/landing/src/content/blog/ai-receptionist-savings.md",
+        "apps/landing/src/content/blog/fr/ai-receptionist-savings.md"
+      ],
+      "finalFileSha256": "6498388de341653e24f2245b2723d35bd1bc984ee526c6c16a3d3151c8653823"
+    },
+    {
+      "path": "/illustrations/ai-receptionist-vs-virtual-receptionist-hero.webp",
+      "sha256": "749b639159f95dc08f5a1c6638a321111853bd645c9fbccde81037869de8a8a6",
+      "size": 40360,
+      "upstreamPath": "apps/landing/public/illustrations/ai-receptionist-vs-virtual-receptionist-hero.webp",
+      "upstreamSha256": "749b639159f95dc08f5a1c6638a321111853bd645c9fbccde81037869de8a8a6",
+      "sameBytesAsCurrentUpstream": true,
+      "status": "EDITORIAL_ARCHIVE_SOURCE",
+      "licenseBasis": "MIT repository illustration reproduced within attributed source editorial archive; trademark ownership retained by original owners",
+      "references": [
+        "apps/landing/src/content/blog/ai-receptionist-vs-virtual-receptionist.md",
+        "apps/landing/src/content/blog/fr/ai-receptionist-vs-virtual-receptionist.md"
+      ],
+      "finalFileSha256": "749b639159f95dc08f5a1c6638a321111853bd645c9fbccde81037869de8a8a6"
+    },
+    {
+      "path": "/illustrations/ai-receptionist-vs-voicemail-hero.webp",
+      "sha256": "b9c0a9258ff5f5aed303a3e42cc5b2957bb79e70b5d2fdaf030a1c1199616e22",
+      "size": 31034,
+      "upstreamPath": "apps/landing/public/illustrations/ai-receptionist-vs-voicemail-hero.webp",
+      "upstreamSha256": "b9c0a9258ff5f5aed303a3e42cc5b2957bb79e70b5d2fdaf030a1c1199616e22",
+      "sameBytesAsCurrentUpstream": true,
+      "status": "EDITORIAL_ARCHIVE_SOURCE",
+      "licenseBasis": "MIT repository illustration reproduced within attributed source editorial archive; trademark ownership retained by original owners",
+      "references": [
+        "apps/landing/src/content/blog/ai-receptionist-vs-voicemail.md",
+        "apps/landing/src/content/blog/fr/ai-receptionist-vs-voicemail.md"
+      ],
+      "finalFileSha256": "b9c0a9258ff5f5aed303a3e42cc5b2957bb79e70b5d2fdaf030a1c1199616e22"
+    },
+    {
+      "path": "/illustrations/ai-receptionist-workflows-hero.webp",
+      "sha256": "1a14b84058ff64e598f80eaf50f0a9e7b63976c0b9734cb69b378cf0be0884af",
+      "size": 202838,
+      "upstreamPath": "apps/landing/public/illustrations/ai-receptionist-workflows-hero.webp",
+      "upstreamSha256": "1a14b84058ff64e598f80eaf50f0a9e7b63976c0b9734cb69b378cf0be0884af",
+      "sameBytesAsCurrentUpstream": true,
+      "status": "EDITORIAL_ARCHIVE_SOURCE",
+      "licenseBasis": "MIT repository illustration reproduced within attributed source editorial archive; trademark ownership retained by original owners",
+      "references": [
+        "apps/landing/src/content/blog/ai-receptionist-workflows.md",
+        "apps/landing/src/content/blog/fr/ai-receptionist-workflows.md"
+      ],
+      "finalFileSha256": "1a14b84058ff64e598f80eaf50f0a9e7b63976c0b9734cb69b378cf0be0884af"
+    },
+    {
+      "path": "/illustrations/ai-voice-agent-gpt-live-hero.webp",
+      "sha256": "c94fa315bdde93dec6161dec2bd40b142c9687728d1a0164f433fd1f05424c8b",
+      "size": 33972,
+      "upstreamPath": "apps/landing/public/illustrations/ai-voice-agent-gpt-live-hero.webp",
+      "upstreamSha256": "c94fa315bdde93dec6161dec2bd40b142c9687728d1a0164f433fd1f05424c8b",
+      "sameBytesAsCurrentUpstream": true,
+      "status": "EDITORIAL_ARCHIVE_SOURCE",
+      "licenseBasis": "MIT repository illustration reproduced within attributed source editorial archive; trademark ownership retained by original owners",
+      "references": [
+        "apps/landing/src/content/blog/ai-voice-agent-gpt-live.md",
+        "apps/landing/src/content/blog/fr/ai-voice-agent-gpt-live.md"
+      ],
+      "finalFileSha256": "c94fa315bdde93dec6161dec2bd40b142c9687728d1a0164f433fd1f05424c8b"
+    },
+    {
+      "path": "/illustrations/automated-answering-service-hero.webp",
+      "sha256": "3fb7353a15168c19010a49afe49d9c7b7ad65066559ef794b0c3475429f2f8dc",
+      "size": 43704,
+      "upstreamPath": "apps/landing/public/illustrations/automated-answering-service-hero.webp",
+      "upstreamSha256": "3fb7353a15168c19010a49afe49d9c7b7ad65066559ef794b0c3475429f2f8dc",
+      "sameBytesAsCurrentUpstream": true,
+      "status": "EDITORIAL_ARCHIVE_SOURCE",
+      "licenseBasis": "MIT repository illustration reproduced within attributed source editorial archive; trademark ownership retained by original owners",
+      "references": [
+        "apps/landing/src/content/blog/automated-answering-service.md",
+        "apps/landing/src/content/blog/fr/automated-answering-service.md"
+      ],
+      "finalFileSha256": "3fb7353a15168c19010a49afe49d9c7b7ad65066559ef794b0c3475429f2f8dc"
+    },
+    {
+      "path": "/illustrations/best-answering-service-for-small-business-hero.webp",
+      "sha256": "e2435de4eface67c1e71a7c50dc8b8a1a1086c7d2fc088e4a1236066ad906223",
+      "size": 46742,
+      "upstreamPath": "apps/landing/public/illustrations/best-answering-service-for-small-business-hero.webp",
+      "upstreamSha256": "e2435de4eface67c1e71a7c50dc8b8a1a1086c7d2fc088e4a1236066ad906223",
+      "sameBytesAsCurrentUpstream": true,
+      "status": "EDITORIAL_ARCHIVE_SOURCE",
+      "licenseBasis": "MIT repository illustration reproduced within attributed source editorial archive; trademark ownership retained by original owners",
+      "references": [
+        "apps/landing/src/content/blog/best-answering-service-for-small-business.md",
+        "apps/landing/src/content/blog/fr/best-answering-service-for-small-business.md"
+      ],
+      "finalFileSha256": "e2435de4eface67c1e71a7c50dc8b8a1a1086c7d2fc088e4a1236066ad906223"
+    },
+    {
+      "path": "/illustrations/best-answering-services-for-contractors-hero.webp",
+      "sha256": "25d5b4a619889b498f00f41bf222baaf7be6856f898b88b7a9318258bd48f33d",
+      "size": 46702,
+      "upstreamPath": "apps/landing/public/illustrations/best-answering-services-for-contractors-hero.webp",
+      "upstreamSha256": "25d5b4a619889b498f00f41bf222baaf7be6856f898b88b7a9318258bd48f33d",
+      "sameBytesAsCurrentUpstream": true,
+      "status": "EDITORIAL_ARCHIVE_SOURCE",
+      "licenseBasis": "MIT repository illustration reproduced within attributed source editorial archive; trademark ownership retained by original owners",
+      "references": [
+        "apps/landing/src/content/blog/best-answering-services-for-contractors.md",
+        "apps/landing/src/content/blog/fr/best-answering-services-for-contractors.md"
+      ],
+      "finalFileSha256": "25d5b4a619889b498f00f41bf222baaf7be6856f898b88b7a9318258bd48f33d"
+    },
+    {
+      "path": "/illustrations/best-hvac-answering-services-hero.webp",
+      "sha256": "78cb6e32949816821fb85f5fca1953f0747bcf6185b306a235164a704b9174c2",
+      "size": 43950,
+      "upstreamPath": "apps/landing/public/illustrations/best-hvac-answering-services-hero.webp",
+      "upstreamSha256": "78cb6e32949816821fb85f5fca1953f0747bcf6185b306a235164a704b9174c2",
+      "sameBytesAsCurrentUpstream": true,
+      "status": "EDITORIAL_ARCHIVE_SOURCE",
+      "licenseBasis": "MIT repository illustration reproduced within attributed source editorial archive; trademark ownership retained by original owners",
+      "references": [
+        "apps/landing/src/content/blog/best-hvac-answering-services.md",
+        "apps/landing/src/content/blog/fr/best-hvac-answering-services.md"
+      ],
+      "finalFileSha256": "78cb6e32949816821fb85f5fca1953f0747bcf6185b306a235164a704b9174c2"
+    },
+    {
+      "path": "/illustrations/best-open-source-ai-phone-answering-services-hero.webp",
+      "sha256": "0b91b77e172e1f76e7c417a474b40fdf9345e26fc2a1c0ebf48c5375c712708f",
+      "size": 68350,
+      "upstreamPath": "apps/landing/public/illustrations/best-open-source-ai-phone-answering-services-hero.webp",
+      "upstreamSha256": "0b91b77e172e1f76e7c417a474b40fdf9345e26fc2a1c0ebf48c5375c712708f",
+      "sameBytesAsCurrentUpstream": true,
+      "status": "EDITORIAL_ARCHIVE_SOURCE",
+      "licenseBasis": "MIT repository illustration reproduced within attributed source editorial archive; trademark ownership retained by original owners",
+      "references": [
+        "apps/landing/src/content/blog/best-open-source-ai-phone-answering-services.md",
+        "apps/landing/src/content/blog/fr/best-open-source-ai-phone-answering-services.md"
+      ],
+      "finalFileSha256": "0b91b77e172e1f76e7c417a474b40fdf9345e26fc2a1c0ebf48c5375c712708f"
+    },
+    {
+      "path": "/illustrations/best-plumbing-answering-services-hero.webp",
+      "sha256": "6f8ff6dfe9f52523be60d5d6a91ed34a0209ec6bab9f52dc568fe4e6b2f3c164",
+      "size": 44618,
+      "upstreamPath": "apps/landing/public/illustrations/best-plumbing-answering-services-hero.webp",
+      "upstreamSha256": "6f8ff6dfe9f52523be60d5d6a91ed34a0209ec6bab9f52dc568fe4e6b2f3c164",
+      "sameBytesAsCurrentUpstream": true,
+      "status": "EDITORIAL_ARCHIVE_SOURCE",
+      "licenseBasis": "MIT repository illustration reproduced within attributed source editorial archive; trademark ownership retained by original owners",
+      "references": [
+        "apps/landing/src/content/blog/best-plumbing-answering-services.md",
+        "apps/landing/src/content/blog/fr/best-plumbing-answering-services.md"
+      ],
+      "finalFileSha256": "6f8ff6dfe9f52523be60d5d6a91ed34a0209ec6bab9f52dc568fe4e6b2f3c164"
+    },
+    {
+      "path": "/illustrations/best-property-management-answering-services-hero.webp",
+      "sha256": "4448dfb50630a88d7d85aaf6a47f8dd280efe26e6ccaf69141c9403e89495ff1",
+      "size": 47566,
+      "upstreamPath": "apps/landing/public/illustrations/best-property-management-answering-services-hero.webp",
+      "upstreamSha256": "4448dfb50630a88d7d85aaf6a47f8dd280efe26e6ccaf69141c9403e89495ff1",
+      "sameBytesAsCurrentUpstream": true,
+      "status": "EDITORIAL_ARCHIVE_SOURCE",
+      "licenseBasis": "MIT repository illustration reproduced within attributed source editorial archive; trademark ownership retained by original owners",
+      "references": [
+        "apps/landing/src/content/blog/best-property-management-answering-services.md",
+        "apps/landing/src/content/blog/fr/best-property-management-answering-services.md"
+      ],
+      "finalFileSha256": "4448dfb50630a88d7d85aaf6a47f8dd280efe26e6ccaf69141c9403e89495ff1"
+    },
+    {
+      "path": "/illustrations/booking-flow-caleonis.svg",
+      "sha256": "4bc77ed5fc47e8ee54ec6cfacff9faa457e989001d8533138920a2a96ac482dc",
+      "size": 1336,
+      "upstreamPath": null,
+      "upstreamSha256": null,
+      "sameBytesAsCurrentUpstream": null,
+      "status": "ORIGINAL_VECTOR_REPLACEMENT",
+      "licenseBasis": "Original code-native diagram created for Caléonis",
+      "references": [
+        "apps/landing/src/components/LandingPageAdditions.tsx",
+        "apps/landing/src/components/pages/BespokeSolutionPage.astro",
+        "apps/landing/src/lib/localized-seo-landing-pages.ts",
+        "apps/landing/src/lib/seo-landing-pages.ts"
+      ],
+      "finalFileSha256": "4bc77ed5fc47e8ee54ec6cfacff9faa457e989001d8533138920a2a96ac482dc"
+    },
+    {
+      "path": "/illustrations/booking-flow.webp",
+      "sha256": "15a22697da6ee0df557840abdc033b0124bc1ea2c99a29e2a7c9c69673f02da5",
+      "size": 86530,
+      "upstreamPath": "apps/landing/public/illustrations/booking-flow.webp",
+      "upstreamSha256": "15a22697da6ee0df557840abdc033b0124bc1ea2c99a29e2a7c9c69673f02da5",
+      "sameBytesAsCurrentUpstream": true,
+      "status": "RETAINED_NOT_REFERENCED",
+      "licenseBasis": "Repository MIT scope only; no independent third-party mark or portrait grant assumed",
+      "references": [],
+      "finalFileSha256": "15a22697da6ee0df557840abdc033b0124bc1ea2c99a29e2a7c9c69673f02da5"
+    },
+    {
+      "path": "/illustrations/build-or-buy-ai-receptionist-hero.webp",
+      "sha256": "68db062bef7a01670d0656d5f94e3d2d6d9873bdd42f8eb1e2db012ceee914b9",
+      "size": 65144,
+      "upstreamPath": "apps/landing/public/illustrations/build-or-buy-ai-receptionist-hero.webp",
+      "upstreamSha256": "68db062bef7a01670d0656d5f94e3d2d6d9873bdd42f8eb1e2db012ceee914b9",
+      "sameBytesAsCurrentUpstream": true,
+      "status": "EDITORIAL_ARCHIVE_SOURCE",
+      "licenseBasis": "MIT repository illustration reproduced within attributed source editorial archive; trademark ownership retained by original owners",
+      "references": [
+        "apps/landing/src/content/blog/build-or-buy-ai-receptionist.md",
+        "apps/landing/src/content/blog/fr/build-or-buy-ai-receptionist.md"
+      ],
+      "finalFileSha256": "68db062bef7a01670d0656d5f94e3d2d6d9873bdd42f8eb1e2db012ceee914b9"
+    },
+    {
+      "path": "/illustrations/business-knowledge.webp",
+      "sha256": "3db732f738664cf1484896cdb5688f2c96c1eb3287864c12d98c970ec0c19919",
+      "size": 42380,
+      "upstreamPath": "apps/landing/public/illustrations/business-knowledge.webp",
+      "upstreamSha256": "3db732f738664cf1484896cdb5688f2c96c1eb3287864c12d98c970ec0c19919",
+      "sameBytesAsCurrentUpstream": true,
+      "status": "REUSED_MIT_ILLUSTRATION",
+      "licenseBasis": "MIT repository illustration; no separate conflicting license found at source snapshot",
+      "references": [
+        "apps/landing/src/components/LandingPageAdditions.tsx",
+        "apps/landing/src/lib/seo-landing-pages.ts"
+      ],
+      "finalFileSha256": "3db732f738664cf1484896cdb5688f2c96c1eb3287864c12d98c970ec0c19919"
+    },
+    {
+      "path": "/illustrations/call-booking-summary.webp",
+      "sha256": "ff5d733e098a0b2cf972bac8cbebd183666c428db80ab9e922264c4ecd701be2",
+      "size": 123118,
+      "upstreamPath": "apps/landing/public/illustrations/call-booking-summary.webp",
+      "upstreamSha256": "ff5d733e098a0b2cf972bac8cbebd183666c428db80ab9e922264c4ecd701be2",
+      "sameBytesAsCurrentUpstream": true,
+      "status": "REUSED_MIT_ILLUSTRATION",
+      "licenseBasis": "MIT repository illustration; no separate conflicting license found at source snapshot",
+      "references": [
+        "apps/landing/src/lib/seo-landing-pages.ts"
+      ],
+      "finalFileSha256": "ff5d733e098a0b2cf972bac8cbebd183666c428db80ab9e922264c4ecd701be2"
+    },
+    {
+      "path": "/illustrations/call-capture-caleonis.svg",
+      "sha256": "e0b178d2c2caa60a41e02e35ad3524c8c82f6dd3e67adc607ff5e1d88fe21458",
+      "size": 1297,
+      "upstreamPath": null,
+      "upstreamSha256": null,
+      "sameBytesAsCurrentUpstream": null,
+      "status": "ORIGINAL_VECTOR_REPLACEMENT",
+      "licenseBasis": "Original code-native diagram created for Caléonis",
+      "references": [
+        "apps/landing/src/components/LandingPageAdditions.tsx",
+        "apps/landing/src/components/pages/BespokeSolutionPage.astro",
+        "apps/landing/src/lib/localized-seo-landing-pages.ts",
+        "apps/landing/src/lib/seo-landing-pages.ts"
+      ],
+      "finalFileSha256": "e0b178d2c2caa60a41e02e35ad3524c8c82f6dd3e67adc607ff5e1d88fe21458"
+    },
+    {
+      "path": "/illustrations/call-capture.webp",
+      "sha256": "364333b3afdbd225e670b9e08a3e7bab0109d6d2db8e876a5bc1af28d46b148f",
+      "size": 71882,
+      "upstreamPath": "apps/landing/public/illustrations/call-capture.webp",
+      "upstreamSha256": "364333b3afdbd225e670b9e08a3e7bab0109d6d2db8e876a5bc1af28d46b148f",
+      "sameBytesAsCurrentUpstream": true,
+      "status": "RETAINED_NOT_REFERENCED",
+      "licenseBasis": "Repository MIT scope only; no independent third-party mark or portrait grant assumed",
+      "references": [],
+      "finalFileSha256": "364333b3afdbd225e670b9e08a3e7bab0109d6d2db8e876a5bc1af28d46b148f"
+    },
+    {
+      "path": "/illustrations/call-playback-demo.webp",
+      "sha256": "de7cf6cea2a836022b4cf08f050ece600b4a90a3bb5fe679151be6cf9cee0180",
+      "size": 162530,
+      "upstreamPath": "apps/landing/public/illustrations/call-playback-demo.webp",
+      "upstreamSha256": "de7cf6cea2a836022b4cf08f050ece600b4a90a3bb5fe679151be6cf9cee0180",
+      "sameBytesAsCurrentUpstream": true,
+      "status": "RETAINED_NOT_REFERENCED",
+      "licenseBasis": "Repository MIT scope only; no independent third-party mark or portrait grant assumed",
+      "references": [],
+      "finalFileSha256": "de7cf6cea2a836022b4cf08f050ece600b4a90a3bb5fe679151be6cf9cee0180"
+    },
+    {
+      "path": "/illustrations/call-routing-team-caleonis.svg",
+      "sha256": "d07aa7d5f7cf75dab53328e1c6fa4d40e8451ade90945998651f98e5e1295777",
+      "size": 1346,
+      "upstreamPath": null,
+      "upstreamSha256": null,
+      "sameBytesAsCurrentUpstream": null,
+      "status": "ORIGINAL_VECTOR_REPLACEMENT",
+      "licenseBasis": "Original code-native diagram created for Caléonis",
+      "references": [
+        "apps/landing/src/components/LandingPageAdditions.tsx",
+        "apps/landing/src/lib/seo-landing-pages.ts"
+      ],
+      "finalFileSha256": "d07aa7d5f7cf75dab53328e1c6fa4d40e8451ade90945998651f98e5e1295777"
+    },
+    {
+      "path": "/illustrations/call-routing-team.webp",
+      "sha256": "32f9c3349d332bdec0218a06a9086cbce1bb8ca995954df8c15211e4aa1c0de5",
+      "size": 36754,
+      "upstreamPath": "apps/landing/public/illustrations/call-routing-team.webp",
+      "upstreamSha256": "32f9c3349d332bdec0218a06a9086cbce1bb8ca995954df8c15211e4aa1c0de5",
+      "sameBytesAsCurrentUpstream": true,
+      "status": "RETAINED_NOT_REFERENCED",
+      "licenseBasis": "Repository MIT scope only; no independent third-party mark or portrait grant assumed",
+      "references": [],
+      "finalFileSha256": "32f9c3349d332bdec0218a06a9086cbce1bb8ca995954df8c15211e4aa1c0de5"
+    },
+    {
+      "path": "/illustrations/calls-need-person.webp",
+      "sha256": "c50a55db0b54415c41af3984f01d216747472c042c8b08e237b13d48dcb3caca",
+      "size": 298588,
+      "upstreamPath": "apps/landing/public/illustrations/calls-need-person.webp",
+      "upstreamSha256": "c50a55db0b54415c41af3984f01d216747472c042c8b08e237b13d48dcb3caca",
+      "sameBytesAsCurrentUpstream": true,
+      "status": "REUSED_MIT_ILLUSTRATION",
+      "licenseBasis": "MIT repository illustration; no separate conflicting license found at source snapshot",
+      "references": [
+        "apps/landing/src/lib/seo-landing-pages.ts"
+      ],
+      "finalFileSha256": "c50a55db0b54415c41af3984f01d216747472c042c8b08e237b13d48dcb3caca"
+    },
+    {
+      "path": "/illustrations/capabilities-network.webp",
+      "sha256": "587346c0551dbfcfd20dba29d18cb94d5af3a0d15d1439d2caaa0f0f404ec2a2",
+      "size": 46964,
+      "upstreamPath": "apps/landing/public/illustrations/capabilities-network.webp",
+      "upstreamSha256": "587346c0551dbfcfd20dba29d18cb94d5af3a0d15d1439d2caaa0f0f404ec2a2",
+      "sameBytesAsCurrentUpstream": true,
+      "status": "REUSED_MIT_ILLUSTRATION",
+      "licenseBasis": "MIT repository illustration; no separate conflicting license found at source snapshot",
+      "references": [
+        "apps/landing/src/components/FeatureGrid.tsx"
+      ],
+      "finalFileSha256": "587346c0551dbfcfd20dba29d18cb94d5af3a0d15d1439d2caaa0f0f404ec2a2"
+    },
+    {
+      "path": "/illustrations/capabilities-receptionist.webp",
+      "sha256": "b47fc31e8c745915e0521de6382f658a880dfecf40cdd5a7c58c17674eada58d",
+      "size": 31734,
+      "upstreamPath": "apps/landing/public/illustrations/capabilities-receptionist.webp",
+      "upstreamSha256": "b47fc31e8c745915e0521de6382f658a880dfecf40cdd5a7c58c17674eada58d",
+      "sameBytesAsCurrentUpstream": true,
+      "status": "RETAINED_NOT_REFERENCED",
+      "licenseBasis": "Repository MIT scope only; no independent third-party mark or portrait grant assumed",
+      "references": [],
+      "finalFileSha256": "b47fc31e8c745915e0521de6382f658a880dfecf40cdd5a7c58c17674eada58d"
+    },
+    {
+      "path": "/illustrations/cloudtalk-ai-receptionist-alternative-hero.webp",
+      "sha256": "7886d6119720774f272e72cffdcb28b443b7f82639fbd15da9ececd82610c92c",
+      "size": 31244,
+      "upstreamPath": "apps/landing/public/illustrations/cloudtalk-ai-receptionist-alternative-hero.webp",
+      "upstreamSha256": "7886d6119720774f272e72cffdcb28b443b7f82639fbd15da9ececd82610c92c",
+      "sameBytesAsCurrentUpstream": true,
+      "status": "EDITORIAL_ARCHIVE_SOURCE",
+      "licenseBasis": "MIT repository illustration reproduced within attributed source editorial archive; trademark ownership retained by original owners",
+      "references": [
+        "apps/landing/src/content/blog/cloudtalk-ai-receptionist-alternative.md",
+        "apps/landing/src/content/blog/fr/cloudtalk-ai-receptionist-alternative.md"
+      ],
+      "finalFileSha256": "7886d6119720774f272e72cffdcb28b443b7f82639fbd15da9ececd82610c92c"
+    },
+    {
+      "path": "/illustrations/dental/after-extraction.webp",
+      "sha256": "c06b6d59c5152bd5bac7399e5d0b50d02b69ef6322c726364d10a315f8eae0b1",
+      "size": 10410,
+      "upstreamPath": "apps/landing/public/illustrations/dental/after-extraction.webp",
+      "upstreamSha256": "c06b6d59c5152bd5bac7399e5d0b50d02b69ef6322c726364d10a315f8eae0b1",
+      "sameBytesAsCurrentUpstream": true,
+      "status": "REUSED_MIT_ILLUSTRATION",
+      "licenseBasis": "MIT repository illustration; no separate conflicting license found at source snapshot",
+      "references": [
+        "apps/landing/src/lib/solution-details.ts"
+      ],
+      "finalFileSha256": "c06b6d59c5152bd5bac7399e5d0b50d02b69ef6322c726364d10a315f8eae0b1"
+    },
+    {
+      "path": "/illustrations/dental/billing.webp",
+      "sha256": "898f6bbd781dad413b8686120bef61f618dd1189654ed8c843e9035d99ed915d",
+      "size": 11966,
+      "upstreamPath": "apps/landing/public/illustrations/dental/billing.webp",
+      "upstreamSha256": "898f6bbd781dad413b8686120bef61f618dd1189654ed8c843e9035d99ed915d",
+      "sameBytesAsCurrentUpstream": true,
+      "status": "REUSED_MIT_ILLUSTRATION",
+      "licenseBasis": "MIT repository illustration; no separate conflicting license found at source snapshot",
+      "references": [
+        "apps/landing/src/lib/solution-details.ts"
+      ],
+      "finalFileSha256": "898f6bbd781dad413b8686120bef61f618dd1189654ed8c843e9035d99ed915d"
+    },
+    {
+      "path": "/illustrations/dental/cracked-tooth.webp",
+      "sha256": "dc539fcfb5e44fa0d21cd8a533c570c837b7f1fdc3050f5bdb8f318f0d84a0cb",
+      "size": 17426,
+      "upstreamPath": "apps/landing/public/illustrations/dental/cracked-tooth.webp",
+      "upstreamSha256": "dc539fcfb5e44fa0d21cd8a533c570c837b7f1fdc3050f5bdb8f318f0d84a0cb",
+      "sameBytesAsCurrentUpstream": true,
+      "status": "REUSED_MIT_ILLUSTRATION",
+      "licenseBasis": "MIT repository illustration; no separate conflicting license found at source snapshot",
+      "references": [
+        "apps/landing/src/lib/solution-details.ts"
+      ],
+      "finalFileSha256": "dc539fcfb5e44fa0d21cd8a533c570c837b7f1fdc3050f5bdb8f318f0d84a0cb"
+    },
+    {
+      "path": "/illustrations/dental/insurance.webp",
+      "sha256": "09a84eb9753cd318b97ab41e3c3eac8ba223a383b89c8a394156604159695130",
+      "size": 19068,
+      "upstreamPath": "apps/landing/public/illustrations/dental/insurance.webp",
+      "upstreamSha256": "09a84eb9753cd318b97ab41e3c3eac8ba223a383b89c8a394156604159695130",
+      "sameBytesAsCurrentUpstream": true,
+      "status": "REUSED_MIT_ILLUSTRATION",
+      "licenseBasis": "MIT repository illustration; no separate conflicting license found at source snapshot",
+      "references": [
+        "apps/landing/src/lib/solution-details.ts"
+      ],
+      "finalFileSha256": "09a84eb9753cd318b97ab41e3c3eac8ba223a383b89c8a394156604159695130"
+    },
+    {
+      "path": "/illustrations/dental/new-patient.webp",
+      "sha256": "2c18b9c8050df224c00e073fc04d345f521ab75cbe5ecded774fd70b725d43ff",
+      "size": 16978,
+      "upstreamPath": "apps/landing/public/illustrations/dental/new-patient.webp",
+      "upstreamSha256": "2c18b9c8050df224c00e073fc04d345f521ab75cbe5ecded774fd70b725d43ff",
+      "sameBytesAsCurrentUpstream": true,
+      "status": "REUSED_MIT_ILLUSTRATION",
+      "licenseBasis": "MIT repository illustration; no separate conflicting license found at source snapshot",
+      "references": [
+        "apps/landing/src/lib/solution-details.ts"
+      ],
+      "finalFileSha256": "2c18b9c8050df224c00e073fc04d345f521ab75cbe5ecded774fd70b725d43ff"
+    },
+    {
+      "path": "/illustrations/dental/reschedule.webp",
+      "sha256": "9cfc007d3dea7d2d8017857f6dfe6a52aaa44a1e6d1c6e89f68cb827f316a08e",
+      "size": 11184,
+      "upstreamPath": "apps/landing/public/illustrations/dental/reschedule.webp",
+      "upstreamSha256": "9cfc007d3dea7d2d8017857f6dfe6a52aaa44a1e6d1c6e89f68cb827f316a08e",
+      "sameBytesAsCurrentUpstream": true,
+      "status": "REUSED_MIT_ILLUSTRATION",
+      "licenseBasis": "MIT repository illustration; no separate conflicting license found at source snapshot",
+      "references": [
+        "apps/landing/src/lib/solution-details.ts"
+      ],
+      "finalFileSha256": "9cfc007d3dea7d2d8017857f6dfe6a52aaa44a1e6d1c6e89f68cb827f316a08e"
+    },
+    {
+      "path": "/illustrations/dialzara-alternative-hero.webp",
+      "sha256": "d2a7e12589c12b66c254c82d54bec47ba900e21eb368a92b7afb0b419e147f7a",
+      "size": 27460,
+      "upstreamPath": "apps/landing/public/illustrations/dialzara-alternative-hero.webp",
+      "upstreamSha256": "d2a7e12589c12b66c254c82d54bec47ba900e21eb368a92b7afb0b419e147f7a",
+      "sameBytesAsCurrentUpstream": true,
+      "status": "EDITORIAL_ARCHIVE_SOURCE",
+      "licenseBasis": "MIT repository illustration reproduced within attributed source editorial archive; trademark ownership retained by original owners",
+      "references": [
+        "apps/landing/src/content/blog/dialzara-alternative.md",
+        "apps/landing/src/content/blog/fr/dialzara-alternative.md"
+      ],
+      "finalFileSha256": "d2a7e12589c12b66c254c82d54bec47ba900e21eb368a92b7afb0b419e147f7a"
+    },
+    {
+      "path": "/illustrations/elevenlabs-reception-alternative-hero.webp",
+      "sha256": "201220c850c6d2648f84bbc65cebb35fd4684301ba1293694bec2808e1d73355",
+      "size": 27422,
+      "upstreamPath": "apps/landing/public/illustrations/elevenlabs-reception-alternative-hero.webp",
+      "upstreamSha256": "201220c850c6d2648f84bbc65cebb35fd4684301ba1293694bec2808e1d73355",
+      "sameBytesAsCurrentUpstream": true,
+      "status": "EDITORIAL_ARCHIVE_SOURCE",
+      "licenseBasis": "MIT repository illustration reproduced within attributed source editorial archive; trademark ownership retained by original owners",
+      "references": [
+        "apps/landing/src/content/blog/elevenlabs-reception-alternative.md",
+        "apps/landing/src/content/blog/fr/elevenlabs-reception-alternative.md"
+      ],
+      "finalFileSha256": "201220c850c6d2648f84bbc65cebb35fd4684301ba1293694bec2808e1d73355"
+    },
+    {
+      "path": "/illustrations/free-ai-receptionist-hero.webp",
+      "sha256": "f67d837fabbba6b445a8780828b5f6e11a4789e90aee998b59f75d3fe2d11366",
+      "size": 42958,
+      "upstreamPath": "apps/landing/public/illustrations/free-ai-receptionist-hero.webp",
+      "upstreamSha256": "f67d837fabbba6b445a8780828b5f6e11a4789e90aee998b59f75d3fe2d11366",
+      "sameBytesAsCurrentUpstream": true,
+      "status": "EDITORIAL_ARCHIVE_SOURCE",
+      "licenseBasis": "MIT repository illustration reproduced within attributed source editorial archive; trademark ownership retained by original owners",
+      "references": [
+        "apps/landing/src/content/blog/fr/free-ai-receptionist.md",
+        "apps/landing/src/content/blog/free-ai-receptionist.md"
+      ],
+      "finalFileSha256": "f67d837fabbba6b445a8780828b5f6e11a4789e90aee998b59f75d3fe2d11366"
+    },
+    {
+      "path": "/illustrations/goodcall-alternative-hero.webp",
+      "sha256": "e0f3dbc55559777778b6e1e343d1ff94e8a0bf0addc497f2cd773792182d9f3d",
+      "size": 30718,
+      "upstreamPath": "apps/landing/public/illustrations/goodcall-alternative-hero.webp",
+      "upstreamSha256": "e0f3dbc55559777778b6e1e343d1ff94e8a0bf0addc497f2cd773792182d9f3d",
+      "sameBytesAsCurrentUpstream": true,
+      "status": "EDITORIAL_ARCHIVE_SOURCE",
+      "licenseBasis": "MIT repository illustration reproduced within attributed source editorial archive; trademark ownership retained by original owners",
+      "references": [
+        "apps/landing/src/content/blog/fr/goodcall-alternative.md",
+        "apps/landing/src/content/blog/goodcall-alternative.md"
+      ],
+      "finalFileSha256": "e0f3dbc55559777778b6e1e343d1ff94e8a0bf0addc497f2cd773792182d9f3d"
+    },
+    {
+      "path": "/illustrations/google-business-profile-calls-hero.webp",
+      "sha256": "cb84885203d50e293cab187c8a91cd9c38bd295a988dfe62ea907369d5a76588",
+      "size": 43974,
+      "upstreamPath": "apps/landing/public/illustrations/google-business-profile-calls-hero.webp",
+      "upstreamSha256": "cb84885203d50e293cab187c8a91cd9c38bd295a988dfe62ea907369d5a76588",
+      "sameBytesAsCurrentUpstream": true,
+      "status": "EDITORIAL_ARCHIVE_SOURCE",
+      "licenseBasis": "MIT repository illustration reproduced within attributed source editorial archive; trademark ownership retained by original owners",
+      "references": [
+        "apps/landing/src/content/blog/fr/google-business-profile-calls.md",
+        "apps/landing/src/content/blog/google-business-profile-calls.md"
+      ],
+      "finalFileSha256": "cb84885203d50e293cab187c8a91cd9c38bd295a988dfe62ea907369d5a76588"
+    },
+    {
+      "path": "/illustrations/how-much-does-an-answering-service-cost-hero.webp",
+      "sha256": "d5d651f00585e997c30f044f3655bc245b7b6fde3df9ec7a81f1bf45356db0db",
+      "size": 42246,
+      "upstreamPath": "apps/landing/public/illustrations/how-much-does-an-answering-service-cost-hero.webp",
+      "upstreamSha256": "d5d651f00585e997c30f044f3655bc245b7b6fde3df9ec7a81f1bf45356db0db",
+      "sameBytesAsCurrentUpstream": true,
+      "status": "EDITORIAL_ARCHIVE_SOURCE",
+      "licenseBasis": "MIT repository illustration reproduced within attributed source editorial archive; trademark ownership retained by original owners",
+      "references": [
+        "apps/landing/src/content/blog/fr/how-much-does-an-answering-service-cost.md",
+        "apps/landing/src/content/blog/how-much-does-an-answering-service-cost.md"
+      ],
+      "finalFileSha256": "d5d651f00585e997c30f044f3655bc245b7b6fde3df9ec7a81f1bf45356db0db"
+    },
+    {
+      "path": "/illustrations/how-to-choose-an-ai-receptionist-hero.webp",
+      "sha256": "a8420366b710c0af5884dedad51bbbeff599ac654f058dbdb13e8120bebd9e61",
+      "size": 281890,
+      "upstreamPath": "apps/landing/public/illustrations/how-to-choose-an-ai-receptionist-hero.webp",
+      "upstreamSha256": "a8420366b710c0af5884dedad51bbbeff599ac654f058dbdb13e8120bebd9e61",
+      "sameBytesAsCurrentUpstream": true,
+      "status": "EDITORIAL_ARCHIVE_SOURCE",
+      "licenseBasis": "MIT repository illustration reproduced within attributed source editorial archive; trademark ownership retained by original owners",
+      "references": [
+        "apps/landing/src/content/blog/fr/how-to-choose-an-ai-receptionist.md",
+        "apps/landing/src/content/blog/how-to-choose-an-ai-receptionist.md"
+      ],
+      "finalFileSha256": "a8420366b710c0af5884dedad51bbbeff599ac654f058dbdb13e8120bebd9e61"
+    },
+    {
+      "path": "/illustrations/how-to-forward-business-calls-hero.webp",
+      "sha256": "d210dc784f727f24c7a67cbfaffcf29b6051db6f960322c2c355dde26d0a3204",
+      "size": 43706,
+      "upstreamPath": "apps/landing/public/illustrations/how-to-forward-business-calls-hero.webp",
+      "upstreamSha256": "d210dc784f727f24c7a67cbfaffcf29b6051db6f960322c2c355dde26d0a3204",
+      "sameBytesAsCurrentUpstream": true,
+      "status": "EDITORIAL_ARCHIVE_SOURCE",
+      "licenseBasis": "MIT repository illustration reproduced within attributed source editorial archive; trademark ownership retained by original owners",
+      "references": [
+        "apps/landing/src/content/blog/fr/how-to-forward-business-calls.md",
+        "apps/landing/src/content/blog/how-to-forward-business-calls.md"
+      ],
+      "finalFileSha256": "d210dc784f727f24c7a67cbfaffcf29b6051db6f960322c2c355dde26d0a3204"
+    },
+    {
+      "path": "/illustrations/human-handoff-caleonis.svg",
+      "sha256": "825f718f801b44ada62628defd3573163af7103a72697c74242c30df7e8d03e4",
+      "size": 990,
+      "upstreamPath": null,
+      "upstreamSha256": null,
+      "sameBytesAsCurrentUpstream": null,
+      "status": "ORIGINAL_VECTOR_REPLACEMENT",
+      "licenseBasis": "Original code-native diagram created for Caléonis",
+      "references": [
+        "apps/landing/src/components/LandingPageAdditions.tsx",
+        "apps/landing/src/lib/seo-landing-pages.ts"
+      ],
+      "finalFileSha256": "825f718f801b44ada62628defd3573163af7103a72697c74242c30df7e8d03e4"
+    },
+    {
+      "path": "/illustrations/human-handoff.webp",
+      "sha256": "6d1cbbd7aa22f924c4ee6610cdd6eeacb2927defde0344d603db63edddbb0069",
+      "size": 135552,
+      "upstreamPath": "apps/landing/public/illustrations/human-handoff.webp",
+      "upstreamSha256": "6d1cbbd7aa22f924c4ee6610cdd6eeacb2927defde0344d603db63edddbb0069",
+      "sameBytesAsCurrentUpstream": true,
+      "status": "RETAINED_NOT_REFERENCED",
+      "licenseBasis": "Repository MIT scope only; no independent third-party mark or portrait grant assumed",
+      "references": [],
+      "finalFileSha256": "6d1cbbd7aa22f924c4ee6610cdd6eeacb2927defde0344d603db63edddbb0069"
+    },
+    {
+      "path": "/illustrations/industry-bookings.webp",
+      "sha256": "69ca3df7dbba8d1f13e632ebb2636732d86f1d7be17e69747aee315b93d0dcca",
+      "size": 129744,
+      "upstreamPath": "apps/landing/public/illustrations/industry-bookings.webp",
+      "upstreamSha256": "69ca3df7dbba8d1f13e632ebb2636732d86f1d7be17e69747aee315b93d0dcca",
+      "sameBytesAsCurrentUpstream": true,
+      "status": "REUSED_MIT_ILLUSTRATION",
+      "licenseBasis": "MIT repository illustration; no separate conflicting license found at source snapshot",
+      "references": [
+        "apps/landing/src/components/pages/BespokeSolutionPage.astro",
+        "apps/landing/src/components/pages/SolutionsIndexPage.astro",
+        "apps/landing/src/lib/localized-seo-landing-pages.ts"
+      ],
+      "finalFileSha256": "69ca3df7dbba8d1f13e632ebb2636732d86f1d7be17e69747aee315b93d0dcca"
+    },
+    {
+      "path": "/illustrations/law-firm-answering-service-hero.webp",
+      "sha256": "34c1a1082712337a093d92241b400cf5ea53bbead479516067c00ab78f0e1cbd",
+      "size": 41850,
+      "upstreamPath": "apps/landing/public/illustrations/law-firm-answering-service-hero.webp",
+      "upstreamSha256": "34c1a1082712337a093d92241b400cf5ea53bbead479516067c00ab78f0e1cbd",
+      "sameBytesAsCurrentUpstream": true,
+      "status": "EDITORIAL_ARCHIVE_SOURCE",
+      "licenseBasis": "MIT repository illustration reproduced within attributed source editorial archive; trademark ownership retained by original owners",
+      "references": [
+        "apps/landing/src/content/blog/fr/law-firm-answering-service.md",
+        "apps/landing/src/content/blog/law-firm-answering-service.md"
+      ],
+      "finalFileSha256": "34c1a1082712337a093d92241b400cf5ea53bbead479516067c00ab78f0e1cbd"
+    },
+    {
+      "path": "/illustrations/lobbystack-is-live-hero.webp",
+      "sha256": "a9cea6c459c95ef987ba3fbf58bf0dbc48d606ddba5018155419d02abaaa2c87",
+      "size": 164024,
+      "upstreamPath": "apps/landing/public/illustrations/lobbystack-is-live-hero.webp",
+      "upstreamSha256": "a9cea6c459c95ef987ba3fbf58bf0dbc48d606ddba5018155419d02abaaa2c87",
+      "sameBytesAsCurrentUpstream": true,
+      "status": "EDITORIAL_ARCHIVE_SOURCE",
+      "licenseBasis": "MIT repository illustration reproduced within attributed source editorial archive; trademark ownership retained by original owners",
+      "references": [
+        "apps/landing/src/content/blog/fr/lobbystack-is-live.md",
+        "apps/landing/src/content/blog/lobbystack-is-live.md"
+      ],
+      "finalFileSha256": "a9cea6c459c95ef987ba3fbf58bf0dbc48d606ddba5018155419d02abaaa2c87"
+    },
+    {
+      "path": "/illustrations/lobbystack-mit-license-ai-receptionist-resellers-hero.webp",
+      "sha256": "d704b8cbc0148a5f6cfdd0cdf970f4c919b18b850ffd5eba9af586aeb39431bf",
+      "size": 123422,
+      "upstreamPath": "apps/landing/public/illustrations/lobbystack-mit-license-ai-receptionist-resellers-hero.webp",
+      "upstreamSha256": "d704b8cbc0148a5f6cfdd0cdf970f4c919b18b850ffd5eba9af586aeb39431bf",
+      "sameBytesAsCurrentUpstream": true,
+      "status": "EDITORIAL_ARCHIVE_SOURCE",
+      "licenseBasis": "MIT repository illustration reproduced within attributed source editorial archive; trademark ownership retained by original owners",
+      "references": [
+        "apps/landing/src/content/blog/fr/lobbystack-mit-license-ai-receptionist-resellers.md",
+        "apps/landing/src/content/blog/lobbystack-mit-license-ai-receptionist-resellers.md"
+      ],
+      "finalFileSha256": "d704b8cbc0148a5f6cfdd0cdf970f4c919b18b850ffd5eba9af586aeb39431bf"
+    },
+    {
+      "path": "/illustrations/missed-calls-booked-work-caleonis.svg",
+      "sha256": "bce2d2acc3f8b503a49d8887b41ed3b898d3cd444cd0f02cab08f7dd329f6d9b",
+      "size": 761,
+      "upstreamPath": null,
+      "upstreamSha256": null,
+      "sameBytesAsCurrentUpstream": null,
+      "status": "ORIGINAL_VECTOR_REPLACEMENT",
+      "licenseBasis": "Original code-native diagram created for Caléonis",
+      "references": [
+        "apps/landing/src/components/LandingPageAdditions.tsx"
+      ],
+      "finalFileSha256": "bce2d2acc3f8b503a49d8887b41ed3b898d3cd444cd0f02cab08f7dd329f6d9b"
+    },
+    {
+      "path": "/illustrations/missed-calls-booked-work.webp",
+      "sha256": "0214c9ad09b9619e81531257d2be61c4f504b68d2ad91c20a94e9868e373b759",
+      "size": 30516,
+      "upstreamPath": "apps/landing/public/illustrations/missed-calls-booked-work.webp",
+      "upstreamSha256": "0214c9ad09b9619e81531257d2be61c4f504b68d2ad91c20a94e9868e373b759",
+      "sameBytesAsCurrentUpstream": true,
+      "status": "RETAINED_NOT_REFERENCED",
+      "licenseBasis": "Repository MIT scope only; no independent third-party mark or portrait grant assumed",
+      "references": [],
+      "finalFileSha256": "0214c9ad09b9619e81531257d2be61c4f504b68d2ad91c20a94e9868e373b759"
+    },
+    {
+      "path": "/illustrations/missed-calls-v3.webp",
+      "sha256": "e093b6ba70f584471e3e430859f7788ba881241fe3c050f40222a859fc2b46c0",
+      "size": 30728,
+      "upstreamPath": "apps/landing/public/illustrations/missed-calls-v3.webp",
+      "upstreamSha256": "e093b6ba70f584471e3e430859f7788ba881241fe3c050f40222a859fc2b46c0",
+      "sameBytesAsCurrentUpstream": true,
+      "status": "REUSED_MIT_ILLUSTRATION",
+      "licenseBasis": "MIT repository illustration; no separate conflicting license found at source snapshot",
+      "references": [
+        "apps/landing/src/lib/seo-landing-pages.ts"
+      ],
+      "finalFileSha256": "e093b6ba70f584471e3e430859f7788ba881241fe3c050f40222a859fc2b46c0"
+    },
+    {
+      "path": "/illustrations/missed-calls-v4.webp",
+      "sha256": "939cd164883c9c1ac2da95484348f1537bf9856b7cb5000c415e4ddaadbc72a5",
+      "size": 71204,
+      "upstreamPath": "apps/landing/public/illustrations/missed-calls-v4.webp",
+      "upstreamSha256": "939cd164883c9c1ac2da95484348f1537bf9856b7cb5000c415e4ddaadbc72a5",
+      "sameBytesAsCurrentUpstream": true,
+      "status": "REUSED_MIT_ILLUSTRATION",
+      "licenseBasis": "MIT repository illustration; no separate conflicting license found at source snapshot",
+      "references": [
+        "apps/landing/src/lib/seo-landing-pages.ts"
+      ],
+      "finalFileSha256": "939cd164883c9c1ac2da95484348f1537bf9856b7cb5000c415e4ddaadbc72a5"
+    },
+    {
+      "path": "/illustrations/missed-calls.webp",
+      "sha256": "9bb966d9e41a1706affd95a0d0fd695378936d1c2b18883e877b8402dc673089",
+      "size": 173592,
+      "upstreamPath": "apps/landing/public/illustrations/missed-calls.webp",
+      "upstreamSha256": "9bb966d9e41a1706affd95a0d0fd695378936d1c2b18883e877b8402dc673089",
+      "sameBytesAsCurrentUpstream": true,
+      "status": "RETAINED_NOT_REFERENCED",
+      "licenseBasis": "Repository MIT scope only; no independent third-party mark or portrait grant assumed",
+      "references": [],
+      "finalFileSha256": "9bb966d9e41a1706affd95a0d0fd695378936d1c2b18883e877b8402dc673089"
+    },
+    {
+      "path": "/illustrations/moneypenny-ai-receptionist-alternative-hero.webp",
+      "sha256": "d4c8c7f6e1c538ebedacc596949030e533f18f9307e836c431e328fbde3c7d3e",
+      "size": 31694,
+      "upstreamPath": "apps/landing/public/illustrations/moneypenny-ai-receptionist-alternative-hero.webp",
+      "upstreamSha256": "d4c8c7f6e1c538ebedacc596949030e533f18f9307e836c431e328fbde3c7d3e",
+      "sameBytesAsCurrentUpstream": true,
+      "status": "EDITORIAL_ARCHIVE_SOURCE",
+      "licenseBasis": "MIT repository illustration reproduced within attributed source editorial archive; trademark ownership retained by original owners",
+      "references": [
+        "apps/landing/src/content/blog/fr/moneypenny-ai-receptionist-alternative.md",
+        "apps/landing/src/content/blog/moneypenny-ai-receptionist-alternative.md"
+      ],
+      "finalFileSha256": "d4c8c7f6e1c538ebedacc596949030e533f18f9307e836c431e328fbde3c7d3e"
+    },
+    {
+      "path": "/illustrations/my-ai-front-desk-alternative-hero.webp",
+      "sha256": "1c915109bed1da92cb1676570ccb5946186a6c9f21198b9fddbbe7035c22567b",
+      "size": 28380,
+      "upstreamPath": "apps/landing/public/illustrations/my-ai-front-desk-alternative-hero.webp",
+      "upstreamSha256": "1c915109bed1da92cb1676570ccb5946186a6c9f21198b9fddbbe7035c22567b",
+      "sameBytesAsCurrentUpstream": true,
+      "status": "EDITORIAL_ARCHIVE_SOURCE",
+      "licenseBasis": "MIT repository illustration reproduced within attributed source editorial archive; trademark ownership retained by original owners",
+      "references": [
+        "apps/landing/src/content/blog/fr/my-ai-front-desk-alternative.md",
+        "apps/landing/src/content/blog/my-ai-front-desk-alternative.md"
+      ],
+      "finalFileSha256": "1c915109bed1da92cb1676570ccb5946186a6c9f21198b9fddbbe7035c22567b"
+    },
+    {
+      "path": "/illustrations/nextiva-xbert-alternative-hero.webp",
+      "sha256": "99baa4d49198c3e9316d5d249da90b101cbdd2c7a34ad782293ebdb828f52e34",
+      "size": 29894,
+      "upstreamPath": "apps/landing/public/illustrations/nextiva-xbert-alternative-hero.webp",
+      "upstreamSha256": "99baa4d49198c3e9316d5d249da90b101cbdd2c7a34ad782293ebdb828f52e34",
+      "sameBytesAsCurrentUpstream": true,
+      "status": "EDITORIAL_ARCHIVE_SOURCE",
+      "licenseBasis": "MIT repository illustration reproduced within attributed source editorial archive; trademark ownership retained by original owners",
+      "references": [
+        "apps/landing/src/content/blog/fr/nextiva-xbert-alternative.md",
+        "apps/landing/src/content/blog/nextiva-xbert-alternative.md"
+      ],
+      "finalFileSha256": "99baa4d49198c3e9316d5d249da90b101cbdd2c7a34ad782293ebdb828f52e34"
+    },
+    {
+      "path": "/illustrations/open-source-ai-receptionist-affiliate-program-hero.webp",
+      "sha256": "61df40217cb97a2c4abd5ad579ffa3a087df80bab07b6a58dd04b2683fe86d4c",
+      "size": 27994,
+      "upstreamPath": "apps/landing/public/illustrations/open-source-ai-receptionist-affiliate-program-hero.webp",
+      "upstreamSha256": "61df40217cb97a2c4abd5ad579ffa3a087df80bab07b6a58dd04b2683fe86d4c",
+      "sameBytesAsCurrentUpstream": true,
+      "status": "REUSED_MIT_ILLUSTRATION",
+      "licenseBasis": "MIT repository illustration; no separate conflicting license found at source snapshot",
+      "references": [
+        "apps/landing/src/components/pages/AffiliateProgramPage.astro",
+        "apps/landing/src/content/blog/ai-receptionist-affiliate-program.md",
+        "apps/landing/src/content/blog/fr/ai-receptionist-affiliate-program.md"
+      ],
+      "finalFileSha256": "61df40217cb97a2c4abd5ad579ffa3a087df80bab07b6a58dd04b2683fe86d4c"
+    },
+    {
+      "path": "/illustrations/open-source-ai-receptionist-stack-hero.webp",
+      "sha256": "3a33a393a0be7ad82080f1c6b73b4e6e1fb3d73ce342250b388b06306af0dd10",
+      "size": 225672,
+      "upstreamPath": "apps/landing/public/illustrations/open-source-ai-receptionist-stack-hero.webp",
+      "upstreamSha256": "3a33a393a0be7ad82080f1c6b73b4e6e1fb3d73ce342250b388b06306af0dd10",
+      "sameBytesAsCurrentUpstream": true,
+      "status": "EDITORIAL_ARCHIVE_SOURCE",
+      "licenseBasis": "MIT repository illustration reproduced within attributed source editorial archive; trademark ownership retained by original owners",
+      "references": [
+        "apps/landing/src/content/blog/fr/open-source-ai-receptionist-stack.md",
+        "apps/landing/src/content/blog/open-source-ai-receptionist-stack.md"
+      ],
+      "finalFileSha256": "3a33a393a0be7ad82080f1c6b73b4e6e1fb3d73ce342250b388b06306af0dd10"
+    },
+    {
+      "path": "/illustrations/outsourced-phone-answering-france-hero.webp",
+      "sha256": "c4662da78d2dfd14ab654ab5c71b551c63644f111c9edf14091694a9fdd35051",
+      "size": 45134,
+      "upstreamPath": "apps/landing/public/illustrations/outsourced-phone-answering-france-hero.webp",
+      "upstreamSha256": "c4662da78d2dfd14ab654ab5c71b551c63644f111c9edf14091694a9fdd35051",
+      "sameBytesAsCurrentUpstream": true,
+      "status": "EDITORIAL_ARCHIVE_SOURCE",
+      "licenseBasis": "MIT repository illustration reproduced within attributed source editorial archive; trademark ownership retained by original owners",
+      "references": [
+        "apps/landing/src/content/blog/fr/outsourced-phone-answering-france.md",
+        "apps/landing/src/content/blog/outsourced-phone-answering-france.md"
+      ],
+      "finalFileSha256": "c4662da78d2dfd14ab654ab5c71b551c63644f111c9edf14091694a9fdd35051"
+    },
+    {
+      "path": "/illustrations/phone-answering-script-hero.webp",
+      "sha256": "73474612e13f72d158c603a7c0ca14cb89d915b83d3d3ddb14ab5cfd7f08ccfc",
+      "size": 43626,
+      "upstreamPath": "apps/landing/public/illustrations/phone-answering-script-hero.webp",
+      "upstreamSha256": "73474612e13f72d158c603a7c0ca14cb89d915b83d3d3ddb14ab5cfd7f08ccfc",
+      "sameBytesAsCurrentUpstream": true,
+      "status": "EDITORIAL_ARCHIVE_SOURCE",
+      "licenseBasis": "MIT repository illustration reproduced within attributed source editorial archive; trademark ownership retained by original owners",
+      "references": [
+        "apps/landing/src/content/blog/fr/phone-answering-script.md",
+        "apps/landing/src/content/blog/phone-answering-script.md"
+      ],
+      "finalFileSha256": "73474612e13f72d158c603a7c0ca14cb89d915b83d3d3ddb14ab5cfd7f08ccfc"
+    },
+    {
+      "path": "/illustrations/quo-sona-alternative-hero.webp",
+      "sha256": "6ad712f085a8758161f98f0ff51054013cd48789970430dbd349b06bb7326ab8",
+      "size": 28990,
+      "upstreamPath": "apps/landing/public/illustrations/quo-sona-alternative-hero.webp",
+      "upstreamSha256": "6ad712f085a8758161f98f0ff51054013cd48789970430dbd349b06bb7326ab8",
+      "sameBytesAsCurrentUpstream": true,
+      "status": "EDITORIAL_ARCHIVE_SOURCE",
+      "licenseBasis": "MIT repository illustration reproduced within attributed source editorial archive; trademark ownership retained by original owners",
+      "references": [
+        "apps/landing/src/content/blog/fr/quo-sona-alternative.md",
+        "apps/landing/src/content/blog/quo-sona-alternative.md"
+      ],
+      "finalFileSha256": "6ad712f085a8758161f98f0ff51054013cd48789970430dbd349b06bb7326ab8"
+    },
+    {
+      "path": "/illustrations/ringcentral-ai-receptionist-alternative-hero.webp",
+      "sha256": "35c79ef13d89a3c3c8bc8b021ff40a5f4eddc45d1cd9d0cb61c6460b2dd40d12",
+      "size": 45480,
+      "upstreamPath": "apps/landing/public/illustrations/ringcentral-ai-receptionist-alternative-hero.webp",
+      "upstreamSha256": "35c79ef13d89a3c3c8bc8b021ff40a5f4eddc45d1cd9d0cb61c6460b2dd40d12",
+      "sameBytesAsCurrentUpstream": true,
+      "status": "EDITORIAL_ARCHIVE_SOURCE",
+      "licenseBasis": "MIT repository illustration reproduced within attributed source editorial archive; trademark ownership retained by original owners",
+      "references": [
+        "apps/landing/src/content/blog/fr/ringcentral-ai-receptionist-alternative.md",
+        "apps/landing/src/content/blog/ringcentral-ai-receptionist-alternative.md"
+      ],
+      "finalFileSha256": "35c79ef13d89a3c3c8bc8b021ff40a5f4eddc45d1cd9d0cb61c6460b2dd40d12"
+    },
+    {
+      "path": "/illustrations/rosie-ai-alternative-hero.webp",
+      "sha256": "a32a937a2c780fa76251d7e22ad27065eca0891c61e916ea16206e0842fdadf1",
+      "size": 44010,
+      "upstreamPath": "apps/landing/public/illustrations/rosie-ai-alternative-hero.webp",
+      "upstreamSha256": "a32a937a2c780fa76251d7e22ad27065eca0891c61e916ea16206e0842fdadf1",
+      "sameBytesAsCurrentUpstream": true,
+      "status": "EDITORIAL_ARCHIVE_SOURCE",
+      "licenseBasis": "MIT repository illustration reproduced within attributed source editorial archive; trademark ownership retained by original owners",
+      "references": [
+        "apps/landing/src/content/blog/fr/rosie-ai-alternative.md",
+        "apps/landing/src/content/blog/rosie-ai-alternative.md"
+      ],
+      "finalFileSha256": "a32a937a2c780fa76251d7e22ad27065eca0891c61e916ea16206e0842fdadf1"
+    },
+    {
+      "path": "/illustrations/ruby-receptionists-alternative-hero.webp",
+      "sha256": "285f514f2c2a08ce33cc100e85b6e453e89cbc76ef2286f0b2be9a7e71382bea",
+      "size": 42858,
+      "upstreamPath": "apps/landing/public/illustrations/ruby-receptionists-alternative-hero.webp",
+      "upstreamSha256": "285f514f2c2a08ce33cc100e85b6e453e89cbc76ef2286f0b2be9a7e71382bea",
+      "sameBytesAsCurrentUpstream": true,
+      "status": "EDITORIAL_ARCHIVE_SOURCE",
+      "licenseBasis": "MIT repository illustration reproduced within attributed source editorial archive; trademark ownership retained by original owners",
+      "references": [
+        "apps/landing/src/content/blog/fr/ruby-receptionists-alternative.md",
+        "apps/landing/src/content/blog/ruby-receptionists-alternative.md"
+      ],
+      "finalFileSha256": "285f514f2c2a08ce33cc100e85b6e453e89cbc76ef2286f0b2be9a7e71382bea"
+    },
+    {
+      "path": "/illustrations/setup-flow.webp",
+      "sha256": "7b71c21689171d1253f17b9b826d92c123ca3514539e4257dc5ea2b0bcc1ed5f",
+      "size": 102540,
+      "upstreamPath": "apps/landing/public/illustrations/setup-flow.webp",
+      "upstreamSha256": "7b71c21689171d1253f17b9b826d92c123ca3514539e4257dc5ea2b0bcc1ed5f",
+      "sameBytesAsCurrentUpstream": true,
+      "status": "RETAINED_NOT_REFERENCED",
+      "licenseBasis": "Repository MIT scope only; no independent third-party mark or portrait grant assumed",
+      "references": [],
+      "finalFileSha256": "7b71c21689171d1253f17b9b826d92c123ca3514539e4257dc5ea2b0bcc1ed5f"
+    },
+    {
+      "path": "/illustrations/smith-ai-alternative-hero.webp",
+      "sha256": "19d246a92fcf0c8b2a594bcb21ff451ea250ab427e27d31336acd695dd4a9a14",
+      "size": 31060,
+      "upstreamPath": "apps/landing/public/illustrations/smith-ai-alternative-hero.webp",
+      "upstreamSha256": "19d246a92fcf0c8b2a594bcb21ff451ea250ab427e27d31336acd695dd4a9a14",
+      "sameBytesAsCurrentUpstream": true,
+      "status": "EDITORIAL_ARCHIVE_SOURCE",
+      "licenseBasis": "MIT repository illustration reproduced within attributed source editorial archive; trademark ownership retained by original owners",
+      "references": [
+        "apps/landing/src/content/blog/fr/smith-ai-alternative.md",
+        "apps/landing/src/content/blog/smith-ai-alternative.md"
+      ],
+      "finalFileSha256": "19d246a92fcf0c8b2a594bcb21ff451ea250ab427e27d31336acd695dd4a9a14"
+    },
+    {
+      "path": "/illustrations/trust-controls.webp",
+      "sha256": "9d2b61b18e5bd2e2e9193e6fa010af21b76476524847eb4d6f09b17436bda2fb",
+      "size": 42774,
+      "upstreamPath": "apps/landing/public/illustrations/trust-controls.webp",
+      "upstreamSha256": "9d2b61b18e5bd2e2e9193e6fa010af21b76476524847eb4d6f09b17436bda2fb",
+      "sameBytesAsCurrentUpstream": true,
+      "status": "REUSED_MIT_ILLUSTRATION",
+      "licenseBasis": "MIT repository illustration; no separate conflicting license found at source snapshot",
+      "references": [
+        "apps/landing/src/lib/seo-landing-pages.ts"
+      ],
+      "finalFileSha256": "9d2b61b18e5bd2e2e9193e6fa010af21b76476524847eb4d6f09b17436bda2fb"
+    },
+    {
+      "path": "/illustrations/upfirst-alternative-hero.webp",
+      "sha256": "94ed88730e0a8457e6aa07d2bbb282e0312241b3c34faaa547a55c89e29ce5e1",
+      "size": 27218,
+      "upstreamPath": "apps/landing/public/illustrations/upfirst-alternative-hero.webp",
+      "upstreamSha256": "94ed88730e0a8457e6aa07d2bbb282e0312241b3c34faaa547a55c89e29ce5e1",
+      "sameBytesAsCurrentUpstream": true,
+      "status": "EDITORIAL_ARCHIVE_SOURCE",
+      "licenseBasis": "MIT repository illustration reproduced within attributed source editorial archive; trademark ownership retained by original owners",
+      "references": [
+        "apps/landing/src/content/blog/fr/upfirst-alternative.md",
+        "apps/landing/src/content/blog/upfirst-alternative.md"
+      ],
+      "finalFileSha256": "94ed88730e0a8457e6aa07d2bbb282e0312241b3c34faaa547a55c89e29ce5e1"
+    },
+    {
+      "path": "/illustrations/value-network.webp",
+      "sha256": "bd7cb905aaec91b71586fbf1c5836a70eb9ced0523c5b44f05dcce08990cfde8",
+      "size": 98916,
+      "upstreamPath": "apps/landing/public/illustrations/value-network.webp",
+      "upstreamSha256": "bd7cb905aaec91b71586fbf1c5836a70eb9ced0523c5b44f05dcce08990cfde8",
+      "sameBytesAsCurrentUpstream": true,
+      "status": "REUSED_MIT_ILLUSTRATION",
+      "licenseBasis": "MIT repository illustration; no separate conflicting license found at source snapshot",
+      "references": [
+        "apps/landing/src/lib/seo-landing-pages.ts"
+      ],
+      "finalFileSha256": "bd7cb905aaec91b71586fbf1c5836a70eb9ced0523c5b44f05dcce08990cfde8"
+    },
+    {
+      "path": "/illustrations/what-is-a-phone-answering-service-hero.webp",
+      "sha256": "e0ed3b43a63faa2eb78685916730d4b3f843e35574442c3787a79ab6131c9ae5",
+      "size": 44438,
+      "upstreamPath": "apps/landing/public/illustrations/what-is-a-phone-answering-service-hero.webp",
+      "upstreamSha256": "e0ed3b43a63faa2eb78685916730d4b3f843e35574442c3787a79ab6131c9ae5",
+      "sameBytesAsCurrentUpstream": true,
+      "status": "EDITORIAL_ARCHIVE_SOURCE",
+      "licenseBasis": "MIT repository illustration reproduced within attributed source editorial archive; trademark ownership retained by original owners",
+      "references": [
+        "apps/landing/src/content/blog/fr/what-is-a-phone-answering-service.md",
+        "apps/landing/src/content/blog/what-is-a-phone-answering-service.md"
+      ],
+      "finalFileSha256": "e0ed3b43a63faa2eb78685916730d4b3f843e35574442c3787a79ab6131c9ae5"
+    },
+    {
+      "path": "/illustrations/why-lobbystack-is-moving-away-from-convex-hero.webp",
+      "sha256": "4890164a5673f7acf80863b00d6305b27217ab8ca84dfe7838713f9f8b6511fd",
+      "size": 116856,
+      "upstreamPath": "apps/landing/public/illustrations/why-lobbystack-is-moving-away-from-convex-hero.webp",
+      "upstreamSha256": "4890164a5673f7acf80863b00d6305b27217ab8ca84dfe7838713f9f8b6511fd",
+      "sameBytesAsCurrentUpstream": true,
+      "status": "EDITORIAL_ARCHIVE_SOURCE",
+      "licenseBasis": "MIT repository illustration reproduced within attributed source editorial archive; trademark ownership retained by original owners",
+      "references": [
+        "apps/landing/src/content/blog/fr/why-lobbystack-is-moving-away-from-convex.md",
+        "apps/landing/src/content/blog/why-lobbystack-is-moving-away-from-convex.md"
+      ],
+      "finalFileSha256": "4890164a5673f7acf80863b00d6305b27217ab8ca84dfe7838713f9f8b6511fd"
+    },
+    {
+      "path": "/illustrations/zoom-ai-receptionist-alternative-hero.webp",
+      "sha256": "8b7be85470d572f68fb83df4169376be9e235c57650097e67946c114eef1b09c",
+      "size": 29616,
+      "upstreamPath": "apps/landing/public/illustrations/zoom-ai-receptionist-alternative-hero.webp",
+      "upstreamSha256": "8b7be85470d572f68fb83df4169376be9e235c57650097e67946c114eef1b09c",
+      "sameBytesAsCurrentUpstream": true,
+      "status": "EDITORIAL_ARCHIVE_SOURCE",
+      "licenseBasis": "MIT repository illustration reproduced within attributed source editorial archive; trademark ownership retained by original owners",
+      "references": [
+        "apps/landing/src/content/blog/fr/zoom-ai-receptionist-alternative.md",
+        "apps/landing/src/content/blog/zoom-ai-receptionist-alternative.md"
+      ],
+      "finalFileSha256": "8b7be85470d572f68fb83df4169376be9e235c57650097e67946c114eef1b09c"
+    },
+    {
+      "path": "/lobbystack-logo-long.webp",
+      "sha256": "e61e0d57f26aff68b30c9fea2dd83cdf4b542fd929ce9dfc22a8c7a72170fdc7",
+      "size": 46172,
+      "upstreamPath": "apps/landing/public/lobbystack-logo-long.webp",
+      "upstreamSha256": "e61e0d57f26aff68b30c9fea2dd83cdf4b542fd929ce9dfc22a8c7a72170fdc7",
+      "sameBytesAsCurrentUpstream": true,
+      "status": "RETAINED_NOT_REFERENCED",
+      "licenseBasis": "Repository MIT scope only; no independent third-party mark or portrait grant assumed",
+      "references": [],
+      "finalFileSha256": "e61e0d57f26aff68b30c9fea2dd83cdf4b542fd929ce9dfc22a8c7a72170fdc7"
+    },
+    {
+      "path": "/lobbystack-logo.svg",
+      "sha256": "fb0717728090334ff09cc0116c2657220a35faed8aae47004a2c985ff1da8c00",
+      "size": 822,
+      "upstreamPath": "apps/landing/public/lobbystack-logo.svg",
+      "upstreamSha256": "0d5c1f73c10104b36ea9fb4877c9f069589baa6fea214f2f5f3c6e52fffa6d07",
+      "sameBytesAsCurrentUpstream": false,
+      "status": "RETAINED_NOT_REFERENCED",
+      "licenseBasis": "Repository MIT scope only; no independent third-party mark or portrait grant assumed",
+      "references": [],
+      "finalFileSha256": "fb0717728090334ff09cc0116c2657220a35faed8aae47004a2c985ff1da8c00"
+    },
+    {
+      "path": "/logo-icon.png",
+      "sha256": "9497921ef452bf7fe65f9c6cc4411c017476fdca3b2d6c264c0f4a762f460d9c",
+      "size": 7829,
+      "upstreamPath": "apps/landing/public/logo-icon.png",
+      "upstreamSha256": "9497921ef452bf7fe65f9c6cc4411c017476fdca3b2d6c264c0f4a762f460d9c",
+      "sameBytesAsCurrentUpstream": true,
+      "status": "RETAINED_NOT_REFERENCED",
+      "licenseBasis": "Repository MIT scope only; no independent third-party mark or portrait grant assumed",
+      "references": [],
+      "finalFileSha256": "9497921ef452bf7fe65f9c6cc4411c017476fdca3b2d6c264c0f4a762f460d9c"
+    },
+    {
+      "path": "/logo-icon.svg",
+      "sha256": "84791175543879c0d144461c74aa0383326988caeedf8dac2678eb6783f08237",
+      "size": 513,
+      "upstreamPath": "apps/landing/public/logo-icon.svg",
+      "upstreamSha256": "576032406abda6e5d1e296330c90c1cd079adf479f942b2507aff6f193da9570",
+      "sameBytesAsCurrentUpstream": false,
+      "status": "RETAINED_NOT_REFERENCED",
+      "licenseBasis": "Repository MIT scope only; no independent third-party mark or portrait grant assumed",
+      "references": [],
+      "finalFileSha256": "84791175543879c0d144461c74aa0383326988caeedf8dac2678eb6783f08237"
+    },
+    {
+      "path": "/og/lobbystack-og.webp",
+      "sha256": "973a6480200f28e5448ee6b897853d4f7b64c2612e3810e5c481375b6b4e221d",
+      "size": 35930,
+      "upstreamPath": "apps/landing/public/og/lobbystack-og.webp",
+      "upstreamSha256": "973a6480200f28e5448ee6b897853d4f7b64c2612e3810e5c481375b6b4e221d",
+      "sameBytesAsCurrentUpstream": true,
+      "status": "RETAINED_NOT_REFERENCED",
+      "licenseBasis": "Repository MIT scope only; no independent third-party mark or portrait grant assumed",
+      "references": [],
+      "finalFileSha256": "973a6480200f28e5448ee6b897853d4f7b64c2612e3810e5c481375b6b4e221d"
+    },
+    {
+      "path": "/screenshots/dashboard.webp",
+      "sha256": "68236a66adfe2c9d311c386bf395087370b208ead1142aec7384abbe0df9f4f7",
+      "size": 128706,
+      "upstreamPath": "apps/landing/public/screenshots/dashboard.webp",
+      "upstreamSha256": "68236a66adfe2c9d311c386bf395087370b208ead1142aec7384abbe0df9f4f7",
+      "sameBytesAsCurrentUpstream": true,
+      "status": "RETAINED_NOT_REFERENCED",
+      "licenseBasis": "Repository MIT scope only; no independent third-party mark or portrait grant assumed",
+      "references": [],
+      "finalFileSha256": "68236a66adfe2c9d311c386bf395087370b208ead1142aec7384abbe0df9f4f7"
+    },
+    {
+      "path": "/screenshots/messages-voice-only-fr-desktop.png",
+      "sha256": "7b64b29f29f3cb97d7b54c56b4f169966959bbfdee868e812a6b1490f7ac7feb",
+      "size": 80573,
+      "upstreamPath": null,
+      "upstreamSha256": null,
+      "sameBytesAsCurrentUpstream": null,
+      "status": "REAL_PRODUCT_CAPTURE",
+      "licenseBasis": "Application capture with synthetic isolated test data",
+      "references": [
+        "apps/landing/src/components/LandingPageAdditions.tsx",
+        "apps/landing/src/components/ProductScreenshots.astro",
+        "apps/landing/src/components/SeoLandingPage.astro",
+        "apps/landing/src/components/trade/AfterTheCall.astro"
+      ],
+      "finalFileSha256": "7b64b29f29f3cb97d7b54c56b4f169966959bbfdee868e812a6b1490f7ac7feb"
+    },
+    {
+      "path": "/screenshots/messages-voice-only-fr-mobile.png",
+      "sha256": "0f57f76e0ea3e4f15b4862df4545d21bd08c29430ac6b554d73019a2a9c2ae52",
+      "size": 22920,
+      "upstreamPath": null,
+      "upstreamSha256": null,
+      "sameBytesAsCurrentUpstream": null,
+      "status": "REAL_PRODUCT_CAPTURE",
+      "licenseBasis": "Application capture with synthetic isolated test data",
+      "references": [
+        "apps/landing/src/components/ProductScreenshots.astro"
+      ],
+      "finalFileSha256": "0f57f76e0ea3e4f15b4862df4545d21bd08c29430ac6b554d73019a2a9c2ae52"
+    }
+  ],
+  "articles": [
+    {
+      "locale": "en",
+      "route": "/blog/ai-phone-system-small-business/",
+      "source": "apps/landing/src/content/blog/ai-phone-system-small-business.md",
+      "currentCharacters": 13658,
+      "upstreamCharacters": 13658,
+      "fullTextPreservedWithOnlyAccountCtaUrlAdaptation": true,
+      "headingCount": 15,
+      "sha256": "3c9a275fba8d44e38c300c2e34065611f5bb273514ffe6d15a9d6761ed5d621d",
+      "upstreamSha256": "3c9a275fba8d44e38c300c2e34065611f5bb273514ffe6d15a9d6761ed5d621d",
+      "allowedLinkAdaptations": [
+        "Account CTA to receptionist.caleonis.com/signup or /login",
+        "Dead original GitHub repository href to official public GitLab repository"
+      ],
+      "workingTreeFileSha256": "d0aae0f9a72632114583ff51c8755323dd12bc4fb7b65705567769f95934607f",
+      "lineEndingNormalization": "LF; earlier source-body proof is retained, this additional digest identifies the final file bytes."
+    },
+    {
+      "locale": "en",
+      "route": "/blog/ai-receptionist-affiliate-program/",
+      "source": "apps/landing/src/content/blog/ai-receptionist-affiliate-program.md",
+      "currentCharacters": 20787,
+      "upstreamCharacters": 20787,
+      "fullTextPreservedWithOnlyAccountCtaUrlAdaptation": true,
+      "headingCount": 43,
+      "sha256": "fdc810bd40feab9e220f2a823778d5276749802e0a3a4e359df41dbeb9f58383",
+      "upstreamSha256": "fdc810bd40feab9e220f2a823778d5276749802e0a3a4e359df41dbeb9f58383",
+      "allowedLinkAdaptations": [
+        "Account CTA to receptionist.caleonis.com/signup or /login",
+        "Dead original GitHub repository href to official public GitLab repository"
+      ],
+      "workingTreeFileSha256": "fdc810bd40feab9e220f2a823778d5276749802e0a3a4e359df41dbeb9f58383",
+      "lineEndingNormalization": "LF; earlier source-body proof is retained, this additional digest identifies the final file bytes."
+    },
+    {
+      "locale": "en",
+      "route": "/blog/ai-receptionist-savings/",
+      "source": "apps/landing/src/content/blog/ai-receptionist-savings.md",
+      "currentCharacters": 29193,
+      "upstreamCharacters": 29193,
+      "fullTextPreservedWithOnlyAccountCtaUrlAdaptation": true,
+      "headingCount": 37,
+      "sha256": "3d761310cc4af586d1e53ad0736494d4a339dab00bb5487050af0580715dc218",
+      "upstreamSha256": "3d761310cc4af586d1e53ad0736494d4a339dab00bb5487050af0580715dc218",
+      "allowedLinkAdaptations": [
+        "Account CTA to receptionist.caleonis.com/signup or /login",
+        "Dead original GitHub repository href to official public GitLab repository"
+      ],
+      "workingTreeFileSha256": "1e52f3b23d213d883cedc5a5f6d220e604f92d713c9d0351d913c13972c7b290",
+      "lineEndingNormalization": "LF; earlier source-body proof is retained, this additional digest identifies the final file bytes."
+    },
+    {
+      "locale": "en",
+      "route": "/blog/ai-receptionist-vs-virtual-receptionist/",
+      "source": "apps/landing/src/content/blog/ai-receptionist-vs-virtual-receptionist.md",
+      "currentCharacters": 20812,
+      "upstreamCharacters": 20806,
+      "fullTextPreservedWithOnlyAccountCtaUrlAdaptation": true,
+      "headingCount": 26,
+      "sha256": "2effebdf14b0448b4287eacd891151875e796a721879431c2a1eb453f6ebf675",
+      "upstreamSha256": "0139d71d3aa4b03074871131bb29397e253c9b8253a6c5ac1f9a19917ad5e38a",
+      "allowedLinkAdaptations": [
+        "Account CTA to receptionist.caleonis.com/signup or /login",
+        "Dead original GitHub repository href to official public GitLab repository"
+      ],
+      "workingTreeFileSha256": "7beae57c2eb13d91bd1ad678504c850fee772d0089789ec3ce93be5f8da7feb4",
+      "lineEndingNormalization": "LF; earlier source-body proof is retained, this additional digest identifies the final file bytes."
+    },
+    {
+      "locale": "en",
+      "route": "/blog/ai-receptionist-vs-voicemail/",
+      "source": "apps/landing/src/content/blog/ai-receptionist-vs-voicemail.md",
+      "currentCharacters": 7188,
+      "upstreamCharacters": 7182,
+      "fullTextPreservedWithOnlyAccountCtaUrlAdaptation": true,
+      "headingCount": 10,
+      "sha256": "bc312b47d9bb290cb60330b7d29c7fd7ea87019f5b007497a8debe3a386b22ad",
+      "upstreamSha256": "5cb484cd53d013d94ade5aa2c9ca24295ee5768e63c05fdf13c730408dd2477b",
+      "allowedLinkAdaptations": [
+        "Account CTA to receptionist.caleonis.com/signup or /login",
+        "Dead original GitHub repository href to official public GitLab repository"
+      ],
+      "workingTreeFileSha256": "3ea915b9bacf4ed07cbc3b7a50a0266b9525ac4eb35a9f80e7f75e1157c749bd",
+      "lineEndingNormalization": "LF; earlier source-body proof is retained, this additional digest identifies the final file bytes."
+    },
+    {
+      "locale": "en",
+      "route": "/blog/ai-receptionist-workflows/",
+      "source": "apps/landing/src/content/blog/ai-receptionist-workflows.md",
+      "currentCharacters": 9382,
+      "upstreamCharacters": 9376,
+      "fullTextPreservedWithOnlyAccountCtaUrlAdaptation": true,
+      "headingCount": 10,
+      "sha256": "8c3925dd5dee973ddbe8209f9aa181d2e8d864c034d9fbb31ccc3ddd7e565d72",
+      "upstreamSha256": "25bfc6ac08fcdbfb136d8e586328584aacb0b12bd44168fe8636369d83ddd3f9",
+      "allowedLinkAdaptations": [
+        "Account CTA to receptionist.caleonis.com/signup or /login",
+        "Dead original GitHub repository href to official public GitLab repository"
+      ],
+      "workingTreeFileSha256": "832fb6c9c75492648f505b748430e4a177c3031a256c2490190cc291380875ef",
+      "lineEndingNormalization": "LF; earlier source-body proof is retained, this additional digest identifies the final file bytes."
+    },
+    {
+      "locale": "en",
+      "route": "/blog/ai-voice-agent-gpt-live/",
+      "source": "apps/landing/src/content/blog/ai-voice-agent-gpt-live.md",
+      "currentCharacters": 7754,
+      "upstreamCharacters": 7754,
+      "fullTextPreservedWithOnlyAccountCtaUrlAdaptation": true,
+      "headingCount": 10,
+      "sha256": "175c4dcf13226dd25e038e53cd27505132933cc2d9cef2b17dcdc48e40e8cfd3",
+      "upstreamSha256": "175c4dcf13226dd25e038e53cd27505132933cc2d9cef2b17dcdc48e40e8cfd3",
+      "allowedLinkAdaptations": [
+        "Account CTA to receptionist.caleonis.com/signup or /login",
+        "Dead original GitHub repository href to official public GitLab repository"
+      ],
+      "workingTreeFileSha256": "fc64e5211e7aca6d1bbfde6b87e0f67be014a0c0bd162b9ae92b5a683a103439",
+      "lineEndingNormalization": "LF; earlier source-body proof is retained, this additional digest identifies the final file bytes."
+    },
+    {
+      "locale": "en",
+      "route": "/blog/automated-answering-service/",
+      "source": "apps/landing/src/content/blog/automated-answering-service.md",
+      "currentCharacters": 21439,
+      "upstreamCharacters": 21439,
+      "fullTextPreservedWithOnlyAccountCtaUrlAdaptation": true,
+      "headingCount": 35,
+      "sha256": "f356e47ce32dec5ebd9fecdfc35360307664ac523f934a88fc3a8949d779e1c0",
+      "upstreamSha256": "f356e47ce32dec5ebd9fecdfc35360307664ac523f934a88fc3a8949d779e1c0",
+      "allowedLinkAdaptations": [
+        "Account CTA to receptionist.caleonis.com/signup or /login",
+        "Dead original GitHub repository href to official public GitLab repository"
+      ],
+      "workingTreeFileSha256": "b2ea87b95a3500bad9c70a121f6bbb8b3219832f51cd6b1fed3413e851339030",
+      "lineEndingNormalization": "LF; earlier source-body proof is retained, this additional digest identifies the final file bytes."
+    },
+    {
+      "locale": "en",
+      "route": "/blog/best-answering-service-for-small-business/",
+      "source": "apps/landing/src/content/blog/best-answering-service-for-small-business.md",
+      "currentCharacters": 28327,
+      "upstreamCharacters": 28327,
+      "fullTextPreservedWithOnlyAccountCtaUrlAdaptation": true,
+      "headingCount": 36,
+      "sha256": "bc09d989758e23f8a978c33f22084834b87d26e4192f2b5ff5f5d9c799ea479b",
+      "upstreamSha256": "bc09d989758e23f8a978c33f22084834b87d26e4192f2b5ff5f5d9c799ea479b",
+      "allowedLinkAdaptations": [
+        "Account CTA to receptionist.caleonis.com/signup or /login",
+        "Dead original GitHub repository href to official public GitLab repository"
+      ],
+      "workingTreeFileSha256": "943ec8e61e5ccecc2a38705beb44e36ecca709b387d5f3373afd8171dd7ac878",
+      "lineEndingNormalization": "LF; earlier source-body proof is retained, this additional digest identifies the final file bytes."
+    },
+    {
+      "locale": "en",
+      "route": "/blog/best-answering-services-for-contractors/",
+      "source": "apps/landing/src/content/blog/best-answering-services-for-contractors.md",
+      "currentCharacters": 30413,
+      "upstreamCharacters": 30413,
+      "fullTextPreservedWithOnlyAccountCtaUrlAdaptation": true,
+      "headingCount": 35,
+      "sha256": "821fc7253ed5cf8c4d8d69a42319c2f09ebf717c414614c226e7003f2bfc8e92",
+      "upstreamSha256": "821fc7253ed5cf8c4d8d69a42319c2f09ebf717c414614c226e7003f2bfc8e92",
+      "allowedLinkAdaptations": [
+        "Account CTA to receptionist.caleonis.com/signup or /login",
+        "Dead original GitHub repository href to official public GitLab repository"
+      ],
+      "workingTreeFileSha256": "4f229b6313e90d9b90594c2664c4fc809fb60870717615720abc0869ac24b7f6",
+      "lineEndingNormalization": "LF; earlier source-body proof is retained, this additional digest identifies the final file bytes."
+    },
+    {
+      "locale": "en",
+      "route": "/blog/best-hvac-answering-services/",
+      "source": "apps/landing/src/content/blog/best-hvac-answering-services.md",
+      "currentCharacters": 31864,
+      "upstreamCharacters": 31864,
+      "fullTextPreservedWithOnlyAccountCtaUrlAdaptation": true,
+      "headingCount": 38,
+      "sha256": "0e602ffae60c9114fe61c1dff34f3a3aea92eb5449ea9245d2df65771b7a14e6",
+      "upstreamSha256": "0e602ffae60c9114fe61c1dff34f3a3aea92eb5449ea9245d2df65771b7a14e6",
+      "allowedLinkAdaptations": [
+        "Account CTA to receptionist.caleonis.com/signup or /login",
+        "Dead original GitHub repository href to official public GitLab repository"
+      ],
+      "workingTreeFileSha256": "78f2b90803d5874d5813d22635e95a3d3d2a62ce66308c9673163440f4bf6943",
+      "lineEndingNormalization": "LF; earlier source-body proof is retained, this additional digest identifies the final file bytes."
+    },
+    {
+      "locale": "en",
+      "route": "/blog/best-open-source-ai-phone-answering-services/",
+      "source": "apps/landing/src/content/blog/best-open-source-ai-phone-answering-services.md",
+      "currentCharacters": 11028,
+      "upstreamCharacters": 11016,
+      "fullTextPreservedWithOnlyAccountCtaUrlAdaptation": true,
+      "headingCount": 11,
+      "sha256": "009b840f40779e8126a39f91c05baf0db561f3a8fec01dd4c0c9c760c890ed7c",
+      "upstreamSha256": "8d27feb7983c07dceec66d4ffd8f0e046202621485f8d806a6da115e751059ec",
+      "allowedLinkAdaptations": [
+        "Account CTA to receptionist.caleonis.com/signup or /login",
+        "Dead original GitHub repository href to official public GitLab repository"
+      ],
+      "workingTreeFileSha256": "c5160d9fe569991e622d3976fbb7c0f49eb0958586c5f9a987669aaa8a5c1595",
+      "lineEndingNormalization": "LF; earlier source-body proof is retained, this additional digest identifies the final file bytes."
+    },
+    {
+      "locale": "en",
+      "route": "/blog/best-plumbing-answering-services/",
+      "source": "apps/landing/src/content/blog/best-plumbing-answering-services.md",
+      "currentCharacters": 33905,
+      "upstreamCharacters": 33905,
+      "fullTextPreservedWithOnlyAccountCtaUrlAdaptation": true,
+      "headingCount": 37,
+      "sha256": "16b97c0a6248d55c4d0872afd1fad2a0f1c0014ed45eeac9f1be29361281f658",
+      "upstreamSha256": "16b97c0a6248d55c4d0872afd1fad2a0f1c0014ed45eeac9f1be29361281f658",
+      "allowedLinkAdaptations": [
+        "Account CTA to receptionist.caleonis.com/signup or /login",
+        "Dead original GitHub repository href to official public GitLab repository"
+      ],
+      "workingTreeFileSha256": "81640d56f92d61e68756e7c66b1b826ad944141484f6d3f9ee223831b4b59282",
+      "lineEndingNormalization": "LF; earlier source-body proof is retained, this additional digest identifies the final file bytes."
+    },
+    {
+      "locale": "en",
+      "route": "/blog/best-property-management-answering-services/",
+      "source": "apps/landing/src/content/blog/best-property-management-answering-services.md",
+      "currentCharacters": 34382,
+      "upstreamCharacters": 34382,
+      "fullTextPreservedWithOnlyAccountCtaUrlAdaptation": true,
+      "headingCount": 39,
+      "sha256": "6087dc25ec5e3dc6f29c4cfa68e60636b58a61c2296463169ec5cde5b370f3ab",
+      "upstreamSha256": "6087dc25ec5e3dc6f29c4cfa68e60636b58a61c2296463169ec5cde5b370f3ab",
+      "allowedLinkAdaptations": [
+        "Account CTA to receptionist.caleonis.com/signup or /login",
+        "Dead original GitHub repository href to official public GitLab repository"
+      ],
+      "workingTreeFileSha256": "62dbd80bc22eabddae543929ea5f72c6e4545432469e4ac7382ea3c7dcd79f86",
+      "lineEndingNormalization": "LF; earlier source-body proof is retained, this additional digest identifies the final file bytes."
+    },
+    {
+      "locale": "en",
+      "route": "/blog/build-or-buy-ai-receptionist/",
+      "source": "apps/landing/src/content/blog/build-or-buy-ai-receptionist.md",
+      "currentCharacters": 15712,
+      "upstreamCharacters": 15712,
+      "fullTextPreservedWithOnlyAccountCtaUrlAdaptation": true,
+      "headingCount": 7,
+      "sha256": "cf3686e6ca5a92474c29bd313e5b68688d29749dafe1d5f442335148edd70c4f",
+      "upstreamSha256": "cf3686e6ca5a92474c29bd313e5b68688d29749dafe1d5f442335148edd70c4f",
+      "allowedLinkAdaptations": [
+        "Account CTA to receptionist.caleonis.com/signup or /login",
+        "Dead original GitHub repository href to official public GitLab repository"
+      ],
+      "workingTreeFileSha256": "cf3686e6ca5a92474c29bd313e5b68688d29749dafe1d5f442335148edd70c4f",
+      "lineEndingNormalization": "LF; earlier source-body proof is retained, this additional digest identifies the final file bytes."
+    },
+    {
+      "locale": "en",
+      "route": "/blog/cloudtalk-ai-receptionist-alternative/",
+      "source": "apps/landing/src/content/blog/cloudtalk-ai-receptionist-alternative.md",
+      "currentCharacters": 7663,
+      "upstreamCharacters": 7657,
+      "fullTextPreservedWithOnlyAccountCtaUrlAdaptation": true,
+      "headingCount": 11,
+      "sha256": "0ee42559d7207937a131eaee0163a6c11d81a9db6d8edec319233c164ee8a5b8",
+      "upstreamSha256": "4e0ad8a4b4640a75d999ceacaadb350f9dbc33638cf90c387e195d081c582fa7",
+      "allowedLinkAdaptations": [
+        "Account CTA to receptionist.caleonis.com/signup or /login",
+        "Dead original GitHub repository href to official public GitLab repository"
+      ],
+      "workingTreeFileSha256": "e6e3483260154877c61f43a3262bd0062579612b06dfe6db988d731974e1846b",
+      "lineEndingNormalization": "LF; earlier source-body proof is retained, this additional digest identifies the final file bytes."
+    },
+    {
+      "locale": "en",
+      "route": "/blog/dialzara-alternative/",
+      "source": "apps/landing/src/content/blog/dialzara-alternative.md",
+      "currentCharacters": 7581,
+      "upstreamCharacters": 7575,
+      "fullTextPreservedWithOnlyAccountCtaUrlAdaptation": true,
+      "headingCount": 11,
+      "sha256": "5a266a3ccffcbee35b1f4abe63914769993d214a2645e74a9806f5dc8a190cf1",
+      "upstreamSha256": "db9e9000d4b23c30c4d7300b45782084cb081eb038d45b93687afcc2ac07da48",
+      "allowedLinkAdaptations": [
+        "Account CTA to receptionist.caleonis.com/signup or /login",
+        "Dead original GitHub repository href to official public GitLab repository"
+      ],
+      "workingTreeFileSha256": "783fd637942362677b4cab529ebec46074f9758166ca6992a759336db93704d8",
+      "lineEndingNormalization": "LF; earlier source-body proof is retained, this additional digest identifies the final file bytes."
+    },
+    {
+      "locale": "en",
+      "route": "/blog/elevenlabs-reception-alternative/",
+      "source": "apps/landing/src/content/blog/elevenlabs-reception-alternative.md",
+      "currentCharacters": 8449,
+      "upstreamCharacters": 8443,
+      "fullTextPreservedWithOnlyAccountCtaUrlAdaptation": true,
+      "headingCount": 11,
+      "sha256": "c3345f3f539eb76e1e9fa643943b9c98416978a5d5be9b234b3590e470c55f75",
+      "upstreamSha256": "9363d6c0998a254c7a5877b57d19d77b49076c2c3ef893e23029f0865dd9d535",
+      "allowedLinkAdaptations": [
+        "Account CTA to receptionist.caleonis.com/signup or /login",
+        "Dead original GitHub repository href to official public GitLab repository"
+      ],
+      "workingTreeFileSha256": "1bb5b57ab1d841cc48bd96b0827a149ade3894195a3d546847bb318d7c2b64c5",
+      "lineEndingNormalization": "LF; earlier source-body proof is retained, this additional digest identifies the final file bytes."
+    },
+    {
+      "locale": "en",
+      "route": "/blog/free-ai-receptionist/",
+      "source": "apps/landing/src/content/blog/free-ai-receptionist.md",
+      "currentCharacters": 16661,
+      "upstreamCharacters": 16661,
+      "fullTextPreservedWithOnlyAccountCtaUrlAdaptation": true,
+      "headingCount": 16,
+      "sha256": "a6f88697da54285ac290b31a3c8b7a701b546335e997d2eba9032f0dfc9146de",
+      "upstreamSha256": "a6f88697da54285ac290b31a3c8b7a701b546335e997d2eba9032f0dfc9146de",
+      "allowedLinkAdaptations": [
+        "Account CTA to receptionist.caleonis.com/signup or /login",
+        "Dead original GitHub repository href to official public GitLab repository"
+      ],
+      "workingTreeFileSha256": "949c1f982f83b46f96df627738ddc6e085c5a0d735e5d87de8e34a13998f8784",
+      "lineEndingNormalization": "LF; earlier source-body proof is retained, this additional digest identifies the final file bytes."
+    },
+    {
+      "locale": "en",
+      "route": "/blog/goodcall-alternative/",
+      "source": "apps/landing/src/content/blog/goodcall-alternative.md",
+      "currentCharacters": 9898,
+      "upstreamCharacters": 9898,
+      "fullTextPreservedWithOnlyAccountCtaUrlAdaptation": true,
+      "headingCount": 11,
+      "sha256": "8238f440355629cd09eb1f17e1e2c305a43f4d04a29bb726a75919096d0b621b",
+      "upstreamSha256": "8238f440355629cd09eb1f17e1e2c305a43f4d04a29bb726a75919096d0b621b",
+      "allowedLinkAdaptations": [
+        "Account CTA to receptionist.caleonis.com/signup or /login",
+        "Dead original GitHub repository href to official public GitLab repository"
+      ],
+      "workingTreeFileSha256": "5eef958c75dbf31117da51df1d58ac694c6dea4f954293d0db45378bbf940c18",
+      "lineEndingNormalization": "LF; earlier source-body proof is retained, this additional digest identifies the final file bytes."
+    },
+    {
+      "locale": "en",
+      "route": "/blog/google-business-profile-calls/",
+      "source": "apps/landing/src/content/blog/google-business-profile-calls.md",
+      "currentCharacters": 16384,
+      "upstreamCharacters": 16384,
+      "fullTextPreservedWithOnlyAccountCtaUrlAdaptation": true,
+      "headingCount": 22,
+      "sha256": "9b478d4406df5457e4617edfa2ea52565ea43258dd06f29f5d2b8a01a7dab2e2",
+      "upstreamSha256": "9b478d4406df5457e4617edfa2ea52565ea43258dd06f29f5d2b8a01a7dab2e2",
+      "allowedLinkAdaptations": [
+        "Account CTA to receptionist.caleonis.com/signup or /login",
+        "Dead original GitHub repository href to official public GitLab repository"
+      ],
+      "workingTreeFileSha256": "c3e0668c4cd51c94b02b8df36ea413a1db12cd4be2281c8675206db4d42c28ab",
+      "lineEndingNormalization": "LF; earlier source-body proof is retained, this additional digest identifies the final file bytes."
+    },
+    {
+      "locale": "en",
+      "route": "/blog/how-much-does-an-answering-service-cost/",
+      "source": "apps/landing/src/content/blog/how-much-does-an-answering-service-cost.md",
+      "currentCharacters": 31497,
+      "upstreamCharacters": 31497,
+      "fullTextPreservedWithOnlyAccountCtaUrlAdaptation": true,
+      "headingCount": 43,
+      "sha256": "c143c902a59d93d32806a2b56521b7bf19002ae748dfcb8550208288fe5a19be",
+      "upstreamSha256": "c143c902a59d93d32806a2b56521b7bf19002ae748dfcb8550208288fe5a19be",
+      "allowedLinkAdaptations": [
+        "Account CTA to receptionist.caleonis.com/signup or /login",
+        "Dead original GitHub repository href to official public GitLab repository"
+      ],
+      "workingTreeFileSha256": "aac49c0232000d972a4e486833ad42c861353291a866a764bb682aaacb2595df",
+      "lineEndingNormalization": "LF; earlier source-body proof is retained, this additional digest identifies the final file bytes."
+    },
+    {
+      "locale": "en",
+      "route": "/blog/how-to-choose-an-ai-receptionist/",
+      "source": "apps/landing/src/content/blog/how-to-choose-an-ai-receptionist.md",
+      "currentCharacters": 20508,
+      "upstreamCharacters": 20508,
+      "fullTextPreservedWithOnlyAccountCtaUrlAdaptation": true,
+      "headingCount": 21,
+      "sha256": "424895d5899c2cc8856d0de82b42b9add1a270f76a25bb9e792c5c83686860e6",
+      "upstreamSha256": "424895d5899c2cc8856d0de82b42b9add1a270f76a25bb9e792c5c83686860e6",
+      "allowedLinkAdaptations": [
+        "Account CTA to receptionist.caleonis.com/signup or /login",
+        "Dead original GitHub repository href to official public GitLab repository"
+      ],
+      "workingTreeFileSha256": "e669d1beeef6d346320af6bd718c01f7497a89d334f3b26f9b55b2e9ab057ce1",
+      "lineEndingNormalization": "LF; earlier source-body proof is retained, this additional digest identifies the final file bytes."
+    },
+    {
+      "locale": "en",
+      "route": "/blog/how-to-forward-business-calls/",
+      "source": "apps/landing/src/content/blog/how-to-forward-business-calls.md",
+      "currentCharacters": 20999,
+      "upstreamCharacters": 20999,
+      "fullTextPreservedWithOnlyAccountCtaUrlAdaptation": true,
+      "headingCount": 28,
+      "sha256": "e6c8a34718bc470f481b7766ecb3ea9af72b4fad2df9c1e9eac92c20fda72d10",
+      "upstreamSha256": "e6c8a34718bc470f481b7766ecb3ea9af72b4fad2df9c1e9eac92c20fda72d10",
+      "allowedLinkAdaptations": [
+        "Account CTA to receptionist.caleonis.com/signup or /login",
+        "Dead original GitHub repository href to official public GitLab repository"
+      ],
+      "workingTreeFileSha256": "83a7732dd88326fe5a76c8271586e34fc2336adf8e1c428d146f718a94c9ac6c",
+      "lineEndingNormalization": "LF; earlier source-body proof is retained, this additional digest identifies the final file bytes."
+    },
+    {
+      "locale": "en",
+      "route": "/blog/law-firm-answering-service/",
+      "source": "apps/landing/src/content/blog/law-firm-answering-service.md",
+      "currentCharacters": 30226,
+      "upstreamCharacters": 30226,
+      "fullTextPreservedWithOnlyAccountCtaUrlAdaptation": true,
+      "headingCount": 36,
+      "sha256": "9c6b237c367a0c4457532544ea26b770b3d9c444355a230a511aea983530d485",
+      "upstreamSha256": "9c6b237c367a0c4457532544ea26b770b3d9c444355a230a511aea983530d485",
+      "allowedLinkAdaptations": [
+        "Account CTA to receptionist.caleonis.com/signup or /login",
+        "Dead original GitHub repository href to official public GitLab repository"
+      ],
+      "workingTreeFileSha256": "ca6034ede09e15356297c42b4b06acb03373da8d7ef8ca4c780d46333b8d05ee",
+      "lineEndingNormalization": "LF; earlier source-body proof is retained, this additional digest identifies the final file bytes."
+    },
+    {
+      "locale": "en",
+      "route": "/blog/lobbystack-is-live/",
+      "source": "apps/landing/src/content/blog/lobbystack-is-live.md",
+      "currentCharacters": 6896,
+      "upstreamCharacters": 6890,
+      "fullTextPreservedWithOnlyAccountCtaUrlAdaptation": true,
+      "headingCount": 6,
+      "sha256": "3ab8bd60d1159dc965854e4aca3fc6103b8a516478ffead6035fa423f443dd22",
+      "upstreamSha256": "cf536471951f2e3380ae9308c3f31f070a5599ddbbf4668493cd80c7da53f2b4",
+      "allowedLinkAdaptations": [
+        "Account CTA to receptionist.caleonis.com/signup or /login",
+        "Dead original GitHub repository href to official public GitLab repository"
+      ],
+      "workingTreeFileSha256": "884356a7342d5b92edbeb415e372bba585a7ea0fbbbe34e3e243f339e0058f4e",
+      "lineEndingNormalization": "LF; earlier source-body proof is retained, this additional digest identifies the final file bytes."
+    },
+    {
+      "locale": "en",
+      "route": "/blog/lobbystack-mit-license-ai-receptionist-resellers/",
+      "source": "apps/landing/src/content/blog/lobbystack-mit-license-ai-receptionist-resellers.md",
+      "currentCharacters": 7291,
+      "upstreamCharacters": 7279,
+      "fullTextPreservedWithOnlyAccountCtaUrlAdaptation": true,
+      "headingCount": 10,
+      "sha256": "156ca747bfe6af8823d45b907d58309d901341e3caf30e1d66126830e5ed76a8",
+      "upstreamSha256": "cf1c6a88b6c67c35d40232ded82f82155610c47802cb79c207a04b9229807c5a",
+      "allowedLinkAdaptations": [
+        "Account CTA to receptionist.caleonis.com/signup or /login",
+        "Dead original GitHub repository href to official public GitLab repository"
+      ],
+      "workingTreeFileSha256": "67e8968c0888c611b4ecbe7782886aa0419c85efeb9e7b54362ad9d4e3d437a3",
+      "lineEndingNormalization": "LF; earlier source-body proof is retained, this additional digest identifies the final file bytes."
+    },
+    {
+      "locale": "en",
+      "route": "/blog/moneypenny-ai-receptionist-alternative/",
+      "source": "apps/landing/src/content/blog/moneypenny-ai-receptionist-alternative.md",
+      "currentCharacters": 9245,
+      "upstreamCharacters": 9245,
+      "fullTextPreservedWithOnlyAccountCtaUrlAdaptation": true,
+      "headingCount": 11,
+      "sha256": "606ef2d63a29d859c1715f285f39424f7ac3f56d235ce085a6022165d4be5bd9",
+      "upstreamSha256": "606ef2d63a29d859c1715f285f39424f7ac3f56d235ce085a6022165d4be5bd9",
+      "allowedLinkAdaptations": [
+        "Account CTA to receptionist.caleonis.com/signup or /login",
+        "Dead original GitHub repository href to official public GitLab repository"
+      ],
+      "workingTreeFileSha256": "e29e3ff3e50badbe5c340fe6d1a47de4b3b3cfb6890f1a6637452ed919f4230a",
+      "lineEndingNormalization": "LF; earlier source-body proof is retained, this additional digest identifies the final file bytes."
+    },
+    {
+      "locale": "en",
+      "route": "/blog/my-ai-front-desk-alternative/",
+      "source": "apps/landing/src/content/blog/my-ai-front-desk-alternative.md",
+      "currentCharacters": 9229,
+      "upstreamCharacters": 9229,
+      "fullTextPreservedWithOnlyAccountCtaUrlAdaptation": true,
+      "headingCount": 10,
+      "sha256": "a8ff747a552f1750a3fd13ef23fc8f84e6cb0442c55269fd1c3f3f763051e8d8",
+      "upstreamSha256": "a8ff747a552f1750a3fd13ef23fc8f84e6cb0442c55269fd1c3f3f763051e8d8",
+      "allowedLinkAdaptations": [
+        "Account CTA to receptionist.caleonis.com/signup or /login",
+        "Dead original GitHub repository href to official public GitLab repository"
+      ],
+      "workingTreeFileSha256": "bbe3a1bf1433e188235ec7d8151c03aadd76ca3caf98c2f71b5f4daa1811eeaa",
+      "lineEndingNormalization": "LF; earlier source-body proof is retained, this additional digest identifies the final file bytes."
+    },
+    {
+      "locale": "en",
+      "route": "/blog/nextiva-xbert-alternative/",
+      "source": "apps/landing/src/content/blog/nextiva-xbert-alternative.md",
+      "currentCharacters": 7480,
+      "upstreamCharacters": 7480,
+      "fullTextPreservedWithOnlyAccountCtaUrlAdaptation": true,
+      "headingCount": 11,
+      "sha256": "7411ee08dbf90fefa6a84f0715cc603c1e75894ffaaa7a6293bfeeb2f156aaae",
+      "upstreamSha256": "7411ee08dbf90fefa6a84f0715cc603c1e75894ffaaa7a6293bfeeb2f156aaae",
+      "allowedLinkAdaptations": [
+        "Account CTA to receptionist.caleonis.com/signup or /login",
+        "Dead original GitHub repository href to official public GitLab repository"
+      ],
+      "workingTreeFileSha256": "874d707425cec124c19b07d019e5ef83a44d3640ee1c7fd31445b1062fcc59ca",
+      "lineEndingNormalization": "LF; earlier source-body proof is retained, this additional digest identifies the final file bytes."
+    },
+    {
+      "locale": "en",
+      "route": "/blog/open-source-ai-receptionist-stack/",
+      "source": "apps/landing/src/content/blog/open-source-ai-receptionist-stack.md",
+      "currentCharacters": 8365,
+      "upstreamCharacters": 8359,
+      "fullTextPreservedWithOnlyAccountCtaUrlAdaptation": true,
+      "headingCount": 7,
+      "sha256": "ec483829cad3026abb95fd4d7c1daef2e34c68c4ef0f7ffbb5b8b6611b4fb5e9",
+      "upstreamSha256": "4292b319be05588b7692598f324df7af12dac5287a47972edf66a2de34cfab4f",
+      "allowedLinkAdaptations": [
+        "Account CTA to receptionist.caleonis.com/signup or /login",
+        "Dead original GitHub repository href to official public GitLab repository"
+      ],
+      "workingTreeFileSha256": "7e80b17988c92316c3936a2ad00883310ad89e84ce5c1bc9c3a66ad83d55e879",
+      "lineEndingNormalization": "LF; earlier source-body proof is retained, this additional digest identifies the final file bytes."
+    },
+    {
+      "locale": "en",
+      "route": "/blog/outsourced-phone-answering-france/",
+      "source": "apps/landing/src/content/blog/outsourced-phone-answering-france.md",
+      "currentCharacters": 13719,
+      "upstreamCharacters": 13719,
+      "fullTextPreservedWithOnlyAccountCtaUrlAdaptation": true,
+      "headingCount": 15,
+      "sha256": "4f4f88d7816747f03d6b2bfb7712d395462cb99fc1b3211929bb188509914124",
+      "upstreamSha256": "4f4f88d7816747f03d6b2bfb7712d395462cb99fc1b3211929bb188509914124",
+      "allowedLinkAdaptations": [
+        "Account CTA to receptionist.caleonis.com/signup or /login",
+        "Dead original GitHub repository href to official public GitLab repository"
+      ],
+      "workingTreeFileSha256": "c793d7d9d086d185f96a719442741f5659839dfe365c8f44496af8430c9bf8b2",
+      "lineEndingNormalization": "LF; earlier source-body proof is retained, this additional digest identifies the final file bytes."
+    },
+    {
+      "locale": "en",
+      "route": "/blog/phone-answering-script/",
+      "source": "apps/landing/src/content/blog/phone-answering-script.md",
+      "currentCharacters": 21395,
+      "upstreamCharacters": 21017,
+      "fullTextPreservedWithOnlyAccountCtaUrlAdaptation": true,
+      "headingCount": 45,
+      "sha256": "6ffa95360afb0790e76ccdc1b9bade79000f1440476b577fc3563f7b972d794f",
+      "upstreamSha256": "e36c04b19242929f0dc116b4911b4cd3d520f5fdea1e44a4dd32164c5cd2cf05",
+      "allowedLinkAdaptations": [
+        "Account CTA to receptionist.caleonis.com/signup or /login",
+        "Dead original GitHub repository href to official public GitLab repository",
+        "Dead FTC robocalls href replaced with its current FTC unwanted-calls article and corresponding robocalls section; full prose unchanged"
+      ],
+      "workingTreeFileSha256": "36903718ac27ba3b90af5a6b7a2ad9800570cc7330f4c1592a6cd06d4736a1f7",
+      "lineEndingNormalization": "LF; earlier source-body proof is retained, this additional digest identifies the final file bytes."
+    },
+    {
+      "locale": "en",
+      "route": "/blog/quo-sona-alternative/",
+      "source": "apps/landing/src/content/blog/quo-sona-alternative.md",
+      "currentCharacters": 7068,
+      "upstreamCharacters": 7068,
+      "fullTextPreservedWithOnlyAccountCtaUrlAdaptation": true,
+      "headingCount": 11,
+      "sha256": "303fe32aba295b95addfe5ecabeba4a893008fff681fa82fce30a7020b7fb27b",
+      "upstreamSha256": "303fe32aba295b95addfe5ecabeba4a893008fff681fa82fce30a7020b7fb27b",
+      "allowedLinkAdaptations": [
+        "Account CTA to receptionist.caleonis.com/signup or /login",
+        "Dead original GitHub repository href to official public GitLab repository"
+      ],
+      "workingTreeFileSha256": "929d070eb64bc1993e98c9c0f64d5e75b28c6475a4aa6bf07f31e99074b240df",
+      "lineEndingNormalization": "LF; earlier source-body proof is retained, this additional digest identifies the final file bytes."
+    },
+    {
+      "locale": "en",
+      "route": "/blog/ringcentral-ai-receptionist-alternative/",
+      "source": "apps/landing/src/content/blog/ringcentral-ai-receptionist-alternative.md",
+      "currentCharacters": 17300,
+      "upstreamCharacters": 17294,
+      "fullTextPreservedWithOnlyAccountCtaUrlAdaptation": true,
+      "headingCount": 20,
+      "sha256": "919885058ee00e08a7df4dfe5da41577f41d9e59269d6fbbdcccb50c8ba16858",
+      "upstreamSha256": "6521d080986fd763130f3bfdca04abaeb9b9408d0a5ce1895088163990a54601",
+      "allowedLinkAdaptations": [
+        "Account CTA to receptionist.caleonis.com/signup or /login",
+        "Dead original GitHub repository href to official public GitLab repository"
+      ],
+      "workingTreeFileSha256": "ec6db9864a94b693b65c92c8f01c4e6d0aeb4daaf2d6ce5b51ccd9fafd189127",
+      "lineEndingNormalization": "LF; earlier source-body proof is retained, this additional digest identifies the final file bytes."
+    },
+    {
+      "locale": "en",
+      "route": "/blog/rosie-ai-alternative/",
+      "source": "apps/landing/src/content/blog/rosie-ai-alternative.md",
+      "currentCharacters": 21909,
+      "upstreamCharacters": 21909,
+      "fullTextPreservedWithOnlyAccountCtaUrlAdaptation": true,
+      "headingCount": 17,
+      "sha256": "b5639dca13c1af2339a613f251f7a8aebfcc406dbbc7ba3536fc4da1986ecbcf",
+      "upstreamSha256": "b5639dca13c1af2339a613f251f7a8aebfcc406dbbc7ba3536fc4da1986ecbcf",
+      "allowedLinkAdaptations": [
+        "Account CTA to receptionist.caleonis.com/signup or /login",
+        "Dead original GitHub repository href to official public GitLab repository"
+      ],
+      "workingTreeFileSha256": "afa789cac6b8f90c9709ef11f27f51c2149a4cf20db105fa2266f674d4120c35",
+      "lineEndingNormalization": "LF; earlier source-body proof is retained, this additional digest identifies the final file bytes."
+    },
+    {
+      "locale": "en",
+      "route": "/blog/ruby-receptionists-alternative/",
+      "source": "apps/landing/src/content/blog/ruby-receptionists-alternative.md",
+      "currentCharacters": 21632,
+      "upstreamCharacters": 21632,
+      "fullTextPreservedWithOnlyAccountCtaUrlAdaptation": true,
+      "headingCount": 22,
+      "sha256": "fc278440a9f3891978612608c94648401b67ab17f3b3d1325fe58bd8a2d2fb44",
+      "upstreamSha256": "fc278440a9f3891978612608c94648401b67ab17f3b3d1325fe58bd8a2d2fb44",
+      "allowedLinkAdaptations": [
+        "Account CTA to receptionist.caleonis.com/signup or /login",
+        "Dead original GitHub repository href to official public GitLab repository"
+      ],
+      "workingTreeFileSha256": "75b16b49da351526cd9bff612b13bab8430b3f20e81bdeb69878b5467ffd8d2c",
+      "lineEndingNormalization": "LF; earlier source-body proof is retained, this additional digest identifies the final file bytes."
+    },
+    {
+      "locale": "en",
+      "route": "/blog/smith-ai-alternative/",
+      "source": "apps/landing/src/content/blog/smith-ai-alternative.md",
+      "currentCharacters": 7204,
+      "upstreamCharacters": 7204,
+      "fullTextPreservedWithOnlyAccountCtaUrlAdaptation": true,
+      "headingCount": 10,
+      "sha256": "ced33a51c64849e19b654e6fdebd3c3a7b55751770f26fd435d70cb010cd256f",
+      "upstreamSha256": "ced33a51c64849e19b654e6fdebd3c3a7b55751770f26fd435d70cb010cd256f",
+      "allowedLinkAdaptations": [
+        "Account CTA to receptionist.caleonis.com/signup or /login",
+        "Dead original GitHub repository href to official public GitLab repository"
+      ],
+      "workingTreeFileSha256": "caa735c185dcb92fb2d958b0bce748e342a29c66cb8ccb5cd71b8cfca9a4e8c3",
+      "lineEndingNormalization": "LF; earlier source-body proof is retained, this additional digest identifies the final file bytes."
+    },
+    {
+      "locale": "en",
+      "route": "/blog/upfirst-alternative/",
+      "source": "apps/landing/src/content/blog/upfirst-alternative.md",
+      "currentCharacters": 7188,
+      "upstreamCharacters": 7176,
+      "fullTextPreservedWithOnlyAccountCtaUrlAdaptation": true,
+      "headingCount": 10,
+      "sha256": "a0a905b7c15b03fb08b95b2bc711eaf5c17234d50ac049cb4d33bf6e34b59ee0",
+      "upstreamSha256": "9e73cb46eef3c5bcd598ebed3f103de26cde10b42942e87942ff5f888bf21c36",
+      "allowedLinkAdaptations": [
+        "Account CTA to receptionist.caleonis.com/signup or /login",
+        "Dead original GitHub repository href to official public GitLab repository"
+      ],
+      "workingTreeFileSha256": "5c215580a1f0c2d7c4fbb0ea7855b1f09577bf323548c90122d41d05e9aed57b",
+      "lineEndingNormalization": "LF; earlier source-body proof is retained, this additional digest identifies the final file bytes."
+    },
+    {
+      "locale": "en",
+      "route": "/blog/what-is-a-phone-answering-service/",
+      "source": "apps/landing/src/content/blog/what-is-a-phone-answering-service.md",
+      "currentCharacters": 15521,
+      "upstreamCharacters": 15521,
+      "fullTextPreservedWithOnlyAccountCtaUrlAdaptation": true,
+      "headingCount": 26,
+      "sha256": "89425b6b6c6be2fbc77dba4e593bdb5e23990f74ef671f4d5e940985348d5ebf",
+      "upstreamSha256": "89425b6b6c6be2fbc77dba4e593bdb5e23990f74ef671f4d5e940985348d5ebf",
+      "allowedLinkAdaptations": [
+        "Account CTA to receptionist.caleonis.com/signup or /login",
+        "Dead original GitHub repository href to official public GitLab repository"
+      ],
+      "workingTreeFileSha256": "8e5b065570a5787f8125958f6fbaf51337219c7aaf9a7830b528671c53a977a3",
+      "lineEndingNormalization": "LF; earlier source-body proof is retained, this additional digest identifies the final file bytes."
+    },
+    {
+      "locale": "en",
+      "route": "/blog/why-lobbystack-is-moving-away-from-convex/",
+      "source": "apps/landing/src/content/blog/why-lobbystack-is-moving-away-from-convex.md",
+      "currentCharacters": 7788,
+      "upstreamCharacters": 7782,
+      "fullTextPreservedWithOnlyAccountCtaUrlAdaptation": true,
+      "headingCount": 6,
+      "sha256": "fae1d2466419fe7cd5aa1e082f8c6cbbf30ed3d0a8387db2d9148d7164a59330",
+      "upstreamSha256": "4f585e9bc177082c818e59f7ec856a0f236c47b74c51c89407c02b3ccefa7a70",
+      "allowedLinkAdaptations": [
+        "Account CTA to receptionist.caleonis.com/signup or /login",
+        "Dead original GitHub repository href to official public GitLab repository"
+      ],
+      "workingTreeFileSha256": "9bb158a5d7c12f60bbc477626057ab1a4b9f533fb661c21abf2bdb7cd4fd0f3c",
+      "lineEndingNormalization": "LF; earlier source-body proof is retained, this additional digest identifies the final file bytes."
+    },
+    {
+      "locale": "en",
+      "route": "/blog/zoom-ai-receptionist-alternative/",
+      "source": "apps/landing/src/content/blog/zoom-ai-receptionist-alternative.md",
+      "currentCharacters": 9266,
+      "upstreamCharacters": 9266,
+      "fullTextPreservedWithOnlyAccountCtaUrlAdaptation": true,
+      "headingCount": 11,
+      "sha256": "d8559f9eb39fc06d86988b942935b605d6f5e90bab181e2726a1325bbcab899a",
+      "upstreamSha256": "d8559f9eb39fc06d86988b942935b605d6f5e90bab181e2726a1325bbcab899a",
+      "allowedLinkAdaptations": [
+        "Account CTA to receptionist.caleonis.com/signup or /login",
+        "Dead original GitHub repository href to official public GitLab repository"
+      ],
+      "workingTreeFileSha256": "e37fb2204a0c1cd82d2411891a364ddbde2a6c585cd135e508de531972ceb41a",
+      "lineEndingNormalization": "LF; earlier source-body proof is retained, this additional digest identifies the final file bytes."
+    },
+    {
+      "locale": "fr",
+      "route": "/fr/blog/ai-phone-system-small-business/",
+      "source": "apps/landing/src/content/blog/fr/ai-phone-system-small-business.md",
+      "currentCharacters": 14957,
+      "upstreamCharacters": 14953,
+      "fullTextPreservedWithOnlyAccountCtaUrlAdaptation": true,
+      "headingCount": 15,
+      "sha256": "9700677d0928de5b2adc5c4e1fc0225ced3a528537b09df3ce7775d1534b5568",
+      "upstreamSha256": "a6e741eea98fdcdf9d590af565eed6c9581f28e788b8f7d28ad3e46bdfa451ca",
+      "allowedLinkAdaptations": [
+        "Account CTA to receptionist.caleonis.com/signup or /login",
+        "Dead original GitHub repository href to official public GitLab repository"
+      ],
+      "workingTreeFileSha256": "4b1491fabb1981c16686c3bf70fb3a7fe2a1cb6d07ed43a80b53bde8bcb1630d",
+      "lineEndingNormalization": "LF; earlier source-body proof is retained, this additional digest identifies the final file bytes."
+    },
+    {
+      "locale": "fr",
+      "route": "/fr/blog/ai-receptionist-affiliate-program/",
+      "source": "apps/landing/src/content/blog/fr/ai-receptionist-affiliate-program.md",
+      "currentCharacters": 14327,
+      "upstreamCharacters": 14321,
+      "fullTextPreservedWithOnlyAccountCtaUrlAdaptation": true,
+      "headingCount": 15,
+      "sha256": "df8b5157b4b48bffc5ca45c97762e70963eb6ec2ba9570dc26fc8ef48b6fe247",
+      "upstreamSha256": "1f7404b80cf797de81cb5bd7d0e9ad459318325f041aaa9361210854688d410b",
+      "allowedLinkAdaptations": [
+        "Account CTA to receptionist.caleonis.com/signup or /login",
+        "Dead original GitHub repository href to official public GitLab repository"
+      ],
+      "workingTreeFileSha256": "b7a02712f2f583a0af6ca794afe3acb016b755d25abb5bfb348411421d909ebc",
+      "lineEndingNormalization": "LF; earlier source-body proof is retained, this additional digest identifies the final file bytes."
+    },
+    {
+      "locale": "fr",
+      "route": "/fr/blog/ai-receptionist-savings/",
+      "source": "apps/landing/src/content/blog/fr/ai-receptionist-savings.md",
+      "currentCharacters": 35041,
+      "upstreamCharacters": 35037,
+      "fullTextPreservedWithOnlyAccountCtaUrlAdaptation": true,
+      "headingCount": 37,
+      "sha256": "330f097e9633c314097683eeff7699e858a253931bed9f3b83d762804deae305",
+      "upstreamSha256": "cc9906e068afd4d42af6c93f776b85034f85a728eaf0c0fe2653b8719d5ab9d2",
+      "allowedLinkAdaptations": [
+        "Account CTA to receptionist.caleonis.com/signup or /login",
+        "Dead original GitHub repository href to official public GitLab repository"
+      ],
+      "workingTreeFileSha256": "cb76b56facf4d140c0dd8b08e00e77b33f6c8e70d083b0c9f83c3a21828b981e",
+      "lineEndingNormalization": "LF; earlier source-body proof is retained, this additional digest identifies the final file bytes."
+    },
+    {
+      "locale": "fr",
+      "route": "/fr/blog/ai-receptionist-vs-virtual-receptionist/",
+      "source": "apps/landing/src/content/blog/fr/ai-receptionist-vs-virtual-receptionist.md",
+      "currentCharacters": 25300,
+      "upstreamCharacters": 25290,
+      "fullTextPreservedWithOnlyAccountCtaUrlAdaptation": true,
+      "headingCount": 26,
+      "sha256": "82c92401c8874be0407af1c269b3f337043a3153bd460f9543db8883b023103b",
+      "upstreamSha256": "00dbfecef1836ba254b19e13338c3698b8782df6e4603c13c6cf4becd2d23fdc",
+      "allowedLinkAdaptations": [
+        "Account CTA to receptionist.caleonis.com/signup or /login",
+        "Dead original GitHub repository href to official public GitLab repository"
+      ],
+      "workingTreeFileSha256": "8f221d5eea3e87a4f0435fe3306dff1528c6d608a3deb1fb957ee5c9fa80fa2a",
+      "lineEndingNormalization": "LF; earlier source-body proof is retained, this additional digest identifies the final file bytes."
+    },
+    {
+      "locale": "fr",
+      "route": "/fr/blog/ai-receptionist-vs-voicemail/",
+      "source": "apps/landing/src/content/blog/fr/ai-receptionist-vs-voicemail.md",
+      "currentCharacters": 6057,
+      "upstreamCharacters": 6051,
+      "fullTextPreservedWithOnlyAccountCtaUrlAdaptation": true,
+      "headingCount": 9,
+      "sha256": "bba69ba48148831eab732759317c84539819c669dbd726a74707225e5ed1f6dd",
+      "upstreamSha256": "09fb87574c24e18a8aa1a44b85f3e8d6d74741c2d6eb67fb7de989118a00d062",
+      "allowedLinkAdaptations": [
+        "Account CTA to receptionist.caleonis.com/signup or /login",
+        "Dead original GitHub repository href to official public GitLab repository"
+      ],
+      "workingTreeFileSha256": "eefc2d005f825c2d52ae758636b7551ff2c234a2e5e6f2b6f0a195e02e410b55",
+      "lineEndingNormalization": "LF; earlier source-body proof is retained, this additional digest identifies the final file bytes."
+    },
+    {
+      "locale": "fr",
+      "route": "/fr/blog/ai-receptionist-workflows/",
+      "source": "apps/landing/src/content/blog/fr/ai-receptionist-workflows.md",
+      "currentCharacters": 10679,
+      "upstreamCharacters": 10673,
+      "fullTextPreservedWithOnlyAccountCtaUrlAdaptation": true,
+      "headingCount": 10,
+      "sha256": "69a6a109c33556f7bdb54a33a94464423772819f1507d7a253d0652f2df84479",
+      "upstreamSha256": "f51c8a7c520f0b8eb07f2cd447a3a52764e3152426b16c8e9d7fcdfcfc423144",
+      "allowedLinkAdaptations": [
+        "Account CTA to receptionist.caleonis.com/signup or /login",
+        "Dead original GitHub repository href to official public GitLab repository"
+      ],
+      "workingTreeFileSha256": "3feca45afabe63913319f773baa4657eeb3b7dd1368c67d277827434ee5df704",
+      "lineEndingNormalization": "LF; earlier source-body proof is retained, this additional digest identifies the final file bytes."
+    },
+    {
+      "locale": "fr",
+      "route": "/fr/blog/ai-voice-agent-gpt-live/",
+      "source": "apps/landing/src/content/blog/fr/ai-voice-agent-gpt-live.md",
+      "currentCharacters": 9189,
+      "upstreamCharacters": 9185,
+      "fullTextPreservedWithOnlyAccountCtaUrlAdaptation": true,
+      "headingCount": 10,
+      "sha256": "5e1fb0eee4c2745aa67e75f8a95c1013558ccce3eda44bed7875aca42d44e3f5",
+      "upstreamSha256": "c6caac7bcf6b9fa00b13694930e11a59b0e5dcf472ce3ea169907c410d86520e",
+      "allowedLinkAdaptations": [
+        "Account CTA to receptionist.caleonis.com/signup or /login",
+        "Dead original GitHub repository href to official public GitLab repository"
+      ],
+      "workingTreeFileSha256": "7d25c9c0471c2f5e8bbc994fe39146f32fd65a1b3e691b0833d11754c12a55eb",
+      "lineEndingNormalization": "LF; earlier source-body proof is retained, this additional digest identifies the final file bytes."
+    },
+    {
+      "locale": "fr",
+      "route": "/fr/blog/automated-answering-service/",
+      "source": "apps/landing/src/content/blog/fr/automated-answering-service.md",
+      "currentCharacters": 26007,
+      "upstreamCharacters": 26003,
+      "fullTextPreservedWithOnlyAccountCtaUrlAdaptation": true,
+      "headingCount": 35,
+      "sha256": "5948de58ea39cb1c3c6bce11e99304495c9d2cd3f68c7350fa574bbbd6ab3d64",
+      "upstreamSha256": "75f2971b5151acedb7805923899883ca4159e918fef3526d16acc9c264cdf7de",
+      "allowedLinkAdaptations": [
+        "Account CTA to receptionist.caleonis.com/signup or /login",
+        "Dead original GitHub repository href to official public GitLab repository"
+      ],
+      "workingTreeFileSha256": "6f35e4cb06dff243505175e4c1bb9bbd3715a46bc793a835e4eca417d7e48d89",
+      "lineEndingNormalization": "LF; earlier source-body proof is retained, this additional digest identifies the final file bytes."
+    },
+    {
+      "locale": "fr",
+      "route": "/fr/blog/best-answering-service-for-small-business/",
+      "source": "apps/landing/src/content/blog/fr/best-answering-service-for-small-business.md",
+      "currentCharacters": 34407,
+      "upstreamCharacters": 34403,
+      "fullTextPreservedWithOnlyAccountCtaUrlAdaptation": true,
+      "headingCount": 36,
+      "sha256": "dd9188ced79ca64342b4dcf54a99d72e2c5935726bc6a5d490d6f4941d579ba8",
+      "upstreamSha256": "bf078310c64df466eb3edf2f92b447985adbc7b0defab5dec8e667e2d68d4ecc",
+      "allowedLinkAdaptations": [
+        "Account CTA to receptionist.caleonis.com/signup or /login",
+        "Dead original GitHub repository href to official public GitLab repository"
+      ],
+      "workingTreeFileSha256": "9a977c5494c8381b9a8e002506852a4f66fd26c4dfa79304d90a4cecfed60b2c",
+      "lineEndingNormalization": "LF; earlier source-body proof is retained, this additional digest identifies the final file bytes."
+    },
+    {
+      "locale": "fr",
+      "route": "/fr/blog/best-answering-services-for-contractors/",
+      "source": "apps/landing/src/content/blog/fr/best-answering-services-for-contractors.md",
+      "currentCharacters": 36361,
+      "upstreamCharacters": 36357,
+      "fullTextPreservedWithOnlyAccountCtaUrlAdaptation": true,
+      "headingCount": 35,
+      "sha256": "3a0d47cda860cb72bcf0671293b22052c5fc9d732227a5b5a1ee81612225845e",
+      "upstreamSha256": "dac15871f62c3428a3dd1c2a95d947c96239a3d3cef886002ad914727a913de3",
+      "allowedLinkAdaptations": [
+        "Account CTA to receptionist.caleonis.com/signup or /login",
+        "Dead original GitHub repository href to official public GitLab repository"
+      ],
+      "workingTreeFileSha256": "f33eb955472b485864b084ac8cdd4d3d1af7cb855af00bafb10d55aef942d872",
+      "lineEndingNormalization": "LF; earlier source-body proof is retained, this additional digest identifies the final file bytes."
+    },
+    {
+      "locale": "fr",
+      "route": "/fr/blog/best-hvac-answering-services/",
+      "source": "apps/landing/src/content/blog/fr/best-hvac-answering-services.md",
+      "currentCharacters": 39336,
+      "upstreamCharacters": 39332,
+      "fullTextPreservedWithOnlyAccountCtaUrlAdaptation": true,
+      "headingCount": 38,
+      "sha256": "170ae71509daaf2fbffe1486889ef54476441b22e0ba74c32027be167ba7c805",
+      "upstreamSha256": "babc8ea395f63a7ecc3c86e74b2b0d74df62fef3fc352f7a8e080f79f11173c0",
+      "allowedLinkAdaptations": [
+        "Account CTA to receptionist.caleonis.com/signup or /login",
+        "Dead original GitHub repository href to official public GitLab repository"
+      ],
+      "workingTreeFileSha256": "3e424247880d7bd287c0d1cf3bb79eaad8c134917b81afd68450862044e5b7b4",
+      "lineEndingNormalization": "LF; earlier source-body proof is retained, this additional digest identifies the final file bytes."
+    },
+    {
+      "locale": "fr",
+      "route": "/fr/blog/best-open-source-ai-phone-answering-services/",
+      "source": "apps/landing/src/content/blog/fr/best-open-source-ai-phone-answering-services.md",
+      "currentCharacters": 12800,
+      "upstreamCharacters": 12788,
+      "fullTextPreservedWithOnlyAccountCtaUrlAdaptation": true,
+      "headingCount": 11,
+      "sha256": "1e7d141759300c0f10e95c84f32a54e1e3ae36d4547e9052c80d71744bbd680c",
+      "upstreamSha256": "10047636ad007042fdeeff3e23971eee1f05f35c82a976a791731049a93a364c",
+      "allowedLinkAdaptations": [
+        "Account CTA to receptionist.caleonis.com/signup or /login",
+        "Dead original GitHub repository href to official public GitLab repository"
+      ],
+      "workingTreeFileSha256": "bef79da53fcd9425a0eb5325549267e0b2c4ef50a9f2445322daad35df1f3830",
+      "lineEndingNormalization": "LF; earlier source-body proof is retained, this additional digest identifies the final file bytes."
+    },
+    {
+      "locale": "fr",
+      "route": "/fr/blog/best-plumbing-answering-services/",
+      "source": "apps/landing/src/content/blog/fr/best-plumbing-answering-services.md",
+      "currentCharacters": 40405,
+      "upstreamCharacters": 40401,
+      "fullTextPreservedWithOnlyAccountCtaUrlAdaptation": true,
+      "headingCount": 37,
+      "sha256": "ba2dfc12f9a3265c76db8f5fe9c41a90c81f4c88f825b61895625e6d653c789f",
+      "upstreamSha256": "40bfd666ec56bfb2f47a7073aca0694aa1d69da2d6939e5f652cc224588206c1",
+      "allowedLinkAdaptations": [
+        "Account CTA to receptionist.caleonis.com/signup or /login",
+        "Dead original GitHub repository href to official public GitLab repository"
+      ],
+      "workingTreeFileSha256": "d72ee61c0d5d9a5362d58e26e846d2e31e4eabcd77a3306cd81bc3a9ce70b505",
+      "lineEndingNormalization": "LF; earlier source-body proof is retained, this additional digest identifies the final file bytes."
+    },
+    {
+      "locale": "fr",
+      "route": "/fr/blog/best-property-management-answering-services/",
+      "source": "apps/landing/src/content/blog/fr/best-property-management-answering-services.md",
+      "currentCharacters": 40483,
+      "upstreamCharacters": 40479,
+      "fullTextPreservedWithOnlyAccountCtaUrlAdaptation": true,
+      "headingCount": 39,
+      "sha256": "a213ffe0268a3f5874b3083e010bf5ff809b8cecb61d132690eb9da9ab663a7e",
+      "upstreamSha256": "ab507d1c6bf6947f2b31b338064be10f2eb6d980499f20496bd8e878c7672d27",
+      "allowedLinkAdaptations": [
+        "Account CTA to receptionist.caleonis.com/signup or /login",
+        "Dead original GitHub repository href to official public GitLab repository"
+      ],
+      "workingTreeFileSha256": "c97f3f1ad8d20af817d5ffda736fd3df3800e0f9bd5fc44abd070c893be23b48",
+      "lineEndingNormalization": "LF; earlier source-body proof is retained, this additional digest identifies the final file bytes."
+    },
+    {
+      "locale": "fr",
+      "route": "/fr/blog/build-or-buy-ai-receptionist/",
+      "source": "apps/landing/src/content/blog/fr/build-or-buy-ai-receptionist.md",
+      "currentCharacters": 17561,
+      "upstreamCharacters": 17561,
+      "fullTextPreservedWithOnlyAccountCtaUrlAdaptation": true,
+      "headingCount": 7,
+      "sha256": "1eb23790aa643b6a3d1a210a869ca714afc66f28d773d0db984dc10c182dfd5c",
+      "upstreamSha256": "1eb23790aa643b6a3d1a210a869ca714afc66f28d773d0db984dc10c182dfd5c",
+      "allowedLinkAdaptations": [
+        "Account CTA to receptionist.caleonis.com/signup or /login",
+        "Dead original GitHub repository href to official public GitLab repository"
+      ],
+      "workingTreeFileSha256": "1eb23790aa643b6a3d1a210a869ca714afc66f28d773d0db984dc10c182dfd5c",
+      "lineEndingNormalization": "LF; earlier source-body proof is retained, this additional digest identifies the final file bytes."
+    },
+    {
+      "locale": "fr",
+      "route": "/fr/blog/cloudtalk-ai-receptionist-alternative/",
+      "source": "apps/landing/src/content/blog/fr/cloudtalk-ai-receptionist-alternative.md",
+      "currentCharacters": 6603,
+      "upstreamCharacters": 6603,
+      "fullTextPreservedWithOnlyAccountCtaUrlAdaptation": true,
+      "headingCount": 11,
+      "sha256": "b526fe997ddd46cebc0d76d8c3f7166db7c5f09e96edc3004cafc474d4235fc3",
+      "upstreamSha256": "b526fe997ddd46cebc0d76d8c3f7166db7c5f09e96edc3004cafc474d4235fc3",
+      "allowedLinkAdaptations": [
+        "Account CTA to receptionist.caleonis.com/signup or /login",
+        "Dead original GitHub repository href to official public GitLab repository"
+      ],
+      "workingTreeFileSha256": "c6ec7d8bdcd9784fbc04867959193505bef39121b4f12c67cf0238a8edf48b2a",
+      "lineEndingNormalization": "LF; earlier source-body proof is retained, this additional digest identifies the final file bytes."
+    },
+    {
+      "locale": "fr",
+      "route": "/fr/blog/dialzara-alternative/",
+      "source": "apps/landing/src/content/blog/fr/dialzara-alternative.md",
+      "currentCharacters": 6640,
+      "upstreamCharacters": 6634,
+      "fullTextPreservedWithOnlyAccountCtaUrlAdaptation": true,
+      "headingCount": 11,
+      "sha256": "043f6e818f2059f7c3535ac99f1a0a872a156b225a0dc87d18d5568d8cbe5b4d",
+      "upstreamSha256": "e8a205aa71567943ed10e9aa8d04e9eb73bf13e31208a0866f796a4efe6e4654",
+      "allowedLinkAdaptations": [
+        "Account CTA to receptionist.caleonis.com/signup or /login",
+        "Dead original GitHub repository href to official public GitLab repository"
+      ],
+      "workingTreeFileSha256": "e43ce639816242330d4f0055a9166ddf5f239d937fb4aaad040c3ebb3a4214eb",
+      "lineEndingNormalization": "LF; earlier source-body proof is retained, this additional digest identifies the final file bytes."
+    },
+    {
+      "locale": "fr",
+      "route": "/fr/blog/elevenlabs-reception-alternative/",
+      "source": "apps/landing/src/content/blog/fr/elevenlabs-reception-alternative.md",
+      "currentCharacters": 9230,
+      "upstreamCharacters": 9224,
+      "fullTextPreservedWithOnlyAccountCtaUrlAdaptation": true,
+      "headingCount": 11,
+      "sha256": "6faab6e918f1e6e90e5968d608555e5ff2227d4aafc5ba60b29110afd6acd9b2",
+      "upstreamSha256": "1aebf15a2fd73e114e4261938cdf1fd2b0d656dbb92c355dca7f44812eaa242f",
+      "allowedLinkAdaptations": [
+        "Account CTA to receptionist.caleonis.com/signup or /login",
+        "Dead original GitHub repository href to official public GitLab repository"
+      ],
+      "workingTreeFileSha256": "359d735f32d861128e821ca4e041a3f484630200f0ccd63e19ad83e8e79541e0",
+      "lineEndingNormalization": "LF; earlier source-body proof is retained, this additional digest identifies the final file bytes."
+    },
+    {
+      "locale": "fr",
+      "route": "/fr/blog/free-ai-receptionist/",
+      "source": "apps/landing/src/content/blog/fr/free-ai-receptionist.md",
+      "currentCharacters": 19801,
+      "upstreamCharacters": 19797,
+      "fullTextPreservedWithOnlyAccountCtaUrlAdaptation": true,
+      "headingCount": 16,
+      "sha256": "3beb76c025de8b5c5a7e2fb0e7cd8e74df0d29a5488f935af3201cf2adbeb779",
+      "upstreamSha256": "05ae4f348e2b4f18e477848b3bb03fb9cbcf3e50d0d91e189a3ac0badadb9b54",
+      "allowedLinkAdaptations": [
+        "Account CTA to receptionist.caleonis.com/signup or /login",
+        "Dead original GitHub repository href to official public GitLab repository"
+      ],
+      "workingTreeFileSha256": "5f1c31327388490d009a98f3c2e4d1f1fc5cf62c77a6b322b6f343c011d018e1",
+      "lineEndingNormalization": "LF; earlier source-body proof is retained, this additional digest identifies the final file bytes."
+    },
+    {
+      "locale": "fr",
+      "route": "/fr/blog/goodcall-alternative/",
+      "source": "apps/landing/src/content/blog/fr/goodcall-alternative.md",
+      "currentCharacters": 9519,
+      "upstreamCharacters": 9519,
+      "fullTextPreservedWithOnlyAccountCtaUrlAdaptation": true,
+      "headingCount": 11,
+      "sha256": "ebbea610651b6f4fea05fed3e3adc0decf889eb0110bc5b58800c0f3572074b3",
+      "upstreamSha256": "ebbea610651b6f4fea05fed3e3adc0decf889eb0110bc5b58800c0f3572074b3",
+      "allowedLinkAdaptations": [
+        "Account CTA to receptionist.caleonis.com/signup or /login",
+        "Dead original GitHub repository href to official public GitLab repository"
+      ],
+      "workingTreeFileSha256": "42c36c7004d20e0575961e779c96f7f1c71aab91acc12fdc0054f1d7ec36b8a9",
+      "lineEndingNormalization": "LF; earlier source-body proof is retained, this additional digest identifies the final file bytes."
+    },
+    {
+      "locale": "fr",
+      "route": "/fr/blog/google-business-profile-calls/",
+      "source": "apps/landing/src/content/blog/fr/google-business-profile-calls.md",
+      "currentCharacters": 19252,
+      "upstreamCharacters": 19248,
+      "fullTextPreservedWithOnlyAccountCtaUrlAdaptation": true,
+      "headingCount": 22,
+      "sha256": "c4d640f7fcf5f297ec4422f3a57836caa4eb277969c3a3b647b8601d48f80818",
+      "upstreamSha256": "4a068d16964532b382a77f5237e04ae705fb3184eb09639a281fafc7efc682be",
+      "allowedLinkAdaptations": [
+        "Account CTA to receptionist.caleonis.com/signup or /login",
+        "Dead original GitHub repository href to official public GitLab repository"
+      ],
+      "workingTreeFileSha256": "e290cf15043b6511159c34b353c01095aa883ab1606abe87b755ec3bf556b55f",
+      "lineEndingNormalization": "LF; earlier source-body proof is retained, this additional digest identifies the final file bytes."
+    },
+    {
+      "locale": "fr",
+      "route": "/fr/blog/how-much-does-an-answering-service-cost/",
+      "source": "apps/landing/src/content/blog/fr/how-much-does-an-answering-service-cost.md",
+      "currentCharacters": 38878,
+      "upstreamCharacters": 38874,
+      "fullTextPreservedWithOnlyAccountCtaUrlAdaptation": true,
+      "headingCount": 43,
+      "sha256": "1331a3e4e8a242c8dd6838445eae08c30dce266649c7e54d5428af4df80612a0",
+      "upstreamSha256": "416270e5d6b4f3d26531b0947d04ecb5ab85f4a5bc47f58261bee9fc123271a2",
+      "allowedLinkAdaptations": [
+        "Account CTA to receptionist.caleonis.com/signup or /login",
+        "Dead original GitHub repository href to official public GitLab repository"
+      ],
+      "workingTreeFileSha256": "c8a195f3a44078b006625fa1c3de0e2330981d6ee54f4547d866ca4f17d32ed9",
+      "lineEndingNormalization": "LF; earlier source-body proof is retained, this additional digest identifies the final file bytes."
+    },
+    {
+      "locale": "fr",
+      "route": "/fr/blog/how-to-choose-an-ai-receptionist/",
+      "source": "apps/landing/src/content/blog/fr/how-to-choose-an-ai-receptionist.md",
+      "currentCharacters": 23845,
+      "upstreamCharacters": 23845,
+      "fullTextPreservedWithOnlyAccountCtaUrlAdaptation": true,
+      "headingCount": 21,
+      "sha256": "15fbdf1b10976deaffbd6413ba602d7f5954f9744bf1c1136a781e67e9595d66",
+      "upstreamSha256": "15fbdf1b10976deaffbd6413ba602d7f5954f9744bf1c1136a781e67e9595d66",
+      "allowedLinkAdaptations": [
+        "Account CTA to receptionist.caleonis.com/signup or /login",
+        "Dead original GitHub repository href to official public GitLab repository"
+      ],
+      "workingTreeFileSha256": "26a95b3b1447da174f8577f73291e69bd4dc8a0489356dabfc06752fefa67f4a",
+      "lineEndingNormalization": "LF; earlier source-body proof is retained, this additional digest identifies the final file bytes."
+    },
+    {
+      "locale": "fr",
+      "route": "/fr/blog/how-to-forward-business-calls/",
+      "source": "apps/landing/src/content/blog/fr/how-to-forward-business-calls.md",
+      "currentCharacters": 23648,
+      "upstreamCharacters": 23644,
+      "fullTextPreservedWithOnlyAccountCtaUrlAdaptation": true,
+      "headingCount": 28,
+      "sha256": "ed8255909d7e938e9c4d9d8418d42d5f32a571ee300faa8878ad1d1163beba4f",
+      "upstreamSha256": "39c4b9597d66e0fe305609d4eb5a5b8c9065d815530b0620b5ac5284d1889a1f",
+      "allowedLinkAdaptations": [
+        "Account CTA to receptionist.caleonis.com/signup or /login",
+        "Dead original GitHub repository href to official public GitLab repository"
+      ],
+      "workingTreeFileSha256": "d65221179efa3153f057cf81c9f7571dfc64b21a9449b6e637d07f356cb9a758",
+      "lineEndingNormalization": "LF; earlier source-body proof is retained, this additional digest identifies the final file bytes."
+    },
+    {
+      "locale": "fr",
+      "route": "/fr/blog/law-firm-answering-service/",
+      "source": "apps/landing/src/content/blog/fr/law-firm-answering-service.md",
+      "currentCharacters": 36833,
+      "upstreamCharacters": 36829,
+      "fullTextPreservedWithOnlyAccountCtaUrlAdaptation": true,
+      "headingCount": 36,
+      "sha256": "5829a6f1984c39e34348a680e6f29b70babcdfb8579c6b87a5d1e0962d942693",
+      "upstreamSha256": "43754a664545457df60f659c82d6e23288d747a38ec0c5bdee2b904c74e5b9d2",
+      "allowedLinkAdaptations": [
+        "Account CTA to receptionist.caleonis.com/signup or /login",
+        "Dead original GitHub repository href to official public GitLab repository"
+      ],
+      "workingTreeFileSha256": "4e7cde9a8a5062343a29ee9260fe4f9a55a708220ca72eb78ed644a68727ce70",
+      "lineEndingNormalization": "LF; earlier source-body proof is retained, this additional digest identifies the final file bytes."
+    },
+    {
+      "locale": "fr",
+      "route": "/fr/blog/lobbystack-is-live/",
+      "source": "apps/landing/src/content/blog/fr/lobbystack-is-live.md",
+      "currentCharacters": 7313,
+      "upstreamCharacters": 7303,
+      "fullTextPreservedWithOnlyAccountCtaUrlAdaptation": true,
+      "headingCount": 6,
+      "sha256": "25f0e7e7774b674dddbdb2b74492fb63f7a46c917daf1aad93dbf601b4ffa012",
+      "upstreamSha256": "0e776f45e6b377208400c5ed6673a933ba72acd8ffb3fb96dd2984bb4033d466",
+      "allowedLinkAdaptations": [
+        "Account CTA to receptionist.caleonis.com/signup or /login",
+        "Dead original GitHub repository href to official public GitLab repository"
+      ],
+      "workingTreeFileSha256": "a2f130f81428056205f6dda4833ff8170551c583e47d868c3a11f21878dcf434",
+      "lineEndingNormalization": "LF; earlier source-body proof is retained, this additional digest identifies the final file bytes."
+    },
+    {
+      "locale": "fr",
+      "route": "/fr/blog/lobbystack-mit-license-ai-receptionist-resellers/",
+      "source": "apps/landing/src/content/blog/fr/lobbystack-mit-license-ai-receptionist-resellers.md",
+      "currentCharacters": 8416,
+      "upstreamCharacters": 8400,
+      "fullTextPreservedWithOnlyAccountCtaUrlAdaptation": true,
+      "headingCount": 10,
+      "sha256": "1c71bed2a92cef1485bdfd88a2cb3eb2e67cc0aa115a677d9088826ef6745d53",
+      "upstreamSha256": "23630d4a25cba9a5b29ba5a9220a3fcc83057294491c2b4a271ff22bcb53d13e",
+      "allowedLinkAdaptations": [
+        "Account CTA to receptionist.caleonis.com/signup or /login",
+        "Dead original GitHub repository href to official public GitLab repository"
+      ],
+      "workingTreeFileSha256": "0d5fe496d81a9bca4eab947da373a537321be38f001a03df1db87143d40df2c5",
+      "lineEndingNormalization": "LF; earlier source-body proof is retained, this additional digest identifies the final file bytes."
+    },
+    {
+      "locale": "fr",
+      "route": "/fr/blog/moneypenny-ai-receptionist-alternative/",
+      "source": "apps/landing/src/content/blog/fr/moneypenny-ai-receptionist-alternative.md",
+      "currentCharacters": 8874,
+      "upstreamCharacters": 8870,
+      "fullTextPreservedWithOnlyAccountCtaUrlAdaptation": true,
+      "headingCount": 11,
+      "sha256": "b808c84ca9ef422ce5aee72865432b7c9666de1c7981e69f3d46a74b136cff7c",
+      "upstreamSha256": "5235511b118c6305d65f10b4042df18950dad3ba8d2eff970f3a566af6927afc",
+      "allowedLinkAdaptations": [
+        "Account CTA to receptionist.caleonis.com/signup or /login",
+        "Dead original GitHub repository href to official public GitLab repository"
+      ],
+      "workingTreeFileSha256": "bccb79f52566ad2c5a9a29ae136445f024be1c2e6c7bcd9e4fdc8d6ce579740f",
+      "lineEndingNormalization": "LF; earlier source-body proof is retained, this additional digest identifies the final file bytes."
+    },
+    {
+      "locale": "fr",
+      "route": "/fr/blog/my-ai-front-desk-alternative/",
+      "source": "apps/landing/src/content/blog/fr/my-ai-front-desk-alternative.md",
+      "currentCharacters": 9186,
+      "upstreamCharacters": 9186,
+      "fullTextPreservedWithOnlyAccountCtaUrlAdaptation": true,
+      "headingCount": 10,
+      "sha256": "dc2f3838ce6eb3ab56b832002fd58c9f3c365ce85aa98db35a3820975049ac88",
+      "upstreamSha256": "dc2f3838ce6eb3ab56b832002fd58c9f3c365ce85aa98db35a3820975049ac88",
+      "allowedLinkAdaptations": [
+        "Account CTA to receptionist.caleonis.com/signup or /login",
+        "Dead original GitHub repository href to official public GitLab repository"
+      ],
+      "workingTreeFileSha256": "4cec696317547b7057fe98de018f899f9dde2e7794de5bee3fe01ef471a15403",
+      "lineEndingNormalization": "LF; earlier source-body proof is retained, this additional digest identifies the final file bytes."
+    },
+    {
+      "locale": "fr",
+      "route": "/fr/blog/nextiva-xbert-alternative/",
+      "source": "apps/landing/src/content/blog/fr/nextiva-xbert-alternative.md",
+      "currentCharacters": 6386,
+      "upstreamCharacters": 6386,
+      "fullTextPreservedWithOnlyAccountCtaUrlAdaptation": true,
+      "headingCount": 11,
+      "sha256": "191b18eadff8cd0c28093c60364407c70cf5cc4a5cc0961fb866e835375433b9",
+      "upstreamSha256": "191b18eadff8cd0c28093c60364407c70cf5cc4a5cc0961fb866e835375433b9",
+      "allowedLinkAdaptations": [
+        "Account CTA to receptionist.caleonis.com/signup or /login",
+        "Dead original GitHub repository href to official public GitLab repository"
+      ],
+      "workingTreeFileSha256": "ead45d8d93db2c2fc2b00f4d15f4ade540d641e30f737c93fb79b2a4dfed69f2",
+      "lineEndingNormalization": "LF; earlier source-body proof is retained, this additional digest identifies the final file bytes."
+    },
+    {
+      "locale": "fr",
+      "route": "/fr/blog/open-source-ai-receptionist-stack/",
+      "source": "apps/landing/src/content/blog/fr/open-source-ai-receptionist-stack.md",
+      "currentCharacters": 8691,
+      "upstreamCharacters": 8685,
+      "fullTextPreservedWithOnlyAccountCtaUrlAdaptation": true,
+      "headingCount": 6,
+      "sha256": "ad82b1e32dc9f857f8eee6c022aba15284c6f2af540e09cb068d8bb9eb9c7eb5",
+      "upstreamSha256": "4a2735bf5d451e8c055ba5eed9c98f8d723a571b1a54dce8b23f2fc76c88d717",
+      "allowedLinkAdaptations": [
+        "Account CTA to receptionist.caleonis.com/signup or /login",
+        "Dead original GitHub repository href to official public GitLab repository"
+      ],
+      "workingTreeFileSha256": "376c66e7fcc3a6ba37632e5a7b45350dc89851bcdb368693bf97085eb2c6f69d",
+      "lineEndingNormalization": "LF; earlier source-body proof is retained, this additional digest identifies the final file bytes."
+    },
+    {
+      "locale": "fr",
+      "route": "/fr/blog/outsourced-phone-answering-france/",
+      "source": "apps/landing/src/content/blog/fr/outsourced-phone-answering-france.md",
+      "currentCharacters": 14951,
+      "upstreamCharacters": 14947,
+      "fullTextPreservedWithOnlyAccountCtaUrlAdaptation": true,
+      "headingCount": 15,
+      "sha256": "a650e8c839a5522ba0ef748786fbda3ef11c6a2364970b072b6d14c076401c7d",
+      "upstreamSha256": "47962409c44b2f4814d0693d9e7031353797a4c2e8451615b8c282e4a0c6db0b",
+      "allowedLinkAdaptations": [
+        "Account CTA to receptionist.caleonis.com/signup or /login",
+        "Dead original GitHub repository href to official public GitLab repository"
+      ],
+      "workingTreeFileSha256": "f795261cb6ba23bd70eb4bcbf7164ea0898bc6f64b58a32cd59edcefc9543c90",
+      "lineEndingNormalization": "LF; earlier source-body proof is retained, this additional digest identifies the final file bytes."
+    },
+    {
+      "locale": "fr",
+      "route": "/fr/blog/phone-answering-script/",
+      "source": "apps/landing/src/content/blog/fr/phone-answering-script.md",
+      "currentCharacters": 25409,
+      "upstreamCharacters": 25024,
+      "fullTextPreservedWithOnlyAccountCtaUrlAdaptation": true,
+      "headingCount": 45,
+      "sha256": "bdb634bf942ac738c1a4521205df8e383f7781b72430ea8e14333707fe387ab5",
+      "upstreamSha256": "57b1c8673169bc9a8c866103eb6486f91482dba496e47b5cbf48172e04ab60b2",
+      "allowedLinkAdaptations": [
+        "Account CTA to receptionist.caleonis.com/signup or /login",
+        "Dead original GitHub repository href to official public GitLab repository",
+        "Dead FTC robocalls href replaced with its current FTC unwanted-calls article and corresponding robocalls section; full prose unchanged"
+      ],
+      "workingTreeFileSha256": "d4be4fa8811a47596b48ccc986a281fa4fce273f0ee3abf35a9a5c50f78b0e0e",
+      "lineEndingNormalization": "LF; earlier source-body proof is retained, this additional digest identifies the final file bytes."
+    },
+    {
+      "locale": "fr",
+      "route": "/fr/blog/quo-sona-alternative/",
+      "source": "apps/landing/src/content/blog/fr/quo-sona-alternative.md",
+      "currentCharacters": 6293,
+      "upstreamCharacters": 6293,
+      "fullTextPreservedWithOnlyAccountCtaUrlAdaptation": true,
+      "headingCount": 11,
+      "sha256": "86c7fc86a05787dbf82b69335a83b858678843ac8117605d2f3d9009ef511515",
+      "upstreamSha256": "86c7fc86a05787dbf82b69335a83b858678843ac8117605d2f3d9009ef511515",
+      "allowedLinkAdaptations": [
+        "Account CTA to receptionist.caleonis.com/signup or /login",
+        "Dead original GitHub repository href to official public GitLab repository"
+      ],
+      "workingTreeFileSha256": "dec4809149f0e052b303158d4107e233bad73f175ba8aab3e8384082da5fa65e",
+      "lineEndingNormalization": "LF; earlier source-body proof is retained, this additional digest identifies the final file bytes."
+    },
+    {
+      "locale": "fr",
+      "route": "/fr/blog/ringcentral-ai-receptionist-alternative/",
+      "source": "apps/landing/src/content/blog/fr/ringcentral-ai-receptionist-alternative.md",
+      "currentCharacters": 20253,
+      "upstreamCharacters": 20243,
+      "fullTextPreservedWithOnlyAccountCtaUrlAdaptation": true,
+      "headingCount": 20,
+      "sha256": "8de09766943fccf0cac67f15afbf00c8ebd77e3a0636c0e4080920e71ec22843",
+      "upstreamSha256": "c86245eefe03139ed9eaa50419d88a8a3f40fcb0b7c5ade4678be52d044dae14",
+      "allowedLinkAdaptations": [
+        "Account CTA to receptionist.caleonis.com/signup or /login",
+        "Dead original GitHub repository href to official public GitLab repository"
+      ],
+      "workingTreeFileSha256": "58aad9bd6a6650db47f8005a705776b644f3818b2cf64eb8c683e14764dce35b",
+      "lineEndingNormalization": "LF; earlier source-body proof is retained, this additional digest identifies the final file bytes."
+    },
+    {
+      "locale": "fr",
+      "route": "/fr/blog/rosie-ai-alternative/",
+      "source": "apps/landing/src/content/blog/fr/rosie-ai-alternative.md",
+      "currentCharacters": 26125,
+      "upstreamCharacters": 26117,
+      "fullTextPreservedWithOnlyAccountCtaUrlAdaptation": true,
+      "headingCount": 17,
+      "sha256": "c233abdb75416f647f259b1b67318c487620ad0c3283ff82153932836732ca87",
+      "upstreamSha256": "f90495fa90051cc1056907ac4665b7fa82717959e57fceb09f408aadad159632",
+      "allowedLinkAdaptations": [
+        "Account CTA to receptionist.caleonis.com/signup or /login",
+        "Dead original GitHub repository href to official public GitLab repository"
+      ],
+      "workingTreeFileSha256": "9a7f179960c09eae0657eea4f9c997011f90108a40f2b455e2eec84e5134e32a",
+      "lineEndingNormalization": "LF; earlier source-body proof is retained, this additional digest identifies the final file bytes."
+    },
+    {
+      "locale": "fr",
+      "route": "/fr/blog/ruby-receptionists-alternative/",
+      "source": "apps/landing/src/content/blog/fr/ruby-receptionists-alternative.md",
+      "currentCharacters": 25580,
+      "upstreamCharacters": 25572,
+      "fullTextPreservedWithOnlyAccountCtaUrlAdaptation": true,
+      "headingCount": 22,
+      "sha256": "0f9c9bd81a61255c185c1091e238584f92e62f3884abe760a48a0c891d32a6f3",
+      "upstreamSha256": "e56d4aa94c9ddbe026d71a4e38faa7183f068509a788de73194f6f1127569f19",
+      "allowedLinkAdaptations": [
+        "Account CTA to receptionist.caleonis.com/signup or /login",
+        "Dead original GitHub repository href to official public GitLab repository"
+      ],
+      "workingTreeFileSha256": "7a6278d21d2eb00c87abb0b3843d28f8afe0fd10dd767c4d2f71aa3aacdaf3a3",
+      "lineEndingNormalization": "LF; earlier source-body proof is retained, this additional digest identifies the final file bytes."
+    },
+    {
+      "locale": "fr",
+      "route": "/fr/blog/smith-ai-alternative/",
+      "source": "apps/landing/src/content/blog/fr/smith-ai-alternative.md",
+      "currentCharacters": 6478,
+      "upstreamCharacters": 6474,
+      "fullTextPreservedWithOnlyAccountCtaUrlAdaptation": true,
+      "headingCount": 10,
+      "sha256": "667ed4b3bc9d648633938eabffeb3b36630577e9ea094bee8e18655cf77c42c9",
+      "upstreamSha256": "3f3ae5379d9815cbde4cce9988cd468e16bd2dc085cf8125cdf9f01065e90d9b",
+      "allowedLinkAdaptations": [
+        "Account CTA to receptionist.caleonis.com/signup or /login",
+        "Dead original GitHub repository href to official public GitLab repository"
+      ],
+      "workingTreeFileSha256": "4596d9a94b69b8bf5cdb4aafc230928e30d7a9873526fee9da23963f8bf87e07",
+      "lineEndingNormalization": "LF; earlier source-body proof is retained, this additional digest identifies the final file bytes."
+    },
+    {
+      "locale": "fr",
+      "route": "/fr/blog/upfirst-alternative/",
+      "source": "apps/landing/src/content/blog/fr/upfirst-alternative.md",
+      "currentCharacters": 6631,
+      "upstreamCharacters": 6619,
+      "fullTextPreservedWithOnlyAccountCtaUrlAdaptation": true,
+      "headingCount": 10,
+      "sha256": "e9734f40ea207fd2be028846e2962c99b8d353e52094b0891f2141d80deffbde",
+      "upstreamSha256": "22bc505d3b83e7c0577fc9aab69a9219e677167c5e219f21e918ce9a98e60f21",
+      "allowedLinkAdaptations": [
+        "Account CTA to receptionist.caleonis.com/signup or /login",
+        "Dead original GitHub repository href to official public GitLab repository"
+      ],
+      "workingTreeFileSha256": "331c1e94b198ab85434a7536d8f2fc19030a081cad4c50c776a744e5a14bda6b",
+      "lineEndingNormalization": "LF; earlier source-body proof is retained, this additional digest identifies the final file bytes."
+    },
+    {
+      "locale": "fr",
+      "route": "/fr/blog/what-is-a-phone-answering-service/",
+      "source": "apps/landing/src/content/blog/fr/what-is-a-phone-answering-service.md",
+      "currentCharacters": 18724,
+      "upstreamCharacters": 18720,
+      "fullTextPreservedWithOnlyAccountCtaUrlAdaptation": true,
+      "headingCount": 26,
+      "sha256": "6c3d25a566dfdf5ccc2c4046043a5aad009627a73e307cdbd25f7029f38b8cb3",
+      "upstreamSha256": "5df8157fc14b4ab91ee02a0dbdd7b740ba06ef71e46a3b6faf91d40ff428570e",
+      "allowedLinkAdaptations": [
+        "Account CTA to receptionist.caleonis.com/signup or /login",
+        "Dead original GitHub repository href to official public GitLab repository"
+      ],
+      "workingTreeFileSha256": "dedad769f3e71fde64e3e8f1a7ccc25674670cc13aba9269c406ac7e8c0c86da",
+      "lineEndingNormalization": "LF; earlier source-body proof is retained, this additional digest identifies the final file bytes."
+    },
+    {
+      "locale": "fr",
+      "route": "/fr/blog/why-lobbystack-is-moving-away-from-convex/",
+      "source": "apps/landing/src/content/blog/fr/why-lobbystack-is-moving-away-from-convex.md",
+      "currentCharacters": 8824,
+      "upstreamCharacters": 8814,
+      "fullTextPreservedWithOnlyAccountCtaUrlAdaptation": true,
+      "headingCount": 6,
+      "sha256": "7013871dc2fddb75adb95bad428524de33d2ca99a9de9eec45490fa84e7804b3",
+      "upstreamSha256": "168da2ba68d0579acd9e7c981202fc77e39b4f31478e71cd7ddc85aa48564ce2",
+      "allowedLinkAdaptations": [
+        "Account CTA to receptionist.caleonis.com/signup or /login",
+        "Dead original GitHub repository href to official public GitLab repository"
+      ],
+      "workingTreeFileSha256": "e6894ea2a500d06fa0194815f1f8ff14c78787e783d7095b509dbbda5dd8ad91",
+      "lineEndingNormalization": "LF; earlier source-body proof is retained, this additional digest identifies the final file bytes."
+    },
+    {
+      "locale": "fr",
+      "route": "/fr/blog/zoom-ai-receptionist-alternative/",
+      "source": "apps/landing/src/content/blog/fr/zoom-ai-receptionist-alternative.md",
+      "currentCharacters": 8340,
+      "upstreamCharacters": 8340,
+      "fullTextPreservedWithOnlyAccountCtaUrlAdaptation": true,
+      "headingCount": 11,
+      "sha256": "cc34fbb6651e7b480c841b83ce905f79004d3efe9e7a0c67363ed0cc35ce9bff",
+      "upstreamSha256": "cc34fbb6651e7b480c841b83ce905f79004d3efe9e7a0c67363ed0cc35ce9bff",
+      "allowedLinkAdaptations": [
+        "Account CTA to receptionist.caleonis.com/signup or /login",
+        "Dead original GitHub repository href to official public GitLab repository"
+      ],
+      "workingTreeFileSha256": "125afd09030711b4f9fb6bc3bd1427f603a4090777d70ef6a3d566789ce82867",
+      "lineEndingNormalization": "LF; earlier source-body proof is retained, this additional digest identifies the final file bytes."
+    }
+  ],
+  "lastLinkReviewAt": "2026-10-15T21:53:54.391441+00:00",
+  "finalLineEndings": "LF, as required by AGENTS.md"
+}

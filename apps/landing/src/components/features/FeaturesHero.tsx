@@ -12,14 +12,14 @@ const featuresHeroCopy = {
   en: {
     h1Start: "AI receptionist features that actually",
     h1Emphasis: "get work done",
-    body: "LobbyStack handles AI phone answering, appointment booking, team notifications, call routing, quotes, and lead qualification without phone trees or workflow-builder mess.",
+    body: "Caléonis Receptionist handles AI phone answering, appointment booking, team notifications, call routing, quotes, and lead qualification without phone trees or workflow-builder mess.",
     workflowLabel: "Write the workflow",
     workflowText:
       "When someone asks for a quote, ask what service they need, where they are located, their timeline, and their budget. Give our approved price range for standard jobs. If they need exact pricing, book an on-site estimate and attach the summary for the team.",
-    callLabel: "LobbyStack handles the call",
+    callLabel: "Caléonis Receptionist handles the call",
     quoteTitle: "Quote request from Sarah M.",
     service: "Service: Renovation estimate",
-    budget: "Budget: $8,000 to $12,000",
+    budget: "Budget: €8,000 to €12,000",
     timeline: "Timeline: Next month",
     priceRange: "Price range shared",
     callbackNeeded: "On-site estimate needed",
@@ -34,14 +34,14 @@ const featuresHeroCopy = {
   fr: {
     h1Start: "Tout ce qu’il faut pour",
     h1Emphasis: "répondre, qualifier et réserver",
-    body: "LobbyStack prend les appels, qualifie les demandes, planifie les rendez‑vous et transmet les bonnes informations à votre équipe, sans menu téléphonique ni scénarios impossibles à maintenir.",
+    body: "Caléonis Receptionist prend les appels, qualifie les demandes, planifie les rendez‑vous et transmet les bonnes informations à votre équipe, sans menu téléphonique ni scénarios impossibles à maintenir.",
     workflowLabel: "Décrivez vos règles",
     workflowText:
       "Si quelqu’un demande un devis, demandez le service, l’adresse, le délai souhaité et le budget. Donnez la fourchette approuvée pour les demandes standards. Si le prix doit être confirmé, planifiez une visite d’estimation et joignez le résumé pour l’équipe.",
-    callLabel: "LobbyStack prend l’appel",
+    callLabel: "Caléonis Receptionist prend l’appel",
     quoteTitle: "Demande de devis - Sarah M.",
     service: "Service : estimation de rénovation",
-    budget: "Budget : 8 000 $ à 12 000 $",
+    budget: "Budget : 8 000 € à 12 000 €",
     timeline: "Délai : le mois prochain",
     priceRange: "Fourchette communiquée",
     callbackNeeded: "Visite d’estimation à prévoir",
@@ -71,12 +71,12 @@ export function FeaturesHero({ locale = "en" }: FeaturesHeroProps) {
             </span>
           </h1>
 
-          <p className="animate-fade-up body-copy mx-auto mt-6 max-w-[65ch] stagger-2 md:text-lg">
+          <p className="animate-fade-up body-copy stagger-2 mx-auto mt-6 max-w-[65ch] md:text-lg">
             {copy.body}
           </p>
 
           {/* CTAs */}
-          <div className="animate-fade-up mt-8 flex items-center justify-center gap-4 stagger-3">
+          <div className="animate-fade-up stagger-3 mt-8 flex items-center justify-center gap-4">
             <a
               href={APP_SIGNUP_URL}
               className={cn(
@@ -103,8 +103,13 @@ export function FeaturesHero({ locale = "en" }: FeaturesHeroProps) {
           </div>
         </div>
 
+        <p className="mx-auto mt-6 max-w-5xl text-center text-xs text-muted-foreground">
+          {locale === "fr"
+            ? "Exemple fictif de consignes et résultat ; schéma illustratif, pas une capture de l’application. Les confirmations externes dépendent des capacités activées ; aucun SMS sur le numéro Voice-only."
+            : "Fictional instructions and outcome; illustrative diagram, not an application screenshot. External confirmations depend on enabled capabilities; no SMS on the Voice-only number."}
+        </p>
         {/* Three product panels */}
-        <div className="animate-fade-up mx-auto mt-16 max-w-5xl stagger-5 md:mt-20">
+        <div className="animate-fade-up stagger-5 mx-auto mt-16 max-w-5xl md:mt-20">
           <div className="grid gap-4 md:grid-cols-3">
             {/* Panel 1: Plain-language workflow */}
             <div className="flex flex-col rounded-2xl border border-border/70 bg-background p-6">

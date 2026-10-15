@@ -1,29 +1,58 @@
 ---
-title: "Préparer un client ChatGPT"
-description: "Vérifier un accès MCP autorisé sans promettre une option ou une offre tierce."
+title: "Connecter ChatGPT et les agents OpenAI"
+description: "Ajoutez Caléonis Receptionist à ChatGPT comme application, ou utilisez-le depuis l'API Responses d'OpenAI et Codex."
+sidebarTitle: "ChatGPT"
+contentType: "How-to"
 ---
-Cette page traite du serveur MCP existant de Caléonis, pas d’une nouvelle fonction d’agent dans le SaaS.
 
-## Compatibilité
+L'URL du serveur est `https://receptionist.caleonis.com/api/mcp`. Si vous auto-hébergez Caléonis Receptionist, remplacez `receptionist.caleonis.com` par votre propre domaine. ChatGPT s'y connecte depuis Internet : un Caléonis Receptionist auto-hébergé a donc besoin d'une adresse HTTPS publique.
 
-Vérifiez dans votre version de ChatGPT que l’ajout d’un serveur MCP distant est disponible et autorisé par votre organisation. Les réglages et offres tiers ne sont pas garantis par Caléonis.
+Consultez [Serveur MCP](/ai/mcp) pour savoir quels outils chaque autorisation débloque.
 
-L’URL technique est `https://receptionist.caleonis.com/api/mcp`. Utilisez le mécanisme d’authentification que votre client accepte et que votre environnement Caléonis a qualifié.
+## ChatGPT
 
-## Autoriser le bon espace
+Vérifiez dans votre version de ChatGPT que l'ajout d'un serveur MCP distant est disponible et autorisé par votre organisation. Les menus et offres de ce logiciel tiers ne constituent pas une fonction incluse de Caléonis.
 
-Lorsqu’un consentement OAuth est proposé, vérifiez l’entreprise et les permissions demandées. Commencez en lecture seule.
+1. Ouvrez le parcours d'ajout MCP proposé par votre version.
+2. Saisissez `https://receptionist.caleonis.com/api/mcp` et le mode d'authentification effectivement ouvert dans votre espace.
+3. En cas de consentement OAuth, vérifiez l'entreprise et limitez les permissions.
+4. Testez `get_business`, un refus d'action sans permission et la révocation.
 
-Ne collez pas une clé API dans une conversation et ne transmettez pas de données client pour diagnostiquer un problème de connexion.
+La documentation officielle des [connexions MCP OpenAI](https://developers.openai.com/api/docs/guides/tools-connectors-mcp) précise les paramètres API. La connexion du SaaS avec chaque client doit être qualifiée séparément. Ne collez jamais une clé dans une conversation.
 
-## Contrôler
+## API Responses d'OpenAI
 
-Demandez le nom de l’entreprise, puis comparez avec le tableau de bord. Vérifiez le refus d’une opération non autorisée.
+L'API Responses appelle les serveurs MCP distants pour vous. Passez une clé API dans `headers` :
 
-La réservation ou modification d’un rendez-vous nécessite une autorisation de votre organisation et un espace de test. L’assistant ne doit pas annoncer de SMS ou d’email sans résultat de livraison.
+```bash
+curl https://api.openai.com/v1/responses \
+  -H "Authorization: Bearer $OPENAI_API_KEY" \
+  -H "content-type: application/json" \
+  -d '{
+    "model": "gpt-6-luna",
+    "tools": [{
+      "type": "mcp",
+      "server_label": "lobbystack",
+      "server_url": "https://receptionist.caleonis.com/api/mcp",
+      "headers": { "Authorization": "Bearer '"$LOBBYSTACK_API_KEY"'" },
+      "require_approval": "always"
+    }],
+    "input": "Who called yesterday and asked for a callback?"
+  }'
+```
 
-## Retirer l’accès
+`require_approval: "always"` arrête l'API avant chaque appel d'outil pour que votre code puisse le confirmer. N'assouplissez ce réglage que pour les clés qui ont seulement des portées de lecture.
 
-Déconnectez le client et révoquez l’autorisation ou la clé correspondante dans les réglages Caléonis disponibles.
+## Codex
 
-Consultez [MCP](/ai/mcp) et [Authentification API](/api/authentication) pour les limites techniques.
+Ajoutez Caléonis Receptionist à `~/.codex/config.toml`. Codex lit la clé API dans la variable d'environnement que vous indiquez :
+
+```toml ~/.codex/config.toml
+[mcp_servers.lobbystack]
+url = "https://receptionist.caleonis.com/api/mcp"
+bearer_token_env_var = "LOBBYSTACK_API_KEY"
+```
+
+Exportez `LOBBYSTACK_API_KEY` dans votre terminal, lancez Codex et demandez-lui d'appeler `get_business` pour vérifier la connexion.
+
+Référence officielle pour la configuration Codex : [MCP](https://developers.openai.com/codex/mcp).

@@ -9,7 +9,6 @@ import { translatedBasePaths } from "./src/i18n/translated-base-paths.ts"
 import { indexNowChangedPages } from "./src/lib/indexnow.ts"
 import { SITE_URL } from "./src/lib/site-origin.mjs"
 import { stableLastmodForUrl } from "./src/lib/sitemap.ts"
-import { isReviewedPath } from "./src/lib/launch-content.ts"
 
 // No search-engine submission from a private preview.
 const INDEXNOW_KEY = undefined
@@ -19,6 +18,7 @@ const NOINDEX_PATHS = new Set([
   "/404/",
   "/cookie-policy/",
   "/privacy/",
+  "/confidentialite/",
   "/terms/",
   "/search/",
 ])
@@ -157,6 +157,8 @@ export default defineConfig({
         honorRedirects: false,
         skip: (href) =>
           href.startsWith("/.well-known/") ||
+          // Help is assembled from mintlify by build-p1-review.mjs after Astro.
+          href.startsWith("/aide/") ||
           href.startsWith("/api/") ||
           href.startsWith("/openapi.json") ||
           href.startsWith("/schema/") ||
@@ -169,7 +171,7 @@ export default defineConfig({
       entryLimit: 1000,
       filter: (page) => {
         const pathname = new URL(page).pathname
-        return !["/aide/", "/fr/aide/"].includes(pathname) && isReviewedPath(pathname) && !isNoindexPath(pathname)
+        return !["/aide/", "/fr/aide/"].includes(pathname) && !isNoindexPath(pathname)
       },
       serialize(item) {
         const lastmod = stableLastmodForUrl(item.url)

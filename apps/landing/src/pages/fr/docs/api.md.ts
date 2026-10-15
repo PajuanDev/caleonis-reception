@@ -2,9 +2,9 @@ import type { APIRoute } from "astro"
 import { markdownResponse } from "@/lib/markdown-response"
 import { absoluteUrl } from "@/lib/seo"
 
-const markdown = `# Documentation API publique LobbyStack
+const markdown = `# Documentation API publique Caléonis Receptionist
 
-LobbyStack expose des ressources publiques de découverte pour les agents et intégrateurs.
+Caléonis Receptionist expose des ressources publiques de découverte pour les agents et intégrateurs.
 
 ## Ressources
 
@@ -22,7 +22,7 @@ export const GET: APIRoute = () =>
   markdownResponse({
     markdown,
     canonical: absoluteUrl("/fr/docs/api/"),
-    title: "Documentation API publique LobbyStack",
+    title: "Documentation API publique Caléonis Receptionist",
     description:
-      "Ressources de découverte lisibles par machine pour les agents et intégrateurs qui visitent LobbyStack.",
+      "Ressources de découverte lisibles par machine pour les agents et intégrateurs qui visitent Caléonis Receptionist.",
   })

@@ -22,7 +22,6 @@ const entryMap = async () => {
       title: entry.title,
       description: entry.description,
     })),
-
   ]
 
   return new Map(entries.map((entry) => [entry.slug, entry]))

@@ -1,39 +1,68 @@
 ---
-title: "Consulter les appels"
-description: "Retrouver un appel téléphonique ou navigateur, son résumé, sa transcription et son audio disponible."
+title: "Consulter les appels et les suivis"
+description: "Utilisez la page Appels pour consulter les appels entrants, leurs résultats, les transcriptions, les enregistrements et les tâches de suivi."
+sidebarTitle: "Appels"
+contentType: "How-to"
 ---
-Ouvrez **Général > Appels** dans le [tableau de bord](https://receptionist.caleonis.com/calls). La liste concerne uniquement l’entreprise active.
 
-## Trouver un appel
+La page **Appels** contient l'historique des appels de votre entreprise active. Elle affiche les appels entrants traités par Caléonis Receptionist, avec leur statut, leur résultat et la disponibilité de la transcription et de l'enregistrement.
 
-Recherchez le nom ou le numéro de l’appelant et utilisez les filtres proposés. Vérifiez l’heure et le fuseau d’affichage. Un appel navigateur peut ne pas avoir de numéro de téléphone.
 
-La liste peut indiquer un appel en cours avant que son résumé et sa transcription soient terminés.
+## Ce qu'affiche la liste des appels
 
-## Lire une fiche
+Chaque ligne peut inclure :
 
-| Élément | Vérification utile |
+- Le nom de l'appelant ou la mention d'appelant inconnu.
+- Le numéro de téléphone de l'appelant.
+- Un résumé du motif ou du résultat.
+- L'heure de début.
+- Le statut et l'issue de l'appel.
+- Un indicateur de transcription.
+- La lecture audio quand un enregistrement est disponible.
+
+L'en-tête de la page indique aussi le nombre d'appels en cours.
+
+## Rechercher et filtrer
+
+Utilisez le champ de recherche pour trouver des appels par nom d'appelant, numéro de téléphone ou texte du résultat. Utilisez le filtre de statut pour affiner la liste.
+
+## Vue détaillée d'un appel
+
+Ouvrez un appel pour voir trois onglets :
+
+| Onglet | Ce qu'il affiche |
 | --- | --- |
-| Résumé | Le motif et le résultat correspondent-ils à l’échange ? |
-| Transcription | Les noms, dates et demandes sont-ils correctement compris ? |
-| Enregistrement | Un audio est-il effectivement disponible et lisible ? |
-| Détails | L’état final, les horaires et le suivi sont-ils cohérents ? |
-| Rendez-vous ou suivi | L’action a-t-elle réellement été enregistrée ? |
+| **Transcription** | Les échanges enregistrés entre l'appelant et l'assistante, quand ils sont disponibles. |
+| **Enregistrement** | Un lecteur audio une fois l'audio de l'appel téléversé, ou un état de traitement pendant la préparation de l'audio. |
+| **Détails** | Le résultat, la tâche de suivi, le statut de l'appel, le statut du transfert et les horaires. |
 
-La transcription peut comporter des erreurs de reconnaissance. Un résumé n’est pas une preuve de livraison d’un SMS, d’un email ou d’un transfert.
+## Tâches de suivi
 
-## Écouter l’enregistrement
+Si la réceptionniste prend un message de rappel ou de suivi pendant un appel, la tâche apparaît sur la page de détail de l'appel. Vous pouvez marquer la tâche comme terminée depuis le tableau de bord.
 
-Ouvrez l’onglet audio de la fiche lorsqu’un enregistrement est disponible. La préparation peut prendre du temps après la fin de l’appel. Si aucun audio n’apparaît, consultez [Enregistrements et information des appelants](/support/recordings).
+## Enregistrements
 
-L’audio se consulte depuis une session autorisée. Ne partagez pas une URL temporaire comme lien public.
+Caléonis Receptionist conserve un enregistrement quand l'audio de l'appel est disponible. Pendant la préparation de l'audio, le tableau de bord affiche un état de traitement.
 
-## Traiter les demandes
+<Note>
+  La lecture de l'enregistrement apparaît une fois le traitement de l'audio terminé. Gérez la politique d'enregistrement et de conservation avec les réglages de votre espace de travail et de conformité.
+</Note>
 
-Si un appel a produit une demande de rappel, relisez les coordonnées et organisez l’action de votre équipe. Marquez le suivi comme terminé seulement après traitement.
+## Résultats
 
-Un statut de transfert visible décrit un résultat technique. Le transfert humain du pilote reste à qualifier ; ne le présentez pas comme opérationnel sur cette seule base.
+Les résumés d'appel peuvent indiquer des résultats comme :
 
-## Appel manquant ou incomplet
+- Rendez-vous réservé.
+- Prise de rendez-vous commencée mais non terminée.
+- Message pris.
+- Transfert réussi, ligne occupée ou transfert échoué.
+- Appel terminé sans résultat structuré.
+- Échec, annulation, absence de réponse ou problème technique.
 
-Vérifiez l’entreprise, les filtres et le délai de traitement. Conservez l’identifiant de la fiche et l’heure du test, puis suivez le [dépannage](/support/troubleshooting). Ne publiez pas l’audio ou des données personnelles dans un rapport d’incident.
+{/* Caléonis qualification */}
+
+## Vérifier les résultats du pilote
+
+Une transcription peut comporter des erreurs sur un nom ou une date. Le résumé ne prouve ni livraison SMS/email ni transfert humain. Le transfert du pilote reste à qualifier séparément.
+
+L'audio est privé ; ne partagez pas une URL temporaire comme lien public. Si un élément manque, vérifiez rôle, entreprise et traitement puis consultez [Enregistrements](/support/recordings) et [Dépannage](/support/troubleshooting).

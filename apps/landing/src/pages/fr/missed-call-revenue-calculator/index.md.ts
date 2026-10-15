@@ -28,7 +28,8 @@ export const GET: APIRoute = () =>
   markdownResponse({
     markdown,
     canonical: absoluteUrl("/fr/missed-call-revenue-calculator/"),
-    title: "Calculateur de revenu perdu par appels manqués | LobbyStack",
+    title:
+      "Calculateur de revenu perdu par appels manqués | Caléonis Receptionist",
     description:
       "Estimez le revenu hebdomadaire, mensuel et annuel à risque lorsque votre entreprise manque des appels prêts à réserver.",
   })

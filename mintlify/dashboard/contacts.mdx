@@ -1,28 +1,55 @@
 ---
-title: "Gérer les contacts"
-description: "Rechercher un contact et relier ses échanges sans mélanger les entreprises."
+title: "Gérer les contacts et leur consentement"
+description: "Consultez les fiches des appelants, l'historique des échanges, les rendez-vous, le statut de blocage et le consentement aux SMS."
+sidebarTitle: "Contacts"
+contentType: "How-to"
 ---
-Les **Contacts** regroupent les coordonnées et l’historique disponibles pour l’entreprise active.
 
-## Retrouver une personne
+La page **Contacts** liste les personnes liées à vos appels, messages et rendez-vous. Caléonis Receptionist crée les contacts automatiquement à partir des échanges téléphoniques et les met à jour à chaque nouvelle activité.
 
-1. Ouvrez **Général > Contacts**.
-2. Recherchez un nom, un téléphone ou une adresse email.
-3. Ouvrez la fiche et vérifiez les coordonnées avant toute action.
-4. Consultez les appels, messages ou rendez-vous associés lorsqu’ils sont proposés.
+## Liste des contacts
 
-Un visiteur Web peut n’avoir ni numéro ni adresse email. Un appel masqué ou une transcription imprécise ne permet pas d’identifier une personne avec certitude.
+Chaque ligne peut afficher :
 
-## Corriger une fiche
+- Le nom du contact ou la mention de contact inconnu.
+- Le numéro de téléphone et l'adresse email, s'ils sont connus.
+- Le nombre d'appels et de messages.
+- Le nombre de rendez-vous.
+- L'heure du dernier échange.
+- Le statut de blocage.
 
-Utilisez les actions visibles dans la fiche si votre rôle le permet. Pour un téléphone français, préférez le format international avec **+33** et sans le zéro initial.
+Utilisez la recherche pour filtrer par nom, numéro de téléphone ou adresse email.
 
-Avant de créer un contact supplémentaire, recherchez une fiche existante. N’associez pas deux personnes sur la seule ressemblance d’un nom.
+## Fiche d'un contact
 
-## Consentement et suivi
+Ouvrez un contact pour voir :
 
-La présence d’un téléphone n’équivaut pas à un consentement SMS. Le refus de notification d’un client doit être conservé. Un contact ne déclenche pas un envoi ou un appel sortant automatique.
+| Onglet | Ce qu'il affiche |
+| --- | --- |
+| **Activité** | Les appels, les SMS et l'activité liée aux rendez-vous, par ordre chronologique. |
+| **Rendez-vous** | Le service, la date et l'heure, le statut, le canal et l'état de synchronisation avec le calendrier. |
+| **Détails** | Les coordonnées, l'état de blocage, le consentement aux SMS et les métadonnées du système. |
 
-## Données à saisir
+## Bloquer un contact
 
-Limitez les notes au besoin opérationnel. Ne saisissez pas de données de santé dans le pilote. Pour une demande d’accès ou de suppression, transmettez-la au responsable de l’entreprise et consultez [Confidentialité](/support/privacy).
+Quand vous bloquez un contact, Caléonis Receptionist n'envoie plus de réponses SMS à ce contact et raccroche immédiatement ses nouveaux appels entrants. Vous pouvez débloquer le contact plus tard depuis le même menu.
+
+## Consentement aux SMS
+
+La fiche du contact indique s'il est abonné aux SMS ou s'il s'est désabonné, la date du changement de consentement et, si elle est connue, la source de ce changement.
+
+## Supprimer un contact
+
+Les contacts liés à des conversations ou à des rendez-vous restent en place pour que l'historique d'activité reste complet. Vous pouvez supprimer un contact sans éléments liés depuis sa fiche.
+
+<Note>
+  La suppression d'un contact est définitive. Les conversations et les rendez-vous liés restent protégés pour que votre historique d'activité reste intact.
+</Note>
+
+{/* Caléonis qualification */}
+
+## Identification et protection des données
+
+Un visiteur Web peut ne pas avoir de téléphone ni d'email. Un appel masqué ou un nom ressemblant ne permettent pas d'identifier une personne avec certitude. Recherchez une fiche existante avant d'en créer une autre.
+
+Un téléphone enregistré n'est pas un consentement SMS et ne change pas la capacité Voice-only. Ne testez pas le blocage sur une ligne client active : il peut interrompre la réception. Pour une demande de suppression, suivez le responsable de l'entreprise et [Confidentialité](/support/privacy).

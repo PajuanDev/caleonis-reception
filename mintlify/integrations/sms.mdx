@@ -1,6 +1,7 @@
 ---
 title: "Comprendre les SMS et le consentement"
 description: "Vérifier les capacités d’envoi sans confondre voix, boîte Messages et notifications."
+sidebarTitle: "Alertes SMS et consentement"
 ---
 <Warning>
 Le numéro pilote français est Voice-only : aucun SMS ne peut être envoyé ou reçu sur ce numéro.
@@ -33,3 +34,17 @@ Un refus doit être respecté, même si une réservation a été créée. « En 
 L’état « skipped » indique qu’une notification n’a pas été envoyée. Il ne s’agit pas d’une erreur à contourner en choisissant un autre canal sans accord.
 
 Pour le pilote Voice-only, consultez le rendez-vous dans l’application et Google plutôt que d’annoncer un SMS.
+
+{/* Caléonis qualification */}
+
+## Consentement client lors d'une réservation
+
+Demandez l'accord avant de conserver un opt-in ; le téléphone du contact ne suffit pas. Si l'appelant refuse, gardez le rendez-vous et n'envoyez ni confirmation ni rappel SMS. Le consentement ne peut pas donner une capacité SMS à une ligne Voice-only.
+
+Lors du test pilote sans SMS, l'événement Google a été créé sans invité ; la confirmation interne était skipped et aucun SMS, email ou alerte opérateur n'a été envoyé pour cette réservation. Vérifiez séparément tout autre scénario.
+
+## Désabonnement, aide et future ouverture
+
+L'éventuelle ouverture d'un service distinct nécessiterait validation du pays, de l'expéditeur, des coûts, des preuves de consentement, de la suppression des destinataires opposés et du résultat fournisseur. Les anciens textes STOP/HELP et conditions nord-américaines ne sont pas présentés comme les mentions françaises finales.
+
+L'email et le tableau de bord restent des parcours distincts ; n'utilisez pas un autre canal pour contourner un refus de notification. Un test d'envoi nécessite un destinataire personnel autorisé et le contrôle du résultat réel.

@@ -1,3 +1,4 @@
+import { qualifyPilotText, qualifyPilotLabel } from "@/lib/pilot-qualification"
 import { buttonVariants } from "@/components/ui/button"
 import { APP_SIGNUP_URL } from "@/lib/app-links"
 import { cn } from "@/lib/utils"
@@ -8,19 +9,19 @@ export function Hero() {
     <section className="relative overflow-hidden" id="hero">
       <div className="mx-auto max-w-7xl px-6 pt-16 pb-8 md:pt-20 md:pb-10 lg:pt-24 lg:pb-12">
         <div className="mx-auto max-w-4xl text-center">
-          <h1 className="animate-fade-up font-heading text-4xl leading-[1.1] font-medium tracking-tight stagger-1 md:text-5xl lg:text-[4rem]">
+          <h1 className="animate-fade-up stagger-1 font-heading text-4xl leading-[1.1] font-medium tracking-tight md:text-5xl lg:text-[4rem]">
             Home services answering service that books jobs while your crew{" "}
             <span className="underline decoration-2 underline-offset-4">
               works
             </span>
           </h1>
-          <p className="animate-fade-up mx-auto mt-6 max-w-2xl text-base leading-relaxed text-muted-foreground stagger-2 md:text-lg">
-            LobbyStack answers calls for HVAC, plumbing, electrical, roofing,
-            and landscaping businesses. It captures emergency calls, books
-            appointments, and routes urgent jobs to your team while you are busy
-            doing the work.
+          <p className="animate-fade-up stagger-2 mx-auto mt-6 max-w-2xl text-base leading-relaxed text-muted-foreground md:text-lg">
+            Caléonis Receptionist answers calls for HVAC, plumbing, electrical,
+            roofing, and landscaping businesses. It captures emergency calls,
+            books appointments, and routes urgent jobs to your team while you
+            are busy doing the work.
           </p>
-          <div className="animate-fade-up mt-8 flex items-center justify-center gap-4 stagger-3">
+          <div className="animate-fade-up stagger-3 mt-8 flex items-center justify-center gap-4">
             <a
               href={APP_SIGNUP_URL}
               className={cn(
@@ -28,7 +29,7 @@ export function Hero() {
                 "h-11 rounded-full px-7 text-sm"
               )}
             >
-              Try for free
+              Request a trial
               <ArrowRight className="ml-1 size-4" />
             </a>
             <a
@@ -38,10 +39,10 @@ export function Hero() {
               See pricing
             </a>
           </div>
-          <p className="animate-fade-up mt-5 text-xs text-muted-foreground stagger-4">
-            No credit card required. Works with your existing business number.
+          <p className="animate-fade-up stagger-4 mt-5 text-xs text-muted-foreground">
+            Pilot access requires approval. Existing-number forwarding must be tested with your carrier.
           </p>
-          <div className="animate-fade-up mt-12 flex flex-wrap items-center justify-center gap-x-8 gap-y-4 text-sm font-medium text-muted-foreground stagger-5">
+          <div className="animate-fade-up stagger-5 mt-12 flex flex-wrap items-center justify-center gap-x-8 gap-y-4 text-sm font-medium text-muted-foreground">
             <div className="flex items-center gap-2">
               <Check className="size-4 text-primary" />
               <span>Emergency call routing</span>
@@ -130,7 +131,7 @@ export function Solution() {
     "Answer routine questions about services, pricing, and availability",
     "Collect job details: service type, address, urgency, and budget",
     "Book appointments while the homeowner is still on the phone",
-    "Send confirmation texts and notify your team instantly",
+    "Record the booking internally; no Voice-only SMS, and external alerts require qualification",
     "Route emergency calls to your on-call technician with full context",
     "Save recordings, transcripts, summaries, and next steps",
   ]
@@ -144,9 +145,9 @@ export function Solution() {
               A receptionist that works while your crew works
             </h2>
             <p className="section-intro text-left">
-              LobbyStack gives your home services business a phone answering
-              layer that captures leads, books jobs, and handles emergencies
-              around the clock.
+              Caléonis Receptionist gives your home services business a phone
+              answering layer that captures leads, books jobs, and handles
+              emergencies around the clock.
             </p>
             <ul className="mt-8 space-y-4">
               {points.map((point, i) => (
@@ -157,7 +158,7 @@ export function Solution() {
                   <div className="mt-1 flex size-5 shrink-0 items-center justify-center rounded-full bg-primary/10">
                     <Check className="size-3 text-primary" />
                   </div>
-                  <span>{point}</span>
+                  <span>{qualifyPilotText(point, "en")}</span>
                 </li>
               ))}
             </ul>
@@ -173,7 +174,7 @@ export function Solution() {
                     <div>
                       <p className="text-sm font-medium">Incoming Call</p>
                       <p className="text-xs text-muted-foreground">
-                        LobbyStack AI
+                        Caléonis Receptionist AI
                       </p>
                     </div>
                   </div>
@@ -220,7 +221,7 @@ export function UseCases() {
     },
     {
       title: "Appointment booking",
-      copy: "Offer open slots, book the service call, and send the homeowner a confirmation text.",
+      copy: "Offer configured calendar slots and record the appointment; no SMS is sent on the French Voice-only pilot.",
     },
     {
       title: "Parts and warranty questions",
@@ -228,7 +229,7 @@ export function UseCases() {
     },
     {
       title: "Spam and robocalls",
-      copy: "LobbyStack filters spam calls, and they don't count against your voice minutes.",
+      copy: "Caléonis Receptionist filters spam calls, and they don't count against your voice minutes.",
     },
   ]
 
@@ -240,8 +241,8 @@ export function UseCases() {
             Use AI phone answering where missed calls hurt most
           </h2>
           <p className="section-intro">
-            Set LobbyStack up for the parts of your phone workflow that cost
-            time, revenue, or callbacks.
+            Set Caléonis Receptionist up for the parts of your phone workflow
+            that cost time, revenue, or callbacks.
           </p>
         </div>
         <div className="mt-16 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
@@ -251,10 +252,10 @@ export function UseCases() {
               className="flex flex-col rounded-2xl border border-border/70 bg-muted/30 p-6 transition-colors hover:bg-muted/50"
             >
               <h3 className="text-lg font-medium tracking-tight text-foreground">
-                {c.title}
+                {qualifyPilotLabel(c.title, "en")}
               </h3>
               <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
-                {c.copy}
+                {qualifyPilotText(c.copy, "en")}
               </p>
             </div>
           ))}
@@ -268,11 +269,11 @@ export function HowItWorks() {
   const steps = [
     {
       title: "Connect your phone",
-      copy: "Use a dedicated LobbyStack number or forward calls from the business line your customers already know.",
+      copy: "Use a dedicated Caléonis Receptionist number or forward calls from the business line your customers already know.",
     },
     {
       title: "Add your services and coverage areas",
-      copy: "Give LobbyStack your service list, pricing, hours, service areas, emergency policies, and booking rules.",
+      copy: "Give Caléonis Receptionist your service list, pricing, hours, service areas, emergency policies, and booking rules.",
     },
     {
       title: "Choose when it should answer",
@@ -288,7 +289,9 @@ export function HowItWorks() {
     <section className="section-spacing" id="how-it-works">
       <div className="mx-auto max-w-7xl px-6">
         <div className="mx-auto max-w-3xl text-center">
-          <h2 className="section-heading">How LobbyStack answers your calls</h2>
+          <h2 className="section-heading">
+            How Caléonis Receptionist answers your calls
+          </h2>
         </div>
         <div className="mx-auto mt-16 max-w-4xl">
           <div className="relative ml-4 border-l border-border/70 md:ml-0 md:border-l-0">
@@ -305,7 +308,7 @@ export function HowItWorks() {
                           {step.title}
                         </h3>
                         <p className="mt-2 leading-relaxed text-muted-foreground">
-                          {step.copy}
+                          {qualifyPilotText(step.copy, "en")}
                         </p>
                       </div>
                     ) : null}
@@ -318,7 +321,7 @@ export function HowItWorks() {
                       {step.title}
                     </h3>
                     <p className="mt-2 leading-relaxed text-muted-foreground md:hidden">
-                      {step.copy}
+                      {qualifyPilotText(step.copy, "en")}
                     </p>
                     {i % 2 !== 0 ? (
                       <div className="hidden md:block">
@@ -326,7 +329,7 @@ export function HowItWorks() {
                           {step.title}
                         </h3>
                         <p className="mt-2 leading-relaxed text-muted-foreground">
-                          {step.copy}
+                          {qualifyPilotText(step.copy, "en")}
                         </p>
                       </div>
                     ) : null}
@@ -362,7 +365,7 @@ export function Comparison() {
       limit: "Costs scale with volume. Messages still need callback.",
     },
     {
-      option: "LobbyStack",
+      option: "Caléonis Receptionist",
       what: "AI answers, asks questions, books appointments, and routes emergencies.",
       bestFor:
         "Trades and home services that want 24/7 coverage without adding headcount.",
@@ -378,7 +381,8 @@ export function Comparison() {
             Better phone coverage without another full-time hire
           </h2>
           <p className="section-intro">
-            LobbyStack handles the call while the homeowner is still interested.
+            Caléonis Receptionist handles the call while the homeowner is still
+            interested.
           </p>
         </div>
         <div className="mt-16 overflow-x-auto pb-4">
@@ -395,7 +399,7 @@ export function Comparison() {
                 className="grid grid-cols-4 gap-4 border-b border-border/70 p-4 text-sm last:border-0"
               >
                 <div className="font-medium text-foreground">{c.option}</div>
-                <div className="text-muted-foreground">{c.what}</div>
+                <div className="text-muted-foreground">{qualifyPilotText(c.what, "en")}</div>
                 <div className="text-muted-foreground">{c.bestFor}</div>
                 <div className="text-muted-foreground">{c.limit}</div>
               </div>

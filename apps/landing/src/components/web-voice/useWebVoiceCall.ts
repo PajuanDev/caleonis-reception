@@ -40,9 +40,12 @@ export const webVoiceStatusLabelFr: Record<WebVoiceWidgetStatus, string> = {
 
 function getErrorMessage(error: unknown, locale: "en" | "fr" = "en"): string {
   if (locale === "fr") {
-    if (error instanceof DOMException && error.name === "NotAllowedError") return "Autorisez l’accès au microphone dans votre navigateur."
-    if (error instanceof DOMException && error.name === "NotFoundError") return "Branchez un microphone pour continuer."
-    if (error instanceof DOMException && error.name === "NotReadableError") return "Fermez l’autre application qui utilise le microphone."
+    if (error instanceof DOMException && error.name === "NotAllowedError")
+      return "Autorisez l’accès au microphone dans votre navigateur."
+    if (error instanceof DOMException && error.name === "NotFoundError")
+      return "Branchez un microphone pour continuer."
+    if (error instanceof DOMException && error.name === "NotReadableError")
+      return "Fermez l’autre application qui utilise le microphone."
     return "Impossible de démarrer l’appel. Réessayez."
   }
   if (error instanceof DOMException && error.name === "NotAllowedError") {
@@ -58,7 +61,7 @@ function getErrorMessage(error: unknown, locale: "en" | "fr" = "en"): string {
     return "The call took too long to connect."
   }
   if (error instanceof TypeError && error.message === "Load failed") {
-    return "This page can't reach LobbyStack to start the call."
+    return "This page can't reach Caléonis Receptionist to start the call."
   }
   if (error instanceof Error) {
     return error.message
@@ -198,7 +201,11 @@ export function useWebVoiceCall({
   )
 
   const endCall = async () => {
-    if (status !== "connected" && status !== "connecting" && status !== "requesting_microphone") {
+    if (
+      status !== "connected" &&
+      status !== "connecting" &&
+      status !== "requesting_microphone"
+    ) {
       return
     }
     setStatus("ending")
@@ -275,7 +282,11 @@ export function useWebVoiceCall({
           peerConnection.connectionState === "disconnected"
         ) {
           setStatus("error")
-          setErrorMessage(locale === "fr" ? "La connexion vocale a été interrompue." : "The voice connection dropped.")
+          setErrorMessage(
+            locale === "fr"
+              ? "La connexion vocale a été interrompue."
+              : "The voice connection dropped."
+          )
           emit("landing.web_voice_call_error", {
             connectionState: peerConnection.connectionState,
           })
@@ -320,8 +331,13 @@ export function useWebVoiceCall({
         )
       }
 
-      const payload = (await response.json()) as StartedSession & { sdp: string }
-      const session = { sessionId: payload.sessionId, endToken: payload.endToken }
+      const payload = (await response.json()) as StartedSession & {
+        sdp: string
+      }
+      const session = {
+        sessionId: payload.sessionId,
+        endToken: payload.endToken,
+      }
       if (abandoned()) {
         // The caller gave up while connecting, but the server already started
         // the session; end it so it doesn't run until the silence timeout.

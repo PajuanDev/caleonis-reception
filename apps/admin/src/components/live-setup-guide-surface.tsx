@@ -9,6 +9,7 @@ import { useTranslation } from "react-i18next";
 import { PageHeader } from "@/components/page-header";
 import { startTestCall } from "@/lib/test-call-launcher";
 import { useCallSettleRefetch } from "@/lib/use-call-settle-refetch";
+import { appHomePath } from "@/lib/app-home";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -48,9 +49,9 @@ export function LiveSetupGuideSurface() {
   const active = steps.find((step) => step.status === "needs setup")?.id ?? order[0]!;
   const [openStep, setOpenStep] = useState<StepId>(active);
   useEffect(() => setOpenStep(active), [active]);
-  useEffect(() => { if (business && !canManage) router.replace("/"); }, [business, canManage, router]);
+  useEffect(() => { if (business && !canManage) router.replace(appHomePath()); }, [business, canManage, router]);
   const completed = steps.filter((step) => step.status === "complete" || step.status === "skipped").length;
-  useEffect(() => { if (setup.data && completed === steps.length) router.replace("/"); }, [completed, router, setup.data, steps.length]);
+  useEffect(() => { if (setup.data && completed === steps.length) router.replace(appHomePath()); }, [completed, router, setup.data, steps.length]);
   const expand = useMutation({
     mutationFn: (documentId: string) => getJson(`/api/knowledge/${encodeURIComponent(documentId)}?businessId=${encodeURIComponent(business!.businessId)}`, { method: "PATCH", headers: { "content-type": "application/json" }, body: JSON.stringify({ action: "expand" }) }),
     onSuccess: async () => { await queryClient.invalidateQueries({ queryKey: ["setup", business?.businessId] }); router.push("/agent/knowledge"); },
@@ -64,7 +65,7 @@ export function LiveSetupGuideSurface() {
       <div className="flex w-full flex-col gap-4">
         <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
           {setup.isLoading ? <Skeleton className="h-6 w-72" /> : <div className="flex items-center gap-3 text-muted-foreground"><ProgressRing completed={completed} total={steps.length} /><p className="text-base">{t("sidebar.setupGuide.description", { completed, total: steps.length })}</p></div>}
-          <Button disabled={skip.isPending} onClick={async () => { for (const step of steps.filter((item) => item.status === "needs setup")) await skip.mutateAsync(step.id); router.push("/"); }} type="button" variant="outline">{t("sidebar.setupGuide.skip")}</Button>
+          <Button disabled={skip.isPending} onClick={async () => { for (const step of steps.filter((item) => item.status === "needs setup")) await skip.mutateAsync(step.id); router.push(appHomePath()); }} type="button" variant="outline">{t("sidebar.setupGuide.skip")}</Button>
         </div>
         <Surface>
           {setup.isLoading ? order.map((id) => <Skeleton className="m-3 h-16 rounded-xl" key={id} />) : (

@@ -1,3 +1,4 @@
+import { qualifyPilotText, qualifyPilotLabel } from "@/lib/pilot-qualification"
 import {
   ArrowRight,
   MapPin,
@@ -34,8 +35,8 @@ export function BusinessFit() {
             Built for the trades that run on phone calls
           </h2>
           <p className="section-intro">
-            LobbyStack works for any home services business where a missed call
-            means a missed job.
+            Caléonis Receptionist works for any home services business where a
+            missed call means a missed job.
           </p>
         </div>
         <div className="mt-16 grid gap-6 sm:grid-cols-2">
@@ -46,7 +47,7 @@ export function BusinessFit() {
             >
               <h3 className="text-xl font-medium tracking-tight">{t.name}</h3>
               <p className="mt-4 leading-relaxed text-muted-foreground">
-                {t.copy}
+                {qualifyPilotText(t.copy, "en")}
               </p>
             </div>
           ))}
@@ -91,15 +92,15 @@ export function Capabilities() {
         <div className="mt-16 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
           {caps.map((c) => (
             <div
-              key={c.title}
+              key={qualifyPilotLabel(c.title, "en")}
               className="rounded-[1.35rem] border border-border/70 bg-background p-8"
             >
               <div className="mb-6 inline-flex size-12 items-center justify-center rounded-2xl bg-muted">
                 <c.icon className="size-6 text-foreground" />
               </div>
-              <h3 className="text-xl font-medium tracking-tight">{c.title}</h3>
+              <h3 className="text-xl font-medium tracking-tight">{qualifyPilotLabel(c.title, "en")}</h3>
               <p className="mt-4 leading-relaxed text-muted-foreground">
-                {c.copy}
+                {qualifyPilotText(c.copy, "en")}
               </p>
             </div>
           ))}
@@ -115,7 +116,7 @@ export function RevenueTieIn() {
       <div className="mx-auto max-w-7xl px-6">
         <div className="mx-auto max-w-3xl text-center">
           <h2 className="section-heading">
-            Every missed call could be a $500 job
+            Make missed calls visible to your team
           </h2>
           <p className="section-intro">
             In home services, a single missed emergency call can mean a lost job
@@ -148,18 +149,18 @@ export function OpenSource() {
         <div className="mx-auto max-w-3xl text-center">
           <h2 className="section-heading">Open source and self-hosted ready</h2>
           <p className="section-intro">
-            LobbyStack is open source. You can self-host on your own
+            Caléonis Receptionist is open source. You can self-host on your own
             infrastructure for full data control, custom deployments, and
             white-label options.
           </p>
           <div className="mt-8 flex items-center justify-center gap-6">
             <a
-              href="https://github.com/lobbystack/lobbystack"
+              href="https://gitlab.com/lobbystack-group/lobbystack"
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center gap-2 text-sm font-medium text-foreground underline decoration-1 underline-offset-4 transition-colors hover:text-foreground/80"
             >
-              View on GitHub
+              Upstream MIT source
               <ArrowRight className="size-3.5" />
             </a>
             <a

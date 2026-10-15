@@ -1,64 +1,144 @@
 ---
-title: "Référence des webhooks"
-description: "Vérifier les signatures et traiter les événements de manière idempotente."
+title: "Recevoir des webhooks"
+description: "Abonnez une URL aux événements Caléonis Receptionist, vérifiez les signatures et gérez les nouvelles tentatives."
+sidebarTitle: "Webhooks"
+contentType: "How-to"
 ---
-Consultez d’abord le [guide de configuration](/integrations/webhooks). Testez uniquement vers une destination autorisée sans effet réel sur les clients.
 
-## Événements présents
+Les webhooks envoient une requête HTTPS `POST` à votre URL quand quelque chose se produit dans une entreprise. Vos outils n'ont donc pas besoin d'interroger l'API en boucle.
 
-| Type | Objet |
+## Événements
+
+| Événement | Envoyé quand | `data` | Portée de lecture de la ressource |
+| --- | --- | --- | --- |
+| `call.completed` | Un appel s'est terminé et Caléonis Receptionist a enregistré son résumé et son résultat. | Appel | `calls:read` |
+| `appointment.booked` | Quelqu'un réserve un rendez-vous : la réceptionniste, le tableau de bord ou l'API. | Rendez-vous | `appointments:read` |
+| `appointment.rescheduled` | Un rendez-vous est déplacé à une nouvelle heure. | Rendez-vous | `appointments:read` |
+| `appointment.cancelled` | Un rendez-vous est annulé. | Rendez-vous | `appointments:read` |
+| `message.taken` | La réceptionniste prend un message pour votre équipe. | Message | `messages:read` |
+| `contact.created` | Un nouveau contact apparaît, à partir d'un appel, d'un texto, d'une réservation, du widget du site Web ou de l'API. | Contact | `contacts:read` |
+
+`data` a la même forme que la ressource API correspondante. Par exemple, `GET /appointments` renvoie les objets que transporte un événement `appointment.booked`. Un point de terminaison de liste sert donc aussi de données d'exemple.
+
+## Ajouter un point de terminaison
+
+Vous pouvez ajouter des points de terminaison dans le tableau de bord ou avec l'API.
+
+<Tabs>
+  <Tab title="Tableau de bord">
+    <Steps>
+      <Step title="Ouvrir Webhooks">
+        Allez dans **Intégrations** et cliquez sur **Gérer** sur la carte **Webhooks**. Seuls les propriétaires et les administrateurs peuvent gérer les webhooks.
+      </Step>
+      <Step title="Ajouter le point de terminaison">
+        Cliquez sur **Ajouter un point de terminaison**, saisissez l'URL et choisissez les événements.
+      </Step>
+      <Step title="Copier le secret de signature">
+        Caléonis Receptionist affiche le secret `whsec_` une seule fois. Conservez-le à un endroit où votre point de terminaison peut le lire.
+      </Step>
+      <Step title="Envoyer un événement test">
+        Cliquez sur **Envoyer un événement test**, puis ouvrez **Journal des livraisons** pour voir la réponse renvoyée par votre point de terminaison.
+      </Step>
+    </Steps>
+  </Tab>
+  <Tab title="API">
+    Appelez `POST /webhooks` avec une clé qui a `webhooks:manage` :
+
+    ```bash
+    curl https://receptionist.caleonis.com/api/v1/webhooks \
+      -H "Authorization: Bearer $LOBBYSTACK_API_KEY" \
+      -H "Content-Type: application/json" \
+      -d '{"url":"https://example.com/hooks/lobbystack","events":["appointment.booked","call.completed"]}'
+    ```
+
+    La réponse contient l'`id` du point de terminaison et le `secret`. `DELETE /webhooks/{webhook_id}` le supprime. Ces deux appels servent d'abonnement et de désabonnement pour les REST hooks de Zapier.
+  </Tab>
+</Tabs>
+
+## Charge utile
+
+```json
+{
+  "id": "0f5c2a8e-3a41-4a0c-9d4f-6b5f1d2e7c11",
+  "type": "appointment.booked",
+  "api_version": "v1",
+  "created_at": "2026-09-27T16:58:19.612Z",
+  "business_id": "75795511-9ee2-4cb2-a89d-f173ec1dd82d",
+  "data": {
+    "id": "0c4332ff-becb-45cb-be23-173d55747852",
+    "status": "confirmed",
+    "starts_at": "2026-09-29T13:30:00.000Z",
+    "ends_at": "2026-09-29T14:15:00.000Z",
+    "timezone": "America/Toronto",
+    "service_id": "df8a2c34-d306-4292-a055-1b739ef74991",
+    "service_name": "Haircut",
+    "staff_id": "06d9c0dc-f18a-4cc6-a987-ac4963c87113",
+    "staff_name": "Sam",
+    "contact_id": "0cabb07b-ea18-4e9f-8f7b-356405838770",
+    "contact_name": "Ada Lovelace",
+    "contact_phone": "+14165550134",
+    "source": "voice",
+    "calendar_sync_status": "pending",
+    "created_at": "2026-09-27T16:58:19.590Z",
+    "updated_at": "2026-09-27T16:58:19.590Z"
+  }
+}
+```
+
+`data` reflète la ressource au moment où l'événement s'est produit. Récupérez de nouveau la ressource si vous avez besoin de son état actuel.
+
+## Vérifier les signatures
+
+Caléonis Receptionist signe chaque requête avec le schéma [Standard Webhooks](https://www.standardwebhooks.com) et envoie trois en-têtes :
+
+| En-tête | Valeur |
 | --- | --- |
-| `call.completed` | Appel terminé et résultat enregistré. |
-| `appointment.booked` | Rendez-vous créé. |
-| `appointment.rescheduled` | Rendez-vous déplacé. |
-| `appointment.cancelled` | Rendez-vous annulé. |
-| `message.taken` | Message de suivi pris pour l’équipe. |
-| `contact.created` | Contact créé. |
+| `webhook-id` | L'`id` de l'événement. Il reste le même à chaque nouvelle tentative et à chaque renvoi. |
+| `webhook-timestamp` | Heure Unix, en secondes, à laquelle Caléonis Receptionist a signé cette tentative. |
+| `webhook-signature` | `v1,` suivi d'une signature HMAC-SHA256 en base64. |
 
-L’enveloppe comprend `id`, `type`, `api_version`, `created_at`, `business_id` et `data`. Le contenu reflète l’état au moment de l’événement. Relisez la ressource API si vous avez besoin de son état actuel.
-
-## Signature
-
-Le code utilise le format Standard Webhooks :
-
-| En-tête | Signification |
-| --- | --- |
-| `webhook-id` | Identifiant stable de l’événement. |
-| `webhook-timestamp` | Heure de signature de la tentative. |
-| `webhook-signature` | Signature versionnée. |
-
-Vérifiez la signature sur le **corps brut**, avant de parser le JSON. La valeur signée associe l’identifiant, l’horodatage et ce corps, séparés par des points.
-
-Le secret commence par `whsec_`. Utilisez une bibliothèque compatible et un contrôle d’ancienneté ; ne réimplémentez pas la comparaison cryptographique sans nécessité.
+La signature couvre `{webhook-id}.{webhook-timestamp}.{raw body}`. Sa clé est la partie du secret qui suit `whsec_`, décodée depuis le base64. Utilisez une bibliothèque Standard Webhooks pour la vérifier sur le corps brut de la requête, avant d'analyser le JSON :
 
 ```ts
 import { Webhook } from "standardwebhooks";
 
-const verifier = new Webhook(process.env.CALEONIS_WEBHOOK_SECRET!);
+const webhook = new Webhook(process.env.LOBBYSTACK_WEBHOOK_SECRET!);
 
 export async function POST(request: Request) {
   const body = await request.text();
-  const event = verifier.verify(body, Object.fromEntries(request.headers));
-  // Dédupliquer event.id avant tout effet métier.
-  // Traiter ou mettre en file durablement avant de confirmer.
+  // Throws when the signature is wrong or the timestamp is more than 5 minutes old.
+  const event = webhook.verify(body, Object.fromEntries(request.headers)) as { id: string; type: string };
+  // Store event.id and skip events you already processed.
   return new Response(null, { status: 204 });
 }
 ```
 
-Cet extrait illustre la vérification. Ajoutez la déduplication durable, la validation du type et le traitement métier de votre service avant usage réel.
+Rejetez les requêtes dont l'horodatage date de plus de quelques minutes pour bloquer les attaques par rejeu.
 
-## Réponse et reprises
+## Répondre et relancer
 
-Répondez rapidement avec un statut `2xx` après prise en charge durable. Le code prévoit un délai de réponse de 10 secondes et plusieurs reprises espacées en cas d’échec.
+Renvoyez n'importe quel statut `2xx` en moins de 10 secondes. Caléonis Receptionist considère toute autre réponse comme un échec, y compris les délais dépassés, les redirections et les erreurs de connexion. Il ne suit pas les redirections.
 
-Un même événement peut arriver plusieurs fois ou dans un ordre différent. Dédupliquez sur son identifiant et relisez l’état métier si l’ordre importe.
+Après un échec, Caléonis Receptionist fait une nouvelle tentative après 30 secondes, 2 minutes, 10 minutes, 30 minutes, 1 heure, 3 heures, 6 heures et 12 heures, soit 9 tentatives sur environ 23 heures. Chaque tentative utilise le même `webhook-id`, donc dédoublonnez à partir de cette valeur. Les événements peuvent arriver dans le désordre. Comparez `created_at` ou récupérez la ressource si l'ordre compte.
 
-Ne promettez pas une alerte email ou SMS automatique en cas d’échec : elle dépend de la configuration et de sa livraison réelle.
+Si un événement échoue à chaque tentative et que rien n'a atteint le point de terminaison pendant cette période, Caléonis Receptionist désactive le point de terminaison et alerte votre équipe selon les choix de chaque personne dans **Réglages** > **Notifications**. Corrigez le point de terminaison, réactivez-le dans le tableau de bord ou avec `PATCH /webhooks/{webhook_id}` et `{"status": "enabled"}`, puis utilisez **Renvoyer** dans le journal des livraisons pour envoyer les événements manqués.
 
-## Journal et rotation
+## Journal des livraisons
 
-Le journal montre les tentatives et réponses. Un renvoi manuel peut provoquer un nouvel effet si votre destinataire ne déduplique pas.
+Le journal des livraisons montre chaque événement envoyé à un point de terminaison, son statut, le dernier code de réponse, le nombre de tentatives et l'heure de la prochaine tentative. **Renvoyer** envoie un événement de nouveau. Caléonis Receptionist conserve 30 jours d'historique des webhooks.
 
-La rotation de secret exige une mise à jour coordonnée du destinataire. Ne faites pas cette opération sur un client actif pour un simple test.
+## Changer le secret
 
-Les destinations doivent être HTTPS et publiques. Les adresses privées, locales ou de métadonnées sont refusées par les protections réseau.
+Cliquez sur **Changer le secret** sur le point de terminaison. L'ancien secret cesse de fonctionner immédiatement. Mettez ensuite rapidement votre point de terminaison à jour avec le nouveau secret. Les événements dont la vérification échoue entre-temps sont relancés et arrivent une fois que votre point de terminaison utilise le nouveau secret.
+
+## Règles réseau
+
+Les points de terminaison doivent utiliser `https://` et pointer vers une adresse publique. Caléonis Receptionist refuse les URL qui pointent vers des adresses privées, de bouclage, de liaison locale ou de métadonnées cloud, au moment où vous enregistrez le point de terminaison et à chaque livraison. Les déploiements auto-hébergés suivent la même règle.
+
+{/* Caléonis qualification */}
+
+## Validation Caléonis
+
+Utilisez une destination autorisée et traitez durablement la déduplication sur `event.id` avant tout effet métier. L'extrait de vérification de signature n'est pas un consommateur complet prêt à traiter des données clients.
+
+Une alerte d'échec requiert aussi un expéditeur et une livraison qualifiés. Ne déduisez pas un SMS de la mise en file d'une alerte. La création d'un abonnement ou un test peut envoyer un POST réel à un tiers.

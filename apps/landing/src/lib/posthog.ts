@@ -13,8 +13,9 @@ const isEnabled = import.meta.env.PUBLIC_POSTHOG_ENABLED === "true"
 const projectKey = import.meta.env.PUBLIC_POSTHOG_KEY
 const apiHost = import.meta.env.PUBLIC_POSTHOG_HOST || DEFAULT_POSTHOG_HOST
 const uiHost = import.meta.env.PUBLIC_POSTHOG_UI_HOST || DEFAULT_POSTHOG_UI_HOST
+const isPrivatePreview = typeof window !== "undefined" && /(?:^localhost$|^127\.0\.0\.1$|\.chatgpt\.site$)/i.test(window.location.hostname)
 const canCapture =
-  typeof window !== "undefined" && isEnabled && Boolean(projectKey)
+  typeof window !== "undefined" && !isPrivatePreview && isEnabled && Boolean(projectKey)
 let isInitialized = false
 let isSignupCtaListenerAttached = false
 
@@ -184,7 +185,7 @@ if (canCapture) {
 export function captureLandingSignupCtaClick({
   action = "try_for_free",
   destination = "signup",
-  label = "Try for free",
+  label = "Request a trial",
   plan,
   section,
 }: LandingSignupCtaClickProperties) {

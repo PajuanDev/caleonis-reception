@@ -1,3 +1,4 @@
+import { qualifyPilotText, qualifyPilotLabel } from "@/lib/pilot-qualification"
 import { buttonVariants } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
 import {
@@ -42,7 +43,9 @@ export function BusinessFit() {
             Built for businesses that book by phone
           </h2>
           <p className="section-intro">
-            LobbyStack is a good fit when appointments, service visits, consultations, or estimates are part of how your business makes money.
+            Caléonis Receptionist is a good fit when appointments, service
+            visits, consultations, or estimates are part of how your business
+            makes money.
           </p>
         </div>
 
@@ -59,7 +62,8 @@ export function BusinessFit() {
         </div>
 
         <p className="mt-12 text-center text-sm font-medium text-muted-foreground">
-          If a caller needs a time on the calendar before they become a customer, LobbyStack can help them book faster.
+          If a caller needs a time on the calendar before they become a
+          customer, Caléonis Receptionist can help them book faster.
         </p>
       </div>
     </section>
@@ -86,11 +90,11 @@ export function Capabilities() {
     },
     {
       title: "Appointment confirmations",
-      copy: "Send confirmation details by text so the caller knows the appointment was booked.",
+      copy: "SMS is unavailable on the French Voice-only pilot; review the booking details in the application and Google Calendar.",
     },
     {
       title: "Team notifications",
-      copy: "Notify your team when a booking is made, including the caller's details, reason for the appointment, and next step.",
+      copy: "The booking record retains caller details and next steps. External team notifications require separate configuration and qualification.",
     },
     {
       title: "Rescheduling support",
@@ -98,7 +102,7 @@ export function Capabilities() {
     },
     {
       title: "Urgent call routing",
-      copy: "Transfer calls to a person when the request is urgent, sensitive, high-value, or outside your normal rules.",
+      copy: "Human transfers require qualification. Requests outside approved rules produce a message for a human callback.",
     },
     {
       title: "Call summaries",
@@ -130,10 +134,10 @@ export function Capabilities() {
               className="rounded-2xl border border-border/70 bg-background p-6"
             >
               <h3 className="text-base font-medium tracking-tight text-foreground">
-                {c.title}
+                {qualifyPilotLabel(c.title, "en")}
               </h3>
               <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
-                {c.copy}
+                {qualifyPilotText(c.copy, "en")}
               </p>
             </div>
           ))}
@@ -161,7 +165,10 @@ export function RevenueTieIn() {
                 See how many bookings missed calls may be costing you
               </h2>
               <p className="mt-4 leading-relaxed text-muted-foreground">
-                If your business books appointments by phone, every missed call can become an empty spot on the calendar. Use the missed call revenue calculator to estimate how much revenue may be at risk when callers cannot reach you.
+                If your business books appointments by phone, every missed call
+                can become an empty spot on the calendar. Use the missed call
+                revenue calculator to estimate how much revenue may be at risk
+                when callers cannot reach you.
               </p>
               <div className="mt-8">
                 <a
@@ -177,7 +184,9 @@ export function RevenueTieIn() {
             </div>
             <div className="flex flex-col justify-center rounded-2xl bg-muted p-8">
               <p className="text-sm leading-relaxed font-medium text-muted-foreground">
-                The calculator uses your missed calls, booking rate, opportunity rate, and average job value to estimate weekly, monthly, and annual revenue at risk.
+                The calculator uses your missed calls, booking rate, opportunity
+                rate, and average job value to estimate weekly, monthly, and
+                annual revenue at risk.
               </p>
             </div>
           </div>
@@ -204,7 +213,10 @@ export function OpenSource() {
               Scheduling automation you can inspect and control
             </h2>
             <p className="mt-6 text-lg leading-relaxed text-background/80">
-              LobbyStack is built for teams that want practical automation without giving up control. You can define how calls are handled, what questions are asked, when appointments can be booked, and when a person should step in.
+              Caléonis Receptionist is built for teams that want practical
+              automation without giving up control. You can define how calls are
+              handled, what questions are asked, when appointments can be
+              booked, and when a person should step in.
             </p>
             <div className="mt-10 grid gap-6 sm:grid-cols-2">
               <div className="flex gap-3">

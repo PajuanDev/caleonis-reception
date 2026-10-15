@@ -1,80 +1,111 @@
 ---
-title: "Variables d’une instance indépendante"
-description: "Identifier les groupes de configuration sans renommer les paramètres internes."
+title: "Configurer les variables d'environnement"
+description: "Les principales variables d'environnement de l'admin, du worker, des appels vocaux, du stockage et des fournisseurs de Caléonis Receptionist."
+sidebarTitle: "Variables d'environnement"
+contentType: "Reference"
 ---
-`.env.example` et les fichiers de déploiement de la version utilisée font foi. Les variables internes gardent leurs noms LobbyStack ; le rebranding ne doit pas les casser.
 
-## Application et accès
+Utilisez `.env.example` comme source de référence. Stockez les valeurs de production dans le gestionnaire de secrets de votre déploiement ou dans un fichier `.env` aux permissions restreintes.
 
-| Variables | Usage |
+## Application et base de données
+
+| Variable | Rôle |
 | --- | --- |
-| `APP_BASE_URL` | URL HTTPS de votre instance. |
-| `DEPLOYMENT_MODE` | Mode cloud, standard auto-hébergé ou développement selon le code. |
-| `DATABASE_URL` | Connexion du rôle principal de chaque service. |
-| `LOBBYSTACK_AUTH_PASSWORD`, `LOBBYSTACK_WORKER_PASSWORD`, `LOBBYSTACK_DISPATCHER_PASSWORD` | Accès aux rôles séparés. |
-| `LOBBYSTACK_<ROLE>_DATABASE_URL` | Surcharge de connexion d’un rôle si nécessaire. |
-| `BETTER_AUTH_SECRET` | Signature de l’authentification. |
-| `ENCRYPTION_KEY` | Chiffrement et usages cryptographiques du runtime. |
-| `OTP_HASH_SECRET` | Protection des codes de vérification. |
+| `APP_BASE_URL` | URL HTTPS publique du tableau de bord et de l'API. |
+| `DEPLOYMENT_MODE` | `cloud`, `self_hosted_standard` ou `development`. |
+| `DATABASE_URL` | Connexion PostgreSQL pour le rôle principal du service : `lobbystack_app` pour l'admin, `lobbystack_worker` pour le worker. |
+| `LOBBYSTACK_AUTH_PASSWORD`, `LOBBYSTACK_WORKER_PASSWORD`, `LOBBYSTACK_DISPATCHER_PASSWORD` | Mots de passe des autres rôles. Un service se connecte avec chaque rôle en combinant l'hôte et la base de données de `DATABASE_URL` avec le mot de passe de ce rôle. |
+| `LOBBYSTACK_<ROLE>_DATABASE_URL` | Facultatif. Remplace la chaîne de connexion construite pour un rôle, par exemple pour utiliser un autre hôte. |
+| `BETTER_AUTH_SECRET` | Secret de signature de Better Auth. Utilisez au moins 32 caractères aléatoires. |
+| `ENCRYPTION_KEY` | Chiffre les identifiants d'application stockés. |
+| `OTP_HASH_SECRET` | Hache les codes de vérification à usage unique. |
 
-Ne remplacez pas `ENCRYPTION_KEY` à la légère : des identifiants stockés et secrets d’intégration peuvent devenir inutilisables.
+## Services internes
 
-## Admin et worker
-
-| Variables | Usage |
+| Variable | Rôle |
 | --- | --- |
-| `INTERNAL_SERVICE_SECRET` | Signatures internes et jetons courts. |
-| `INTERNAL_SERVICE_TOKEN` | Authentification des échanges internes protégés. |
-| `WORKER_INTERNAL_URL` | Adresse privée du worker. |
-| `REDIS_URL` | Fonctions partagées, dont limites d’accès selon le parcours. |
+| `INTERNAL_SERVICE_SECRET` | Signe les jetons de fin d'appel du navigateur et d'autres valeurs internes de courte durée. |
+| `INTERNAL_SERVICE_TOKEN` | Authentifie la transmission de l'appel de l'admin au worker et les routes de santé internes protégées. Définissez la même valeur sur l'admin et le worker. |
+| `WORKER_INTERNAL_URL` | URL privée du port HTTP du worker, que l'admin utilise pour transmettre chaque appel au worker. Compose la définit à `http://worker:3002`. |
 
-Vérifiez les valeurs communes nécessaires aux deux services. Ne publiez pas les routes internes.
+## Appels vocaux
 
-## Voix
+Le modèle GPT-Live d'OpenAI répond aux appels dans le navigateur et aux appels téléphoniques. Les appels téléphoniques l'atteignent par votre trunk SIP Twilio. L'admin démarre chaque appel et le worker l'exécute.
 
-| Variables | Usage |
+| Variable | Rôle |
 | --- | --- |
-| `LIVE_PROTOTYPE_ENABLED` | Activation du runtime vocal sur les services concernés. |
-| `OPENAI_API_KEY` | Accès fournisseur vocal et éventuels replis IA. |
-| `OPENAI_WEBHOOK_SECRET` | Vérification du webhook d’appels entrants OpenAI. |
-| `TWILIO_SIP_TRUNK_SID` | Trunk configuré pour la chaîne téléphonique. |
-| `WEB_CALL_MAX_DURATION_MS` | Limite de durée des appels navigateur. |
-| `WEB_CALL_PUBLIC_BUSINESS_SLUG` | Entreprise de démo publique de votre instance. |
-| `WEB_CALL_ALLOWED_ORIGINS` | Origines autorisées pour cette démo. |
+| `LIVE_PROTOTYPE_ENABLED` | Définissez-la à `true` sur l'admin et le worker. Compose la définit par défaut. Les appels dans le navigateur échouent sans elle. |
+| `OPENAI_WEBHOOK_SECRET` | Vérifie le webhook d'appel entrant d'OpenAI à `/api/webhooks/openai/live`. Appels téléphoniques seulement. |
+| `TWILIO_SIP_TRUNK_SID` | Le trunk Twilio Elastic SIP qui envoie les appels à votre projet OpenAI. Les nouveaux numéros s'y ajoutent, et le worker ne provisionne pas de numéro sans lui. |
+| `WEB_CALL_MAX_DURATION_MS` | Durée maximale facultative des appels dans le navigateur. |
+| `WEB_CALL_PUBLIC_BUSINESS_SLUG` | Entreprise qui répond à l'appel de démo public sur votre site marketing. |
+| `WEB_CALL_ALLOWED_ORIGINS` | Sites, séparés par des virgules, autorisés à lancer cet appel de démo public. Les appels du widget du site Web utilisent plutôt les origines autorisées de chaque clé de widget. |
 
-Une variable configurée ne qualifie pas le transfert humain. Contrôlez aussi la politique effective du fournisseur.
+## Redis et stockage de fichiers
 
-## Fichiers
-
-| Variables | Usage |
+| Variable | Rôle |
 | --- | --- |
-| `STORAGE_PROVIDER` | Choix local ou S3 selon le déploiement. |
-| `LOCAL_STORAGE_PATH` | Répertoire persistant partagé si stockage local. |
-| `LOCAL_STORAGE_SIGNING_SECRET` | Signature des accès temporaires locaux. |
-| `S3_ENDPOINT`, `S3_BUCKET`, `S3_REGION` | Destination du stockage compatible S3. |
-| `S3_ACCESS_KEY_ID`, `S3_SECRET_ACCESS_KEY`, `S3_FORCE_PATH_STYLE` | Accès et compatibilité du fournisseur. |
+| `REDIS_URL` | URL de connexion Redis utilisée par l'admin et le worker. |
+| `STORAGE_PROVIDER` | `local` par défaut. Définissez-la à `s3` pour AWS S3, MinIO ou un autre service compatible. |
+| `LOCAL_STORAGE_PATH` | Chemin du système de fichiers partagé par l'admin et le worker. Compose monte son volume persistant dans `/var/lib/lobbystack/storage`. |
+| `LOCAL_STORAGE_SIGNING_SECRET` | Signe les URL locales de téléversement et de téléchargement de courte durée. Utilisez une longue valeur aléatoire. Hors de Compose, `INTERNAL_SERVICE_SECRET` sert de valeur de repli. |
+| `S3_ENDPOINT` | Point de terminaison compatible S3, facultatif. Laissez-le vide pour AWS S3. |
+| `S3_BUCKET` | Bucket des enregistrements et des fichiers importés. |
+| `S3_REGION` | Région S3. Vaut `us-east-1` par défaut. |
+| `S3_ACCESS_KEY_ID`, `S3_SECRET_ACCESS_KEY` | Identifiants du stockage d'objets. |
+| `S3_FORCE_PATH_STYLE` | Définissez-la à `true` pour MinIO. |
 
-Préservez des sauvegardes cohérentes avec la base et testez leur restauration.
+Le stockage local convient à un déploiement sur un seul hôte. Utilisez S3 quand l'admin et le worker tournent sur des hôtes différents ou quand vous avez besoin d'un stockage géré hors de l'hôte Docker.
 
-## IA, intégrations et observabilité
+## API publique et webhooks
 
-| Variables | Usage |
+| Variable | Rôle |
 | --- | --- |
-| `AI_CHAT_*`, `AI_SUMMARY_*`, `AI_EMBEDDING_*` | Modèles, points d’accès et accès IA. |
-| `GOOGLE_*` | OAuth et calendrier. |
-| `TWILIO_*` | Opérateur et vérification des requêtes. |
-| `WIDGET_SESSION_SECRET` | Signature des sessions widget. |
-| `WIDGET_KEY_ISSUANCE_ENABLED` | Émission de nouvelles clés, désactivée par défaut. |
-| `FIRECRAWL_*` | Import de pages Web. |
-| `EMAIL_*`, `SMTP_*` et paramètres Resend du fichier exemple | Email transactionnel selon fournisseur. |
-| `PUBLIC_API_RATE_LIMIT_PER_MINUTE` | Limite API configurée. |
-| `POLAR_*` | Facturation si configurée et validée pour votre instance. |
-| `POSTHOG_*`, `OTEL_EXPORTER_OTLP_*` | Analyse, erreurs et export de télémétrie selon configuration. |
+| `PUBLIC_API_RATE_LIMIT_PER_MINUTE` | Requêtes par minute pour chaque clé API sur `/api/v1`. Vaut `120` par défaut. Définissez-la sur l'admin. La limite utilise `REDIS_URL`. En production, les requêtes échouent avec `503` quand Redis est injoignable. |
+| `ENCRYPTION_KEY` | Chiffre aussi les secrets de signature des webhooks et sert de clé au HMAC qui stocke les hachages des clés API. Définissez la même valeur sur l'admin et le worker, sinon le worker ne peut pas signer les livraisons. La modifier invalide toutes les clés API et tous les secrets de webhook. |
 
-N’utilisez pas des prix ou clés fictifs comme données réelles. Vérifiez la redaction des informations sensibles dans les journaux.
+Les livraisons de webhooks refusent les adresses privées, de bouclage, de liaison locale et de métadonnées cloud sur tous les déploiements, y compris les déploiements auto-hébergés. Faites pointer les points de terminaison vers une URL HTTPS publique. Les URL en `http://` simple fonctionnent seulement quand `NODE_ENV=development`.
 
-## Secrets
+## Observabilité
 
-Conservez les secrets côté serveur. Les variables `NEXT_PUBLIC_*` sont destinées aux données publiques et ne doivent contenir aucune clé privée.
+| Variable | Rôle |
+| --- | --- |
+| `OTEL_EXPORTER_OTLP_ENDPOINT` | URL de base OTLP. Caléonis Receptionist ajoute `/v1/traces`, `/v1/metrics` et `/v1/logs`. Laissez-la vide pour désactiver l'export. |
+| `OTEL_EXPORTER_OTLP_HEADERS` | En-têtes `key=value` facultatifs, séparés par des virgules, envoyés avec chaque requête OTLP. Pour PostHog, utilisez `Authorization=Bearer your_posthog_project_token_here`. |
 
-L’activation d’un fournisseur peut générer un coût. Gardez les tests sans envoi, achat ou facturation réels tant qu’ils ne sont pas autorisés.
+Un point de terminaison OTLP vide ne désactive ni les journaux stdout des conteneurs, ni les points de terminaison de santé de l'application, ni l'analytique produit directe, ni le signalement direct des erreurs.
+
+## Fournisseurs
+
+| Groupe de variables | Rôle |
+| --- | --- |
+| `TWILIO_*` | Voix, vérification, provisionnement des numéros et authentification des webhooks. |
+| `OPENAI_API_KEY` | Appels GPT-Live et clé de repli pour `AI_CHAT_*` et `AI_EMBEDDING_*`. |
+| `AI_CHAT_API_KEY`, `AI_CHAT_BASE_URL`, `AI_CHAT_MODEL`, `AI_CHAT_PROVIDER_NAME` | L'agent réceptionniste pour le chat du site Web et les appels. Laissez `AI_CHAT_MODEL` vide sur OpenAI pour utiliser `gpt-6-luna`. Définissez-la pour tout autre point de terminaison compatible OpenAI. |
+| `AI_CHAT_REASONING_EFFORT` | OpenAI seulement : `none`, `minimal`, `low`, `medium`, `high` ou `xhigh`. Vaut `high` par défaut. |
+| `AI_SUMMARY_MODEL` | Le modèle que le worker utilise sur le point de terminaison `AI_CHAT_*` pour écrire le résumé d'une ligne de chaque appel terminé et relever le nom de l'appelant. Laissez-la vide pour utiliser `AI_CHAT_MODEL`. Avec un modèle différent, le coût IA du résumé d'appel reste inconnu, car les prix `AI_CHAT_*` décrivent le modèle de chat. Sans aucun modèle de texte, les appels reçoivent un résumé tiré de la transcription. |
+| `AI_SUMMARY_REASONING_EFFORT` | OpenAI seulement : effort de raisonnement pour les résumés d'appel. Vaut `low` par défaut. |
+| `AI_DELEGATION_MODEL` | Le modèle que le worker utilise sur le point de terminaison `AI_CHAT_*` pour répondre à ce que GPT-Live lui confie pendant un appel, comme une réservation ou un message. L'appelant n'entend rien tant qu'il n'a pas répondu. Laissez-la vide pour utiliser `AI_CHAT_MODEL`. Avec un modèle différent, les prix `AI_CHAT_*` ne s'appliquent pas. |
+| `AI_DELEGATION_REASONING_EFFORT` | OpenAI seulement : effort de raisonnement pour les réponses pendant les appels. Vaut `low` par défaut, qui répond en environ deux fois moins de temps que `high`. Le chat du site garde `AI_CHAT_REASONING_EFFORT`. |
+| `AI_DELEGATION_SERVICE_TIER` | OpenAI seulement : le niveau de traitement des réponses pendant les appels : `auto`, `default`, `flex` ou `priority`. Vaut `priority` par défaut, qui répond plus vite et coûte deux fois le prix standard par jeton. |
+| `AI_CHAT_INPUT_COST_PER_MILLION_TOKENS`, `AI_CHAT_CACHED_INPUT_COST_PER_MILLION_TOKENS`, `AI_CHAT_OUTPUT_COST_PER_MILLION_TOKENS` | Les prix du modèle `AI_CHAT_*` en dollars US par million de jetons, pour que le chat, les résumés d'appel et les réponses pendant les appels enregistrent leur coût. L'entrée en cache prend le prix d'entrée si vous la laissez vide. |
+| `AI_CHAT_PRICING_VERSION`, `AI_CHAT_PRICING_SOURCE`, `AI_CHAT_PRICING_EFFECTIVE_DATE` | Une étiquette, une URL source et la date de ces prix. Caléonis Receptionist n'enregistre un coût que si les trois sont définies. |
+| `AI_EMBEDDING_API_KEY`, `AI_EMBEDDING_BASE_URL`, `AI_EMBEDDING_MODEL`, `AI_EMBEDDING_PROVIDER_NAME`, `AI_EMBEDDING_REVISION` | Embeddings compatibles OpenAI de 1536 dimensions. |
+| `WIDGET_SESSION_SECRET` | Signe les sessions cross-origin du widget du site Web. |
+| `FIRECRAWL_*` | Importation des connaissances à partir du site Web. |
+| `GOOGLE_*` | OAuth de Google Calendar et connexion avec **Continuer avec Google**. |
+| `SMTP_*`, `EMAIL_*` | Emails transactionnels. |
+| `POLAR_*` | Facturation hébergée et compteurs d'utilisation. |
+| `POSTHOG_*` | Analytique produit directe et signalement des erreurs. |
+
+<Warning>
+  Ne placez jamais de secrets dans des variables `NEXT_PUBLIC_*`. Next.js inclut ces valeurs dans les bundles du navigateur.
+</Warning>
+
+{/* Caléonis qualification */}
+
+## Paramètres locaux supplémentaires
+
+`WIDGET_KEY_ISSUANCE_ENABLED` reste désactivé par défaut pour les nouvelles clés. Le pilote utilise les paramètres Resend indiqués par `.env.example` lorsqu'ils sont configurés ; un tableau générique SMTP n'est pas une preuve de fournisseur activé.
+
+Conservez les variables et packages `LOBBYSTACK_*`/`@lobbystack/*` ; le rebranding n'est pas une migration de secrets. Le fichier `.env.example` de votre commit fait foi. Ne placez aucun secret dans une variable `NEXT_PUBLIC_*`.

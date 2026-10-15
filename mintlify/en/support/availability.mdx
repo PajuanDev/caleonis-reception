@@ -1,0 +1,22 @@
+---
+title: "Capabilities and qualification"
+description: "What was tested, what needs qualification, and what is unavailable in the pilot."
+---
+
+This table distinguishes implementation from an action actually tested in the French pilot. Review it before relying on a guide or opening a new customer workspace.
+
+| Capability | State at the 15 October 2026 review | What remains to do |
+| --- | --- | --- |
+| Inbound PSTN conversation | Qualified on the approved pilot number | Qualify each new authorized configuration. |
+| Transcript, summary, private recording playback | Qualified for the tested call | Check processing, permissions and retention for the workspace. |
+| Google Calendar booking | Qualified on a dedicated test calendar | Verify service, time zone, rights and event for new workspaces. |
+| Durable Google OAuth | Pending separate qualification | Verify refreshed access and an operation after renewal. |
+| Human transfer | Pending qualification | End-to-end SIP, busy/no-answer, policy and fallback checks. |
+| Cancellation/rescheduling | Code and controls present; not qualified by the booking test | Identity, confirmation, availability and external event checks. |
+| SMS on pilot line | Unavailable: Voice-only | A distinct approved sender/service would require separate qualification. |
+| Widget | Existing authorized keys only; new issuance off by default | Per-origin and per-business qualification. |
+| API/MCP | Code present and scoped | Open only authorized access; qualify the specific integration. |
+| Prices, affiliate program, live payments | Approval pending | Approved EUR catalogue, taxes, terms and provider sandbox. |
+| Medical/HDS use | No qualification claimed | Limit the pilot to administrative reception without health data. |
+
+A callback request is a task for your team. It does not place an automatic outbound call. A booking does not prove a delivered notification. Use [Troubleshooting](/en/support/troubleshooting) for an unexpected state.

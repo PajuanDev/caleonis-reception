@@ -1,0 +1,406 @@
+---
+title: "Update the business"
+description: "PATCH /api/v1/business: parameters, permissions and full schemas."
+---
+
+`PATCH https://receptionist.caleonis.com/api/v1/business`
+
+This page describes the Caléonis runtime contract. Schema field names and technical descriptions are preserved verbatim for integration accuracy.
+
+Updates basic fields and opening hours. Sending hours replaces the whole week.
+
+## Authentication and permissions
+Send `Authorization: Bearer <API key>`. Required scope: `business:write`.
+
+<Warning>This operation has a real effect. Use an authorized test business; reading the reference does not call the operation.</Warning>
+
+## Parameters
+No path or query parameters.
+
+## Request body
+
+`Content-Type: application/json`
+
+| Field | Type | Required | Description / constraints |
+| --- | --- | --- | --- |
+| `name` | string | No |  minLength=1; maxLength=200 |
+| `timezone` | string | No |  minLength=1; maxLength=80 |
+| `locale` | string | No |  enum=["en", "fr"] |
+| `website_url` | string (uri) / null | No |  |
+| `hours` | array&lt;object&gt; | No | Replaces the whole week. Omit a day to close it. maxItems=7 |
+| `hours[].day` | string | Yes |  enum=["sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday"] |
+| `hours[].open` | string | Yes | Local time as 24-hour HH:MM. pattern="^(?:[01]\\d&#124;2[0-3]):[0-5]\\d$&#124;^24:00$" |
+| `hours[].close` | string | Yes | Local time as 24-hour HH:MM. pattern="^(?:[01]\\d&#124;2[0-3]):[0-5]\\d$&#124;^24:00$" |
+
+## Responses
+| HTTP | Description |
+| --- | --- |
+| `200` | OK |
+| `400` | The request is invalid (invalid_request). |
+| `401` | The API key is missing, invalid, or revoked (unauthorized). |
+| `403` | The API key lacks the business:write scope (insufficient_scope). |
+| `409` | The request conflicts with the current state. |
+| `429` | Too many requests (rate_limited). Wait for the Retry-After header's number of seconds. |
+
+Errors use error.code, error.message and sometimes error.details. Respect Retry-After and reuse the same idempotency key and body when retrying a supported creation.
+
+## HTTP example
+
+```http
+PATCH /api/v1/business HTTP/1.1
+Host: receptionist.caleonis.com
+Authorization: Bearer <server-side key>
+Content-Type: application/json
+```
+
+## Full contract and schemas
+
+The block retains all fields, unions, formats, constraints and responses for this operation. Each $ref resolves in components.schemas included in the same block.
+
+```json
+{
+  "method": "PATCH",
+  "path": "/api/v1/business",
+  "operation": {
+    "operationId": "updateBusiness",
+    "summary": "Update the business",
+    "description": "Updates basic fields and opening hours. Sending hours replaces the whole week.",
+    "tags": [
+      "Business"
+    ],
+    "security": [
+      {
+        "bearerAuth": []
+      }
+    ],
+    "x-required-scope": "business:write",
+    "requestBody": {
+      "required": true,
+      "content": {
+        "application/json": {
+          "schema": {
+            "$ref": "#/components/schemas/BusinessUpdate"
+          }
+        }
+      }
+    },
+    "responses": {
+      "200": {
+        "description": "OK",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "required": [
+                "data"
+              ],
+              "properties": {
+                "data": {
+                  "$ref": "#/components/schemas/Business"
+                }
+              }
+            }
+          }
+        }
+      },
+      "400": {
+        "description": "The request is invalid (invalid_request).",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Error"
+            }
+          }
+        }
+      },
+      "401": {
+        "description": "The API key is missing, invalid, or revoked (unauthorized).",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Error"
+            }
+          }
+        }
+      },
+      "403": {
+        "description": "The API key lacks the business:write scope (insufficient_scope).",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Error"
+            }
+          }
+        }
+      },
+      "409": {
+        "description": "The request conflicts with the current state.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Error"
+            }
+          }
+        }
+      },
+      "429": {
+        "description": "Too many requests (rate_limited). Wait for the Retry-After header's number of seconds.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Error"
+            }
+          }
+        },
+        "headers": {
+          "Retry-After": {
+            "schema": {
+              "type": "integer"
+            },
+            "description": "Seconds to wait."
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "BusinessUpdate": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 200
+          },
+          "timezone": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 80
+          },
+          "locale": {
+            "type": "string",
+            "enum": [
+              "en",
+              "fr"
+            ]
+          },
+          "website_url": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 2000,
+                "format": "uri"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "hours": {
+            "description": "Replaces the whole week. Omit a day to close it.",
+            "maxItems": 7,
+            "type": "array",
+            "items": {
+              "description": "Opening hours for one day. Days that are not listed are closed.",
+              "type": "object",
+              "properties": {
+                "day": {
+                  "type": "string",
+                  "enum": [
+                    "sunday",
+                    "monday",
+                    "tuesday",
+                    "wednesday",
+                    "thursday",
+                    "friday",
+                    "saturday"
+                  ]
+                },
+                "open": {
+                  "description": "Local time as 24-hour HH:MM.",
+                  "type": "string",
+                  "pattern": "^(?:[01]\\d|2[0-3]):[0-5]\\d$|^24:00$"
+                },
+                "close": {
+                  "description": "Local time as 24-hour HH:MM.",
+                  "type": "string",
+                  "pattern": "^(?:[01]\\d|2[0-3]):[0-5]\\d$|^24:00$"
+                }
+              },
+              "required": [
+                "day",
+                "open",
+                "close"
+              ]
+            }
+          }
+        },
+        "additionalProperties": false
+      },
+      "Business": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "description": "Stable identifier (UUID).",
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string"
+          },
+          "timezone": {
+            "description": "IANA time zone, for example America/Toronto.",
+            "type": "string"
+          },
+          "locale": {
+            "description": "Default language for callers: en or fr.",
+            "type": "string"
+          },
+          "website_url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "booking_mode": {
+            "description": "instant: appointments are booked directly. request: the receptionist takes a request and the team confirms it. off: no booking.",
+            "type": "string",
+            "enum": [
+              "instant",
+              "request",
+              "off"
+            ]
+          },
+          "hours": {
+            "type": "array",
+            "items": {
+              "description": "Opening hours for one day. Days that are not listed are closed.",
+              "type": "object",
+              "properties": {
+                "day": {
+                  "type": "string",
+                  "enum": [
+                    "sunday",
+                    "monday",
+                    "tuesday",
+                    "wednesday",
+                    "thursday",
+                    "friday",
+                    "saturday"
+                  ]
+                },
+                "open": {
+                  "description": "Local time as 24-hour HH:MM.",
+                  "type": "string",
+                  "pattern": "^(?:[01]\\d|2[0-3]):[0-5]\\d$|^24:00$"
+                },
+                "close": {
+                  "description": "Local time as 24-hour HH:MM.",
+                  "type": "string",
+                  "pattern": "^(?:[01]\\d|2[0-3]):[0-5]\\d$|^24:00$"
+                }
+              },
+              "required": [
+                "day",
+                "open",
+                "close"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "created_at": {
+            "description": "ISO 8601 timestamp in UTC.",
+            "type": "string",
+            "format": "date-time"
+          },
+          "updated_at": {
+            "description": "ISO 8601 timestamp in UTC.",
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "timezone",
+          "locale",
+          "website_url",
+          "booking_mode",
+          "hours",
+          "created_at",
+          "updated_at"
+        ],
+        "additionalProperties": false
+      },
+      "Error": {
+        "type": "object",
+        "properties": {
+          "error": {
+            "type": "object",
+            "properties": {
+              "code": {
+                "type": "string",
+                "enum": [
+                  "invalid_request",
+                  "unauthorized",
+                  "forbidden",
+                  "insufficient_scope",
+                  "not_found",
+                  "conflict",
+                  "idempotency_key_reused",
+                  "idempotency_request_in_progress",
+                  "booking_disabled",
+                  "booking_requires_confirmation",
+                  "slot_unavailable",
+                  "rate_limited",
+                  "rate_limit_unavailable",
+                  "method_not_allowed",
+                  "internal_error"
+                ]
+              },
+              "message": {
+                "type": "string"
+              },
+              "details": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "path": {
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "path",
+                    "message"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            },
+            "required": [
+              "code",
+              "message"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "required": [
+          "error"
+        ],
+        "additionalProperties": false
+      }
+    }
+  }
+}
+```
+
+Download the [complete OpenAPI document](/api-reference/openapi.json). See [Authentication](/en/api/authentication), [Requests and errors](/en/api/requests) and [Webhooks](/en/api/webhooks).

@@ -1,39 +1,60 @@
 ---
-title: "Comprendre le widget Web"
-description: "Configurer un widget existant autorisé et tester le chat ou l’appel navigateur."
+title: "Ajouter le widget de site Web"
+description: "Configurez le widget intégrable de chat et d'appel Web de Caléonis Receptionist, puis ajoutez le script de chargement à votre site Web."
+sidebarTitle: "Widget de site Web"
+contentType: "How-to"
 ---
+
+La page **Réglages** > **Widget de site web** crée et gère les clés du widget de réceptionniste. Depuis le widget, les visiteurs peuvent clavarder, laisser leurs coordonnées et lancer un appel depuis leur navigateur.
+
 <Note>
-Le widget existe dans le code du produit, mais les nouvelles clés sont désactivées par défaut. L’accès n’est pas une fonction publique incluse automatiquement dans une offre Caléonis V1.
+  Le chat sur le site Web est restreint et ne fait pas partie des forfaits hébergés. La création de nouvelles clés de widget est désactivée par défaut. Sur un déploiement auto-hébergé, définissez `WIDGET_KEY_ISSUANCE_ENABLED=true` pour en créer. Les clés existantes continuent de fonctionner.
 </Note>
 
-Les clés existantes autorisées peuvent conserver leur configuration. La voix dans le navigateur de test et le widget installé sur un site sont deux parcours distincts.
+## Configurer le widget
 
-## Avant une installation
+<Steps>
+  <Step title="Ouvrir les réglages du widget">
+    Allez dans **Réglages** > **Widget de site web**.
+  </Step>
+  <Step title="Configurer son apparence">
+    Choisissez la couleur, la position, le titre, le sous-titre, le message d'accueil et le comportement de langue.
+  </Step>
+  <Step title="Configurer la collecte de prospects">
+    Activez le formulaire de contact, choisissez les champs obligatoires et décidez s'il s'affiche avant le chat.
+  </Step>
+  <Step title="Définir les sites Web autorisés">
+    Entrez chaque origine publique exacte qui peut intégrer le widget, par exemple `https://www.example.com`.
+  </Step>
+  <Step title="Copier l'extrait d'installation">
+    Copiez l'extrait de chargement généré et ajoutez-le avant la balise de fermeture `</body>` de votre site Web.
+  </Step>
+</Steps>
 
-Faites confirmer l’activation dans votre entreprise. Préparez un site de test HTTPS que vous contrôlez et les origines exactes autorisées.
+## Protéger les appels Web
 
-Ne copiez pas une clé d’une autre entreprise. Une clé de widget n’est pas une clé d’API administrative.
+Caléonis Receptionist signe les sessions du widget et compare l'origine de la page parente du visiteur aux origines autorisées pour la clé du widget avant de lancer un appel.
 
-## Configurer une clé existante
+Utilisez un site Web en HTTPS en production. Gardez `WIDGET_SESSION_SECRET` et les autres identifiants de signature sur le serveur.
 
-Dans **Réglages > Widget**, si la page est disponible :
+## Gérer les clés du widget
 
-1. Choisissez la clé de votre site.
-2. Vérifiez la couleur, la position, le titre, l’accueil et la langue.
-3. Définissez les origines exactes autorisées.
-4. Vérifiez les champs de contact demandés.
-5. Copiez le code d’intégration fourni à l’écran dans votre site de test.
+Chaque clé a sa propre liste d'origines autorisées et sa propre configuration. Vous pouvez modifier une clé active, la suspendre temporairement ou la révoquer définitivement. La révocation d'une clé arrête toutes les intégrations qui l'utilisent.
 
-Évitez de collecter des informations inutiles. Ne demandez pas de données de santé dans le pilote.
+## Vérifier l'installation
 
-## Vérifier le parcours
+Ouvrez le site Web public dans une fenêtre de navigation privée. Vérifiez que le widget se charge, qu'il démarre un chat et qu'il affiche le formulaire de contact. Si les appels Web sont activés, autorisez l'accès au microphone et passez un appel test.
 
-Ouvrez le site comme visiteur. Vérifiez l’affichage sur ordinateur et mobile, le formulaire, une réponse de chat et l’apparition du fil dans **Messages**, si le chat est activé.
+{/* Caléonis qualification */}
 
-Pour un appel Web autorisé, accordez le microphone et contrôlez ensuite la fiche dans **Appels**. Le test doit aussi échouer proprement sur une origine non autorisée.
+## Exemple d'installation d'une clé existante
 
-## Suspendre
+Copiez l'extrait exact fourni par votre écran ; les valeurs suivantes sont volontairement fictives :
 
-Utilisez les actions proposées pour suspendre ou révoquer une clé. La révocation interrompt les sites qui l’utilisent ; préparez cette action avec leur responsable.
+```html
+<script src="https://receptionist.caleonis.com/embed.js" data-widget-key="VOTRE_CLE_WIDGET_EXISTANTE" async></script>
+```
 
-La section [auto-hébergement](/self-hosting/overview) documente le contrôle technique d’émission des clés. Elle ne constitue pas une procédure d’activation du SaaS.
+Confirmez les attributs avec le snippet généré dans la version déployée avant installation. Une clé publique de widget n'est pas une clé API administrative. Vérifiez l'origine exacte, l'affichage ordinateur/mobile, le formulaire, le fil dans Messages, puis le refus sur une origine non autorisée.
+
+Les nouvelles clés sont désactivées par défaut. Ce guide ne les active pas et ne promet pas le widget comme fonction publique de l'offre Caléonis V1.

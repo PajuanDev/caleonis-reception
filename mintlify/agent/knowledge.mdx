@@ -1,40 +1,98 @@
 ---
-title: "Ajouter des connaissances fiables"
-description: "Préparer des réponses à partir de textes, documents et imports de pages publiques."
+title: "Ajouter les connaissances de votre entreprise"
+description: "Ajoutez du texte, des documents et le contenu de votre site Web pour que votre réceptionniste réponde aux questions courantes à partir de sources exactes."
+sidebarTitle: "Connaissances"
+contentType: "How-to"
 ---
-Dans **Agent > Connaissances**, ajoutez les faits que l’agent peut utiliser : horaires, coordonnées publiques, zone d’intervention, services et FAQ.
 
-## Texte
+La page **Connaissances** vous permet d'ajouter les informations que la réceptionniste utilise pour répondre aux appelants. Servez-vous-en pour les faits simples à retrouver : heures d'ouverture, adresse, parking, notes sur les prix, descriptions des services, politiques, documents à fournir et FAQ.
 
-1. Choisissez l’ajout de connaissance puis le type texte.
-2. Donnez un titre précis, par exemple « Zone d’intervention ».
-3. Rédigez une réponse courte et vérifiable.
-4. Enregistrez et contrôlez le statut de traitement.
-5. Posez la question dans un nouvel appel de test.
+Caléonis Receptionist prend en charge trois sources de connaissances : les entrées de texte, les documents importés et les importations de sites Web publics.
 
-Une entrée doit décrire une information. Les consignes de comportement appartiennent aux [Règles](/agent/rules).
+<Note>Les quotas Caléonis sont ceux de votre offre approuvée et des contrôles de votre espace ; les anciens quotas commerciaux amont ne les définissent pas.</Note>
 
-## Documents
+## Entrées de texte
 
-Utilisez les types de fichiers acceptés par le formulaire. Le traitement extrait le texte avant de le rendre utilisable. Un document en attente ou en erreur ne constitue pas une source prête.
+Les entrées de texte conviennent le mieux aux faits courts qui font autorité.
 
-Relisez le texte extrait, surtout pour un scan ou un tableau. Évitez les informations périmées, les tarifs non validés et les fichiers contenant des données personnelles inutiles.
+| Titre de l'entrée | Bon contenu |
+| --- | --- |
+| Horaire des jours fériés | Nous sommes fermés les jours fériés. Si un appelant pose une question sur un jour férié précis, prenez un message pour que l'équipe confirme. |
+| Stationnement | Les clients peuvent utiliser le parking derrière l'immeuble. Le parking sur rue est aussi permis sur la rue Pine après 18 h. |
+| Politique d'annulation | Veuillez appeler au moins 24 heures avant le rendez-vous pour l'annuler ou le déplacer. |
+| Accueil des nouveaux clients | Les nouveaux clients doivent apporter une pièce d'identité, leurs renseignements d'assurance s'il y a lieu, ainsi que toute lettre de recommandation ou note de service en leur possession. |
 
-Les limites affichées par votre espace font foi ; les anciens quotas commerciaux LobbyStack ne constituent pas des quotas Caléonis approuvés.
+<Steps>
+  <Step title="Ouvrez Connaissances">
+    Allez dans **Agent** > **Connaissances**.
+  </Step>
+  <Step title="Choisissez Texte">
+    Cliquez sur **Ajouter** et choisissez **Texte**.
+  </Step>
+  <Step title="Ajoutez un titre et un contenu">
+    Utilisez un titre court et rédigez la réponse complète dans le champ de contenu.
+  </Step>
+  <Step title="Enregistrez">
+    Cliquez sur **Enregistrer**. L'entrée apparaît dans le tableau.
+  </Step>
+</Steps>
 
-## Import d’un site public
+## Documents importés
 
-1. Choisissez l’import de site dans les connaissances.
-2. Entrez une URL publique que vous êtes autorisé à utiliser.
-3. Démarrez l’import et attendez son traitement.
-4. Contrôlez les pages retenues et leur statut.
-5. Retirez ou désactivez les contenus sans rapport avec l’accueil.
-6. Testez une question dont la réponse figure dans la source.
+Téléversez des fichiers PDF, des documents Word, des fichiers texte et des fichiers Markdown qui contiennent des informations utiles pour les appelants.
 
-L’import ne se connecte pas aux espaces privés. Les adresses locales et les ressources réseau internes ne sont pas des sources utilisables. Les pages protégées ou non lisibles peuvent nécessiter un ajout manuel.
+| Limite | Valeur |
+| --- | --- |
+| Types pris en charge | PDF, DOCX, TXT, Markdown |
+| Taille maximale | 10 Mo par fichier |
 
-## Entretenir les sources
+Caléonis Receptionist traite les documents importés avant qu'ils soient prêts. Le tableau affiche des statuts comme en file d'attente, en indexation, prêt ou erreur.
 
-Corrigez une source quand vos horaires ou services changent. Désactivez un élément obsolète avant d’en ajouter une copie contradictoire. Testez après toute modification importante.
+<Note>
+  Ne téléversez que des documents prêts à être communiqués aux appelants. Utilisez du contenu à jour et approuvé pour que la réceptionniste donne les mêmes informations que votre équipe.
+</Note>
 
-Vous devez disposer des droits sur les documents et pages importés. Dans le pilote, n’ajoutez pas de dossiers médicaux ou de données de santé.
+## Importation du site Web
+
+L'importation du site Web parcourt une URL publique et ajoute les pages utiles à la base de connaissances. Elle vise les pages publiques comme les services, la page À propos, la FAQ, les heures d'ouverture, les emplacements, les menus, les prix et la page de contact.
+
+L'importation du site Web se concentre sur les pages publiques destinées aux appelants et ignore :
+
+- Les URL localhost, de réseau local ou d'adresse IP directe.
+- Les pages qui exigent une connexion.
+- Les pages peu utiles comme le paiement, le panier, le compte, la recherche, la confidentialité et les conditions d'utilisation.
+- Les fichiers statiques comme les images, les PDF, les feuilles de calcul, les fichiers ZIP, les scripts et les feuilles de style.
+
+<Steps>
+  <Step title="Ouvrez la fenêtre d'importation du site Web">
+    Allez dans **Agent** > **Connaissances**, cliquez sur **Ajouter** et choisissez **Site web**.
+  </Step>
+  <Step title="Entrez une URL publique">
+    Collez l'URL de la page d'accueil ou de la section que Caléonis Receptionist doit parcourir.
+  </Step>
+  <Step title="Lancez l'importation">
+    Cliquez sur **Importer le site web**. Les pages importées apparaissent au fur et à mesure de leur traitement.
+  </Step>
+</Steps>
+
+## Gérer les entrées
+
+Depuis le tableau Connaissances, vous pouvez :
+
+- Chercher des entrées.
+- Ouvrir une ligne pour voir le texte extrait d'un document.
+- Désactiver une entrée sans la supprimer.
+- Réactiver une entrée désactivée.
+- Supprimer définitivement une entrée.
+
+<Tip>
+  Mieux vaut un petit ensemble d'entrées exactes qu'une grande bibliothèque de contenu périmé. Pour les appelants, l'exactitude compte plus que le volume.
+</Tip>
+
+{/* Caléonis qualification */}
+
+## Contrôler les sources et les limites de votre espace
+
+Les quotas commerciaux publics de l'amont ne sont pas des quotas Caléonis approuvés. Consultez les limites réellement configurées et l'offre validée avant d'importer un volume important. Le formulaire et la version du déploiement définissent les formats et tailles acceptés.
+
+Relisez le texte extrait, surtout pour un scan ou un tableau. Une entrée en attente ou en erreur n'est pas prête pour l'agent. Après une modification, posez une question précise dans un nouvel appel et vérifiez la transcription. Vous devez disposer des droits sur les sources. N'ajoutez pas de données de santé dans le pilote.

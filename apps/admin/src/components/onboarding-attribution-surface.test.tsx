@@ -19,7 +19,7 @@ beforeEach(() => {
   route.router.refresh.mockReset();
   vi.stubGlobal("localStorage", { getItem: () => null, setItem: () => {}, removeItem: () => {} });
 });
-afterEach(() => { cleanup(); clients.forEach(client => client.clear()); clients.length = 0; vi.unstubAllGlobals(); vi.clearAllMocks(); });
+afterEach(() => { cleanup(); clients.forEach(client => client.clear()); clients.length = 0; vi.unstubAllGlobals(); vi.unstubAllEnvs(); vi.clearAllMocks(); });
 
 function setup() {
   const client = new QueryClient({ defaultOptions: { queries: { retry: false, staleTime: Infinity } } });
@@ -32,6 +32,12 @@ function setup() {
 }
 
 describe("onboarding attribution telemetry", () => {
+  it("finishes inside the application during the single-host staging rehearsal", async () => {
+    vi.stubEnv("NEXT_PUBLIC_P1_SINGLE_HOST_STAGING", "true");
+    setup();
+    await userEvent.click(await screen.findByRole("button", { name: "attribution.skip" }));
+    await waitFor(() => expect(route.router.push).toHaveBeenCalledWith("/dashboard"));
+  });
   it("records the selected attribution source", async () => {
     setup();
     await userEvent.click(await screen.findByRole("button", { name: "attribution.options.google" }));

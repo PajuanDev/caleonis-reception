@@ -1,6 +1,7 @@
 ---
 title: "Régler l’accueil et la réservation"
 description: "Choisir la langue, l’accueil et les politiques de l’agent."
+sidebarTitle: "Paramètres IA"
 ---
 Ouvrez **Agent > Paramètres IA**. Vérifiez l’entreprise sélectionnée avant de modifier l’accueil ou les politiques.
 
@@ -31,3 +32,35 @@ Le transfert du pilote n’est pas qualifié comme opérationnel. Préférez une
 ## Après l’enregistrement
 
 Démarrez un nouvel appel de test. Contrôlez l’accueil, la langue, les actions réellement réalisées et la fiche d’appel. Les modifications n’altèrent pas les appels passés.
+
+{/* Caléonis qualification */}
+
+## Exemples d'accueil et langue de repli
+
+| Activité | Texte à adapter |
+| --- | --- |
+| Artisan | Bonjour, vous êtes chez Exemple Dépannage. Je peux vous renseigner ou prendre une demande de rappel pour devis. |
+| Salon | Bonjour, vous êtes chez Exemple Salon. Comment puis-je vous aider concernant nos prestations ou une demande de rendez-vous ? |
+| Accueil administratif | Bonjour, vous êtes à l'accueil du cabinet. Merci de ne pas communiquer de détails médicaux à cet assistant. |
+
+Les valeurs de repli prévues sont français (`fr`) et anglais (`en`). Ce réglage s'utilise lorsque la langue de l'appelant est incertaine ; il ne constitue pas une certification linguistique. Renseignez les sources utiles dans les langues de vos appelants et testez-les.
+
+## Numéro de transfert et repli
+
+Le champ désigne la destination potentielle du transfert humain. Utilisez un numéro complet que votre équipe contrôle, enregistrez et prévoyez la prise de message dans Règles. Une qualification distincte doit couvrir transfert accepté, occupé, absence de réponse et refus par la politique. Tant qu'elle manque, l'agent doit prendre un message.
+
+Les modes de réservation internes sont `off`, `request` et `instant`. Dans le mode demande, votre équipe doit confirmer ; aucune phrase de l'agent ne doit convertir cette demande en confirmation.
+
+{/* Latest upstream settings differences */}
+
+## Résumé de l'entreprise
+
+La nouvelle interface candidate de cette PR expose le résumé manuel déjà pris en charge par le backend. Renseignez des faits approuvés dans Résumé de l'entreprise, enregistrez puis vérifiez un nouvel appel. Cette interface candidate ne constitue pas une mise à jour de la production précédemment qualifiée.
+
+L'amont récent ajoute génération automatique depuis les connaissances et bouton de réécriture IA. Ces deux automatismes ne sont pas implémentés dans cette candidate ; aucun bouton factice n'est présenté. Les Connaissances restent la source des informations à vérifier.
+
+## Heures d'ouverture
+
+L'amont récent documente extraction automatique, plusieurs plages quotidiennes et fermetures depuis les Paramètres IA. Le sélecteur actuel Caléonis de cette page ne fournit pas ces contrôles. Les horaires existants de l'entreprise et les paramètres nécessaires à la réservation doivent être configurés par l'opérateur via les fonctions disponibles, puis vérifiés dans les disponibilités.
+
+L'API `PATCH /business` documente les champs réellement pris en charge. Ne présentez pas l'extraction ou les nouveaux contrôles amont comme disponibles sans implémentation et qualification spécifiques. De même, le runtime Caléonis expose français/anglais ; les six langues de repli supplémentaires de l'amont récent ne sont pas annoncées comme une option de ce sélecteur.

@@ -1,67 +1,25 @@
-# Livraison V1.1, V1.2 et V1.3
+# Reprise de la PR #10 — V1.1 / V1.2 / V1.3
 
-Base : `e8e23bae4955f64fa3f99cb525faad908439077e`, version admin/worker vérifiée en production le 15 octobre 2026. Branche isolée : `codex/receptionist-v1-parity-2026-10-15`, à empiler sur la branche de PR9. Aucun merge, déploiement Railway, migration, achat, appel, réservation, envoi ou changement DNS effectué par cette passe.
+La preview initiale masquait des pages du fork et réduisait la documentation anglaise. La reprise rétablit les composants, routes et contenus complets sous Caléonis Receptionist. **P1.4 et V2 restent fermées tant que cette revue n’est pas qualifiée.**
 
-## Résultat consultable
+## Sources et continuité
 
-- [Prévisualisation privée du site FR](https://caleonis-receptionist-v1-review.willgosse225.chatgpt.site/fr/).
-- [Centre d'aide FR](https://caleonis-receptionist-v1-review.willgosse225.chatgpt.site/aide/).
-- [Matrice de parité et Go/No-Go](parity-matrix.md).
-- [Application et preuves ciblées](app-parity.md).
-- [Adaptation des guides et limites des vérificateurs](docs-adaptation.md).
-- [Relecture du site marketing](../../apps/landing/V1-LAUNCH-REVIEW.md).
+La branche existante `codex/receptionist-v1-parity-2026-10-15` conserve `c054d96dd1d67c2ab57e8b6cacaa041b929bca36` et les ancêtres des PR #6 à #9. Source publique complémentaire : GitLab officiel `lobbystack-group/lobbystack`, commit MIT `46b217807cb251a6679a5e64b8142d2441ccecd3`. Les notices MIT et copyright LobbyStack contributors restent conservées. Aucun merge de PR ni réécriture forcée de branche.
 
-L'aperçu contient le site et l'aide. Il ne déploie pas la version candidate du dashboard : les CTA ouvrent l'application existante. Il reste privé et noindex, avec les prix sur demande et une simple notice d'attente pour les textes juridiques non validés. Le site corporate n'a pas été remplacé. Chaque paquet statique est une copie du build vérifié. La première version du preview avait pour commit source `df533f234a1c270f606b6c0872207f2144dbfe6a` ; le relevé final accompagne les versions suivantes et leurs preuves.
+Le contrôle en lecture seule du service existant a trouvé la version admin `47a4917c8110bd573a6e04a7f9dc434a952cbe09`, PostgreSQL et stockage prêts. Ses trois pages légales pilote approuvées sont reprises à l’identique. La reprise ne modifie ni service de production, ni DNS, données clients ou paiements et ne lance aucun appel ou message fournisseur.
 
-## Changements essentiels
+## Résultat de revue
 
-Messages réapparaît toujours dans la sidebar d'origine. Une ligne Voice-only conserve l'inbox et affiche sa limite ; l'interface et l'API refusent l'envoi SMS sans numéro actif compatible. Les viewers restent en lecture seule, y compris sur les routes de réponse et de prise en charge humaine. Les brouillons survivent à un échec et aux changements de fil pendant un envoi.
+- Véritable Astro : dispositions, menus, composants, typographie, illustrations neutres autorisées et 84 articles FR/EN complets avec attribution d’archive. Toutes les routes marketing FR/EN du sitemap public contrôlé ont une page spécifique.
+- Aide native complète FR/EN avec références API issues du contrat réel Caléonis, navigation hiérarchique, recherche plein texte, ancres, snippets et illustrations autorisées.
+- Messages et protections Voice-only conservés. Préparation `/dashboard` et retours auth opt-in staging, désactivée sur le domaine et l’environnement de production.
+- Gateway HTTP locale testée : API/auth/anciens chemins privés, corps bruts, cookies multiples, statuts et SSE. Cela ne qualifie pas OAuth/PSTN sur un déploiement combiné.
+- Catalogue de revue désactivé : Free 0 €, Starter 30 €/mois ou 288 €/an, Pro 100 €/mois ou 960 €/an. TVA/CGV, éligibilité, marge réelle et produits de paiement restent à valider.
 
-Les surfaces tarifaires ne proposent plus les offres héritées lorsqu'aucun produit/intervalle commercial n'est configuré. L'affiliation est fermée par défaut, y compris les chemins d'attribution lors de la création d'espace et de l'onboarding. Les vrais comptes commerciaux conservent leur lecture de plan selon leurs permissions.
+## Preuves et exceptions
 
-Le site réutilise Astro, ses composants et styles, avec les assets Caléonis présents dans le workspace. Accueil, fonctionnalités, tarifs, ressources et cinq métiers sont adaptés en FR/EN. Les contenus longs et textes hérités non relus restent dans les sources, mais leur sortie affiche une notice et ils sont exclus du sitemap de lancement. Les 51 guides couvrent 49 pages FR et deux synthèses EN ; documentation SaaS et développeur/self-host sont séparées. La licence MIT et le copyright LobbyStack contributors sont conservés. Les packages et moteurs internes n'ont pas été renommés.
+`exhaustive-parity-manifest.json` contient routes, présence du build, statuts HTTP réellement observés, liens/actions, assets, captures et écarts. `public-source-inventory.json` est le relevé horodaté des sitemaps/pages publiques. Rapports complémentaires : `marketing-restoration-report.md`, `marketing-assets.json`, `docs-parity.json`, `app-settings-parity.md`, `pricing-parity-review.md`, `domain-single-host-review.md`.
 
-## Qualification et reproduction
+La couverture de routes ne certifie pas la parité fonctionnelle ou visuelle. Les exceptions comprennent les marques d’origine dans les images, portraits tiers sans provenance distincte, archives éditoriales attribuées, clauses US/CA, SMS incompatibles Voice-only, transferts non qualifiés, tarifs non activés et nouvelles fonctions amont absentes du moteur conservé.
 
-| Contrôle | Preuve locale |
-| --- | --- |
-| Tests ciblés application | 84 tests / 12 fichiers PASS après corrections des permissions et conditions commerciales |
-| Lint application modifiée | 0 erreur ; trois avertissements hérités documentés dans le rapport app |
-| Site | 85 tests PASS ; Astro check sans erreur, warning ou hint ; lint PASS ; 74 pages générées |
-| SEO | 20 URLs de preview relues : canonical, hreflang, sitemap et noindex PASS |
-| Aide native | Mintlify build validation PASS ; check:content PASS, 51 pages et 99 liens internes |
-| Export site + aide | 125 HTML, 6 244 références locales, 139 cibles, aucune cible absente après ajout des captures |
-| Navigateur site + aide | 22 cas desktop 1440×1000 et mobile 390×844 PASS : menu, recherche d'aide, contrôles nommés, images et débordements |
-| Types, lint et compilation globale | PASS dans la CI `f50075f`, y compris le build admin final, l'export de l'aide et ses liens |
-| Tests globaux locaux | Lots interrompus pour laisser la fenêtre CPU à P0 ; un timeout worker sous charge et l'écart OpenAPI hérité ont été conservés dans les logs, sans les présenter comme PASS |
-| Tests globaux CI | 2 107 PASS, 110 ignorés sur `f50075f` ; aucun test ignoré présenté comme exécuté |
-| PostgreSQL/RLS | 113 tests PASS dans la CI Linux isolée ; aucun accès à une base de production depuis cette passe |
-| Images Docker | Admin, worker et migrateur construits et scannés avec succès sur `f50075f` |
-| Navigateur dashboard | Relance `207dc2c` : 14 PASS, 2 ignorés, 0 échec. Messages FR depuis Appels, desktop/mobile, composer SMS fermé et isolation/revocation vérifiés dans un environnement jetable |
-
-La [CI de la branche](https://github.com/PajuanDev/caleonis-reception/actions?query=branch%3Acodex%2Freceptionist-v1-parity-2026-10-15) porte le statut courant du SHA proposé. La description de PR et le relevé de livraison final identifient le SHA et les résultats acquis. Les captures Messages desktop/mobile du [parcours réussi](https://github.com/PajuanDev/caleonis-reception/actions/runs/38803741713/artifacts/12005352465) ont été téléchargées, vérifiées par SHA256 et inspectées. Deux sont intégrées aux pages Fonctionnalités FR/EN, avec données fictives explicitement indiquées. Leur provenance pérenne est conservée dans [screenshots.json](screenshots.json), car les artefacts CI expirent après sept jours.
-
-La fixture Playwright jetable active explicitement le programme d'affiliation hérité pour conserver son scénario de régression. Cela ne l'active pas en production ; les tests de routes vérifient séparément le défaut fermé et l'absence d'effets de bord.
-
-La reprise des E2E corrige le nom accessible de la marque, utilise l'entrée de langue explicite `/calls?lng=fr` et des identités uniques à chaque tentative pour éviter le cooldown Redis laissé par une précédente vérification d'e-mail. Les attentes Voice-only, le composer désactivé et les contrôles d'isolation restent en place. Les captures d'échec sont désormais conservées pour distinguer un problème de fixture d'un défaut visible.
-
-Une vérification du site effectivement déployé a aussi révélé que le CSS de l'export d'aide gardait les liens filtrés visibles. La règle `nav a[hidden]` corrige ce défaut. Le smoke navigateur contrôle désormais la visibilité réelle d'un résultat, le masquage des autres liens, une recherche sans résultat et leur réapparition après effacement.
-
-Sur Windows, `mint broken-links` émet quatre faux positifs sur les chemins imbriqués ; la cause séparateurs `\\` contre `/`, les cibles présentes et le contrôle indépendant sont documentés. La CI exécute aussi le vérificateur natif sur Linux. Le contrôle navigateur est un smoke d'accessibilité et de responsive, pas une certification WCAG exhaustive.
-
-Commandes de revue : `pnpm typecheck`, `pnpm test`, `pnpm build`, `pnpm docs:validate`, `pnpm --filter @lobbystack/docs check:content`, `pnpm --filter @lobbystack/landing seo:validate`. Pour exporter l'aide : `node scripts/build-help-preview.mjs apps/landing/dist/aide`, puis `node scripts/verify-v1-preview.mjs apps/landing/dist`. Le smoke navigateur accepte une URL locale et, si nécessaire, `PLAYWRIGHT_CHROMIUM_EXECUTABLE` vers un navigateur installé. Les machines locales partagées doivent exécuter les gros lots en séquence.
-
-## Configuration de lancement
-
-- `AFFILIATE_PROGRAM_ENABLED=false` par défaut. Activer uniquement après validation des conditions et circuits de paiement.
-- `NEXT_PUBLIC_HELP_SITE_URL` : URL d'une aide publiée et accessible. Sans valeur valide, l'application renvoie vers l'accompagnement existant `/fr/essai`.
-- `NEXT_PUBLIC_LANDING_SITE_URL` : URL marketing dédiée à choisir avant de réactiver les liens riches du dashboard public. Aucun domaine définitif n'a été inventé.
-- `PUBLIC_SITE_URL` : origin canonique du site ; le build livré utilise l'origin du preview indépendant. L'indexation reste volontairement désactivée.
-
-## Go / No-Go
-
-GO pour relire la preview et préparer une démonstration encadrée des capacités prouvées. NO-GO pour annoncer une parité totale ou ouvrir sans réserve le service commercial. La session P0 reste propriétaire de la latence, de la durée OAuth Google, des textes légaux, de l'information/choix des appelants, des durées de conservation et de la qualification téléphonique de chaque entreprise. Les points d'activité SaaS et de TVA de l'exploitant restent à finaliser dans cette coordination.
-
-Le numéro pilote reste Voice-only. SMS, transfert humain, paiements, affiliation, portabilité et traitements de santé ne doivent pas être annoncés activés sans preuve et accord spécifiques. Le rendez-vous Google TEST et les données P0 sont conservés. Les anciens enregistrements manquants et les prix individuels Twilio incomplets restent des limites distinctes, documentées dans la matrice.
-
-La suite recommandée après cette livraison est P1.4 : offre, exploitation, support, suivi et paiements de test. Aucun chantier P2 n'est lancé.
+Les résultats finaux, SHA livré, version de preview, tests et captures sont consignés dans `reprise-qualification.json` après exécution. Preview privée et noindex sur chatgpt.site ; les CTA ouvrent l’application existante. Domaine final imposé : `https://receptionist.caleonis.com/`, `/login`, `/signup`, `/fr`, `/aide` et `/dashboard`, sous réserve de répétition staging et d’autorisation humaine avant changement de production.

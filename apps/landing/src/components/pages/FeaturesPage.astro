@@ -1,55 +1,71 @@
 ---
 import Layout from "@/layouts/main.astro"
 import { Navbar } from "@/components/Navbar"
+import { FeaturesHero } from "@/components/features/FeaturesHero"
+import { FeatureWall } from "@/components/features/FeatureWall"
+import { IncludedOnEveryPlan } from "@/components/features/IncludedOnEveryPlan"
+import { FeaturesCtaSection } from "@/components/features/FeaturesCtaSection"
 import { Footer } from "@/components/Footer"
-import { FeatureGrid } from "@/components/FeatureGrid"
-import ProductScreenshots from "@/components/ProductScreenshots.astro"
-import { CtaSection } from "@/components/CtaSection"
-import { assertLocale, localizePath, type Locale } from "@/i18n"
-const locale = assertLocale(
-  (Astro.props as { locale?: Locale }).locale ?? Astro.currentLocale
-)
+import {
+  breadcrumbJsonLd,
+  organizationJsonLd,
+  webSiteJsonLd,
+  absoluteUrl,
+} from "@/lib/seo"
+import {
+  assertLocale,
+  getCopy,
+  getRouteSeo,
+  localizePath,
+  type Locale,
+} from "@/i18n"
+
+interface Props {
+  locale?: Locale
+}
+
+const locale = assertLocale(Astro.props.locale ?? Astro.currentLocale)
+const copy = getCopy(locale)
+const canonicalPath = localizePath(locale, "/features/")
+const seo = getRouteSeo({ locale, path: "/features/" })
 ---
 
-<Layout seo={{ locale, canonicalPath: localizePath(locale, "/features/") }}
-  ><Navbar locale={locale} /><main id="main-content">
-    <section class="mx-auto max-w-7xl px-6 pt-16 md:pt-24">
-      <h1 class="display-heading">
+<Layout
+  seo={{
+    ...seo,
+    canonicalPath,
+    locale,
+    jsonLd: [
+      organizationJsonLd(),
+      webSiteJsonLd({ locale }),
+      breadcrumbJsonLd([
+        { name: copy.common.home, path: localizePath(locale, "/") },
         {
-          locale === "fr"
-            ? "L’accueil de votre entreprise, dans un seul outil"
-            : "Your business reception in one application"
-        }
-      </h1><p class="body-copy mt-6 max-w-3xl">
-        {
-          locale === "fr"
-            ? "Le pilote associe accueil vocal, informations métier, suivi des appels et agenda connecté. Chaque activation est vérifiée avec votre configuration."
-            : "The pilot brings together voice reception, business information, call review and a connected calendar. Each activation is checked with your configuration."
-        }
-      </p>
-    </section><FeatureGrid locale={locale} /><ProductScreenshots locale={locale} /><section
-      class="mx-auto max-w-7xl px-6 py-16"
-    >
-      <h2 class="section-heading">
-        {
-          locale === "fr"
-            ? "À vérifier avant l’ouverture aux clients"
-            : "Check before opening to customers"
-        }
-      </h2><p class="body-copy mt-6 max-w-3xl">
-        {
-          locale === "fr"
-            ? "Le numéro pilote est Voice-only. Les SMS, transferts humains, notifications externes, renvois opérateur, invitations d’équipe et accès API doivent être confirmés séparément avant tout engagement. L’interface peut présenter des réglages dont la disponibilité dépend du compte."
-            : "The pilot number is Voice-only. SMS, human transfers, external notifications, carrier forwarding, team invitations and API access require separate confirmation before any commitment. Some settings depend on account capabilities."
-        }
-      </p><a
-        class="mt-6 inline-block underline underline-offset-4"
-        href={localizePath(locale, "/resources/")}
-        >{
-          locale === "fr"
-            ? "Consulter l’aide et les limites du pilote"
-            : "Read pilot help and limitations"
-        }</a>
-    </section><CtaSection locale={locale} />
-  </main><Footer locale={locale} /></Layout
+          name: locale === "fr" ? "Fonctionnalites" : "Features",
+          path: canonicalPath,
+        },
+      ]),
+      {
+        "@context": "https://schema.org",
+        "@type": "WebPage",
+        "@id": absoluteUrl(`${canonicalPath}#webpage`),
+        name: seo?.title,
+        url: absoluteUrl(canonicalPath),
+        description: seo?.description,
+        inLanguage: locale,
+        isPartOf: {
+          "@id": absoluteUrl("/#website"),
+        },
+      },
+    ],
+  }}
 >
+  <Navbar locale={locale} />
+  <main id="main-content" tabindex="-1">
+    <FeaturesHero locale={locale} />
+    <FeatureWall locale={locale} />
+    <IncludedOnEveryPlan locale={locale} />
+    <FeaturesCtaSection locale={locale} />
+  </main>
+  <Footer locale={locale} />
+</Layout>

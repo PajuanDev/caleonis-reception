@@ -1,0 +1,244 @@
+{
+  "source": "mintlify/api-reference/openapi.json",
+  "sha256": "bfd3153d01e740c08d431ac27a47ec1b4a64c68572cacbedb4b555aea1d2a93d",
+  "operations": 25,
+  "events": 7,
+  "pagesPerLocale": 32,
+  "records": [
+    {
+      "kind": "operation",
+      "slug": "api-reference/business/check-an-api-key",
+      "operationId": "getMe",
+      "method": "GET",
+      "path": "/me",
+      "scope": null
+    },
+    {
+      "kind": "operation",
+      "slug": "api-reference/business/get-the-business",
+      "operationId": "getBusiness",
+      "method": "GET",
+      "path": "/business",
+      "scope": "business:read"
+    },
+    {
+      "kind": "operation",
+      "slug": "api-reference/business/update-the-business",
+      "operationId": "updateBusiness",
+      "method": "PATCH",
+      "path": "/business",
+      "scope": "business:write"
+    },
+    {
+      "kind": "operation",
+      "slug": "api-reference/business/list-services",
+      "operationId": "listServices",
+      "method": "GET",
+      "path": "/services",
+      "scope": "business:read"
+    },
+    {
+      "kind": "operation",
+      "slug": "api-reference/business/list-staff",
+      "operationId": "listStaff",
+      "method": "GET",
+      "path": "/staff",
+      "scope": "business:read"
+    },
+    {
+      "kind": "operation",
+      "slug": "api-reference/calls/list-calls",
+      "operationId": "listCalls",
+      "method": "GET",
+      "path": "/calls",
+      "scope": "calls:read"
+    },
+    {
+      "kind": "operation",
+      "slug": "api-reference/calls/get-a-call",
+      "operationId": "getCall",
+      "method": "GET",
+      "path": "/calls/{call_id}",
+      "scope": "calls:read"
+    },
+    {
+      "kind": "operation",
+      "slug": "api-reference/contacts/list-contacts",
+      "operationId": "listContacts",
+      "method": "GET",
+      "path": "/contacts",
+      "scope": "contacts:read"
+    },
+    {
+      "kind": "operation",
+      "slug": "api-reference/contacts/create-a-contact",
+      "operationId": "createContact",
+      "method": "POST",
+      "path": "/contacts",
+      "scope": "contacts:write"
+    },
+    {
+      "kind": "operation",
+      "slug": "api-reference/contacts/get-a-contact",
+      "operationId": "getContact",
+      "method": "GET",
+      "path": "/contacts/{contact_id}",
+      "scope": "contacts:read"
+    },
+    {
+      "kind": "operation",
+      "slug": "api-reference/contacts/update-a-contact",
+      "operationId": "updateContact",
+      "method": "PATCH",
+      "path": "/contacts/{contact_id}",
+      "scope": "contacts:write"
+    },
+    {
+      "kind": "operation",
+      "slug": "api-reference/appointments/list-appointments",
+      "operationId": "listAppointments",
+      "method": "GET",
+      "path": "/appointments",
+      "scope": "appointments:read"
+    },
+    {
+      "kind": "operation",
+      "slug": "api-reference/appointments/book-an-appointment",
+      "operationId": "createAppointment",
+      "method": "POST",
+      "path": "/appointments",
+      "scope": "appointments:write"
+    },
+    {
+      "kind": "operation",
+      "slug": "api-reference/appointments/list-open-appointment-times",
+      "operationId": "getAvailability",
+      "method": "GET",
+      "path": "/availability",
+      "scope": "appointments:read"
+    },
+    {
+      "kind": "operation",
+      "slug": "api-reference/appointments/get-an-appointment",
+      "operationId": "getAppointment",
+      "method": "GET",
+      "path": "/appointments/{appointment_id}",
+      "scope": "appointments:read"
+    },
+    {
+      "kind": "operation",
+      "slug": "api-reference/appointments/cancel-an-appointment",
+      "operationId": "cancelAppointment",
+      "method": "POST",
+      "path": "/appointments/{appointment_id}/cancel",
+      "scope": "appointments:write"
+    },
+    {
+      "kind": "operation",
+      "slug": "api-reference/appointments/reschedule-an-appointment",
+      "operationId": "rescheduleAppointment",
+      "method": "POST",
+      "path": "/appointments/{appointment_id}/reschedule",
+      "scope": "appointments:write"
+    },
+    {
+      "kind": "operation",
+      "slug": "api-reference/messages/list-messages",
+      "operationId": "listMessages",
+      "method": "GET",
+      "path": "/messages",
+      "scope": "messages:read"
+    },
+    {
+      "kind": "operation",
+      "slug": "api-reference/knowledge/add-a-knowledge-entry",
+      "operationId": "createKnowledgeEntry",
+      "method": "POST",
+      "path": "/knowledge",
+      "scope": "knowledge:write"
+    },
+    {
+      "kind": "operation",
+      "slug": "api-reference/webhooks/list-webhook-endpoints",
+      "operationId": "listWebhooks",
+      "method": "GET",
+      "path": "/webhooks",
+      "scope": "webhooks:manage"
+    },
+    {
+      "kind": "operation",
+      "slug": "api-reference/webhooks/create-a-webhook-endpoint",
+      "operationId": "createWebhook",
+      "method": "POST",
+      "path": "/webhooks",
+      "scope": "webhooks:manage"
+    },
+    {
+      "kind": "operation",
+      "slug": "api-reference/webhooks/get-a-webhook-endpoint",
+      "operationId": "getWebhook",
+      "method": "GET",
+      "path": "/webhooks/{webhook_id}",
+      "scope": "webhooks:manage"
+    },
+    {
+      "kind": "operation",
+      "slug": "api-reference/webhooks/update-a-webhook-endpoint",
+      "operationId": "updateWebhook",
+      "method": "PATCH",
+      "path": "/webhooks/{webhook_id}",
+      "scope": "webhooks:manage"
+    },
+    {
+      "kind": "operation",
+      "slug": "api-reference/webhooks/delete-a-webhook-endpoint",
+      "operationId": "deleteWebhook",
+      "method": "DELETE",
+      "path": "/webhooks/{webhook_id}",
+      "scope": "webhooks:manage"
+    },
+    {
+      "kind": "operation",
+      "slug": "api-reference/webhooks/send-a-test-event",
+      "operationId": "testWebhook",
+      "method": "POST",
+      "path": "/webhooks/{webhook_id}/test",
+      "scope": "webhooks:manage"
+    },
+    {
+      "kind": "event",
+      "slug": "api-reference/callcompleted",
+      "event": "call.completed"
+    },
+    {
+      "kind": "event",
+      "slug": "api-reference/appointmentbooked",
+      "event": "appointment.booked"
+    },
+    {
+      "kind": "event",
+      "slug": "api-reference/appointmentrescheduled",
+      "event": "appointment.rescheduled"
+    },
+    {
+      "kind": "event",
+      "slug": "api-reference/appointmentcancelled",
+      "event": "appointment.cancelled"
+    },
+    {
+      "kind": "event",
+      "slug": "api-reference/messagetaken",
+      "event": "message.taken"
+    },
+    {
+      "kind": "event",
+      "slug": "api-reference/contactcreated",
+      "event": "contact.created"
+    },
+    {
+      "kind": "event",
+      "slug": "api-reference/webhooktest",
+      "event": "webhook.test"
+    }
+  ]
+}

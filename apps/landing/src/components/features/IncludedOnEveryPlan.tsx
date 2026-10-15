@@ -1,4 +1,4 @@
-import { Check } from "lucide-react"
+import { Check, Clock3, Minus } from "lucide-react"
 import { getCopy, localizeHref, type Locale } from "@/i18n"
 
 const includedCopy = {
@@ -6,8 +6,8 @@ const includedCopy = {
     headingStart: "Answer telephone calls with",
     headingEmphasis: "Starter or Pro",
     intro:
-      "Test 30 browser voice minutes on Free, without a telephone number. Choose Starter or Pro for a dedicated number and the telephone features below.",
-    label: "Included on Starter and Pro",
+      "Source target catalogue shown for review. This grid does not activate free usage, a number, SMS or a paid plan on the French pilot.",
+    label: "Source target features — current Caléonis pilot state",
     features: [
       "Call answering",
       "Plain-language workflows",
@@ -29,8 +29,8 @@ const includedCopy = {
     headingStart: "Recevez des appels téléphoniques avec",
     headingEmphasis: "Starter ou Pro",
     intro:
-      "Testez 30 minutes vocales dans le navigateur sur Free, sans numéro de téléphone. Choisissez Starter ou Pro pour obtenir un numéro dédié et les fonctions téléphoniques ci-dessous.",
-    label: "Inclus dans Starter et Pro",
+      "Catalogue cible source présenté en revue. Cette grille n’active aucun usage gratuit, numéro, SMS ni forfait payant sur le pilote français.",
+    label: "Fonctions cibles source — état actuel du pilote Caléonis",
     features: [
       "Réponse aux appels",
       "Consignes en langage naturel",
@@ -90,15 +90,21 @@ export function IncludedOnEveryPlan({
           </p>
 
           <div className="grid gap-x-8 gap-y-3 sm:grid-cols-2 lg:grid-cols-3">
-            {copy.features.map((feature) => (
-              <div
-                key={feature}
-                className="flex items-center gap-2.5 text-sm text-foreground"
-              >
-                <Check className="size-4 shrink-0 text-foreground/50" />
-                {feature}
-              </div>
-            ))}
+            {copy.features.map((feature) => {
+              const sms = /SMS|texts/i.test(feature)
+              const pending = /transf|unlimited|illimit|notification/i.test(feature)
+              const Icon = sms ? Minus : pending ? Clock3 : Check
+              const state = sms
+                ? locale === "fr" ? "indisponible sur le numéro Voice-only" : "unavailable on the Voice-only number"
+                : pending ? locale === "fr" ? "à qualifier selon la configuration Caléonis" : "requires Caléonis configuration-specific qualification"
+                : locale === "fr" ? "selon la configuration autorisée" : "subject to authorised configuration"
+              return (
+                <div key={feature} className="flex items-center gap-2.5 text-sm text-foreground" data-pilot-feature-state={sms ? "unavailable" : pending ? "pending" : "configured"}>
+                  <Icon className="size-4 shrink-0 text-foreground/50" aria-hidden="true" />
+                  <span>{feature} · {state}</span>
+                </div>
+              )
+            })}
           </div>
         </div>
 

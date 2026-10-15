@@ -15,8 +15,9 @@ export function SolutionCta() {
           Start answering every call without hiring another receptionist
         </h2>
         <p className="section-intro mx-auto max-w-lg">
-          Try LobbyStack with included voice minutes, set your answering rules,
-          and see how many calls it can turn into clear next steps.
+          Try Caléonis Receptionist with included voice minutes, set your
+          answering rules, and see how many calls it can turn into clear next
+          steps.
         </p>
         <div className="mt-8 flex flex-wrap items-center justify-center gap-4">
           <a
@@ -26,7 +27,7 @@ export function SolutionCta() {
               "h-11 rounded-full px-7 text-sm"
             )}
           >
-            Try for free
+            Request a trial
             <ArrowRight className="ml-1 size-4" />
           </a>
           <a
@@ -37,7 +38,7 @@ export function SolutionCta() {
           </a>
         </div>
         <p className="mt-5 text-xs text-muted-foreground">
-          No credit card required. Cancel anytime.
+          Pilot access and terms require approval. No purchase in this review.
         </p>
       </div>
     </section>

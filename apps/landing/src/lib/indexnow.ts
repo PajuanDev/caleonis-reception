@@ -151,7 +151,7 @@ export const isKeyFileLive = async (
 
 const fetchWithTimeout: FetchLike = (url) =>
   fetch(url, {
-    headers: { "User-Agent": "LobbyStack IndexNow build check" },
+    headers: { "User-Agent": "Caléonis Receptionist IndexNow build check" },
     signal: AbortSignal.timeout(10_000),
   })
 

@@ -173,6 +173,20 @@ async function verifyVoiceOnlyMessages(page: Page, businessId: string, testInfo:
   };
   try {
     await locale("fr");
+    // Capture real candidate screens with this disposable tenant, never a
+    // production account. These replace branded upstream documentation images.
+    for (const viewport of [{ width: 1440, height: 1000 }, { width: 390, height: 844 }]) {
+      await page.setViewportSize(viewport);
+      for (const [screen, path] of [["home", "/"], ["calls", "/calls"], ["analytics", "/analytics"]] as const) {
+        await page.goto(`${path}?lng=fr`);
+        await expect(page.locator("html")).toHaveAttribute("lang", "fr");
+        await expect(page.locator("main")).toBeVisible();
+        await expect(page.locator("main")).not.toContainText("Application error");
+        const screenshot = testInfo.outputPath(`p1-${screen}-fr-${viewport.width}.png`);
+        await page.screenshot({ path: screenshot, fullPage: true });
+        await testInfo.attach(`${screen} FR ${viewport.width} — espace de test isolé`, { path: screenshot, contentType: "image/png" });
+      }
+    }
     await page.setViewportSize({ width: 1440, height: 1000 });
     // Use the supported explicit locale entry point so server-rendered copy and
     // the client namespace loader start in French before sidebar navigation.

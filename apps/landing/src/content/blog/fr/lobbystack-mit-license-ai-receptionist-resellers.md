@@ -28,7 +28,7 @@ L'adoption du produit et les contributions sont restées sous notre objectif. No
 
 ## Ce que permet la licence MIT
 
-La [licence de LobbyStack](https://github.com/lobbystack/lobbystack/blob/main/LICENSE) donne à toute personne qui reçoit le logiciel le droit de l'utiliser, le copier, le modifier, le fusionner, le publier, le distribuer, le concéder sous licence et le vendre.
+La [licence de LobbyStack](https://gitlab.com/lobbystack-group/lobbystack/blob/main/LICENSE) donne à toute personne qui reçoit le logiciel le droit de l'utiliser, le copier, le modifier, le fusionner, le publier, le distribuer, le concéder sous licence et le vendre.
 
 La licence pose une condition : les copies ou les parties substantielles du logiciel doivent inclure l'avis de droit d'auteur et l'avis d'autorisation. Elle contient aussi l'exclusion de garantie et de responsabilité habituelle de la licence MIT.
 
@@ -36,7 +36,7 @@ Une équipe commerciale peut donc explorer plusieurs modèles. Vous pouvez chang
 
 ## Quatre façons de bâtir une entreprise avec LobbyStack
 
-LobbyStack contient déjà la couche produit autour du modèle vocal : appels, rendez-vous, textos de réservation, alertes courriel et SMS, connaissances, transcriptions, enregistrements, transfert humain, consommation, facturation et tableau de bord. Vous pouvez consacrer votre travail aux clients et au marché que vous connaissez.
+LobbyStack contient déjà la couche produit autour du modèle vocal : appels, rendez-vous, SMS de réservation, alertes e-mail et SMS, connaissances, transcriptions, enregistrements, transfert humain, consommation, facturation et tableau de bord. Vous pouvez consacrer votre travail aux clients et au marché que vous connaissez.
 
 ### Construire un réceptionniste IA vertical
 
@@ -46,7 +46,7 @@ Une équipe qui sert des cliniques dentaires peut ajouter les règles d'accueil,
 
 Une agence peut déployer LobbyStack dans son environnement ou dans l'infrastructure contrôlée par le client. Elle peut facturer la configuration, les fournisseurs, les consignes et les connaissances, les intégrations, la surveillance, les mises à jour et le soutien.
 
-La pile auto-hébergée repose sur des outils connus des équipes d'infrastructure : Next.js, PostgreSQL, Drizzle, Redis, BullMQ, Fastify et Docker Compose. Votre équipe peut utiliser ses propres comptes Twilio, IA compatible OpenAI, calendrier, courriel, analytique, facturation et stockage.
+La pile auto-hébergée repose sur des outils connus des équipes d'infrastructure : Next.js, PostgreSQL, Drizzle, Redis, BullMQ, Fastify et Docker Compose. Votre équipe peut utiliser ses propres comptes Twilio, IA compatible OpenAI, calendrier, e-mail, analytique, facturation et stockage.
 
 ### Vendre des intégrations et la conception des workflows
 
@@ -76,6 +76,6 @@ Les agences peuvent choisir le modèle adapté à chaque mandat. Utilisez le cod
 
 Nous avons choisi l'AGPL pour son modèle réciproque pendant la construction de la première version. Nous avons choisi la licence MIT pour faciliter l'adoption commerciale et aider plus d'équipes à apporter LobbyStack dans des marchés que nous ne pouvons pas atteindre seuls.
 
-[Clonez LobbyStack sur GitHub](https://github.com/lobbystack/lobbystack), lisez la [présentation de l'auto-hébergement](https://docs.lobbystack.com/self-hosting/overview) et utilisez le [guide Docker Compose](https://docs.lobbystack.com/self-hosting/docker-compose) pour votre premier déploiement. L'article lié explique [pourquoi LobbyStack abandonne Convex](/fr/blog/why-lobbystack-is-moving-away-from-convex/).
+[Clonez LobbyStack sur GitHub](https://gitlab.com/lobbystack-group/lobbystack), lisez la [présentation de l'auto-hébergement](https://docs.lobbystack.com/self-hosting/overview) et utilisez le [guide Docker Compose](https://docs.lobbystack.com/self-hosting/docker-compose) pour votre premier déploiement. L'article lié explique [pourquoi LobbyStack abandonne Convex](/fr/blog/why-lobbystack-is-moving-away-from-convex/).
 
-Si vous préférez commencer avec le produit géré, [créez un compte LobbyStack Cloud](https://app.lobbystack.com/signup) et testez un appel dans votre navigateur avant de le présenter à un client.
+Si vous préférez commencer avec le produit géré, [créez un compte LobbyStack Cloud](https://receptionist.caleonis.com/signup) et testez un appel dans votre navigateur avant de le présenter à un client.

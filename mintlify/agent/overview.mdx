@@ -1,28 +1,49 @@
 ---
-title: "Configurer l’agent de votre entreprise"
-description: "Un seul réceptionniste IA, quatre rubriques pour préparer ses réponses."
+title: "Configurer votre réceptionniste IA"
+description: "Utilisez la section Agent pour configurer les paramètres IA, les connaissances, les services et les règles de votre réceptionniste."
+sidebarTitle: "Vue d'ensemble de l'agent"
+contentType: "Conceptual"
 ---
-Caléonis Receptionist V1 utilise **un seul agent pour votre entreprise**. Vous configurez ses informations et son comportement dans la rubrique **Agent**.
+
+La section **Agent** détermine le comportement de votre réceptionniste IA. Elle se divise en Paramètres IA, Connaissances, Services et Règles.
+
+Les modifications s'appliquent aux nouveaux appels et aux nouvelles réponses du chat du site Web. Elles ne modifient pas les appels ni les messages passés.
 
 <CardGroup cols={2}>
-  <Card title="Paramètres IA" icon="sliders" href="/agent/ai-settings/overview">Accueil, langue et règles structurées de réservation.</Card>
-  <Card title="Connaissances" icon="book-open" href="/agent/knowledge">Informations fiables issues de textes, documents ou pages publiques.</Card>
-  <Card title="Services" icon="calendar-check" href="/agent/services">Prestations, durées et conditions de réservation.</Card>
-  <Card title="Règles" icon="list-check" href="/agent/rules">Instructions pour les demandes et situations particulières.</Card>
+  <Card title="Paramètres IA" icon="comment-dots" href="/agent/ai-settings/overview">
+    Définissez la phrase d'ouverture, la langue de repli, les modifications de rendez-vous et le numéro de transfert par défaut.
+  </Card>
+  <Card title="Connaissances" icon="book-open" href="/agent/knowledge">
+    Ajoutez des informations sur votre entreprise à partir d'entrées de texte, de documents ou d'une importation de site Web.
+  </Card>
+  <Card title="Services" icon="calendar-check" href="/agent/services">
+    Ajoutez vos types de rendez-vous et les informations dont les appelants ont besoin sur vos services.
+  </Card>
+  <Card title="Règles" icon="list-check" href="/agent/rules">
+    Ajoutez des consignes pour les transferts, les demandes de rappel, le comportement de repli et les cas particuliers.
+  </Card>
 </CardGroup>
 
-## Préparer les informations
+## Comment la configuration est utilisée
 
-Commencez par les faits : horaires, adresse, zone desservie, services et procédure de rappel. Ajoutez les consignes de comportement ensuite.
+Caléonis Receptionist prépare les réglages enregistrés de l'agent pour chaque appel en direct. Le comportement reste ainsi stable pendant toute la conversation.
 
-Les réglages sont utilisés pour les nouveaux échanges. Un appel déjà démarré conserve son contexte ; une modification n’en réécrit pas la transcription.
+Pour le chat du site Web, Caléonis Receptionist s'appuie sur le contexte actuel de l'entreprise et sur l'état enregistré de la conversation pour générer les réponses.
 
-## Vérifier une modification
+## Configuration minimale avant les vrais appelants
 
-Enregistrez, attendez le traitement des connaissances si nécessaire, puis démarrez un **nouveau** test. Posez une question correspondant exactement à la modification.
+Avant de renvoyer de vrais appels, vérifiez que :
 
-Si l’agent invente une réponse, corrigez la source ou ajoutez une règle de prise de message. Ne lui donnez pas une instruction qui promet un canal ou une action indisponible.
+- Votre message d'accueil nomme votre entreprise et indique clairement à quoi l'appelant peut s'attendre.
+- La langue de repli est définie pour les cas où la langue de l'appelant n'est pas claire.
+- Un numéro de transfert est enregistré si vous voulez qu'un humain puisse prendre le relais en direct.
+- Vos entrées de connaissances couvrent les heures d'ouverture, l'adresse, les services, les prix, les politiques et les questions fréquentes des appelants.
+- Vos services et votre connexion Google Calendar sont prêts avant de compter sur la prise de rendez-vous ou les modifications de rendez-vous.
 
-## Limites V1
+{/* Caléonis qualification */}
 
-Il n’existe ni catalogue multi-agents ni Agent Builder dans ce parcours. Les intégrations techniques et assistants développeurs documentés séparément ne créent pas de nouveaux agents métier dans votre tableau de bord.
+## Périmètre Caléonis V1
+
+Un seul agent est configuré par entreprise. Les rubriques IA, Connaissances, Services et Règles ne constituent pas un Agent Builder. Les modifications sont prises en compte dans les nouveaux échanges ; elles ne réécrivent pas un appel déjà commencé. Réalisez un nouveau test après enregistrement et traitement des sources.
+
+Une prise de message est le repli pendant qu'un transfert reste indisponible. Elle n'initie aucun appel sortant automatique. Voir [Capacités et qualification](/support/availability).

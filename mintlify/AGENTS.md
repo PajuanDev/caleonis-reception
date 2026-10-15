@@ -7,7 +7,9 @@ Ce répertoire adapte les guides LobbyStack à Caléonis Receptionist, conformé
 - Pages MDX avec frontmatter YAML ; configuration dans `docs.json`.
 - Aide SaaS en français en priorité.
 - Guides développeurs et auto-hébergement séparés du produit géré.
-- Anglais de synthèse dans `en/` ; ne pas prétendre à une traduction intégrale.
+- Aide française complète à la racine et miroir anglais complet dans `en/` ; ne pas remplacer un guide par un résumé.
+- Conserver toutes les routes de référence API générées depuis le contrat OpenAPI Caléonis, paramètres et schémas inclus.
+- Reprendre la structure native FR/EN du socle MIT ; consigner précisément tout écart de capacité du runtime.
 
 ## Rédaction
 

@@ -1,0 +1,44 @@
+---
+import type { Locale } from "@/i18n"
+const { locale = "fr", path = "/" } = Astro.props as {
+  locale?: Locale
+  path?: string
+}
+const health = /dental|medical/.test(path)
+---
+
+<aside
+  class="border-b border-border/60 bg-muted/25 px-6 py-3 text-sm"
+  data-parity-preview
+>
+  <details class="mx-auto max-w-7xl">
+    <summary class="cursor-pointer font-medium"
+      >{
+        locale === "fr"
+          ? "Candidat privé Caléonis · périmètre pilote et exceptions"
+          : "Private Caléonis candidate · pilot scope and exceptions"
+      }</summary
+    >
+    <p class="mt-3 max-w-5xl leading-relaxed">
+      {
+        locale === "fr"
+          ? "Cette revue restitue la structure et le périmètre cible du socle LobbyStack MIT. L’accueil PSTN, l’historique et une réservation Google ont été vérifiés sur le pilote. Les parcours illustratifs ne qualifient pas une fonction en production : transferts humains, OAuth durable, alertes externes, widget public et limites de charge restent à valider selon la configuration. Numéro pilote français Voice-only : aucun SMS. Catalogue EUR en projet, aucun achat ni affiliation activé. Les exemples métiers et données sont fictifs ; aucune garantie de résultat, de disponibilité illimitée ou de certification n’est fournie. Exploitation : EI MrManiac ; marque commerciale : Caléonis Receptionist."
+          : "This review restores the structure and target scope of the MIT-licensed LobbyStack foundation. PSTN reception, call history and a Google booking have been verified on the pilot. Illustrative workflows do not qualify a production feature: human transfers, durable OAuth, external alerts, public widget and load limits require configuration-specific validation. The French pilot number is Voice-only: no SMS. EUR catalogue is a draft; no purchase or affiliate scheme is activated. Business examples and data are fictional; no outcome, unlimited availability or certification is guaranteed. Operator: EI MrManiac; trading brand: Caléonis Receptionist."
+      }
+    </p>
+    <a class="mt-2 inline-block underline" href="/third-party-notices.txt"
+      >{
+        locale === "fr" ? "Licence et attributions" : "License and attribution"
+      }</a
+    >
+  </details>
+  {
+    health && (
+      <p class="mx-auto mt-3 max-w-7xl font-medium">
+        {locale === "fr"
+          ? "Qualification HDS non établie : démonstration administrative fictive uniquement, sans données de santé réelles, diagnostic, triage clinique ni urgence médicale."
+          : "HDS qualification has not been established: fictional administrative demonstrations only, without real health data, diagnosis, clinical triage or medical emergency handling."}
+      </p>
+    )
+  }
+</aside>

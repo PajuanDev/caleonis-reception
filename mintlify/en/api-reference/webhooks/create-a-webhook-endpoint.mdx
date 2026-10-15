@@ -1,0 +1,361 @@
+---
+title: "Create a webhook endpoint"
+description: "POST /api/v1/webhooks: parameters, permissions and full schemas."
+---
+
+`POST https://receptionist.caleonis.com/api/v1/webhooks`
+
+This page describes the Caléonis runtime contract. Schema field names and technical descriptions are preserved verbatim for integration accuracy.
+
+Subscribes a URL to events. The response includes the signing secret once.
+
+## Authentication and permissions
+Send `Authorization: Bearer <API key>`. Required scope: `webhooks:manage`.
+
+<Warning>This operation has a real effect. Use an authorized test business; reading the reference does not call the operation.</Warning>
+
+## Parameters
+| Field | Location | Type | Required | Description |
+| --- | --- | --- | --- | --- |
+| `Idempotency-Key` | header | string | No | A unique value, up to 255 characters, that makes retries of this request safe for 24 hours. |
+
+## Request body
+
+`Content-Type: application/json`
+
+| Field | Type | Required | Description / constraints |
+| --- | --- | --- | --- |
+| `url` | string (uri) | Yes | HTTPS URL that receives events. maxLength=2000 |
+| `events` | array&lt;string&gt; | Yes |  minItems=1 |
+| `description` | string | No |  maxLength=200 |
+
+## Responses
+| HTTP | Description |
+| --- | --- |
+| `201` | Created |
+| `400` | The request is invalid (invalid_request). |
+| `401` | The API key is missing, invalid, or revoked (unauthorized). |
+| `403` | The API key lacks the webhooks:manage scope (insufficient_scope). |
+| `409` | The request conflicts with the current state. |
+| `429` | Too many requests (rate_limited). Wait for the Retry-After header's number of seconds. |
+
+Errors use error.code, error.message and sometimes error.details. Respect Retry-After and reuse the same idempotency key and body when retrying a supported creation.
+
+## HTTP example
+
+```http
+POST /api/v1/webhooks HTTP/1.1
+Host: receptionist.caleonis.com
+Authorization: Bearer <server-side key>
+Content-Type: application/json
+```
+
+## Full contract and schemas
+
+The block retains all fields, unions, formats, constraints and responses for this operation. Each $ref resolves in components.schemas included in the same block.
+
+```json
+{
+  "method": "POST",
+  "path": "/api/v1/webhooks",
+  "operation": {
+    "operationId": "createWebhook",
+    "summary": "Create a webhook endpoint",
+    "description": "Subscribes a URL to events. The response includes the signing secret once.",
+    "tags": [
+      "Webhooks"
+    ],
+    "security": [
+      {
+        "bearerAuth": []
+      }
+    ],
+    "x-required-scope": "webhooks:manage",
+    "parameters": [
+      {
+        "name": "Idempotency-Key",
+        "in": "header",
+        "description": "A unique value, up to 255 characters, that makes retries of this request safe for 24 hours.",
+        "schema": {
+          "type": "string",
+          "maxLength": 255
+        }
+      }
+    ],
+    "requestBody": {
+      "required": true,
+      "content": {
+        "application/json": {
+          "schema": {
+            "$ref": "#/components/schemas/WebhookEndpointCreate"
+          }
+        }
+      }
+    },
+    "responses": {
+      "201": {
+        "description": "Created",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "required": [
+                "data"
+              ],
+              "properties": {
+                "data": {
+                  "$ref": "#/components/schemas/WebhookEndpointWithSecret"
+                }
+              }
+            }
+          }
+        }
+      },
+      "400": {
+        "description": "The request is invalid (invalid_request).",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Error"
+            }
+          }
+        }
+      },
+      "401": {
+        "description": "The API key is missing, invalid, or revoked (unauthorized).",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Error"
+            }
+          }
+        }
+      },
+      "403": {
+        "description": "The API key lacks the webhooks:manage scope (insufficient_scope).",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Error"
+            }
+          }
+        }
+      },
+      "409": {
+        "description": "The request conflicts with the current state.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Error"
+            }
+          }
+        }
+      },
+      "429": {
+        "description": "Too many requests (rate_limited). Wait for the Retry-After header's number of seconds.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Error"
+            }
+          }
+        },
+        "headers": {
+          "Retry-After": {
+            "schema": {
+              "type": "integer"
+            },
+            "description": "Seconds to wait."
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "WebhookEndpointCreate": {
+        "type": "object",
+        "properties": {
+          "url": {
+            "description": "HTTPS URL that receives events.",
+            "type": "string",
+            "maxLength": 2000,
+            "format": "uri"
+          },
+          "events": {
+            "minItems": 1,
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "call.completed",
+                "appointment.booked",
+                "appointment.rescheduled",
+                "appointment.cancelled",
+                "message.taken",
+                "contact.created"
+              ]
+            }
+          },
+          "description": {
+            "type": "string",
+            "maxLength": 200
+          }
+        },
+        "required": [
+          "url",
+          "events"
+        ],
+        "additionalProperties": false
+      },
+      "WebhookEndpointWithSecret": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "description": "Stable identifier (UUID).",
+            "type": "string",
+            "format": "uuid"
+          },
+          "url": {
+            "type": "string"
+          },
+          "description": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "events": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "call.completed",
+                "appointment.booked",
+                "appointment.rescheduled",
+                "appointment.cancelled",
+                "message.taken",
+                "contact.created"
+              ]
+            }
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "enabled",
+              "disabled"
+            ]
+          },
+          "disabled_reason": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "manual",
+                  "failing"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "created_at": {
+            "description": "ISO 8601 timestamp in UTC.",
+            "type": "string",
+            "format": "date-time"
+          },
+          "updated_at": {
+            "description": "ISO 8601 timestamp in UTC.",
+            "type": "string",
+            "format": "date-time"
+          },
+          "secret": {
+            "description": "Signing secret (whsec_...). Returned only when the endpoint is created.",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "url",
+          "description",
+          "events",
+          "status",
+          "disabled_reason",
+          "created_at",
+          "updated_at",
+          "secret"
+        ],
+        "additionalProperties": false
+      },
+      "Error": {
+        "type": "object",
+        "properties": {
+          "error": {
+            "type": "object",
+            "properties": {
+              "code": {
+                "type": "string",
+                "enum": [
+                  "invalid_request",
+                  "unauthorized",
+                  "forbidden",
+                  "insufficient_scope",
+                  "not_found",
+                  "conflict",
+                  "idempotency_key_reused",
+                  "idempotency_request_in_progress",
+                  "booking_disabled",
+                  "booking_requires_confirmation",
+                  "slot_unavailable",
+                  "rate_limited",
+                  "rate_limit_unavailable",
+                  "method_not_allowed",
+                  "internal_error"
+                ]
+              },
+              "message": {
+                "type": "string"
+              },
+              "details": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "path": {
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "path",
+                    "message"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            },
+            "required": [
+              "code",
+              "message"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "required": [
+          "error"
+        ],
+        "additionalProperties": false
+      }
+    }
+  }
+}
+```
+
+Download the [complete OpenAPI document](/api-reference/openapi.json). See [Authentication](/en/api/authentication), [Requests and errors](/en/api/requests) and [Webhooks](/en/api/webhooks).

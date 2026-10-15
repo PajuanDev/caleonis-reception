@@ -15,13 +15,13 @@ canonicalSlug: "cloudtalk-ai-receptionist-alternative"
 
 A **CloudTalk AI Receptionist alternative** should not require a contact-center subscription to answer and book calls. CloudTalk lists 200 AI minutes for $99 and 500 for $199, on top of its business-phone platform. LobbyStack includes 150 minutes for $30 and 500 for $100, with no CloudTalk seat requirement.
 
-You can test LobbyStack with 30 browser voice minutes on Free, without a telephone number. Starter and Pro include a dedicated number for telephone calls.
+You can test LobbyStack on Free with 30 voice minutes and a US or Canadian number free for 14 days. Starter and Pro include a dedicated number for telephone calls.
 
 ## CloudTalk vs LobbyStack at a glance
 
 | Area | CloudTalk AI Receptionist | LobbyStack |
 | --- | --- | --- |
-| Ongoing free plan | No; 50-minute first-month trial | 30 browser voice minutes, no card, no telephone number |
+| Ongoing free plan | No; 50-minute first-month trial | 30 voice minutes, no card, US or Canadian number free for 14 days |
 | AI entry | $99 for 200 minutes | $30 for 150 minutes |
 | 500-minute tier | $199 | $100 |
 | Base platform | CloudTalk user subscription required | No contact-center subscription required |
@@ -57,7 +57,7 @@ CloudTalk's reviewed pages list AI receptionist tiers at:
 - $299 for 1,000 minutes
 - $699 for 2,500 minutes
 
-The broader CloudTalk platform starts around $19 to $25 per user on the public pricing page. A company that already pays for CloudTalk should treat those seats as existing cost. A new buyer should add them to the receptionist estimate.
+The broader CloudTalk platform starts around $19 to $25 per user on the public pricing page. A company that already pays for CloudTalk should treat those seats as existing cost. A new buyer should add them to the receptionist estimate. The same math applies to [RingCentral's add-on plus seat pricing](/blog/ringcentral-ai-receptionist-alternative/), where you pay for the AI receptionist on top of a RingEX seat.
 
 LobbyStack lists $30 for 150 minutes and $100 for 500. At the published 500-minute tier, LobbyStack costs less before overages. CloudTalk includes access to a larger communications platform.
 
@@ -101,7 +101,7 @@ Choose LobbyStack when the receptionist is the main purchase. You get 30 free te
 - [CloudTalk receptionist template](https://help.cloudtalk.io/en/articles/14057883-voiceagent-templates-ai-receptionist)
 - [CloudTalk platform pricing](https://www.cloudtalk.io/pricing/)
 - [LobbyStack pricing](/pricing/)
-- [LobbyStack GitHub repository](https://github.com/lobbystack/lobbystack)
+- [LobbyStack GitHub repository](https://gitlab.com/lobbystack-group/lobbystack)
 
 ## Verdict
 

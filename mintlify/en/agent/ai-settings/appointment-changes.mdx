@@ -1,0 +1,46 @@
+---
+title: "Configure appointment changes"
+description: "Identification, explicit confirmation, verification and separate end-to-end qualification."
+sidebarTitle: "Appointment changes"
+---
+
+The code includes appointment lookup, cancellation and rescheduling controls. Enable these only after the entire workflow has been qualified for your business. A successful new Google booking does not qualify cancellation or rescheduling.
+
+## Requests the workflow covers
+
+The receptionist may identify an upcoming appointment, ask the caller to confirm it, cancel it or offer another available slot when those actions are enabled. An ambiguous caller or booking must be handed back as a follow-up request rather than changed by guesswork.
+
+## Confirmation before a change
+
+Identification may use the calling phone number, the customer's name and an appointment detail such as the service or time. These are not a universal identity guarantee. Ask for explicit final confirmation of the exact appointment and proposed action before applying it.
+
+Your organization must decide the appropriate verification level for its context. The pilot is limited to administrative reception without health data; no medical or HDS qualification is claimed.
+
+## Optional one-time code
+
+The stricter policy requires a working delivery route and successful code verification before a change. The French Voice-only pilot line cannot send SMS. Do not enable an SMS-code requirement without a separately qualified sender and recipient flow. Do not weaken the policy simply to bypass a failed code.
+
+## Calendar synchronization
+
+After an approved change, check the application record and the external calendar separately. For cancellation, inspect the cancelled state and what happened to the selected Google event. For a move, check availability first, then verify the new time, duration and calendar event.
+
+An internal success is not evidence of a delivered SMS or email. A network error leaves the result uncertain: inspect the existing appointment before retrying.
+
+## Configure the controls
+
+1. Open **Agent > AI settings** for the correct business.
+2. Find **Appointment changes**.
+3. Set cancellation and rescheduling permissions separately.
+4. Choose the available verification policy only after checking its delivery prerequisites.
+5. Save and reload to check the selected values.
+
+## Qualification scenario
+
+Create a fictitious appointment in a test calendar. Confirm the caller can only identify the intended booking, ask for a move or cancellation, explicitly confirm, then inspect both the application and Google. Also check ambiguous identity, disabled action, unavailable slot, wrong code and expired code where applicable.
+
+Keep service descriptions, opening hours and Google authorization current. Until transfer is qualified, use a manual callback request for exceptions.
+
+<CardGroup cols={2}>
+  <Card title="Services" icon="calendar-check" href="/en/agent/services">Describe the appointment types and durations.</Card>
+  <Card title="Google Calendar" icon="calendar" href="/en/integrations/google-calendar">Check writable calendars, renewal and external event results.</Card>
+</CardGroup>

@@ -6,7 +6,9 @@ type AffiliateProgramFaqSectionProps = {
   locale: Locale
 }
 
-export function AffiliateProgramFaqSection({ locale }: AffiliateProgramFaqSectionProps) {
+export function AffiliateProgramFaqSection({
+  locale,
+}: AffiliateProgramFaqSectionProps) {
   const faqs = getAffiliateProgramFaqs(locale)
   const title = locale === "fr" ? "FAQ affiliation" : "Affiliate FAQ"
   const description =
@@ -21,7 +23,9 @@ export function AffiliateProgramFaqSection({ locale }: AffiliateProgramFaqSectio
           <h2 className="text-3xl font-semibold tracking-tight text-foreground md:text-4xl">
             {title}
           </h2>
-          <p className="mt-4 text-base text-muted-foreground md:text-lg">{description}</p>
+          <p className="mt-4 text-base text-muted-foreground md:text-lg">
+            {description}
+          </p>
         </div>
         <div className="mt-10">
           <FaqAccordion faqs={faqs} />

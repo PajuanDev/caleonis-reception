@@ -1,0 +1,330 @@
+---
+title: "Add a knowledge entry"
+description: "POST /api/v1/knowledge: parameters, permissions and full schemas."
+---
+
+`POST https://receptionist.caleonis.com/api/v1/knowledge`
+
+This page describes the Caléonis runtime contract. Schema field names and technical descriptions are preserved verbatim for integration accuracy.
+
+Adds a text entry or an FAQ that the receptionist can use to answer callers.
+
+## Authentication and permissions
+Send `Authorization: Bearer <API key>`. Required scope: `knowledge:write`.
+
+<Warning>This operation has a real effect. Use an authorized test business; reading the reference does not call the operation.</Warning>
+
+## Parameters
+| Field | Location | Type | Required | Description |
+| --- | --- | --- | --- | --- |
+| `Idempotency-Key` | header | string | No | A unique value, up to 255 characters, that makes retries of this request safe for 24 hours. |
+
+## Request body
+
+`Content-Type: application/json`
+
+| Field | Type | Required | Description / constraints |
+| --- | --- | --- | --- |
+| — | object / object | — | See the full schema below. |
+
+## Responses
+| HTTP | Description |
+| --- | --- |
+| `201` | Created |
+| `400` | The request is invalid (invalid_request). |
+| `401` | The API key is missing, invalid, or revoked (unauthorized). |
+| `403` | The API key lacks the knowledge:write scope (insufficient_scope). |
+| `409` | The request conflicts with the current state. |
+| `429` | Too many requests (rate_limited). Wait for the Retry-After header's number of seconds. |
+
+Errors use error.code, error.message and sometimes error.details. Respect Retry-After and reuse the same idempotency key and body when retrying a supported creation.
+
+## HTTP example
+
+```http
+POST /api/v1/knowledge HTTP/1.1
+Host: receptionist.caleonis.com
+Authorization: Bearer <server-side key>
+Content-Type: application/json
+```
+
+## Full contract and schemas
+
+The block retains all fields, unions, formats, constraints and responses for this operation. Each $ref resolves in components.schemas included in the same block.
+
+```json
+{
+  "method": "POST",
+  "path": "/api/v1/knowledge",
+  "operation": {
+    "operationId": "createKnowledgeEntry",
+    "summary": "Add a knowledge entry",
+    "description": "Adds a text entry or an FAQ that the receptionist can use to answer callers.",
+    "tags": [
+      "Knowledge"
+    ],
+    "security": [
+      {
+        "bearerAuth": []
+      }
+    ],
+    "x-required-scope": "knowledge:write",
+    "parameters": [
+      {
+        "name": "Idempotency-Key",
+        "in": "header",
+        "description": "A unique value, up to 255 characters, that makes retries of this request safe for 24 hours.",
+        "schema": {
+          "type": "string",
+          "maxLength": 255
+        }
+      }
+    ],
+    "requestBody": {
+      "required": true,
+      "content": {
+        "application/json": {
+          "schema": {
+            "$ref": "#/components/schemas/KnowledgeEntryCreate"
+          }
+        }
+      }
+    },
+    "responses": {
+      "201": {
+        "description": "Created",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "required": [
+                "data"
+              ],
+              "properties": {
+                "data": {
+                  "$ref": "#/components/schemas/KnowledgeEntry"
+                }
+              }
+            }
+          }
+        }
+      },
+      "400": {
+        "description": "The request is invalid (invalid_request).",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Error"
+            }
+          }
+        }
+      },
+      "401": {
+        "description": "The API key is missing, invalid, or revoked (unauthorized).",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Error"
+            }
+          }
+        }
+      },
+      "403": {
+        "description": "The API key lacks the knowledge:write scope (insufficient_scope).",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Error"
+            }
+          }
+        }
+      },
+      "409": {
+        "description": "The request conflicts with the current state.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Error"
+            }
+          }
+        }
+      },
+      "429": {
+        "description": "Too many requests (rate_limited). Wait for the Retry-After header's number of seconds.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Error"
+            }
+          }
+        },
+        "headers": {
+          "Retry-After": {
+            "schema": {
+              "type": "integer"
+            },
+            "description": "Seconds to wait."
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "KnowledgeEntryCreate": {
+        "anyOf": [
+          {
+            "type": "object",
+            "properties": {
+              "type": {
+                "type": "string",
+                "const": "text"
+              },
+              "title": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 300
+              },
+              "content": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 20000
+              }
+            },
+            "required": [
+              "type",
+              "title",
+              "content"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "type": {
+                "type": "string",
+                "const": "faq"
+              },
+              "question": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 300
+              },
+              "answer": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 20000
+              }
+            },
+            "required": [
+              "type",
+              "question",
+              "answer"
+            ],
+            "additionalProperties": false
+          }
+        ]
+      },
+      "KnowledgeEntry": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "description": "Stable identifier (UUID).",
+            "type": "string",
+            "format": "uuid"
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "text",
+              "faq"
+            ]
+          },
+          "title": {
+            "type": "string"
+          },
+          "content": {
+            "type": "string"
+          },
+          "created_at": {
+            "description": "ISO 8601 timestamp in UTC.",
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "required": [
+          "id",
+          "type",
+          "title",
+          "content",
+          "created_at"
+        ],
+        "additionalProperties": false
+      },
+      "Error": {
+        "type": "object",
+        "properties": {
+          "error": {
+            "type": "object",
+            "properties": {
+              "code": {
+                "type": "string",
+                "enum": [
+                  "invalid_request",
+                  "unauthorized",
+                  "forbidden",
+                  "insufficient_scope",
+                  "not_found",
+                  "conflict",
+                  "idempotency_key_reused",
+                  "idempotency_request_in_progress",
+                  "booking_disabled",
+                  "booking_requires_confirmation",
+                  "slot_unavailable",
+                  "rate_limited",
+                  "rate_limit_unavailable",
+                  "method_not_allowed",
+                  "internal_error"
+                ]
+              },
+              "message": {
+                "type": "string"
+              },
+              "details": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "path": {
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "path",
+                    "message"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            },
+            "required": [
+              "code",
+              "message"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "required": [
+          "error"
+        ],
+        "additionalProperties": false
+      }
+    }
+  }
+}
+```
+
+Download the [complete OpenAPI document](/api-reference/openapi.json). See [Authentication](/en/api/authentication), [Requests and errors](/en/api/requests) and [Webhooks](/en/api/webhooks).

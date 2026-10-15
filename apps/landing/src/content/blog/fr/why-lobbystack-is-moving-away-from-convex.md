@@ -32,7 +32,7 @@ Convex nous a donné une bonne première étape et continue de servir nos client
 
 LobbyStack a maintenant besoin de plus d'entreprises utilisatrices et de plus de développeurs prêts à l'exécuter, l'inspecter et l'étendre. L'adoption de ces deux groupes reste sous nos attentes.
 
-L'évaluation technique créait des frictions pour certaines équipes que nous voulions rejoindre. Un contributeur devait comprendre notre produit et ajouter Convex aux systèmes à apprendre. Un opérateur devait gérer les services LobbyStack ainsi qu'un backend Convex séparé. Une agence qui préparait un déploiement client devait expliquer cette architecture à son équipe et à son client.
+L'évaluation technique créait des frictions pour certaines équipes que nous voulions toucher. Un contributeur devait comprendre notre produit et ajouter Convex aux systèmes à apprendre. Un opérateur devait gérer les services LobbyStack ainsi qu'un backend Convex séparé. Une agence qui préparait un déploiement client devait expliquer cette architecture à son équipe et à son client.
 
 Les équipes consacraient plus de temps à l'évaluation et à l'apprentissage de l'infrastructure avant de pouvoir adopter le produit.
 
@@ -80,6 +80,6 @@ LobbyStack reste le même produit : un réceptionniste IA pour les appels, les m
 
 La licence soutient aussi cet objectif. Nous avons remplacé l'AGPL par la licence MIT afin que les équipes commerciales puissent adapter, concéder et vendre des produits issus du code. Lisez [pourquoi LobbyStack passe sous licence MIT](/fr/blog/lobbystack-mit-license-ai-receptionist-resellers/) pour comprendre les raisons commerciales et les nouvelles permissions.
 
-Vous pouvez [inspecter la plateforme sur GitHub](https://github.com/lobbystack/lobbystack), consulter la [présentation de l'auto-hébergement](https://docs.lobbystack.com/self-hosting/overview) ou suivre le [guide Docker Compose](https://docs.lobbystack.com/self-hosting/docker-compose).
+Vous pouvez [inspecter la plateforme sur GitHub](https://gitlab.com/lobbystack-group/lobbystack), consulter la [présentation de l'auto-hébergement](https://docs.lobbystack.com/self-hosting/overview) ou suivre le [guide Docker Compose](https://docs.lobbystack.com/self-hosting/docker-compose).
 
-Si vous voulez le réceptionniste sans exploiter l'infrastructure, [créez un compte LobbyStack Cloud](https://app.lobbystack.com/signup) et testez-le avec votre entreprise.
+Si vous voulez le réceptionniste sans exploiter l'infrastructure, [créez un compte LobbyStack Cloud](https://receptionist.caleonis.com/signup) et testez-le avec votre entreprise.

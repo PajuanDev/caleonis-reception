@@ -27,11 +27,11 @@ const legal = /\/(terms|privacy|cookie-policy|confidentialite)\//.test(path)
     {
       locale === "fr"
         ? legal
-          ? "Les textes hérités du socle LobbyStack ne constituent pas les conditions du service Caléonis. Leur adaptation à l’activité de William Fabrice Gosse, entrepreneur individuel sous le nom commercial MrManiac, est en cours. Cette prévisualisation n’ouvre aucune souscription ni facturation."
-          : "Ce contenu hérité du socle LobbyStack n’a pas encore été validé pour l’offre Caléonis Receptionist. Il est conservé dans les sources, sans présenter ses prix, comparatifs ou fonctionnalités comme disponibles."
+          ? "Les textes hérités du socle Caléonis Receptionist ne constituent pas les conditions du service Caléonis. Leur adaptation à l’activité de William Fabrice Gosse, entrepreneur individuel sous le nom commercial MrManiac, est en cours. Cette prévisualisation n’ouvre aucune souscription ni facturation."
+          : "Ce contenu hérité du socle Caléonis Receptionist n’a pas encore été validé pour l’offre Caléonis Receptionist. Il est conservé dans les sources, sans présenter ses prix, comparatifs ou fonctionnalités comme disponibles."
         : legal
-          ? "The inherited LobbyStack texts are not the terms of the Caléonis service. Adaptation for William Fabrice Gosse, sole proprietor trading as MrManiac, is in progress. This preview does not accept subscriptions or payments."
-          : "This inherited LobbyStack resource has not yet been verified for Caléonis Receptionist. It is retained in source without presenting its prices, comparisons or capabilities as available."
+          ? "The inherited Caléonis Receptionist texts are not the terms of the Caléonis service. Adaptation for William Fabrice Gosse, sole proprietor trading as MrManiac, is in progress. This preview does not accept subscriptions or payments."
+          : "This inherited Caléonis Receptionist resource has not yet been verified for Caléonis Receptionist. It is retained in source without presenting its prices, comparisons or capabilities as available."
     }
   </p><div class="mt-8 flex flex-wrap gap-6">
     <a
@@ -45,8 +45,7 @@ const legal = /\/(terms|privacy|cookie-policy|confidentialite)\//.test(path)
     ><a
       class="underline underline-offset-4"
       href={localizePath(locale, "/features/")}
-      >{
-        locale === "fr" ? "Fonctionnalités présentées" : "Reviewed features"
-      }</a>
+      >{locale === "fr" ? "Fonctionnalités présentées" : "Reviewed features"}</a
+    >
   </div>
 </main><Footer locale={locale} />

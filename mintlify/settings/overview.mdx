@@ -1,25 +1,67 @@
 ---
-title: "Retrouver les réglages"
-description: "Gérer compte, équipe, numéro et préférences de l’entreprise."
+title: "Gérer les réglages de l'espace de travail"
+description: "Gérez l'utilisation, la facturation, les membres de l'équipe, les notifications, votre numéro de téléphone, le widget de site Web, les identifiants de votre compte et l'apparence du tableau de bord dans les Réglages de Caléonis Receptionist."
+sidebarTitle: "Réglages"
+contentType: "Conceptual"
 ---
-Les **Réglages** rassemblent les préférences personnelles et celles de l’entreprise. Certaines actions exigent un rôle propriétaire ou administrateur.
 
-| Page | Usage |
+La section **Réglages** regroupe les contrôles de l'espace de travail, les identifiants du compte, les notifications, les réglages du numéro de téléphone, l'utilisation, la facturation et les préférences d'apparence.
+
+<CardGroup cols={2}>
+  <Card title="Utilisation" icon="chart-line" href="/billing/usage">
+    Suivez les minutes vocales hébergées, les segments SMS, les tentatives de transfert, la base de connaissances et les limites du forfait.
+  </Card>
+  <Card title="Facturation" icon="credit-card" href="/billing/plans">
+    Consultez les forfaits, les mises à niveau, les actions sur l'abonnement et les plafonds de dépenses.
+  </Card>
+  <Card title="Équipe" icon="users" href="/settings/team">
+    Invitez des membres et contrôlez l'accès à l'espace de travail.
+  </Card>
+  <Card title="Notifications" icon="bell" href="/settings/notifications">
+    Choisissez les événements qui envoient des alertes par email ou par SMS.
+  </Card>
+  <Card title="Numéro de téléphone" icon="phone" href="/settings/phone-number">
+    Consultez ou remplacez le numéro de téléphone de l'entreprise.
+  </Card>
+  <Card title="Widget de site Web" icon="messages-square" href="/settings/widget">
+    Configurez les clés du widget, la présentation du chat, la collecte de prospects et l'accès au site Web.
+  </Card>
+  <Card title="Sécurité du compte" icon="shield" href="/settings/account">
+    Changez votre adresse email ou votre mot de passe.
+  </Card>
+</CardGroup>
+
+## Pages des réglages
+
+| Page | À quoi elle sert |
 | --- | --- |
-| [Compte](/settings/account) | Identité du compte et sécurité d’accès. |
-| [Équipe](/settings/team) | Membres, invitations et rôles. |
-| [Notifications](/settings/notifications) | Préférences et disponibilité des canaux. |
-| [Numéro de téléphone](/settings/phone-number) | Numéro attribué et capacités. |
-| [Widget](/settings/widget) | Configuration des clés Web existantes autorisées. |
-| [Usage](/billing/usage) | Consommation et limites affichées. |
-| [Clés d’API](/api/authentication) | Accès techniques limités à l’entreprise. |
+| **Utilisation** | Utilisation de la période de facturation en cours, utilisation incluse restante, date de remise à zéro et utilisation facturée à l'usage. |
+| **Forfait** | Forfait actuel, mises à niveau, gestion de l'abonnement et plafonds de dépenses. |
+| **Équipe** | Invitations des membres, rôles et accès à l'espace de travail. |
+| **Notifications** | Alertes par email et par SMS pour les événements qui demandent votre attention. |
+| **Numéro de téléphone** | Le numéro d'entreprise actif et le remplacement du numéro, si vous y avez droit. |
+| **Widget de site web** | Clés du widget, chat sur le site Web, collecte de prospects, appels depuis le navigateur et installation. |
+| **Compte** | Modification du email et du mot de passe du compte. |
+| **Préférences** | Langue du tableau de bord, format de l'heure et thème. |
 
-## Modifier un réglage
+## Mettre à jour les informations du compte
 
-Vérifiez l’entreprise, lisez le message d’effet et enregistrez. Certains contrôles enregistrent immédiatement ; d’autres exigent une confirmation.
+<Steps>
+  <Step title="Ouvrir les Réglages">
+    Dans la barre latérale du tableau de bord, allez dans **Gestion** > **Réglages**.
+  </Step>
+  <Step title="Choisir une page de réglages">
+    Sélectionnez la page qui contient le réglage de l'espace de travail ou du compte à modifier.
+  </Step>
+  <Step title="Faire votre modification">
+    Modifiez le champ ou lancez l'action voulue. Certaines modifications, comme le changement de email, demandent une confirmation.
+  </Step>
+</Steps>
 
-Après un changement de numéro, de calendrier ou de politique de réservation, qualifiez le parcours concerné avant usage client.
+{/* Caléonis qualification */}
 
-## Fonction absente
+## Fonctions ouvertes et apparence
 
-Une page peut dépendre du rôle, des capacités ou de la version déployée. Ne considérez pas une fonction comme incluse dans votre offre sur la seule base de ce guide. Consultez les [capacités](/support/availability) puis l’administrateur de votre espace.
+Les pages proposées dépendent du rôle, de la version et des capacités activées. Les réglages d'apparence peuvent contrôler langue, format horaire et thème ; vérifiez l'affichage après rechargement.
+
+Les offres restent à approuver et les nouvelles clés widget sont restreintes. Après modification du numéro, du calendrier ou de la réservation, refaites le contrôle du parcours concerné avant usage client.

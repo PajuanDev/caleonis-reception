@@ -1,0 +1,257 @@
+---
+title: "Événement appointment.booked"
+description: "Signature, charge utile et schéma complet pour appointment.booked."
+---
+
+`appointment.booked`
+
+Ce webhook envoie un POST signé vers une destination publique HTTPS autorisée. Cette fiche documente le contrat réel de l’événement ; lire la page ne crée aucun abonnement.
+
+## En-têtes et vérification
+| En-tête | Requis | Description |
+| --- | --- | --- |
+| `webhook-id` | Oui | Event id. The same for every retry of this event. |
+| `webhook-timestamp` | Oui | Unix time in seconds when this attempt was signed. |
+| `webhook-signature` | Oui | Space-separated signatures, each v1,&lt;base64 HMAC-SHA256&gt;. |
+
+Vérifiez la signature sur le corps brut avec Standard Webhooks et refusez un horodatage trop ancien. Dédupliquez durablement `id` avant de produire un effet. Les événements peuvent être relivrés ou arriver dans un ordre différent.
+
+## Charge utile
+| Champ | Type | Requis | Description / contraintes |
+| --- | --- | --- | --- |
+| `id` | string (uuid) | Oui | Event id. Also sent as the webhook-id header; use it to ignore duplicates. |
+| `type` | string | Oui |  |
+| `api_version` | string | Oui |  |
+| `created_at` | string (date-time) | Oui | ISO 8601 timestamp in UTC. |
+| `business_id` | string (uuid) | Oui | Stable identifier (UUID). |
+| `data` | object | Oui |  |
+| `data.id` | string (uuid) | Oui | Stable identifier (UUID). |
+| `data.status` | string | Oui |  enum=["confirmed", "cancelled"] |
+| `data.starts_at` | string (date-time) | Oui | ISO 8601 timestamp in UTC. |
+| `data.ends_at` | string (date-time) | Oui | ISO 8601 timestamp in UTC. |
+| `data.timezone` | string | Oui |  |
+| `data.service_id` | string (uuid) | Oui | Stable identifier (UUID). |
+| `data.service_name` | string | Oui |  |
+| `data.staff_id` | string (uuid) | Oui | Stable identifier (UUID). |
+| `data.staff_name` | string | Oui |  |
+| `data.contact_id` | string (uuid) | Oui | Stable identifier (UUID). |
+| `data.contact_name` | string / null | Oui |  |
+| `data.contact_phone` | string / null | Oui |  |
+| `data.source` | string | Oui | Where the booking came from, for example voice, web_chat, dashboard or api. |
+| `data.calendar_sync_status` | string | Oui |  enum=["pending", "synced", "failed", "not_required"] |
+| `data.created_at` | string (date-time) | Oui | ISO 8601 timestamp in UTC. |
+| `data.updated_at` | string (date-time) | Oui | ISO 8601 timestamp in UTC. |
+
+## Contrat et schémas complets
+
+```json
+{
+  "event": "appointment.booked",
+  "operation": {
+    "summary": "appointment.booked",
+    "description": "Signed with the Standard Webhooks scheme: verify webhook-signature against webhook-id, webhook-timestamp and the raw body.",
+    "parameters": [
+      {
+        "name": "webhook-id",
+        "in": "header",
+        "required": true,
+        "description": "Event id. The same for every retry of this event.",
+        "schema": {
+          "type": "string"
+        }
+      },
+      {
+        "name": "webhook-timestamp",
+        "in": "header",
+        "required": true,
+        "description": "Unix time in seconds when this attempt was signed.",
+        "schema": {
+          "type": "string"
+        }
+      },
+      {
+        "name": "webhook-signature",
+        "in": "header",
+        "required": true,
+        "description": "Space-separated signatures, each v1,<base64 HMAC-SHA256>.",
+        "schema": {
+          "type": "string"
+        }
+      }
+    ],
+    "requestBody": {
+      "required": true,
+      "content": {
+        "application/json": {
+          "schema": {
+            "$ref": "#/components/schemas/AppointmentBookedEvent"
+          }
+        }
+      }
+    },
+    "responses": {
+      "200": {
+        "description": "Return any 2xx status within 10 seconds to acknowledge the event."
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "AppointmentBookedEvent": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "description": "Event id. Also sent as the webhook-id header; use it to ignore duplicates.",
+            "type": "string",
+            "format": "uuid"
+          },
+          "type": {
+            "type": "string",
+            "const": "appointment.booked"
+          },
+          "api_version": {
+            "type": "string",
+            "const": "v1"
+          },
+          "created_at": {
+            "description": "ISO 8601 timestamp in UTC.",
+            "type": "string",
+            "format": "date-time"
+          },
+          "business_id": {
+            "description": "Stable identifier (UUID).",
+            "type": "string",
+            "format": "uuid"
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "description": "Stable identifier (UUID).",
+                "type": "string",
+                "format": "uuid"
+              },
+              "status": {
+                "type": "string",
+                "enum": [
+                  "confirmed",
+                  "cancelled"
+                ]
+              },
+              "starts_at": {
+                "description": "ISO 8601 timestamp in UTC.",
+                "type": "string",
+                "format": "date-time"
+              },
+              "ends_at": {
+                "description": "ISO 8601 timestamp in UTC.",
+                "type": "string",
+                "format": "date-time"
+              },
+              "timezone": {
+                "type": "string"
+              },
+              "service_id": {
+                "description": "Stable identifier (UUID).",
+                "type": "string",
+                "format": "uuid"
+              },
+              "service_name": {
+                "type": "string"
+              },
+              "staff_id": {
+                "description": "Stable identifier (UUID).",
+                "type": "string",
+                "format": "uuid"
+              },
+              "staff_name": {
+                "type": "string"
+              },
+              "contact_id": {
+                "description": "Stable identifier (UUID).",
+                "type": "string",
+                "format": "uuid"
+              },
+              "contact_name": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "contact_phone": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "source": {
+                "description": "Where the booking came from, for example voice, web_chat, dashboard or api.",
+                "type": "string"
+              },
+              "calendar_sync_status": {
+                "type": "string",
+                "enum": [
+                  "pending",
+                  "synced",
+                  "failed",
+                  "not_required"
+                ]
+              },
+              "created_at": {
+                "description": "ISO 8601 timestamp in UTC.",
+                "type": "string",
+                "format": "date-time"
+              },
+              "updated_at": {
+                "description": "ISO 8601 timestamp in UTC.",
+                "type": "string",
+                "format": "date-time"
+              }
+            },
+            "required": [
+              "id",
+              "status",
+              "starts_at",
+              "ends_at",
+              "timezone",
+              "service_id",
+              "service_name",
+              "staff_id",
+              "staff_name",
+              "contact_id",
+              "contact_name",
+              "contact_phone",
+              "source",
+              "calendar_sync_status",
+              "created_at",
+              "updated_at"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "required": [
+          "id",
+          "type",
+          "api_version",
+          "created_at",
+          "business_id",
+          "data"
+        ],
+        "additionalProperties": false
+      }
+    }
+  }
+}
+```
+
+## Accusé de réception et reprises
+
+Acceptez durablement puis répondez 2xx sous 10 secondes. Les échecs sont repris selon le calendrier de la version déployée. Un événement de réservation ne prouve ni synchronisation externe ni SMS/email livré. Voir le [guide complet des webhooks](/api/webhooks) et le [schéma OpenAPI](/api-reference/openapi.json).

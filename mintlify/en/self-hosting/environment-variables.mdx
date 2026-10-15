@@ -1,0 +1,109 @@
+---
+title: "Configure environment variables"
+description: "Key environment variables for the Caléonis Receptionist admin, worker, voice calls, storage, and providers."
+sidebarTitle: "Environment variables"
+contentType: "Reference"
+---
+
+Use `.env.example` as the source of truth. Store production values in your deployment secret manager or a permission-restricted `.env` file.
+
+## Application and database
+
+| Variable | Purpose |
+| --- | --- |
+| `APP_BASE_URL` | Public HTTPS URL for the dashboard and API. |
+| `DEPLOYMENT_MODE` | `cloud`, `self_hosted_standard`, or `development`. |
+| `DATABASE_URL` | PostgreSQL connection for the service's main role: `lobbystack_app` for the admin, `lobbystack_worker` for the worker. |
+| `LOBBYSTACK_AUTH_PASSWORD`, `LOBBYSTACK_WORKER_PASSWORD`, `LOBBYSTACK_DISPATCHER_PASSWORD` | Passwords for the other roles. A service connects as each role by combining `DATABASE_URL`'s host and database with that role's password. |
+| `LOBBYSTACK_<ROLE>_DATABASE_URL` | Optional. Overrides the built connection string for one role, for example to use a different host. |
+| `BETTER_AUTH_SECRET` | Better Auth signing secret. Use at least 32 random characters. |
+| `ENCRYPTION_KEY` | Encrypts stored application credentials. |
+| `OTP_HASH_SECRET` | Hashes one-time verification codes. |
+
+## Internal services
+
+| Variable | Purpose |
+| --- | --- |
+| `INTERNAL_SERVICE_SECRET` | Signs browser call end tokens and other short-lived internal values. |
+| `INTERNAL_SERVICE_TOKEN` | Authenticates the admin's call handoff to the worker and protected internal health routes. Set the same value on admin and worker. |
+| `WORKER_INTERNAL_URL` | Private URL of the worker's HTTP port, used by the admin to hand each call to the worker. Compose sets this to `http://worker:3002`. |
+
+## Voice calls
+
+OpenAI's GPT-Live model answers browser calls and phone calls. Phone calls reach it through your Twilio SIP trunk. The admin starts each call and the worker runs it.
+
+| Variable | Purpose |
+| --- | --- |
+| `LIVE_PROTOTYPE_ENABLED` | Set to `true` on admin and worker. Compose sets it by default. Browser calls fail without it. |
+| `OPENAI_WEBHOOK_SECRET` | Verifies OpenAI's incoming-call webhook at `/api/webhooks/openai/live`. Phone calls only. |
+| `TWILIO_SIP_TRUNK_SID` | The Twilio Elastic SIP trunk that sends calls to your OpenAI project. New numbers join it, and the worker won't provision a number without it. |
+| `WEB_CALL_MAX_DURATION_MS` | Optional cap on browser call length. |
+| `WEB_CALL_PUBLIC_BUSINESS_SLUG` | Business that answers the public demo call on your marketing site. |
+| `WEB_CALL_ALLOWED_ORIGINS` | Comma-separated sites allowed to start that public demo call. Website widget calls use each widget key's allowed origins instead. |
+
+## Redis and file storage
+
+| Variable | Purpose |
+| --- | --- |
+| `REDIS_URL` | Redis connection URL used by admin and worker runtimes. |
+| `STORAGE_PROVIDER` | `local` by default. Set to `s3` for AWS S3, MinIO, or another compatible service. |
+| `LOCAL_STORAGE_PATH` | Filesystem path shared by the admin and worker. Compose mounts its persistent volume at `/var/lib/lobbystack/storage`. |
+| `LOCAL_STORAGE_SIGNING_SECRET` | Signs short-lived local upload and download URLs. Use a long random value. Falls back to `INTERNAL_SERVICE_SECRET` outside Compose. |
+| `S3_ENDPOINT` | Optional S3-compatible endpoint. Leave empty for AWS S3. |
+| `S3_BUCKET` | Bucket for recordings and uploads. |
+| `S3_REGION` | S3 region. Defaults to `us-east-1`. |
+| `S3_ACCESS_KEY_ID`, `S3_SECRET_ACCESS_KEY` | Object-storage credentials. |
+| `S3_FORCE_PATH_STYLE` | Set to `true` for MinIO. |
+
+Local storage fits a single-host deployment. Use S3 when the admin and worker run on different hosts or when you need storage managed outside the Docker host.
+
+## Public API and webhooks
+
+| Variable | Purpose |
+| --- | --- |
+| `PUBLIC_API_RATE_LIMIT_PER_MINUTE` | Requests per minute for each API key on `/api/v1`. Defaults to `120`. Set it on the admin. The limit uses `REDIS_URL`; in production, requests fail with `503` when Redis is unreachable. |
+| `ENCRYPTION_KEY` | Also encrypts webhook signing secrets and keys the HMAC that stores API key hashes. Set the same value on the admin and the worker, or the worker can't sign deliveries. Changing it invalidates every API key and webhook secret. |
+
+Webhook deliveries refuse private, loopback, link-local and cloud metadata addresses on every deployment, including self-hosted ones. Point endpoints at a public HTTPS URL. Plain `http://` URLs work only when `NODE_ENV=development`.
+
+## Observability
+
+| Variable | Purpose |
+| --- | --- |
+| `OTEL_EXPORTER_OTLP_ENDPOINT` | OTLP base URL. Caléonis Receptionist appends `/v1/traces`, `/v1/metrics`, and `/v1/logs`. Leave empty to disable export. |
+| `OTEL_EXPORTER_OTLP_HEADERS` | Optional comma-separated `key=value` headers sent with each OTLP request. For PostHog, use `Authorization=Bearer your_posthog_project_token_here`. |
+
+An empty OTLP endpoint does not disable container stdout logs, application health endpoints, direct product analytics, or direct error reporting.
+
+## Providers
+
+| Variable group | Purpose |
+| --- | --- |
+| `TWILIO_*` | Voice, verification, number provisioning, and webhook authentication. |
+| `OPENAI_API_KEY` | GPT-Live calls and the fallback key for `AI_CHAT_*` and `AI_EMBEDDING_*`. |
+| `AI_CHAT_API_KEY`, `AI_CHAT_BASE_URL`, `AI_CHAT_MODEL`, `AI_CHAT_PROVIDER_NAME` | The receptionist agent for website chat and calls. Leave `AI_CHAT_MODEL` blank on OpenAI to use `gpt-6-luna`. Set it for any other OpenAI-compatible endpoint. |
+| `AI_CHAT_REASONING_EFFORT` | OpenAI only: `none`, `minimal`, `low`, `medium`, `high`, or `xhigh`. Defaults to `high`. |
+| `AI_SUMMARY_MODEL` | The model the worker uses on the `AI_CHAT_*` endpoint to write the one-line summary of each finished call and pick up the caller's name. Leave it blank to use `AI_CHAT_MODEL`. With a different model, the call summary's AI cost stays unknown, because the `AI_CHAT_*` prices describe the chat model. Without any text model, calls fall back to a summary taken from the transcript. |
+| `AI_SUMMARY_REASONING_EFFORT` | OpenAI only: reasoning effort for call summaries. Defaults to `low`. |
+| `AI_DELEGATION_MODEL` | The model the worker uses on the `AI_CHAT_*` endpoint to answer what GPT-Live hands off during a call, such as a booking or a message. The caller hears silence until it answers. Leave it blank to use `AI_CHAT_MODEL`. With a different model, the `AI_CHAT_*` prices don't apply. |
+| `AI_DELEGATION_REASONING_EFFORT` | OpenAI only: reasoning effort for answers during calls. Defaults to `low`, which answers in about half the time of `high`. Website chat keeps `AI_CHAT_REASONING_EFFORT`. |
+| `AI_DELEGATION_SERVICE_TIER` | OpenAI only: the processing tier for answers during calls: `auto`, `default`, `flex` or `priority`. Defaults to `priority`, which answers faster and costs twice the standard token price. |
+| `AI_CHAT_INPUT_COST_PER_MILLION_TOKENS`, `AI_CHAT_CACHED_INPUT_COST_PER_MILLION_TOKENS`, `AI_CHAT_OUTPUT_COST_PER_MILLION_TOKENS` | The `AI_CHAT_*` model's prices in USD per million tokens, so chat, call summaries and answers during calls record what they cost. Cached input uses the input price when you leave it blank. |
+| `AI_CHAT_PRICING_VERSION`, `AI_CHAT_PRICING_SOURCE`, `AI_CHAT_PRICING_EFFECTIVE_DATE` | A label, a source URL and the date for those prices. Caléonis Receptionist records a cost only when all three are set. |
+| `AI_EMBEDDING_API_KEY`, `AI_EMBEDDING_BASE_URL`, `AI_EMBEDDING_MODEL`, `AI_EMBEDDING_PROVIDER_NAME`, `AI_EMBEDDING_REVISION` | OpenAI-compatible 1536-dimensional embeddings. |
+| `WIDGET_SESSION_SECRET` | Signs cross-origin website-widget sessions. |
+| `FIRECRAWL_*` | Website knowledge ingestion. |
+| `GOOGLE_*` | Google Calendar OAuth and **Continue with Google** sign-in. |
+| `SMTP_*`, `EMAIL_*` | Transactional email. |
+| `POLAR_*` | Hosted billing and usage meters. |
+| `POSTHOG_*` | Direct product analytics and error reporting. |
+
+<Warning>
+  Never place secrets in `NEXT_PUBLIC_*` variables. Next.js includes those values in browser bundles.
+</Warning>
+
+{/* Caléonis qualification */}
+
+## Additional local controls
+
+WIDGET_KEY_ISSUANCE_ENABLED is off by default for new keys. The pilot may use Resend parameters from .env.example; a generic SMTP table does not prove a configured sender. Keep LOBBYSTACK_* variables and @lobbystack/* package names. The .env.example of the deployed commit is authoritative; no secret belongs in NEXT_PUBLIC_*.

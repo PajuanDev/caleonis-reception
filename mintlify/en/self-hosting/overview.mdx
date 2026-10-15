@@ -1,0 +1,104 @@
+---
+title: "Understand self-hosting"
+description: "Learn which services a self-hosted Caléonis Receptionist deployment runs, how call data moves between them, and which parts you operate, from Railway to your own servers."
+sidebarTitle: "Self-hosting overview"
+contentType: "Conceptual"
+---
+
+Caléonis Receptionist can run on one Docker host or as separate managed services. Self-hosting gives you control over application data, credentials, provider usage, backups, and upgrades.
+
+<Note>
+  Live calls still require Twilio, OpenAI, and a public HTTPS endpoint for the dashboard. Phone calls also need a Twilio Elastic SIP trunk that sends calls to your OpenAI project.
+</Note>
+
+## Deploy on Railway
+
+The [Caléonis Receptionist Railway template](https://railway.com/deploy/lobbystack) deploys the admin, worker, and migration services with PostgreSQL, Redis, and a storage bucket. Railway generates every secret and database password. You enter an OpenAI API key and your Twilio credentials, then create your account on the admin domain and finish the steps in [After deploying](#after-deploying).
+
+[![Deploy on Railway](https://railway.com/button.svg)](https://railway.com/deploy/lobbystack)
+
+### After deploying
+
+Browser test calls work as soon as the deploy finishes. Email, phone calls, website import, and Google Calendar need more setup, and the phone and calendar steps use the admin domain that Railway assigns. Set each variable on the service named below, then deploy the staged changes in Railway.
+
+#### Set up email
+
+Password resets, verification codes, team invites, and operator alerts fail until the worker can send email. On the `worker` service, set:
+
+- `SMTP_HOST`, `SMTP_USERNAME`, and `SMTP_PASSWORD` from your email provider
+- `SMTP_PORT`, which defaults to `587`, and `SMTP_SECURE`, which defaults to `false`. Use `465` and `true` if your provider needs TLS from the start.
+- `EMAIL_FROM`, an address your provider lets you send from, such as `Caléonis Receptionist <no-reply@example.com>`
+- `EMAIL_REPLY_TO`, if replies should go to another address
+
+#### Finish phone calls
+
+Browser calls work without these steps. Phone calls need an OpenAI project with SIP enabled and a Twilio Elastic SIP trunk:
+
+1. In the OpenAI dashboard, add a webhook for `live.transport.incoming` that points to `https://your_admin_domain/api/webhooks/openai/live`.
+2. Set the webhook's signing secret as `OPENAI_WEBHOOK_SECRET` on the `admin` service.
+3. In Twilio, create an Elastic SIP trunk with the origination URI `sip:your_openai_project_id@sip.api.openai.com;transport=tls`.
+4. Set the trunk's SID as `TWILIO_SIP_TRUNK_SID` on the `worker` service. The worker can't provision a phone number without it.
+
+The [upstream voice runtime guide](https://gitlab.com/lobbystack-group/lobbystack/-/blob/main/docs/voice/runtime.md#set-up-the-phone-path) covers the trunk's transfer settings and moving existing numbers. Review it against the commit used by your independent deployment.
+
+#### Import websites (optional)
+
+Set `FIRECRAWL_API_KEY` on the `worker` service. Without it, website import fails.
+
+#### Connect Google Calendar (optional)
+
+In Google Cloud, enable the Google Calendar API and create an OAuth client for a web application. Add `https://your_admin_domain/api/calendar/google/callback` as an authorized redirect URI. Set `GOOGLE_CLIENT_ID` and `GOOGLE_CLIENT_SECRET` on the `admin` service. The template fills in `GOOGLE_REDIRECT_URI`, and the worker reads all three from the admin.
+
+With both values set, the sign-in and sign-up pages also offer **Continue with Google**. Add `https://your_admin_domain/api/auth/callback/google` to the same OAuth client as a second authorized redirect URI.
+
+#### Use a custom domain
+
+Add the domain to the `admin` service, then set `APP_BASE_URL` on the `admin` service to `https://your_domain`. These variables reference it and follow the change:
+
+- `SITE_URL`, `AUTH_TRUSTED_ORIGINS`, `TWILIO_SMS_WEBHOOK_URL`, `TWILIO_STATUS_CALLBACK_URL`, and `GOOGLE_REDIRECT_URI` on the `admin` service
+- `APP_BASE_URL`, `TWILIO_STATUS_CALLBACK_URL`, and `GOOGLE_REDIRECT_URI` on the `worker` service
+
+A deployment from an older version of the template has the Railway domain written into each of these variables, so edit them all. Then point the OpenAI webhook and both Google redirect URIs at the new domain. Phone numbers you provisioned before the change keep their old SMS and status callback URLs in Twilio until you update them there.
+
+## Official baseline
+
+The public upstream repository's [`docker-compose.yml`](https://gitlab.com/lobbystack-group/lobbystack/-/blob/main/docker-compose.yml) runs:
+
+- PostgreSQL with pgvector for durable data, authentication state, and knowledge embeddings
+- Redis for queues, rate limits, and realtime coordination
+- a persistent Docker volume for recordings and uploaded documents
+- the Next.js admin dashboard and HTTP API
+- the background worker and transactional outbox dispatcher, which also runs each GPT-Live call
+- Caddy to route the dashboard hostname over plain HTTP, behind the proxy or load balancer that terminates HTTPS
+
+Caléonis Receptionist does not add monitoring containers to the Compose stack. Server runtimes can send traces, metrics, and OpenTelemetry logs to a configured OTLP-compatible backend.
+
+## Data flow
+
+1. The dashboard and API read and write PostgreSQL through role-specific connections and row-level security.
+2. Durable side effects enter the PostgreSQL outbox in the same transaction as business state changes.
+3. The worker dispatches queued jobs and refreshes business context snapshots.
+4. OpenAI hosts call audio. The admin starts each call with the business snapshot, and the worker answers GPT-Live's requests for bookings, messages, and transfers.
+5. The admin and worker share the configured storage provider. Single-host Compose deployments use a persistent local volume by default.
+
+## Responsibilities
+
+You are responsible for:
+
+- PostgreSQL, Redis, and file-storage durability
+- backups, restore drills, upgrades, and monitoring
+- public DNS and TLS for the dashboard
+- Twilio, OpenAI, email, calendar, billing, and analytics credentials
+- secret rotation and least-privilege database roles
+
+Continue with the [Docker Compose deployment guide](/en/self-hosting/docker-compose), [environment variables](/en/self-hosting/environment-variables), and [provider reference](/en/self-hosting/providers).
+
+<Warning>
+  Local storage requires the admin and worker to run on the same Docker host. Deployments with application containers on more than one host must set `STORAGE_PROVIDER=s3` and use AWS S3 or a compatible service.
+</Warning>
+
+{/* Caléonis qualification */}
+
+## Independent deployment
+
+Use your own accounts and secrets; these instructions do not administer the Caléonis production service. PostgreSQL is canonical. Preserve the MIT notice and internal package names. Startup alone is not PSTN, calendar, security or medical/HDS qualification. Verify backup restore, business isolation and private access.

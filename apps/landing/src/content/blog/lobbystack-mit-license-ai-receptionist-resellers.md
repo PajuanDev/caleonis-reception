@@ -28,7 +28,7 @@ Our product and contributor adoption stayed below our goal. We chose to reduce b
 
 ## What the MIT License permits
 
-The [LobbyStack license](https://github.com/lobbystack/lobbystack/blob/main/LICENSE) gives anyone who receives the software permission to use, copy, modify, merge, publish, distribute, sublicense, and sell it.
+The [LobbyStack license](https://gitlab.com/lobbystack-group/lobbystack/blob/main/LICENSE) gives anyone who receives the software permission to use, copy, modify, merge, publish, distribute, sublicense, and sell it.
 
 The license has one condition: copies or substantial portions of the software must include its copyright and permission notice. It also includes the standard MIT warranty and liability disclaimer.
 
@@ -76,6 +76,6 @@ Agencies can choose the model that fits each engagement. Use the MIT code when t
 
 We chose the AGPL for a reciprocal model while we built the first version. We have chosen MIT to make commercial adoption easier and help more builders take LobbyStack into markets we cannot reach alone.
 
-[Clone LobbyStack on GitHub](https://github.com/lobbystack/lobbystack), read the [self-hosting overview](https://docs.lobbystack.com/self-hosting/overview), and use the [Docker Compose guide](https://docs.lobbystack.com/self-hosting/docker-compose) for your first deployment. The companion article explains [why LobbyStack is moving away from Convex](/blog/why-lobbystack-is-moving-away-from-convex/).
+[Clone LobbyStack on GitHub](https://gitlab.com/lobbystack-group/lobbystack), read the [self-hosting overview](https://docs.lobbystack.com/self-hosting/overview), and use the [Docker Compose guide](https://docs.lobbystack.com/self-hosting/docker-compose) for your first deployment. The companion article explains [why LobbyStack is moving away from Convex](/blog/why-lobbystack-is-moving-away-from-convex/).
 
-If you would rather start with the managed product, [create a LobbyStack Cloud account](https://app.lobbystack.com/signup) and test a call in your browser before you bring it to a client.
+If you would rather start with the managed product, [create a LobbyStack Cloud account](https://app.lobbystack.com/en/signup) and test a call in your browser before you bring it to a client.

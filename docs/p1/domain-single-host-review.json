@@ -1,0 +1,67 @@
+{
+  "schemaVersion": 1,
+  "reviewedOn": "2026-10-15",
+  "status": "LOCAL_HTTP_REHEARSAL_MOCK_PASS_NOT_DEPLOYED",
+  "productionHost": "receptionist.caleonis.com",
+  "productionChangeAuthorized": false,
+  "dnsChangeRequiredForFirstRehearsal": false,
+  "architecture": "EXPLICIT_PATH_GATEWAY_ASTRO_STATIC_HELP_STATIC_NEXT_PRIVATE",
+  "routingOrder": [
+    "Next reserved API/auth/provider/legacy routes and runtime assets, preserving raw method, path, query, body and upstream status",
+    "Physical gated Next /dashboard alias",
+    "Exact /aide build route and asset inventory",
+    "Exact Astro marketing route and asset inventory",
+    "Every other path is proxied to Next and retains its status, including unknown API/help paths; never marketing fallback"
+  ],
+  "appGate": {
+    "requestVariable": "P1_SINGLE_HOST_STAGING=true",
+    "environmentSource": "RAILWAY_ENVIRONMENT_NAME or P1_SINGLE_HOST_ENVIRONMENT or NODE_ENV",
+    "allowedEnvironmentNames": ["development", "test", "staging", "preview", "certification"],
+    "productionHostnameExplicitlyBlocked": "receptionist.caleonis.com",
+    "builtPublicFlag": "NEXT_PUBLIC_P1_SINGLE_HOST_STAGING",
+    "enabledAppHome": "/dashboard",
+    "disabledAppHome": "/",
+    "requiresRebuildWhenFlagChanges": true
+  },
+  "mustRemainNext": [
+    "/api/*", "/api/auth/*", "/api/calendar/google/callback",
+    "/api/webhooks/twilio/*", "/api/webhooks/openai/live", "/api/webhooks/polar", "/api/webhooks/resend",
+    "/.well-known/*", "/oauth/*", "/_next/*", "/embed.js", "/embed/*",
+    "/login", "/signup", "/fr/login", "/en/login", "/fr/signup", "/en/signup",
+    "/onboarding/*", "/dashboard", "/calls/*", "/messages", "/settings/*",
+    "/contacts/*", "/appointments", "/agent/*", "/analytics", "/integrations/*"
+  ],
+  "knownConflicts": [
+    "Astro /api/status must not override Next /api namespace; publish static status information outside /api instead.",
+    "Marketing /affiliate-program is separate from private /affiliate.",
+    "Marketing/API docs /docs/api is separate from private /api endpoints.",
+    "Shared /brand, /locales, favicon or asset filenames require a collision manifest before publishing; Next assets take priority in the prototype.",
+    "Legacy /login redirects to localized Next /fr/login or /en/login; this remains same-host app authentication.",
+    "The staging app flag and alias do not move production root. A separate local-only HTTP gateway exists but is not wired into any deployment."
+  ],
+  "localGateway": {
+    "script": "scripts/p1-single-host-gateway.mjs",
+    "testCommand": "node --test scripts/p1-single-host-gateway.test.mjs",
+    "testsPassed": 9,
+    "listener": "127.0.0.1 only",
+    "nextOrigin": "HTTP literal loopback or localhost pinned to 127.0.0.1; no path, credentials, external host or HTTPS",
+    "unknownPaths": "NEXT_UPSTREAM_STATUS_WITHOUT_FALLBACK",
+    "staticNonGetHead": 405,
+    "rawBodyPreserved": true,
+    "queriesAndMultipleSetCookiePreserved": true,
+    "mockSseFirstChunkBeforeCompletion": "PASS",
+    "forwardedHostPolicy": "Validate incoming Host against loopback/bound port; remove supplied Forwarded/X-Forwarded-*; derive controlled values from socket and local origin; preserve Origin for Next CSRF",
+    "websocket": "PENDING_NOT_IMPLEMENTED_UPGRADE_RETURNS_501",
+    "evidence": "docs/p1/domain-gateway-local-evidence.json",
+    "realNextRuntimeVerified": false
+  },
+  "productionBlockers": [
+    "RUN_GATEWAY_WITH_COMPLETE_HELP_BUILD_AND_REAL_ISOLATED_NEXT",
+    "HTTP_E2E_AUTH_OAUTH_COOKIE_CSRF_AND_WEBHOOK_REPLAY_IN_SANDBOX",
+    "PSTN_AND_GOOGLE_NO_SIDE_EFFECT_REGRESSION_QUALIFICATION",
+    "COMPLETE_ROUTE_ASSET_COLLISION_AND_404_REPORT",
+    "MEASURE_REAL_NEXT_STREAMING_TIMEOUT_HEADERS_AND_UPGRADE_NEEDS",
+    "CAPTURE_CURRENT_DEPLOYMENT_AND_ROLLBACK_CONFIGURATION",
+    "EXPLICIT_HUMAN_AUTHORIZATION_FOR_ROOT_ROUTING_CUTOVER"
+  ]
+}

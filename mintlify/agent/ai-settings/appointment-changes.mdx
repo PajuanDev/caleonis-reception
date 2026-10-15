@@ -1,6 +1,7 @@
 ---
 title: "Encadrer les changements de rendez-vous"
 description: "Préparer annulation et déplacement avec vérification, sans promettre un SMS indisponible."
+sidebarTitle: "Modifications de rendez-vous"
 ---
 Le code comprend des parcours d’identification, d’annulation et de déplacement. Ils doivent être activés et qualifiés dans votre espace avant usage client.
 
@@ -34,3 +35,21 @@ Ne répétez pas une action après une erreur réseau sans vérifier son résult
 Une modification peut réussir sans SMS ou email. L’état d’envoi doit être contrôlé séparément.
 
 En cas d’échec, relevez l’identifiant du rendez-vous et de l’appel. Confiez la correction à votre équipe ; ne promettez pas un transfert humain non qualifié.
+
+{/* Caléonis qualification */}
+
+## Actions et confirmation attendues
+
+Le parcours peut retrouver un rendez-vous à venir, demander confirmation, annuler ou proposer un autre créneau lorsque l'action est autorisée. Une demande vague ne doit pas provoquer de changement : faites confirmer service, date, heure locale et action exacte.
+
+La politique peut utiliser téléphone, nom et détail du rendez-vous. Ces éléments ne constituent pas une garantie universelle d'identité. En cas d'ambiguïté, recueillez une demande de suivi pour l'équipe.
+
+## Activer les contrôles séparément
+
+1. Ouvrez Agent > Paramètres IA pour la bonne entreprise.
+2. Recherchez les changements de rendez-vous.
+3. Réglez séparément annulation et déplacement.
+4. Choisissez la vérification après avoir validé son moyen de livraison.
+5. Enregistrez et vérifiez les valeurs après rechargement.
+
+Pour une annulation, relisez le statut et l'effet exact sur l'événement Google. Pour un déplacement, contrôlez le nouveau créneau, la durée et l'agenda. Vérifiez aussi code faux ou expiré lorsque cette politique s'applique. Conservez les services et les droits calendrier à jour.

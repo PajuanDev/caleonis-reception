@@ -9,7 +9,10 @@ interface Props {
 
 export function LightModeDashboardMockup({ slug }: Props) {
   return (
-    <div className="flex h-full w-full flex-col overflow-hidden rounded-xl border border-border/60 bg-background font-sans text-foreground shadow-[0_20px_50px_rgba(0,0,0,0.06)] select-none">
+    <div
+      aria-label="Illustrative source workflow diagram with fictional data; not a product screenshot"
+      className="flex h-full w-full flex-col overflow-hidden rounded-xl border border-border/60 bg-background font-sans text-foreground shadow-[0_20px_50px_rgba(0,0,0,0.06)] select-none"
+    >
       <div className="flex min-h-0 flex-1 flex-col p-5">
         {slug === "after-hours-answering-service" && <AfterHoursSchematic />}
         {slug === "ai-receptionist-for-dental-offices" && <DentalSchematic />}

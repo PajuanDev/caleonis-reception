@@ -1,43 +1,126 @@
 ---
-title: "MCP : intégration développeur"
-description: "Connecter un client autorisé au serveur existant, avec des permissions limitées."
+title: "Gérer votre réceptionniste depuis un assistant IA"
+description: "Connectez Claude, ChatGPT et d'autres clients MCP à Caléonis Receptionist pour consulter les appels, réserver des rendez-vous et mettre à jour ce que sait votre réceptionniste."
+sidebarTitle: "Serveur MCP"
+contentType: "Reference"
 ---
-Le code contient un serveur MCP à l’adresse `https://receptionist.caleonis.com/api/mcp`, avec transport Streamable HTTP.
 
-Cette interface expose les données et actions de l’entreprise autorisée. Sa présence ne signifie pas que tous les clients ou actions ont été qualifiés sur le SaaS. Elle ne crée aucun Agent Builder ni plusieurs agents métier Caléonis.
+Caléonis Receptionist exploite un serveur Model Context Protocol (MCP). Connectez-y un assistant IA et posez vos questions en langage courant : « Qui a appelé hier sans réserver ? », « Réserve un nettoyage pour Dana Whitfield mardi matin » ou « Désormais, ferme le samedi ».
 
-## Accès
+L'assistant suit les mêmes règles que l'[API REST](/api/overview). Il voit une seule entreprise, il ne peut faire que ce que sa clé API autorise, et chaque modification qu'il fait est inscrite dans le journal d'audit de l'entreprise.
 
-Deux mécanismes existent dans le code : clé API et consentement OAuth. Choisissez seulement le mécanisme effectivement ouvert dans votre environnement.
+## Se connecter
 
-Commencez par une clé en lecture limitée ou un consentement de lecture. Vérifiez l’entreprise affichée avant d’autoriser un client externe.
-
-Pour les [clés API](/api/authentication), utilisez l’en-tête `Authorization: Bearer <clé>` uniquement dans un client qui le stocke de manière sûre.
-
-## Outils présents
-
-| Outils | Permission |
+| Paramètre | Valeur |
 | --- | --- |
-| `get_business`, `list_services`, `list_staff` | `business:read` |
-| `update_business_hours` | `business:write` |
-| `list_calls`, `get_call` | `calls:read` |
-| `search_contacts`, `get_contact` | `contacts:read` |
-| `create_contact`, `update_contact` | `contacts:write` |
-| `list_appointments`, `get_appointment`, `check_availability` | `appointments:read` |
-| `book_appointment`, `cancel_appointment`, `reschedule_appointment` | `appointments:write` |
-| `list_messages` | `messages:read` |
-| `add_knowledge` | `knowledge:write` |
+| URL du serveur | `https://receptionist.caleonis.com/api/mcp` |
+| Transport | Streamable HTTP |
+| Authentification | Connexion avec Caléonis Receptionist (OAuth), ou `Authorization: Bearer <API key>` |
 
-Les règles de réservation et l’isolation par entreprise restent applicables. Une instruction d’un assistant ne doit pas contourner un refus.
+Les déploiements auto-hébergés servent le même chemin sur leur propre domaine, par exemple `https://receptionist.example.com/api/mcp`.
 
-## Qualifier une connexion
+Les assistants se connectent de deux façons :
 
-1. Vérifiez le client et l’endroit où il conserve les secrets.
-2. Connectez uniquement un espace de test autorisé.
-3. Lisez les informations d’entreprise.
-4. Vérifiez qu’une action sans permission échoue.
-5. Révoquez l’accès de test et vérifiez son refus.
+- **Connexion avec Caléonis Receptionist.** Ajoutez l'URL du serveur à l'assistant. Il ouvre une page Caléonis Receptionist où vous vous connectez, choisissez l'entreprise et décidez de ce que l'assistant peut faire. Utilisez cette méthode pour les connecteurs Claude et ChatGPT.
+- **Clé API.** Créez une clé dans **Réglages** > **Clés API** et ajoutez-la à la configuration de l'assistant. Utilisez cette méthode pour les scripts, l'intégration continue et les clients qui permettent de définir des en-têtes de requête. Consultez [Authentification](/api/authentication).
 
-Les changements de rendez-vous ou d’horaires nécessitent une autorisation explicite de votre organisation. Consultez le [guide d’usage](/ai/lobbystack-skill) et les [erreurs API](/api/requests).
+Suivez le guide pour [Claude](/ai/connect-claude), [ChatGPT](/ai/connect-chatgpt) ou [un autre client MCP](/ai/connect-other-clients).
 
-Les menus et conditions des logiciels clients évoluent. Les guides suivants décrivent les vérifications à faire, sans garantir un chemin de menu ou un abonnement tiers.
+## Connexion avec Caléonis Receptionist
+
+Caléonis Receptionist exploite un serveur d'autorisation OAuth 2.1 pour les clients MCP, comme le décrit la [spécification d'autorisation MCP](https://modelcontextprotocol.io/specification/2026-07-28/basic/authorization). Votre assistant le trouve seul à partir de l'URL du serveur.
+
+Lors de la connexion, Caléonis Receptionist vous demande de :
+
+1. Vous connecter, si ce n'est pas déjà fait.
+2. Choisir l'entreprise. Vous ne voyez que les entreprises dont vous êtes propriétaire ou administrateur.
+3. Choisir ce que l'assistant peut faire. Chaque autorisation qu'il a demandée est cochée au départ ; décochez celles que vous ne voulez pas accorder.
+
+L'assistant obtient alors l'accès à cette seule entreprise. Les jetons d'accès durent une heure, et l'assistant les renouvelle sans vous redemander votre accord tant que la période d'inactivité ne dépasse pas 30 jours. Chaque renouvellement remplace le jeton d'actualisation précédent, et la réutilisation d'un ancien jeton met fin à la connexion.
+
+Les propriétaires et les administrateurs voient tous les assistants connectés à l'entreprise dans **Réglages** > **Applications connectées**, avec la personne qui les a connectés, leurs autorisations et la date de leur dernière requête. Cliquez sur **Déconnecter** pour couper l'accès immédiatement. Si la personne qui a connecté l'assistant n'est plus propriétaire ou administrateur, la connexion cesse aussi de fonctionner.
+
+<Accordion title="Détails pour les développeurs de clients MCP">
+  | Élément | Valeur |
+  | --- | --- |
+  | Métadonnées de la ressource protégée | `/.well-known/oauth-protected-resource/api/mcp` |
+  | Émetteur du serveur d'autorisation | `https://receptionist.caleonis.com/api/auth` |
+  | Métadonnées du serveur d'autorisation | `/.well-known/oauth-authorization-server/api/auth` |
+  | Enregistrement du client | Client ID Metadata Documents (`client_id` en HTTPS) ou enregistrement dynamique du client à `/api/auth/oauth2/register` |
+  | Types d'autorisation | `authorization_code` avec PKCE (`S256`, obligatoire), `refresh_token` |
+  | Indicateur de ressource | Envoyez `resource=https://receptionist.caleonis.com/api/mcp`. Les jetons destinés à d'autres ressources sont refusés. |
+  | Portées | Les portées des outils du tableau ci-dessous, plus `offline_access` pour les jetons d'actualisation |
+  | Révocation | `/api/auth/oauth2/revoke` (RFC 7009) |
+
+  Une réponse `401` de `/api/mcp` contient `WWW-Authenticate: Bearer resource_metadata="..."`. Les clients dont l'URI de redirection est une adresse de bouclage, comme `http://127.0.0.1:6276/callback`, s'enregistrent comme applications natives ; les autres URI de redirection doivent utiliser HTTPS.
+</Accordion>
+
+## Outils
+
+| Outil | Portée | Ce qu'il fait |
+| --- | --- | --- |
+| `get_business` | `business:read` | Nom de l'entreprise, fuseau horaire, heures d'ouverture et mode de réservation |
+| `list_services` | `business:read` | Services que les clients peuvent réserver |
+| `list_staff` | `business:read` | Personnes qui prennent des rendez-vous et services qu'elles offrent |
+| `update_business_hours` | `business:write` | Remplace les heures d'ouverture de la semaine |
+| `list_calls` | `calls:read` | Appels, du plus récent au plus ancien, filtrés par heure de début |
+| `get_call` | `calls:read` | Un appel avec sa transcription |
+| `search_contacts` | `contacts:read` | Contacts par téléphone, email ou partie du nom |
+| `get_contact` | `contacts:read` | Un contact |
+| `create_contact` | `contacts:write` | Ajoute un contact |
+| `update_contact` | `contacts:write` | Modifie les coordonnées d'un contact |
+| `list_appointments` | `appointments:read` | Rendez-vous filtrés par statut, heure de début ou contact |
+| `get_appointment` | `appointments:read` | Un rendez-vous |
+| `check_availability` | `appointments:read` | Créneaux libres pour un service, sur 7 jours au plus, pour n'importe quel membre du personnel ou pour un seul |
+| `book_appointment` | `appointments:write` | Réserve un créneau libre |
+| `cancel_appointment` | `appointments:write` | Annule un rendez-vous |
+| `reschedule_appointment` | `appointments:write` | Déplace un rendez-vous vers un autre créneau libre ou un autre membre du personnel |
+| `list_messages` | `messages:read` | Messages que le réceptionniste a pris pour votre équipe |
+| `add_knowledge` | `knowledge:write` | Ajoute une FAQ ou un texte que le réceptionniste peut utiliser |
+
+Les portées sont les mêmes pour OAuth et pour les clés API. Les outils renvoient les mêmes objets que l'API REST, avec les heures en UTC. Les outils en lecture seule portent l'annotation `readOnlyHint`, et les outils qui annulent, déplacent ou remplacent des données portent `destructiveHint`, pour que votre assistant puisse vous demander votre accord avant de les exécuter.
+
+La portée `webhooks:manage` n'a aucun outil MCP. Une clé qui n'a que cette portée ne peut pas se connecter.
+
+## Mode de réservation
+
+`book_appointment` et `reschedule_appointment` ne fonctionnent que si **Prise de rendez-vous** est réglé sur **Réserve les rendez-vous** (`booking_mode` `instant`). Dans les autres modes, ils renvoient une erreur au lieu de réserver :
+
+| Réglage | `booking_mode` | Code d'erreur | Ce que l'assistant doit faire |
+| --- | --- | --- | --- |
+| **Prend les demandes** | `request` | `booking_requires_confirmation` | Vous indiquer que votre équipe confirme les demandes depuis la boîte de réception |
+| **Ne réserve pas** | `off` | `booking_disabled` | Vous indiquer que la réservation est désactivée |
+
+Vous modifiez ce réglage dans **Agent** > **Paramètres IA** > **Rendez-vous**. L'annulation fonctionne dans tous les modes.
+
+## Erreurs
+
+Un appel d'outil qui échoue renvoie un résultat marqué comme erreur. Son texte est du JSON avec les mêmes codes que l'[API REST](/api/requests) :
+
+```json
+{ "error": { "code": "slot_unavailable", "message": "That time is not available. Pick another time from GET /availability." } }
+```
+
+Le serveur lui-même répond `401` quand la clé ou le jeton d'accès est absent, inconnu, expiré ou révoqué, et `403` quand il n'a aucune des portées utilisées par le serveur MCP.
+
+## Limites et nouvelles tentatives
+
+Chaque appel d'outil compte dans une limite de 120 requêtes par minute. Une clé API partage sa limite avec les requêtes REST faites avec la même clé ; chaque connexion OAuth a sa propre limite. Lister les outils ne compte pas. Au-delà de la limite, l'outil renvoie `rate_limited` avec le nombre de secondes à attendre.
+
+`book_appointment`, `create_contact` et `add_knowledge` acceptent un `idempotency_key` facultatif. Si vous réessayez avec la même valeur dans les 24 heures, vous obtenez le premier résultat au lieu d'un doublon. Ces clés sont les mêmes que l'en-tête REST `Idempotency-Key` pour `POST /appointments`, `POST /contacts` et `POST /knowledge` : une nouvelle tentative par MCP d'une requête REST, ou l'inverse, renvoie le premier résultat. La même clé avec des détails différents renvoie `idempotency_key_reused`.
+
+## Journal d'audit
+
+Caléonis Receptionist inscrit chaque modification faite par le serveur MCP dans le journal d'audit de l'entreprise, avec l'acteur `mcp` et l'identifiant de la clé API ou, pour OAuth, l'identifiant de la connexion et la personne qui l'a approuvée. Il n'enregistre jamais les clés ni les jetons. Pour couper l'accès d'un assistant, déconnectez-le dans **Réglages** > **Applications connectées** ou révoquez sa clé dans **Réglages** > **Clés API**.
+
+## Guide pour les agents IA
+
+Le [skill Caléonis Receptionist](/ai/lobbystack-skill) explique les outils, les flux de travail courants et la gestion des erreurs sous une forme que vous pouvez donner à un agent comme instructions.
+
+{/* Caléonis qualification */}
+
+## Qualification du SaaS
+
+Ce serveur existant est une intégration développeur facultative ; il n'ajoute aucun Agent Builder ni agent métier supplémentaire. La description des jetons et permissions est un contrat technique du code, pas une preuve qu'un client tiers ou un renouvellement a été testé sur votre espace.
+
+Vérifiez l'entreprise en lecture, le refus d'une action sans permission et la révocation. Les changements de rendez-vous, Google durable et notifications conservent leurs qualifications séparées. N'insérez pas de secret dans une conversation.

@@ -1,37 +1,52 @@
 ---
-title: "Configurer les fournisseurs"
-description: "Préparer les comptes externes nécessaires à votre instance indépendante."
+title: "Configurer les fournisseurs tiers"
+description: "Voyez de quels comptes fournisseurs un Caléonis Receptionist auto-hébergé a besoin : Twilio et OpenAI pour les appels en direct, plus des services facultatifs comme Google Calendar, le stockage S3 et PostHog."
+sidebarTitle: "Fournisseurs tiers"
+contentType: "Reference"
 ---
-Cette page concerne l’auto-hébergement. Les comptes fournisseurs de la production Caléonis ne doivent pas être réutilisés.
 
-| Fournisseur | Rôle | Vérification |
-| --- | --- | --- |
-| PostgreSQL | Données canoniques, rôles et isolation. | Migrations, droits et restauration. |
-| Redis | Fonctions partagées et limitations selon runtime. | Accès privé et reprise. |
-| OpenAI / fournisseur IA compatible | Voix ou texte selon parcours. | Modèle, accès, limites et coûts. |
-| Twilio | Numéros et téléphonie. | Attribution, voix/SMS, trunk et signatures. |
-| Google | Calendar et OAuth. | Droits, agenda, renouvellement et événements. |
-| Stockage S3 compatible ou local | Documents et audio. | Confidentialité, disponibilité et sauvegarde. |
-| Resend / SMTP selon adaptateur | Email transactionnel. | Domaine, expéditeur, destinataire et livraison. |
-| Import Web configuré | Extraction de pages publiques. | Accès aux seules sources autorisées. |
-| Analyse et télémétrie | Mesure et diagnostic. | Consentement/configuration appropriés et données minimales. |
+La base Docker Compose exécute l'application Caléonis Receptionist, PostgreSQL, Redis et un volume de stockage local partagé. Connectez vos propres comptes fournisseurs pour les fonctionnalités externes.
 
-## Téléphonie
+## Requis pour les appels en direct
 
-Un numéro doit être compatible avec les usages souhaités et conforme aux exigences de l’opérateur. Un numéro Voice-only ne fournit pas de SMS.
+<AccordionGroup>
+  <Accordion title="Twilio" icon="phone">
+    Twilio fournit les numéros de téléphone, les transferts d'appel et la vérification des numéros de téléphone. Un trunk Elastic SIP envoie à OpenAI les appels reçus sur vos numéros. Chaque numéro doit faire partie du trunk pour répondre aux appels. Gardez le jeton d'authentification Twilio côté serveur.
+  </Accordion>
+  <Accordion title="OpenAI" icon="waveform">
+    Le modèle GPT-Live d'OpenAI mène la conversation pendant les appels téléphoniques et les appels dans le navigateur, et OpenAI héberge l'audio. Quand l'appelant a besoin de données de l'entreprise, comme des disponibilités ou une réservation, GPT-Live interroge le worker de Caléonis Receptionist, qui répond avec l'agent réceptionniste. Votre projet OpenAI doit avoir SIP activé et un webhook d'appel entrant pour les appels téléphoniques.
+  </Accordion>
+</AccordionGroup>
 
-L’achat, le transfert ou le changement d’un numéro est une opération distincte d’un démarrage technique. Faites-les autoriser et testez avec vos propres lignes.
+## Connaissances et automatisation
 
-## Google
+<AccordionGroup>
+  <Accordion title="IA compatible OpenAI" icon="sparkles">
+    L'agent réceptionniste pour le chat du site Web et les appels utilise par défaut `gpt-6-luna` avec un raisonnement élevé. Pour utiliser un autre fournisseur ou un environnement d'exécution auto-hébergé qui implémente les API de chat et d'embeddings compatibles OpenAI, définissez les variables `AI_CHAT_*` et `AI_EMBEDDING_*`. Le modèle doit prendre en charge les appels d'outils, et les modèles d'embeddings doivent renvoyer exactement 1536 dimensions.
+  </Accordion>
+  <Accordion title="Firecrawl" icon="globe">
+    Firecrawl importe le contenu public des sites Web dans le pipeline de connaissances. Vous pouvez vous en passer si les opérateurs se contentent de importer des documents et de saisir les connaissances à la main.
+  </Accordion>
+</AccordionGroup>
 
-Vérifiez le statut du projet OAuth, les utilisateurs autorisés, les permissions demandées, les URI de retour et le renouvellement des accès. Ne déduisez pas la durabilité d’une autorisation immédiatement après connexion.
+## Intégrations facultatives
 
-## Email, paiements et analyses
+- Google Calendar pour les disponibilités et la synchronisation des réservations
+- SMTP pour la vérification, la réinitialisation des mots de passe et les emails opérationnels
+- Polar pour la facturation hébergée et l'utilisation mesurée
+- PostHog et OpenTelemetry pour l'analytique, le suivi des erreurs, les traces, les métriques et les journaux
+- AWS S3 ou un stockage compatible pour les déploiements sur plusieurs hôtes
+- MinIO par le profil Compose facultatif `minio`
+- PostgreSQL et Redis gérés à la place des conteneurs inclus
 
-Un adaptateur présent n’est pas un fournisseur configuré. Gardez les envois et paiements en mode de test jusqu’à validation des destinataires et conditions.
+Définissez `STORAGE_PROVIDER=s3` pour AWS S3, MinIO ou un autre service compatible. Laissez `S3_ENDPOINT` vide pour AWS S3. MinIO exige son point de terminaison HTTP et `S3_FORCE_PATH_STYLE=true`.
 
-La facturation du SaaS Caléonis et ses offres ne sont pas définies par les exemples de votre installation.
+Consultez la [référence des variables d'environnement](/self-hosting/environment-variables) pour les noms de configuration et le [guide Docker Compose](/self-hosting/docker-compose) pour les étapes de déploiement.
 
-## Qualifier
+{/* Caléonis qualification */}
 
-Pour chaque service, vérifiez le cas nominal et un refus attendu, puis documentez le résultat sans exposer de secrets. Une réponse du fournisseur n’est pas une preuve de succès métier sans contrôle du résultat.
+## Fournisseurs du pilote et limites
+
+L'instance indépendante doit utiliser ses propres comptes et contrats. La production pilote peut utiliser Resend pour les emails transactionnels ; aucun email réel n'est envoyé par la lecture de ce guide. La facturation Polar demeure conditionnelle à l'approbation du catalogue et au mode test.
+
+Un numéro Voice-only ne fournit pas les SMS. La présence d'un adaptateur de transfert ne qualifie pas le parcours SIP. Vérifiez aussi droits Google, renouvellement, accès privé S3 et restauration des sauvegardes.

@@ -1,50 +1,106 @@
 ---
-title: "Authentifier les requêtes API"
-description: "Créer des clés par entreprise et limiter les permissions des intégrations."
+title: "S'authentifier avec des clés API"
+description: "Créez des clés API, choisissez leurs portées, envoyez la clé avec chaque requête et respectez les limites de débit."
+sidebarTitle: "Authentification"
+contentType: "How-to"
 ---
-Les propriétaires et administrateurs peuvent gérer les clés depuis **Réglages > Clés d’API** si cette page leur est ouverte.
+
+Chaque requête nécessite une clé API liée à une entreprise. Les propriétaires et les administrateurs créent et révoquent les clés dans le tableau de bord. Les mêmes clés connectent les assistants IA par le [serveur MCP](/ai/mcp).
 
 ## Créer une clé
 
-1. Vérifiez l’entreprise active.
-2. Donnez un nom reconnaissable à l’intégration.
-3. Choisissez uniquement les permissions nécessaires.
-4. Copiez la clé lorsqu’elle est affichée.
-5. Placez-la dans le gestionnaire de secrets du serveur destinataire.
+<Steps>
+  <Step title="Ouvrir Clés API">
+    Allez dans **Réglages** > **Clés API**. Seuls les propriétaires et les administrateurs voient cette page.
+  </Step>
+  <Step title="Nommer la clé et choisir son accès">
+    Utilisez un nom que vous reconnaîtrez plus tard, comme `Zapier`. Sélectionnez seulement les portées dont l'outil a besoin.
+  </Step>
+  <Step title="Copier la clé">
+    Caléonis Receptionist affiche la clé complète une seule fois. Conservez-la dans votre outil ou dans un gestionnaire de mots de passe. Caléonis Receptionist ne garde qu'un hachage, donc personne ne peut afficher la clé de nouveau.
+  </Step>
+</Steps>
 
-Les clés conservent le préfixe technique `lsk_`. Ne le renommez pas pour le rebranding. La clé complète n’est pas destinée à être affichée à nouveau.
+Les clés ressemblent à `lsk_1a2b3c4d_` suivi de 32 caractères aléatoires. Le tableau de bord liste chaque clé par son préfixe, `lsk_1a2b3c4d`, avec ses portées, la personne qui l'a créée et la date de sa dernière utilisation.
 
-## Appeler une route
+## Envoyer la clé
 
-L’exemple utilise une variable locale choisie pour votre intégration ; il ne s’agit pas d’une variable interne à renommer dans l’application.
+Placez la clé dans l'en-tête `Authorization` :
 
 ```bash
-curl https://receptionist.caleonis.com/api/v1/me \
-  -H "Authorization: Bearer $CALEONIS_API_KEY"
+curl https://receptionist.caleonis.com/api/v1/calls \
+  -H "Authorization: Bearer $LOBBYSTACK_API_KEY"
 ```
 
-Vérifiez que la réponse concerne l’entreprise attendue. Une clé absente, inconnue ou révoquée doit être refusée.
+Une clé manquante, inconnue ou révoquée renvoie `401` avec le code `unauthorized`.
 
-## Permissions
+## Tester une clé
 
-| Permission | Accès |
+`GET /me` fonctionne avec toute clé valide, quelles que soient ses portées. Il renvoie la clé et son entreprise, pour qu'une intégration puisse vérifier une connexion avant d'avoir besoin d'une portée précise :
+
+```json
+{
+  "data": {
+    "api_key": {
+      "id": "0b7c1d2e-3f40-4a51-8b62-7c83d94ea5b6",
+      "name": "Zapier",
+      "prefix": "lsk_1a2b3c4d",
+      "scopes": ["appointments:read", "appointments:write"],
+      "created_at": "2026-09-27T16:58:00.000Z"
+    },
+    "business": { "id": "75795511-9ee2-4cb2-a89d-f173ec1dd82d", "name": "Maple Salon" }
+  }
+}
+```
+
+## Portées
+
+Chaque point de terminaison, sauf `GET /me`, exige une portée. Une clé qui ne l'a pas reçoit `403` avec le code `insufficient_scope`, et le message nomme la portée manquante.
+
+| Portée | Autorise |
 | --- | --- |
-| `business:read` | Entreprise, services et intervenants. |
-| `business:write` | Modification de l’entreprise. |
-| `calls:read` | Liste et détail des appels. |
-| `contacts:read`, `contacts:write` | Lecture ou modification des contacts. |
-| `appointments:read` | Rendez-vous et disponibilités. |
-| `appointments:write` | Création, annulation et déplacement. |
-| `messages:read` | Messages de suivi pris pour l’équipe. |
-| `knowledge:write` | Ajout de connaissances. |
-| `webhooks:manage` | Gestion et test des destinations webhook. |
+| `business:read` | `GET /business`, `GET /services`, `GET /staff` |
+| `business:write` | `PATCH /business` |
+| `calls:read` | `GET /calls`, `GET /calls/{call_id}` |
+| `contacts:read` | `GET /contacts`, `GET /contacts/{contact_id}` |
+| `contacts:write` | `POST /contacts`, `PATCH /contacts/{contact_id}` |
+| `appointments:read` | `GET /appointments`, `GET /appointments/{appointment_id}`, `GET /availability` |
+| `appointments:write` | `POST /appointments`, `POST /appointments/{appointment_id}/cancel`, `POST /appointments/{appointment_id}/reschedule` |
+| `messages:read` | `GET /messages` |
+| `knowledge:write` | `POST /knowledge` |
+| `webhooks:manage` | `GET`, `POST`, `PATCH` et `DELETE` sur `/webhooks`, et `POST /webhooks/{webhook_id}/test` |
 
-`GET /me` sert au contrôle de toute clé valide. Une route sans permission suffisante répond `403` ; ne remplacez pas une clé limitée par une clé générale pour contourner ce résultat.
+## Révoquer une clé
 
-## Limites et révocation
+Dans **Réglages** > **Clés API**, cliquez sur **Révoquer** à côté de la clé. Les requêtes qui l'utilisent échouent immédiatement, et vous ne pouvez pas annuler cette action. Créez une nouvelle clé si vous avez encore besoin d'accès.
 
-La limite du code est de 120 requêtes par minute par défaut ; elle peut varier avec la configuration. Lisez les en-têtes de limite et respectez `Retry-After`.
+Caléonis Receptionist désactive aussi les points de terminaison webhook que la clé a créés. Pour en garder un, réactivez-le depuis la carte **Webhooks** dans **Intégrations**.
 
-Révoquez une clé qui n’est plus nécessaire ou a été exposée, puis remplacez-la dans les services autorisés. Vérifiez ensuite que l’ancienne clé est refusée.
+## Limites de débit
 
-Ne placez jamais une clé dans un widget, une application mobile publique, une capture d’écran ou une URL. La validation d’isolation doit inclure le refus d’une ressource appartenant à une autre entreprise.
+Chaque clé peut faire 120 requêtes par minute. Les déploiements auto-hébergés peuvent modifier cette valeur avec `PUBLIC_API_RATE_LIMIT_PER_MINUTE`. La fenêtre se réinitialise au début de chaque minute.
+
+Chaque réponse contient ces en-têtes :
+
+| En-tête | Signification |
+| --- | --- |
+| `X-RateLimit-Limit` | Requêtes autorisées par minute. |
+| `X-RateLimit-Remaining` | Requêtes restantes dans la minute en cours. |
+| `X-RateLimit-Reset` | Heure Unix, en secondes, à laquelle la fenêtre se réinitialise. |
+
+Au-delà de la limite, l'API renvoie `429` avec le code `rate_limited` et un en-tête `Retry-After` qui indique le nombre de secondes à attendre.
+
+## Protéger vos clés
+
+- Utilisez une clé par outil, pour pouvoir en révoquer une sans briser les autres.
+- Donnez à chaque clé seulement les portées dont elle a besoin.
+- Ne placez jamais une clé dans du code exécuté dans le navigateur ou dans une application mobile. Appelez l'API depuis un serveur.
+- Caléonis Receptionist journalise chaque requête avec l'identifiant de la clé, jamais la clé elle-même, et consigne les changements faits avec une clé dans le journal d'audit de l'entreprise.
+
+{/* Caléonis qualification */}
+
+## Compatibilité des permissions Caléonis
+
+Conservez le préfixe `lsk_` et les identifiants internes. Les secrets ne doivent jamais être intégrés au widget, à une URL ou à du code navigateur. Vérifiez le refus d'une ressource d'une autre entreprise.
+
+La version Caléonis documentée requiert `webhooks:manage` pour gérer les destinations. Les nouvelles restrictions d'abonnement par portée d'événement de l'amont ne sont pas déclarées actives sans modification du runtime.
