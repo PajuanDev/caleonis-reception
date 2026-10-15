@@ -19,6 +19,7 @@ import { renewVoicePresenceGateway, updateVoicePresence } from "@lobbystack/jobs
 import OpenAI from "openai";
 
 import { recordLiveCallLatency, recordLiveDelegation } from "./liveCallTelemetry";
+import { knownVoicePlannerEffort, voicePlannerMediumEnabled } from "./voicePlannerPolicy";
 
 export const LIVE_ATTACH_PATH = "/internal/live/attach";
 const MAX_BODY_BYTES = 16 * 1024;
@@ -224,8 +225,15 @@ export function createLiveCallHandler(input: { domain: DomainContext }) {
       } : {}),
     };
 
+    const modelIdentity = typeof model === "object" ? { provider: model.provider, modelId: model.modelId } : { provider: "", modelId: "" };
+    const medium = request.businessId === snapshot.businessId && voicePlannerMediumEnabled({
+      businessId: request.businessId, channel: request.channel, ...(request.intakeOnly !== undefined ? { intakeOnly: request.intakeOnly } : {}),
+      model: modelIdentity,
+    });
+    const requestedPlannerEffort = medium ? "medium" : knownVoicePlannerEffort(modelIdentity);
     const agent = createReceptionistAgent({
       model,
+      ...(medium ? { voicePlannerReasoningEffort: "medium" } : {}),
       context: {
         domain: input.domain,
         snapshot,
@@ -254,6 +262,7 @@ export function createLiveCallHandler(input: { domain: DomainContext }) {
       client,
       sessionId: request.sessionId,
       agent,
+      ...(requestedPlannerEffort ? { requestedPlannerEffort } : {}),
       greeting: snapshot.greeting,
       silenceTimeoutMs: SILENCE_TIMEOUT_MS,
       maxDurationMs: phone ? MAX_PHONE_CALL_MS : request.maxDurationMs ?? MAX_PHONE_CALL_MS,
@@ -264,7 +273,7 @@ export function createLiveCallHandler(input: { domain: DomainContext }) {
         void hangup();
       },
       onDelegation: (timing) => {
-        console.info(JSON.stringify({ event: "live.delegation", sessionId: request.sessionId, agentMs: timing.agentMs, totalMs: timing.totalMs, tools: timing.tools, failed: timing.failed }));
+        console.info(JSON.stringify({ event: "live.delegation", sessionId: request.sessionId, agentMs: timing.agentMs, totalMs: timing.totalMs, tools: timing.tools, failed: timing.failed, ...(timing.execution ? { execution: timing.execution } : {}) }));
         recordLiveDelegation(input.domain, telemetryCall, timing);
       },
       onClose: (summary) => {

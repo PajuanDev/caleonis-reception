@@ -1,4 +1,5 @@
 export { createReceptionistAgent, type ReceptionistAgent } from "./agent";
+export { describePlannerExecution, type PlannerExecution, type PlannerRequestedEffort } from "./plannerExecution";
 export { buildAgentInstructions, buildLiveInstructions } from "./instructions";
 export { agentModelId, callSummaryEnvironment, createAgentModel, describeAgentUsage, type AgentUsage } from "./model";
 export { createReceptionistTools, type AgentChannel, type AgentToolContext, type CallControl } from "./tools";

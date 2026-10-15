@@ -39,6 +39,7 @@ export function recordLiveDelegation(domain: DomainContext, call: LiveCallTeleme
     tools: [...new Set(timing.tools)],
     toolCount: timing.tools.length,
     failed: timing.failed,
+    ...(timing.execution ? { execution: timing.execution } : {}),
   });
 }
 
