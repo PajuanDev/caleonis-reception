@@ -1,4 +1,4 @@
-import { readFile, readdir, stat, writeFile } from 'node:fs/promises';
+import { mkdir, readFile, readdir, stat, writeFile } from 'node:fs/promises';
 import { createRequire } from 'node:module';
 import { dirname, join, relative, resolve, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -87,6 +87,7 @@ export async function verify(output,origin,{seo=true}={}) {
 }
 if(process.argv[1]&&resolve(process.argv[1])===fileURLToPath(import.meta.url)) {
   const report=await verify(resolve(process.argv[2]??join(root,'apps/landing/dist')),process.env.PREVIEW_ORIGIN??'https://caleonis-receptionist-v1-review.willgosse225.chatgpt.site');
+  await mkdir(join(root,'.tmp/p1-reprise'),{recursive:true});
   await writeFile(join(root,'.tmp/p1-reprise/link-contract.json'),JSON.stringify(report,null,2));
   console.log(JSON.stringify({...report,externalTargets:report.externalTargets.length},null,2));
   if(report.failures.length)process.exitCode=1;

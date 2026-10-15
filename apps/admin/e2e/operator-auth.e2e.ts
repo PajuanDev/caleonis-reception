@@ -178,12 +178,21 @@ async function verifyVoiceOnlyMessages(page: Page, businessId: string, testInfo:
     for (const viewport of [{ width: 1440, height: 1000 }, { width: 390, height: 844 }]) {
       await page.setViewportSize(viewport);
       for (const [screen, path] of [["home", "/"], ["calls", "/calls"], ["analytics", "/analytics"]] as const) {
+        const dataPath = screen === "home" ? "/api/dashboard" : screen === "calls" ? "/api/calls" : "/api/analytics";
+        const loaded = page.waitForResponse(response => new URL(response.url()).pathname === dataPath && response.request().method() === "GET");
         await page.goto(`${path}?lng=fr`);
+        expect((await loaded).ok()).toBe(true);
         await expect(page.locator("html")).toHaveAttribute("lang", "fr");
-        await expect(page.locator("main")).toBeVisible();
-        await expect(page.locator("main")).not.toContainText("Application error");
+        const content = page.locator("#dashboard-main-content");
+        await expect(content).toBeVisible();
+        await expect(content.getByRole("heading", { name: screen === "home" ? "Accueil" : screen === "calls" ? "Appels" : "Analytique", exact: true })).toBeVisible();
+        await expect(content).not.toContainText("Application error");
+        // A mounted shell is not a finished screen. Wait for data and the lazy
+        // charts before keeping documentation evidence from this test tenant.
+        await expect(page.locator('[data-slot="skeleton"]')).toHaveCount(0, { timeout: 30_000 });
+        if (screen !== "calls") await expect(content.locator(".recharts-surface").first()).toBeVisible();
         const screenshot = testInfo.outputPath(`p1-${screen}-fr-${viewport.width}.png`);
-        await page.screenshot({ path: screenshot, fullPage: true });
+        await page.screenshot({ path: screenshot, fullPage: true, animations: "disabled" });
         await testInfo.attach(`${screen} FR ${viewport.width} — espace de test isolé`, { path: screenshot, contentType: "image/png" });
       }
     }
