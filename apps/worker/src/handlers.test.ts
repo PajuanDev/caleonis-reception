@@ -5,7 +5,12 @@ import { vi } from "vitest";
 
 import type { JobEnvelope } from "@lobbystack/contracts";
 import { claimAppointmentChangeOtp, claimBillingCheckoutRequest, claimNotificationDelivery, countPublishableOutboxMessages, deleteCallRecording, deleteCallRecordingForRetention, deleteSentProductEventsBefore, expireProspectDemos, generateAffiliatePayoutRun, loadAppointmentChangeOtpTarget, loadBillingCheckoutRequest, loadBillingUsageEvent, loadPendingProductEvents, markAppointmentChangeOtpSent, markBillingCheckoutCreated, markBillingCheckoutFailed, markBillingUsageSynced, markNotificationSent, loadLiveCallForPricing, recordCallProviderPricing, recordProductEvent, recordSmsProviderPricing, reconcileBillingProviderEvent, releaseNotificationDelivery, resolveNotificationDelivery, runPrivacyRetentionSweep } from "@lobbystack/domain";
-import { claimOperatorNotificationDelivery, loadOperatorNotificationDelivery, markOperatorNotificationSent, queueDailyOperatorSummaries } from "@lobbystack/domain";
+import { claimOperatorNotificationDelivery, loadOperatorNotificationDelivery, markFeedbackEmailFailed, markFeedbackEmailSent, markOperatorNotificationSent, queueDailyOperatorSummaries, releaseOperatorNotificationDelivery } from "@lobbystack/domain";
+import { ResendEmailDeliveryError, ResendEmailProvider } from "@lobbystack/providers";
+import { UnrecoverableError } from "bullmq";
+import { redactJobError } from "./redactJobError";
+import { EmailDeliveryClaimReleaseError, EmailDeliveryClaimStateError, EmailDeliveryReceiptPersistenceError } from "./emailDeliveryReceipt";
+import { loadNotificationDeliveryClaimState } from "@lobbystack/domain";
 import { cancelRetiredPhoneVerificationSend, queueOnboardingFollowupEmail } from "@lobbystack/domain";
 import { claimNumberProvisioning, completeNumberProvisioning, failNumberProvisioning } from "@lobbystack/domain";
 
@@ -35,7 +40,10 @@ vi.mock("@lobbystack/domain", async (importOriginal) => {
     deleteCallRecordingForRetention: vi.fn(),
     deleteSentProductEventsBefore: vi.fn(),
     loadOperatorNotificationDelivery: vi.fn(),
+    loadNotificationDeliveryClaimState: vi.fn(),
     markOperatorNotificationSent: vi.fn(),
+    markFeedbackEmailSent: vi.fn(),
+    markFeedbackEmailFailed: vi.fn(),
     queueDailyOperatorSummaries: vi.fn(),
     completeNumberProvisioning: vi.fn(),
     failNumberProvisioning: vi.fn(),
@@ -99,6 +107,114 @@ function pricingJob(type: "sms.syncPrice" | "call.syncPrice", payload: Record<st
 }
 
 describe("worker handlers", () => {
+  it.each(["operator", "appointment"] as const)("stops a stalled %s email with an unproven SQL claim before any POST or ACK", async kind => {
+    const request = vi.fn();
+    const email = new ResendEmailProvider({ apiKey: "fixture-key", from: "service@example.test" }, request);
+    const deliveryId = randomUUID();
+    const job = { ...notificationJob(kind === "operator" ? { operatorDeliveryId: deliveryId } : { notificationId: deliveryId }), outboxId: randomUUID(), outboxVersion: 0 };
+    if (kind === "operator") vi.mocked(claimOperatorNotificationDelivery).mockResolvedValueOnce(false);
+    else vi.mocked(claimNotificationDelivery).mockResolvedValueOnce(false);
+    for (const state of [{ channel: "email", status: "processing", providerMessageId: null }, null]) {
+      vi.mocked(loadNotificationDeliveryClaimState).mockResolvedValueOnce(state);
+      const acknowledge = vi.fn();
+      await handleJob(job, { domain: { db: undefined as never }, email }, { queuedAtMs: Date.now() - 60_000 }).then(acknowledge, error => {
+        expect(error).toBeInstanceOf(EmailDeliveryClaimStateError);
+        expect(redactJobError(error)).toBeInstanceOf(UnrecoverableError);
+      });
+      expect(acknowledge).not.toHaveBeenCalled();
+    }
+    expect(request).not.toHaveBeenCalled();
+    expect(releaseOperatorNotificationDelivery).not.toHaveBeenCalled();
+    expect(releaseNotificationDelivery).not.toHaveBeenCalled();
+  });
+
+  it.each(["operator", "appointment"] as const)("keeps proven sent/skipped %s emails and SMS claim outcomes unchanged", async kind => {
+    const request = vi.fn();
+    const email = new ResendEmailProvider({ apiKey: "fixture-key", from: "service@example.test" }, request);
+    const deliveryId = randomUUID();
+    const job = notificationJob(kind === "operator" ? { operatorDeliveryId: deliveryId } : { notificationId: deliveryId });
+    if (kind === "operator") vi.mocked(claimOperatorNotificationDelivery).mockResolvedValue(false);
+    else vi.mocked(claimNotificationDelivery).mockResolvedValue(false);
+    for (const state of [{ channel: "email", status: "sent", providerMessageId: "49a3999c-0ce1-4ea6-ab68-afcd6dc2e794" }, { channel: "email", status: "skipped", providerMessageId: null }, { channel: "sms", status: "processing", providerMessageId: null }]) {
+      vi.mocked(loadNotificationDeliveryClaimState).mockResolvedValueOnce(state);
+      await expect(handleJob(job, { domain: { db: undefined as never }, email })).resolves.toEqual({ status: "skipped", entityId: deliveryId });
+    }
+    expect(request).not.toHaveBeenCalled();
+    const reads = vi.mocked(loadNotificationDeliveryClaimState).mock.calls.length;
+    await expect(handleJob(job, { domain: { db: undefined as never }, email: { sendTemplate: vi.fn() } })).resolves.toEqual({ status: "skipped", entityId: deliveryId });
+    expect(loadNotificationDeliveryClaimState).toHaveBeenCalledTimes(reads);
+  });
+
+  it("blocks a stalled existing outbox email after 24 hours before a second POST", async () => {
+    const request = vi.fn();
+    const email = new ResendEmailProvider({ apiKey: "fixture-key", from: "service@example.test" }, request);
+    const job = { jobId: randomUUID(), outboxId: randomUUID(), outboxVersion: 0, businessId: null, type: "email.send" as const, queue: "default" as const, payload: { template: "operator_alert", to: "owner@example.test", variables: {} }, trace: {}, idempotencyKey: "stalled-outbox-accepted-previously", scheduled: false };
+    // BullMQ retains the original job.timestamp when a stalled job returns to
+    // waiting, even when the existing DB start receipt can be claimed again.
+    const error = await handleJob(job, { domain: { db: undefined as never }, email }, { queuedAtMs: Date.now() - 25 * 60 * 60_000 }).catch(value => value);
+    expect(error).toMatchObject({ reason: "idempotency_window_expired", retryable: false });
+    expect(redactJobError(error)).toBeInstanceOf(UnrecoverableError);
+    expect(request).not.toHaveBeenCalled();
+  });
+
+  it.each(["feedback", "operator", "notification"])("stops after a valid receipt when %s persistence fails", async route => {
+    const businessId = randomUUID(), deliveryId = randomUUID();
+    const receipt = "49a3999c-0ce1-4ea6-ab68-afcd6dc2e794";
+    const sendTemplate = vi.fn().mockResolvedValue({ messageId: receipt });
+    const domain = { db: undefined as never };
+    let job: JobEnvelope;
+    if (route === "feedback") {
+      vi.mocked(markFeedbackEmailSent).mockRejectedValueOnce(new Error("private DB failure"));
+      job = { jobId: randomUUID(), type: "email.send", queue: "default", businessId, payload: { template: "feedback_submission", feedbackSubmissionId: deliveryId, to: "owner@example.test", variables: {} }, trace: {}, idempotencyKey: "feedback-fixture", scheduled: false };
+    } else if (route === "operator") {
+      vi.mocked(claimOperatorNotificationDelivery).mockResolvedValueOnce(true);
+      vi.mocked(loadOperatorNotificationDelivery).mockResolvedValueOnce({ id: deliveryId, businessId, userId: randomUUID(), eventKind: "voiceMessage", eventKey: "receipt-fixture", channel: "email", status: "processing", destination: "owner@example.test", sender: null, subject: "Test", body: "Fixture", providerMessageId: null, scheduledFor: new Date(), sentAt: null, contentExpiresAt: new Date(), lastError: null, createdAt: new Date(), updatedAt: new Date() });
+      vi.mocked(markOperatorNotificationSent).mockRejectedValueOnce(new Error("private DB failure"));
+      job = { ...notificationJob({ operatorDeliveryId: deliveryId }), businessId };
+    } else {
+      vi.mocked(claimNotificationDelivery).mockResolvedValueOnce(true);
+      vi.mocked(resolveNotificationDelivery).mockResolvedValueOnce({ kind: "ready", delivery: { notificationId: deliveryId, businessId, channel: "email", kind: "booking_confirmation", relatedId: randomUUID(), to: "owner@example.test", subject: "Test", body: "Fixture" } });
+      vi.mocked(markNotificationSent).mockRejectedValueOnce(new Error("private DB failure"));
+      job = { ...notificationJob({ notificationId: deliveryId }), businessId };
+    }
+    const error = await handleJob(job, { domain, email: { sendTemplate } }, { queuedAtMs: Date.now() }).catch(value => value);
+    expect(error).toBeInstanceOf(EmailDeliveryReceiptPersistenceError);
+    expect((error as Error).message).toBe(`EMAIL_DELIVERY_RECEIPT_NOT_PERSISTED:${receipt}`);
+    expect(redactJobError(error)).toBeInstanceOf(UnrecoverableError);
+    expect(sendTemplate).toHaveBeenCalledOnce();
+    expect(releaseOperatorNotificationDelivery).not.toHaveBeenCalled();
+    expect(releaseNotificationDelivery).not.toHaveBeenCalled();
+    expect(markFeedbackEmailFailed).not.toHaveBeenCalled();
+  });
+
+  it.each(["operator", "notification"].flatMap(route => ["uncertain", "rate_limited"].map(reason => ({ route, reason }))))("handles $reason when $route cleanup also fails", async ({ route, reason }) => {
+    const businessId = randomUUID(), deliveryId = randomUUID();
+    const uncertain = new ResendEmailDeliveryError(reason === "rate_limited" ? "rate_limited" : "transport_uncertain");
+    const sendTemplate = vi.fn().mockRejectedValueOnce(uncertain);
+    let job: JobEnvelope;
+    if (route === "operator") {
+      vi.mocked(claimOperatorNotificationDelivery).mockResolvedValueOnce(true);
+      vi.mocked(loadOperatorNotificationDelivery).mockResolvedValueOnce({ id: deliveryId, businessId, userId: randomUUID(), eventKind: "voiceMessage", eventKey: "cleanup-fixture", channel: "email", status: "processing", destination: "owner@example.test", sender: null, subject: "Test", body: "Fixture", providerMessageId: null, scheduledFor: new Date(), sentAt: null, contentExpiresAt: new Date(), lastError: null, createdAt: new Date(), updatedAt: new Date() });
+      vi.mocked(releaseOperatorNotificationDelivery).mockRejectedValueOnce(new Error("DB cleanup failure"));
+      job = { ...notificationJob({ operatorDeliveryId: deliveryId }), businessId };
+    } else {
+      vi.mocked(claimNotificationDelivery).mockResolvedValueOnce(true);
+      vi.mocked(resolveNotificationDelivery).mockResolvedValueOnce({ kind: "ready", delivery: { notificationId: deliveryId, businessId, channel: "email", kind: "booking_confirmation", relatedId: randomUUID(), to: "owner@example.test", subject: "Test", body: "Fixture" } });
+      vi.mocked(releaseNotificationDelivery).mockRejectedValueOnce(new Error("DB cleanup failure"));
+      job = { ...notificationJob({ notificationId: deliveryId }), businessId };
+    }
+    const error = await handleJob(job, { domain: { db: undefined as never }, email: { sendTemplate } }, { queuedAtMs: Date.now() }).catch(value => value);
+    if (reason === "rate_limited") expect(error).toBeInstanceOf(EmailDeliveryClaimReleaseError);
+    else expect(error).toBe(uncertain);
+    expect(redactJobError(error)).toBeInstanceOf(UnrecoverableError);
+    expect(sendTemplate).toHaveBeenCalledOnce();
+  });
+  it("returns the provider receipt from a real email job to durable queue results", async () => {
+    const sendTemplate = vi.fn().mockResolvedValue({ messageId: "49a3999c-0ce1-4ea6-ab68-afcd6dc2e794" });
+    const job = { jobId: randomUUID(), businessId: null, type: "email.send" as const, queue: "default" as const, payload: { template: "operator_alert", to: "owner@example.test", subject: "Test", variables: { message: "Fixture" } }, trace: {}, idempotencyKey: "fixture-email-idempotency", scheduled: false };
+    await expect(handleJob(job, { domain: { db: undefined as never }, email: { sendTemplate } })).resolves.toEqual({ status: "completed", entityId: "49a3999c-0ce1-4ea6-ab68-afcd6dc2e794" });
+    expect(sendTemplate).toHaveBeenCalledWith(expect.objectContaining({ idempotencyKey: job.idempotencyKey }));
+  });
   it.each(["verify_email", "password_reset", "existing_account"])("fails %s delivery when SMTP is missing", async template => {
     await expect(handleJob({ jobId: randomUUID(), businessId: null, type: "email.send", queue: "default", payload: { template }, trace: {}, idempotencyKey: randomUUID(), scheduled: false }, { domain: { db: undefined as never } })).rejects.toThrow("SMTP configuration");
   });
@@ -599,6 +715,7 @@ describe("worker handlers", () => {
     vi.mocked(claimOperatorNotificationDelivery).mockResolvedValue(true);
     vi.mocked(loadOperatorNotificationDelivery).mockResolvedValue({ id: deliveryId, businessId, userId: randomUUID(), eventKind: "voiceMessage", eventKey: "voice:1", channel: "email", status: "processing", destination: "operator@example.test", sender: null, subject: "New message", body: "A caller left a message.", providerMessageId: null, scheduledFor: new Date(), sentAt: null, contentExpiresAt: new Date(), lastError: null, createdAt: new Date(), updatedAt: new Date() });
     const sendTemplate = vi.fn().mockResolvedValue({ messageId: "email-123" });
+    vi.mocked(markOperatorNotificationSent).mockResolvedValueOnce(true);
 
     const result = await handleJob({ ...notificationJob({ operatorDeliveryId: deliveryId }), businessId }, { domain, email: { sendTemplate } });
 

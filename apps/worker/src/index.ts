@@ -5,7 +5,6 @@ import type { OnboardingFollowupSender } from "@lobbystack/domain";
 import { createQueue, createRedisConnection, createWorkerOptions, enqueueJob, isKnownJobType, jobQueues, type JobEnvelope, type JobQueue } from "@lobbystack/jobs";
 import { createEmbeddingProvider } from "@lobbystack/providers/ai/embeddingProvider";
 import { FirecrawlProvider } from "@lobbystack/providers/crawling/firecrawl";
-import { SmtpEmailProvider } from "@lobbystack/providers/email/smtp";
 import { GoogleCalendarProvider } from "@lobbystack/providers/google/calendar";
 import { PolarBillingProvider } from "@lobbystack/providers/polar/polarBilling";
 import { createStorageProvider } from "@lobbystack/providers/storage/provider";
@@ -22,25 +21,10 @@ import { recoverOutboxDeliveries } from "./outboxRecovery";
 import { startPilotBackupScheduler } from "./pilotBackup";
 import type { BackupHealthState } from "./backupHealth";
 import { getWorkerStartupMode } from "./maintenance";
+import { createEmailProvider } from "./emailProvider";
+import { EmailDeliveryReceiptPersistenceError } from "./emailDeliveryReceipt";
 import { configureSchedulers } from "./scheduler";
 import { getWorkerSnapshotCache } from "./snapshot-cache";
-
-function createEmailProvider(): SmtpEmailProvider | undefined {
-  const host = process.env.SMTP_HOST;
-  if (!host) {
-    console.warn("SMTP_HOST is missing. Authentication email jobs will fail until email delivery is configured.");
-    return undefined;
-  }
-  return new SmtpEmailProvider({
-    host,
-    port: Number(process.env.SMTP_PORT ?? 587),
-    secure: process.env.SMTP_SECURE === "true",
-    username: process.env.SMTP_USERNAME ?? "",
-    password: process.env.SMTP_PASSWORD ?? "",
-    from: process.env.EMAIL_FROM ?? "LobbyStack <no-reply@localhost>",
-    ...(process.env.EMAIL_REPLY_TO ? { replyTo: process.env.EMAIL_REPLY_TO } : {}),
-  });
-}
 
 function createOnboardingFollowupSender(): OnboardingFollowupSender | undefined {
   const from = process.env.ONBOARDING_FOLLOWUP_FROM?.trim();
@@ -218,7 +202,7 @@ async function main(): Promise<void> {
         });
         if (job.data.outboxId) {
           try { await completeOutboxExecution(dispatcherDatabase.db, job.data.outboxId, job.data.idempotencyKey, job.data.outboxVersion); }
-          catch { throw new UnrecoverableError("OUTBOX_ACKNOWLEDGEMENT_UNCERTAIN_REQUIRES_REVIEW"); }
+          catch { throw new UnrecoverableError(job.data.type === "email.send" && result.status === "completed" && result.entityId ? new EmailDeliveryReceiptPersistenceError(result.entityId).message : "OUTBOX_ACKNOWLEDGEMENT_UNCERTAIN_REQUIRES_REVIEW"); }
         }
         return result;
       } catch (error) {
