@@ -1,0 +1,17 @@
+# Private backup freshness monitor — prepared only
+
+This standalone operational image reads only the existing worker's private `/health/backup` endpoint and, after a separate activation decision, sends incident/recovery emails through an existing Resend Sending-key reference. It has no database, storage, Railway API, OpenAI, Twilio or Google access. No service, volume, email or image publication is performed by this validation branch.
+
+The public code contains no pilot owner's personal email. A reviewed deployment setting `BACKUP_MONITOR_OWNER_EMAIL` supplies the already authorized second recipient; the first is the public operational address. A durable ledger freezes the configured recipient set and refuses a changed set. Tests use a synthetic owner address.
+
+`monitor.py` defaults to a no-network plan. Its Linux production cycle requires the exact project/environment, fixed private URL, armed flag, real mounted `/state` volume and a fresh-only approved baseline. PID1 `supervise.py` prepares only the dedicated volume paths as root, drops to UID/GID10001 before network activity, and bounds/reaps each cycle. Run one replica, restart NEVER, hourly cron, 1vCPU and256MiB limits. The Dockerfile pins the official Python image digest and installs no Python packages.
+
+The journal persists an outbox before POST and an independent ACK for each recipient only after HTTP2xx plus a provider UUID. Payload and idempotency key never change on retry. Any unacknowledged attempt stops automatic retry at23h from its first attempt; operator reconciliation is then required. Recovery cannot pass an unacknowledged incident for the same recipient. Corrupt/missing state is never silently reset. Interrupted atomic writes are retained24h and bounded to prevent unbounded volume growth.
+
+The workflow builds the isolated image, runs27 offline tests, verifies actual Linux mounted-volume ownership/UID/cgroup/resource limits and journal persistence across container restart with networking disabled, then scans the image with the repository's existing Trivy policy: fixable CRITICAL vulnerabilities fail. It neither pushes an image nor changes production. A successful scan is not a claim of zero vulnerabilities.
+
+The signal covers worker-reported backup freshness/state at a26h threshold, including unreachable/inconsistent probes. It does not independently inventory S3, verify the512MiB backup cap, test restoration, or cover a global Railway outage. After future deployment, actual private-network access and explicit TEST email receipt still require qualification.
+
+Public-rate estimate on15October2026: an hourly60s run capped at1vCPU/256MiB costs about0.375USD compute per30days; with0.5GB actually used volume, about0.45USD/month before egress/tax. The paid plan, available credit, actual volume capacity/usage, caps and existing backup spending remain to verify. No upgrade is requested or authorized here. See `monthly-cost.py`, [Railway pricing](https://docs.railway.com/pricing/plans), [volumes](https://docs.railway.com/volumes/reference), [cron](https://docs.railway.com/cron-jobs), and [Resend idempotency](https://resend.com/docs/dashboard/emails/idempotency-keys).
+
+Cutover must run the local read-only detector alone or suspend its sending heartbeat. Do not use the local alert wrapper without its send flag as an observation mode: it would continue accumulating LIVE pending events. Preserve old ACKs and reconcile before any reactivation of the old sender.

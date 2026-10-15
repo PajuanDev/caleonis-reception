@@ -1,0 +1,133 @@
+{
+  "workerSha": "6119089901042c92e21a72ac6955a9a89193637a",
+  "hashScope": "exact git blob bytes; checkout health.ts uses CRLF and differs",
+  "healthSourceSha256": "b0eb310f1f1f94d52aeb1c2236d972b2c27891ff4ae9eff2edb55d027a19f68b",
+  "backupHealthSourceSha256": "76cd9f7a346756db6d47ee5728934449b77d15aa9bb07df4804841d7f93e6dc9",
+  "worktreeHealthSourceSha256": "092d5e0d1b31ba96b6e69df9eb60536ac816ac3e12a8c2757cc2032ca94e3bfb",
+  "generatedFromActualTypeScriptFunction": true,
+  "networkCalls": 0,
+  "observedAtUtc": "2026-10-15T12:00:00.000Z",
+  "privateUrl": "http://worker.railway.internal:3002/health/backup",
+  "fixtures": [
+    {
+      "name": "fresh",
+      "httpStatus": 200,
+      "body": {
+        "ok": true,
+        "status": "fresh",
+        "enabled": true,
+        "running": false,
+        "lastSuccessAt": "2026-10-15T11:59:00.000Z",
+        "ageSeconds": 60,
+        "lastCheckedAt": "2026-10-15T12:00:00.000Z",
+        "failureCode": null
+      },
+      "expectedStatus": "fresh"
+    },
+    {
+      "name": "boundary_26h",
+      "httpStatus": 200,
+      "body": {
+        "ok": true,
+        "status": "fresh",
+        "enabled": true,
+        "running": false,
+        "lastSuccessAt": "2026-10-14T10:00:00.000Z",
+        "ageSeconds": 93600,
+        "lastCheckedAt": "2026-10-15T12:00:00.000Z",
+        "failureCode": null
+      },
+      "expectedStatus": "fresh"
+    },
+    {
+      "name": "stale_26h_plus_1s",
+      "httpStatus": 503,
+      "body": {
+        "ok": false,
+        "status": "stale",
+        "enabled": true,
+        "running": false,
+        "lastSuccessAt": "2026-10-14T09:59:59.000Z",
+        "ageSeconds": 93601,
+        "lastCheckedAt": "2026-10-15T12:00:00.000Z",
+        "failureCode": null
+      },
+      "expectedStatus": "stale"
+    },
+    {
+      "name": "stale_27h",
+      "httpStatus": 503,
+      "body": {
+        "ok": false,
+        "status": "stale",
+        "enabled": true,
+        "running": false,
+        "lastSuccessAt": "2026-10-14T09:00:00.000Z",
+        "ageSeconds": 97200,
+        "lastCheckedAt": "2026-10-15T12:00:00.000Z",
+        "failureCode": null
+      },
+      "expectedStatus": "stale"
+    },
+    {
+      "name": "failed",
+      "httpStatus": 503,
+      "body": {
+        "ok": false,
+        "status": "failed",
+        "enabled": true,
+        "running": false,
+        "lastSuccessAt": "2026-10-15T11:59:00.000Z",
+        "ageSeconds": 60,
+        "lastCheckedAt": "2026-10-15T12:00:00.000Z",
+        "failureCode": "BACKUP_STORAGE_BUDGET_REACHED"
+      },
+      "expectedStatus": "failed"
+    },
+    {
+      "name": "disabled",
+      "httpStatus": 503,
+      "body": {
+        "ok": false,
+        "status": "disabled",
+        "enabled": false,
+        "running": false,
+        "lastSuccessAt": "2026-10-15T11:59:00.000Z",
+        "ageSeconds": 60,
+        "lastCheckedAt": "2026-10-15T12:00:00.000Z",
+        "failureCode": null
+      },
+      "expectedStatus": "disabled"
+    },
+    {
+      "name": "never_succeeded",
+      "httpStatus": 503,
+      "body": {
+        "ok": false,
+        "status": "never_succeeded",
+        "enabled": true,
+        "running": false,
+        "lastSuccessAt": null,
+        "ageSeconds": null,
+        "lastCheckedAt": "2026-10-15T12:00:00.000Z",
+        "failureCode": null
+      },
+      "expectedStatus": "never_succeeded"
+    },
+    {
+      "name": "missing_state",
+      "httpStatus": 503,
+      "body": {
+        "ok": false,
+        "status": "disabled",
+        "enabled": false,
+        "running": false,
+        "lastSuccessAt": null,
+        "ageSeconds": null,
+        "lastCheckedAt": null,
+        "failureCode": null
+      },
+      "expectedStatus": "disabled"
+    }
+  ]
+}

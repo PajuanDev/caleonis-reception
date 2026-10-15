@@ -1,0 +1,9 @@
+# Prepared only: no service exists and this file has not been deployed.
+[build]
+builder = "DOCKERFILE"
+dockerfilePath = "Dockerfile"
+
+[deploy]
+cronSchedule = "17 * * * *"
+restartPolicyType = "NEVER"
+numReplicas = 1

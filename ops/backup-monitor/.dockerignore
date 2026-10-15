@@ -1,0 +1,6 @@
+**
+!Dockerfile
+!monitor.py
+!supervise.py
+!test_monitor.py
+!source-health-fixtures.json

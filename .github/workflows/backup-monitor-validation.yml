@@ -1,0 +1,83 @@
+name: Backup monitor isolated Linux validation
+
+on:
+  push:
+    branches: [codex/backup-monitor-linux-2026-10-15]
+    paths:
+      - ops/backup-monitor/**
+      - .github/workflows/backup-monitor-validation.yml
+
+permissions:
+  contents: read
+
+concurrency:
+  group: backup-monitor-validation-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  isolated-monitor:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Build standalone image and run offline Linux tests
+        run: |
+          docker build --tag caleonis/backup-monitor:validation ops/backup-monitor
+          docker image inspect --format '{{.Id}}' caleonis/backup-monitor:validation
+      - name: Qualify mounted volume, dropped UID, limits and restart without network
+        shell: bash
+        run: |
+          set -euo pipefail
+          volume="backup-monitor-validation-${GITHUB_RUN_ID}"
+          docker volume create "$volume"
+          trap 'docker volume rm "$volume" >/dev/null' EXIT
+          smoke="$PWD/ops/backup-monitor/linux_smoke.py"
+          for phase in seed resume; do
+            user=()
+            if [[ "$phase" == resume ]]; then user=(--user 10001:10001); fi
+            timeout 60s docker run --rm --network none --memory 256m --cpus 1 "${user[@]}" \
+              --mount "type=volume,source=$volume,target=/state" \
+              --mount "type=bind,source=$smoke,target=/qualification.py,readonly" \
+              --entrypoint python caleonis/backup-monitor:validation -I -B /qualification.py "$phase"
+          done
+          for uid in 0:0 10001:10001; do
+            timeout 60s docker run --rm --network none --memory 256m --cpus 1 --user "$uid" \
+              --mount "type=bind,source=$smoke,target=/qualification.py,readonly" \
+              --entrypoint python caleonis/backup-monitor:validation -I -B /qualification.py missing-mount
+          done
+          set +e
+          output=$(timeout 65s docker run --rm --network none --memory 256m --cpus 1 \
+            --mount "type=volume,source=$volume,target=/state" caleonis/backup-monitor:validation)
+          code=$?
+          set -e
+          printf '%s\n' "$output"
+          test "$code" -eq 3
+          printf '%s\n' "$output" | python -c 'import sys,json; assert json.load(sys.stdin)["failureCode"] == "PROJECT_ENVIRONMENT_BINDING_REQUIRED"'
+      - name: Scan fixable CRITICAL vulnerabilities using the existing repository policy
+        uses: aquasecurity/trivy-action@v0.36.0
+        with:
+          image-ref: caleonis/backup-monitor:validation
+          scanners: vuln
+          vuln-type: os,library
+          severity: CRITICAL
+          ignore-unfixed: true
+          exit-code: "1"
+          format: json
+          output: backup-monitor-scan.json
+      - name: Summarize isolated evidence
+        if: always()
+        shell: bash
+        run: |
+          python - <<'PY'
+          import json, os
+          from pathlib import Path
+          report = Path('backup-monitor-scan.json')
+          data = json.loads(report.read_text()) if report.exists() else {}
+          findings = [v for r in data.get('Results', []) for v in r.get('Vulnerabilities', [])]
+          result = {'headSha': os.environ['GITHUB_SHA'], 'scanReportPresent': report.exists(), 'fixableCriticalFindings': len(findings), 'scanPolicy': 'CRITICAL; ignore-unfixed=true, same as runtime-images.yml', 'cloudCredentials': False, 'cloudResourcesCreated': 0, 'actualEmailsSent': 0, 'imagePublished': False}
+          print(json.dumps(result))
+          with open(os.environ['GITHUB_STEP_SUMMARY'], 'a') as stream:
+              stream.write('```json\n' + json.dumps(result, indent=2) + '\n```\n')
+          PY
