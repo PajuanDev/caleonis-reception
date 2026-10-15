@@ -1,31 +1,37 @@
 ---
-title: "Choose an integration"
-description: "Connect Google Calendar for bookings, and send events to your own tools with webhooks."
-sidebarTitle: "Integrations"
+title: "Choisir une intégration"
+description: "Connectez Google Calendar pour les réservations et envoyez des événements à vos propres outils avec des webhooks."
+sidebarTitle: "Intégrations"
 contentType: "Conceptual"
 ---
 
-The **Integrations** page connects LobbyStack to Google Calendar and sends events to your own tools with webhooks. To connect a CRM or Zapier, use webhooks and the [LobbyStack API](/api/overview).
+La page **Intégrations** connecte Caléonis Receptionist à Google Calendar et envoie des événements à vos propres outils avec des webhooks. Pour connecter un CRM ou Zapier, utilisez les webhooks et l'[API Caléonis Receptionist](/api/overview).
 
-Each integration guide explains what the connection does, what access it needs, and how to confirm it is working.
+Chaque guide d'intégration explique ce que fait la connexion, de quels accès elle a besoin et comment vérifier qu'elle fonctionne.
 
 <CardGroup cols={1}>
-  <Card title="Connect Google Calendar" icon="calendar" href="/integrations/google-calendar">
-    Let LobbyStack read busy time and create appointment events on a selected calendar.
+  <Card title="Connecter Google Calendar" icon="calendar" href="/integrations/google-calendar">
+    Permettez à Caléonis Receptionist de lire vos plages occupées et de créer des rendez-vous dans le calendrier choisi.
   </Card>
-  <Card title="Set up webhooks" icon="webhook" href="/integrations/webhooks">
-    Send calls, bookings, messages and new contacts to your own tools as they happen.
+  <Card title="Configurer les webhooks" icon="webhook" href="/integrations/webhooks">
+    Envoyez les appels, les réservations, les messages et les nouveaux contacts à vos propres outils dès qu'ils arrivent.
   </Card>
 </CardGroup>
 
 ## Google Calendar
 
-Connect Google Calendar when you want LobbyStack to help callers book appointments. After you authorize Google, choose the calendar that should receive bookings.
+Connectez Google Calendar si vous voulez que Caléonis Receptionist aide les appelants à prendre rendez-vous. Après avoir autorisé Google, choisissez le calendrier qui doit recevoir les réservations.
 
 ## Webhooks
 
-Add a webhook when another tool should react to LobbyStack, for example to log each finished call in your CRM.
+Ajoutez un webhook quand un autre outil doit réagir à Caléonis Receptionist, par exemple pour consigner chaque appel terminé dans votre CRM.
 
-## Where to find it
+## Où la trouver
 
-Open **Manage** > **Integrations** from the dashboard sidebar.
+Ouvrez **Gestion** > **Intégrations** dans la barre latérale du tableau de bord.
+
+{/* Caléonis qualification */}
+
+## Disponibilité de chaque intégration
+
+La réservation Google a été vérifiée dans un agenda de test ; la durabilité OAuth nécessite son propre contrôle. Les webhooks et l'API doivent être ouverts et testés pour votre intégration. Aucun SMS n'est disponible sur la ligne française Voice-only. Un adaptateur présent ne prouve pas une livraison à un tiers.

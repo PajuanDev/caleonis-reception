@@ -15,7 +15,8 @@ export function SolutionCta() {
           Book more appointments from the calls you already get
         </h2>
         <p className="section-intro mx-auto max-w-lg">
-          Try LobbyStack with included voice minutes, set your scheduling rules, and let callers book while they are ready to act.
+          Try Caléonis Receptionist with included voice minutes, set your
+          scheduling rules, and let callers book while they are ready to act.
         </p>
         <div className="mt-8 flex flex-wrap items-center justify-center gap-4">
           <a
@@ -25,7 +26,7 @@ export function SolutionCta() {
               "h-11 rounded-full px-7 text-sm"
             )}
           >
-            Try for free
+            Request a trial
             <ArrowRight className="ml-1 size-4" />
           </a>
           <a
@@ -36,7 +37,7 @@ export function SolutionCta() {
           </a>
         </div>
         <p className="mt-5 text-xs text-muted-foreground">
-          No credit card required. Cancel anytime.
+          Pilot access and terms require approval. No purchase in this review.
         </p>
       </div>
     </section>

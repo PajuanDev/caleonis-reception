@@ -1,0 +1,29 @@
+---
+title: "Préparer le renvoi d’appels"
+description: "Tester un renvoi réversible depuis votre ligne avec votre opérateur."
+---
+Le renvoi dirige les appels de votre ligne existante vers un numéro de réception attribué et qualifié. Il ne transfère pas la propriété du numéro.
+
+## Vérifications préalables
+
+1. Faites confirmer le numéro destinataire attribué à votre entreprise.
+2. Qualifiez un appel direct vers ce numéro.
+3. Demandez à votre opérateur les possibilités et coûts de renvoi.
+4. Choisissez le scénario : systématique, occupé ou absence de réponse.
+5. Préparez la procédure d’annulation du renvoi.
+
+Les codes dépendent de l’opérateur, du contrat et du téléphone. N’utilisez pas un code générique sans le vérifier auprès de votre opérateur.
+
+## Éviter une boucle
+
+Ne renvoyez pas la ligne de réception vers la ligne d’origine si celle-ci renvoie déjà vers la réception. Faites vérifier toute règle de transfert humain séparément.
+
+## Test avant bascule client
+
+Utilisez un créneau calme et un appel autorisé depuis une autre ligne. Vérifiez l’accueil, l’affichage de l’appelant lorsqu’il est transmis et la fiche dans **Appels**.
+
+Testez ensuite la désactivation du renvoi et le retour à votre accueil habituel. Conservez les étapes de retour arrière auprès de l’équipe.
+
+## Limites
+
+Le renvoi peut être facturé par votre opérateur. Il ne crée pas de SMS sur un numéro Voice-only. Portabilité, SIP/BYOC et transfert humain ne sont pas qualifiés par un simple test de renvoi.

@@ -1,6 +1,9 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest"
 
-import { COOKIE_CONSENT_STORAGE_KEY, createCookieConsent } from "@/lib/cookie-consent"
+import {
+  COOKIE_CONSENT_STORAGE_KEY,
+  createCookieConsent,
+} from "@/lib/cookie-consent"
 
 const posthogMock = {
   init: vi.fn(),
@@ -78,6 +81,22 @@ describe("consent state", () => {
 })
 
 describe("startup mode", () => {
+  it("does not initialize without the explicit enable flag and project key", async () => {
+    stubBrowser(null)
+    vi.stubEnv("PUBLIC_POSTHOG_ENABLED", "false")
+    vi.stubEnv("PUBLIC_POSTHOG_KEY", "")
+    await loadModule()
+    expect(posthogMock.init).not.toHaveBeenCalled()
+  })
+
+  it.each(["localhost", "127.0.0.1", "caleonis-review.willgosse225.chatgpt.site"])("never initializes on preview host %s even with a stale key", async (hostname) => {
+    stubBrowser(JSON.stringify(createCookieConsent(true)))
+    window.location.hostname = hostname
+    await loadModule()
+    expect(posthogMock.init).not.toHaveBeenCalled()
+    expect(posthogMock.startSessionRecording).not.toHaveBeenCalled()
+  })
+
   it("counts an undecided visitor without touching their device", async () => {
     stubBrowser(null)
     await loadModule()

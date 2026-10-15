@@ -28,18 +28,21 @@ const allText = (kind: LegalKind, locale: "en" | "fr") => {
 }
 
 describe("legal documents", () => {
-  it.each(kinds)("keeps the %s English and French versions in parity", (kind) => {
-    const { en, fr } = legalDocuments[kind]
+  it.each(kinds)(
+    "keeps the %s English and French versions in parity",
+    (kind) => {
+      const { en, fr } = legalDocuments[kind]
 
-    expect(fr.sections.map((section) => section.id)).toEqual(
-      en.sections.map((section) => section.id)
-    )
-    for (const [index, section] of en.sections.entries()) {
-      expect(fr.sections[index]!.blocks.map(shape)).toEqual(
-        section.blocks.map(shape)
+      expect(fr.sections.map((section) => section.id)).toEqual(
+        en.sections.map((section) => section.id)
       )
+      for (const [index, section] of en.sections.entries()) {
+        expect(fr.sections[index]!.blocks.map(shape)).toEqual(
+          section.blocks.map(shape)
+        )
+      }
     }
-  })
+  )
 
   it.each(kinds)("uses unique section anchors in %s", (kind) => {
     const ids = legalDocuments[kind].en.sections.map((section) => section.id)

@@ -1,8 +1,8 @@
 {
   "$schema": "https://mintlify.com/docs.json",
   "theme": "almond",
-  "name": "LobbyStack",
-  "description": "Help Center and developer documentation for LobbyStack.",
+  "name": "Caléonis Receptionist",
+  "description": "Documentation complète FR/EN : accueil, appels, messages, connaissances, agenda, API, MCP et installation indépendante.",
   "colors": {
     "primary": "#0B0B0D",
     "light": "#FFFFFF",
@@ -19,24 +19,19 @@
   "navbar": {
     "links": [
       {
-        "label": "Lobbystack.com",
-        "href": "https://lobbystack.com"
+        "label": "Caléonis Receptionist",
+        "href": "https://receptionist.caleonis.com/"
       },
       {
-        "label": "",
-        "icon": "github",
-        "href": "https://github.com/lobbystack/lobbystack"
-      },
-      {
-        "label": "Log in",
-        "href": "https://app.lobbystack.com/login"
+        "label": "Connexion",
+        "href": "https://receptionist.caleonis.com/login"
       }
     ],
     "primary": {
       "type": "button",
-      "label": "Try for free",
-      "name": "Try for free",
-      "href": "https://app.lobbystack.com/signup"
+      "label": "Demander un essai",
+      "name": "Demander un essai",
+      "href": "https://receptionist.caleonis.com/signup"
     }
   },
   "redirects": [
@@ -50,101 +45,381 @@
     }
   ],
   "navigation": {
-    "groups": [
+    "languages": [
       {
-        "group": "Get started",
-        "pages": [
-          "introduction",
-          "quickstart",
-          "getting-started/account-setup",
-          "getting-started/claim-your-number"
-        ]
-      },
-      {
-        "group": "General",
-        "pages": [
-          "dashboard/home",
-          "dashboard/calls",
-          "dashboard/messages",
-          "dashboard/contacts",
-          "dashboard/appointments"
-        ]
-      },
-      {
-        "group": "Agent",
-        "pages": [
-          "agent/overview",
+        "language": "fr",
+        "default": true,
+        "groups": [
           {
-            "group": "AI settings",
+            "group": "Premiers pas",
             "pages": [
-              "agent/ai-settings/overview",
-              "agent/ai-settings/appointment-changes"
-            ]
-          },
-          "agent/knowledge",
-          "agent/services",
-          "agent/rules"
-        ]
-      },
-      {
-        "group": "Manage",
-        "pages": [
-          "dashboard/analytics",
-          "integrations/overview",
-          "integrations/google-calendar",
-          "integrations/sms",
-          "integrations/webhooks",
-          {
-            "group": "Settings",
-            "pages": [
-              "settings/overview",
-              "settings/account",
-              "settings/team",
-              "settings/notifications",
-              "settings/phone-number",
-              "settings/widget"
+              "introduction",
+              "quickstart",
+              "getting-started/account-setup",
+              "getting-started/claim-your-number",
+              "getting-started/number-countries"
             ]
           },
           {
-            "group": "Billing",
+            "group": "Général",
             "pages": [
-              "billing/plans",
-              "billing/usage",
-              "billing/affiliate-program"
+              "dashboard/home",
+              "dashboard/calls",
+              "dashboard/messages",
+              "dashboard/contacts",
+              "dashboard/appointments"
+            ]
+          },
+          {
+            "group": "Agent",
+            "pages": [
+              "agent/overview",
+              {
+                "group": "Paramètres IA",
+                "pages": [
+                  "agent/ai-settings/overview",
+                  "agent/ai-settings/appointment-changes"
+                ]
+              },
+              "agent/knowledge",
+              "agent/services",
+              "agent/rules"
+            ]
+          },
+          {
+            "group": "Gestion",
+            "pages": [
+              "dashboard/analytics",
+              "integrations/overview",
+              "integrations/google-calendar",
+              "integrations/sms",
+              "integrations/webhooks",
+              {
+                "group": "Réglages",
+                "pages": [
+                  "settings/overview",
+                  "settings/account",
+                  "settings/team",
+                  "settings/notifications",
+                  "settings/phone-number",
+                  "settings/widget"
+                ]
+              },
+              {
+                "group": "Facturation",
+                "pages": [
+                  "billing/plans",
+                  "billing/usage",
+                  "billing/affiliate-program"
+                ]
+              }
+            ]
+          },
+          {
+            "group": "API",
+            "pages": [
+              "api/overview",
+              "api/authentication",
+              "api/requests",
+              "api/webhooks"
+            ]
+          },
+          {
+            "group": "Assistants IA",
+            "pages": [
+              "ai/mcp",
+              "ai/connect-claude",
+              "ai/connect-chatgpt",
+              "ai/connect-other-clients",
+              "ai/lobbystack-skill"
+            ]
+          },
+          {
+            "group": "Référence de l'API",
+            "pages": [
+              {
+                "group": "Business",
+                "pages": [
+                  "api-reference/business/check-an-api-key",
+                  "api-reference/business/get-the-business",
+                  "api-reference/business/update-the-business",
+                  "api-reference/business/list-services",
+                  "api-reference/business/list-staff"
+                ]
+              },
+              {
+                "group": "Calls",
+                "pages": [
+                  "api-reference/calls/list-calls",
+                  "api-reference/calls/get-a-call"
+                ]
+              },
+              {
+                "group": "Contacts",
+                "pages": [
+                  "api-reference/contacts/list-contacts",
+                  "api-reference/contacts/create-a-contact",
+                  "api-reference/contacts/get-a-contact",
+                  "api-reference/contacts/update-a-contact"
+                ]
+              },
+              {
+                "group": "Appointments",
+                "pages": [
+                  "api-reference/appointments/list-appointments",
+                  "api-reference/appointments/book-an-appointment",
+                  "api-reference/appointments/list-open-appointment-times",
+                  "api-reference/appointments/get-an-appointment",
+                  "api-reference/appointments/cancel-an-appointment",
+                  "api-reference/appointments/reschedule-an-appointment"
+                ]
+              },
+              {
+                "group": "Messages",
+                "pages": [
+                  "api-reference/messages/list-messages"
+                ]
+              },
+              {
+                "group": "Knowledge",
+                "pages": [
+                  "api-reference/knowledge/add-a-knowledge-entry"
+                ]
+              },
+              {
+                "group": "Webhooks",
+                "pages": [
+                  "api-reference/webhooks/list-webhook-endpoints",
+                  "api-reference/webhooks/create-a-webhook-endpoint",
+                  "api-reference/webhooks/get-a-webhook-endpoint",
+                  "api-reference/webhooks/update-a-webhook-endpoint",
+                  "api-reference/webhooks/delete-a-webhook-endpoint",
+                  "api-reference/webhooks/send-a-test-event"
+                ]
+              },
+              {
+                "group": "Événements",
+                "pages": [
+                  "api-reference/callcompleted",
+                  "api-reference/appointmentbooked",
+                  "api-reference/appointmentrescheduled",
+                  "api-reference/appointmentcancelled",
+                  "api-reference/messagetaken",
+                  "api-reference/contactcreated",
+                  "api-reference/webhooktest"
+                ]
+              }
+            ]
+          },
+          {
+            "group": "Auto-hébergement",
+            "pages": [
+              "self-hosting/overview",
+              "self-hosting/docker-compose",
+              "self-hosting/environment-variables",
+              "self-hosting/providers"
+            ]
+          },
+          {
+            "group": "Aide et confiance",
+            "pages": [
+              "support/availability",
+              "support/faq",
+              "support/troubleshooting",
+              "support/phone-forwarding",
+              "support/recordings",
+              "support/privacy",
+              "attributions"
             ]
           }
         ]
       },
       {
-        "group": "API",
-        "pages": [
-          "api/overview",
-          "api/authentication",
-          "api/requests",
-          "api/webhooks"
-        ]
-      },
-      {
-        "group": "AI assistants",
-        "pages": [
-          "ai/mcp",
-          "ai/connect-claude",
-          "ai/connect-chatgpt",
-          "ai/connect-other-clients",
-          "ai/lobbystack-skill"
-        ]
-      },
-      {
-        "group": "API reference",
-        "openapi": "api-reference/openapi.json"
-      },
-      {
-        "group": "Self-hosting",
-        "pages": [
-          "self-hosting/overview",
-          "self-hosting/docker-compose",
-          "self-hosting/environment-variables",
-          "self-hosting/providers"
+        "language": "en",
+        "groups": [
+          {
+            "group": "Get started",
+            "pages": [
+              "en/introduction",
+              "en/quickstart",
+              "en/getting-started/account-setup",
+              "en/getting-started/claim-your-number",
+              "en/getting-started/number-countries"
+            ]
+          },
+          {
+            "group": "General",
+            "pages": [
+              "en/dashboard/home",
+              "en/dashboard/calls",
+              "en/dashboard/messages",
+              "en/dashboard/contacts",
+              "en/dashboard/appointments"
+            ]
+          },
+          {
+            "group": "Agent",
+            "pages": [
+              "en/agent/overview",
+              {
+                "group": "AI settings",
+                "pages": [
+                  "en/agent/ai-settings/overview",
+                  "en/agent/ai-settings/appointment-changes"
+                ]
+              },
+              "en/agent/knowledge",
+              "en/agent/services",
+              "en/agent/rules"
+            ]
+          },
+          {
+            "group": "Manage",
+            "pages": [
+              "en/dashboard/analytics",
+              "en/integrations/overview",
+              "en/integrations/google-calendar",
+              "en/integrations/sms",
+              "en/integrations/webhooks",
+              {
+                "group": "Settings",
+                "pages": [
+                  "en/settings/overview",
+                  "en/settings/account",
+                  "en/settings/team",
+                  "en/settings/notifications",
+                  "en/settings/phone-number",
+                  "en/settings/widget"
+                ]
+              },
+              {
+                "group": "Billing",
+                "pages": [
+                  "en/billing/plans",
+                  "en/billing/usage",
+                  "en/billing/affiliate-program"
+                ]
+              }
+            ]
+          },
+          {
+            "group": "API",
+            "pages": [
+              "en/api/overview",
+              "en/api/authentication",
+              "en/api/requests",
+              "en/api/webhooks"
+            ]
+          },
+          {
+            "group": "AI assistants",
+            "pages": [
+              "en/ai/mcp",
+              "en/ai/connect-claude",
+              "en/ai/connect-chatgpt",
+              "en/ai/connect-other-clients",
+              "en/ai/lobbystack-skill"
+            ]
+          },
+          {
+            "group": "API reference",
+            "pages": [
+              {
+                "group": "Business",
+                "pages": [
+                  "en/api-reference/business/check-an-api-key",
+                  "en/api-reference/business/get-the-business",
+                  "en/api-reference/business/update-the-business",
+                  "en/api-reference/business/list-services",
+                  "en/api-reference/business/list-staff"
+                ]
+              },
+              {
+                "group": "Calls",
+                "pages": [
+                  "en/api-reference/calls/list-calls",
+                  "en/api-reference/calls/get-a-call"
+                ]
+              },
+              {
+                "group": "Contacts",
+                "pages": [
+                  "en/api-reference/contacts/list-contacts",
+                  "en/api-reference/contacts/create-a-contact",
+                  "en/api-reference/contacts/get-a-contact",
+                  "en/api-reference/contacts/update-a-contact"
+                ]
+              },
+              {
+                "group": "Appointments",
+                "pages": [
+                  "en/api-reference/appointments/list-appointments",
+                  "en/api-reference/appointments/book-an-appointment",
+                  "en/api-reference/appointments/list-open-appointment-times",
+                  "en/api-reference/appointments/get-an-appointment",
+                  "en/api-reference/appointments/cancel-an-appointment",
+                  "en/api-reference/appointments/reschedule-an-appointment"
+                ]
+              },
+              {
+                "group": "Messages",
+                "pages": [
+                  "en/api-reference/messages/list-messages"
+                ]
+              },
+              {
+                "group": "Knowledge",
+                "pages": [
+                  "en/api-reference/knowledge/add-a-knowledge-entry"
+                ]
+              },
+              {
+                "group": "Webhooks",
+                "pages": [
+                  "en/api-reference/webhooks/list-webhook-endpoints",
+                  "en/api-reference/webhooks/create-a-webhook-endpoint",
+                  "en/api-reference/webhooks/get-a-webhook-endpoint",
+                  "en/api-reference/webhooks/update-a-webhook-endpoint",
+                  "en/api-reference/webhooks/delete-a-webhook-endpoint",
+                  "en/api-reference/webhooks/send-a-test-event"
+                ]
+              },
+              {
+                "group": "Events",
+                "pages": [
+                  "en/api-reference/callcompleted",
+                  "en/api-reference/appointmentbooked",
+                  "en/api-reference/appointmentrescheduled",
+                  "en/api-reference/appointmentcancelled",
+                  "en/api-reference/messagetaken",
+                  "en/api-reference/contactcreated",
+                  "en/api-reference/webhooktest"
+                ]
+              }
+            ]
+          },
+          {
+            "group": "Self-hosting",
+            "pages": [
+              "en/self-hosting/overview",
+              "en/self-hosting/docker-compose",
+              "en/self-hosting/environment-variables",
+              "en/self-hosting/providers"
+            ]
+          },
+          {
+            "group": "Help and trust",
+            "pages": [
+              "en/support/availability",
+              "en/support/faq",
+              "en/support/troubleshooting",
+              "en/support/phone-forwarding",
+              "en/support/recordings",
+              "en/support/privacy",
+              "en/attributions",
+              "en/overview"
+            ]
+          }
         ]
       }
     ]

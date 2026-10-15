@@ -1,0 +1,249 @@
+---
+title: "Supprimer une destination webhook"
+description: "DELETE /api/v1/webhooks/{webhook_id} : paramètres, permissions et schémas complets."
+---
+
+`DELETE https://receptionist.caleonis.com/api/v1/webhooks/{webhook_id}`
+
+Cette fiche décrit le contrat du runtime Caléonis. Les identifiants, champs et descriptions techniques du schéma sont conservés pour éviter toute ambiguïté.
+
+## Authentification et permissions
+Envoyez `Authorization: Bearer <clé API>`. Permission exigée : `webhooks:manage`.
+
+<Warning>Cette opération produit un effet réel. Utilisez une entreprise de test autorisée ; aucun appel ne doit être exécuté pour simplement lire la référence.</Warning>
+
+## Paramètres
+| Champ | Emplacement | Type | Requis | Description |
+| --- | --- | --- | --- | --- |
+| `webhook_id` | path | string (uuid) | Oui | The webhook endpoint id. |
+
+## Réponses
+| HTTP | Description |
+| --- | --- |
+| `200` | OK |
+| `400` | The request is invalid (invalid_request). |
+| `401` | The API key is missing, invalid, or revoked (unauthorized). |
+| `403` | The API key lacks the webhooks:manage scope (insufficient_scope). |
+| `404` | Not found (not_found). |
+| `409` | The request conflicts with the current state. |
+| `429` | Too many requests (rate_limited). Wait for the Retry-After header's number of seconds. |
+
+Les réponses d’erreur utilisent `error.code`, `error.message` et parfois `error.details`. Respectez `Retry-After` et conservez la même clé d’idempotence et le même corps pour reprendre une création prise en charge.
+
+## Exemple HTTP
+
+```http
+DELETE /api/v1/webhooks/{webhook_id} HTTP/1.1
+Host: receptionist.caleonis.com
+Authorization: Bearer <clé conservée côté serveur>
+```
+
+## Contrat et schémas complets
+
+Le bloc conserve tous les champs, unions, formats, contraintes et réponses de cette opération. Les `$ref` se résolvent dans `components.schemas` fourni dans le même bloc.
+
+```json
+{
+  "method": "DELETE",
+  "path": "/api/v1/webhooks/{webhook_id}",
+  "operation": {
+    "operationId": "deleteWebhook",
+    "summary": "Delete a webhook endpoint",
+    "tags": [
+      "Webhooks"
+    ],
+    "security": [
+      {
+        "bearerAuth": []
+      }
+    ],
+    "x-required-scope": "webhooks:manage",
+    "parameters": [
+      {
+        "name": "webhook_id",
+        "in": "path",
+        "required": true,
+        "description": "The webhook endpoint id.",
+        "schema": {
+          "type": "string",
+          "format": "uuid"
+        }
+      }
+    ],
+    "responses": {
+      "200": {
+        "description": "OK",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "required": [
+                "data"
+              ],
+              "properties": {
+                "data": {
+                  "$ref": "#/components/schemas/Deleted"
+                }
+              }
+            }
+          }
+        }
+      },
+      "400": {
+        "description": "The request is invalid (invalid_request).",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Error"
+            }
+          }
+        }
+      },
+      "401": {
+        "description": "The API key is missing, invalid, or revoked (unauthorized).",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Error"
+            }
+          }
+        }
+      },
+      "403": {
+        "description": "The API key lacks the webhooks:manage scope (insufficient_scope).",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Error"
+            }
+          }
+        }
+      },
+      "404": {
+        "description": "Not found (not_found).",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Error"
+            }
+          }
+        }
+      },
+      "409": {
+        "description": "The request conflicts with the current state.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Error"
+            }
+          }
+        }
+      },
+      "429": {
+        "description": "Too many requests (rate_limited). Wait for the Retry-After header's number of seconds.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Error"
+            }
+          }
+        },
+        "headers": {
+          "Retry-After": {
+            "schema": {
+              "type": "integer"
+            },
+            "description": "Seconds to wait."
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Deleted": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "description": "Stable identifier (UUID).",
+            "type": "string",
+            "format": "uuid"
+          },
+          "deleted": {
+            "type": "boolean",
+            "const": true
+          }
+        },
+        "required": [
+          "id",
+          "deleted"
+        ],
+        "additionalProperties": false
+      },
+      "Error": {
+        "type": "object",
+        "properties": {
+          "error": {
+            "type": "object",
+            "properties": {
+              "code": {
+                "type": "string",
+                "enum": [
+                  "invalid_request",
+                  "unauthorized",
+                  "forbidden",
+                  "insufficient_scope",
+                  "not_found",
+                  "conflict",
+                  "idempotency_key_reused",
+                  "idempotency_request_in_progress",
+                  "booking_disabled",
+                  "booking_requires_confirmation",
+                  "slot_unavailable",
+                  "rate_limited",
+                  "rate_limit_unavailable",
+                  "method_not_allowed",
+                  "internal_error"
+                ]
+              },
+              "message": {
+                "type": "string"
+              },
+              "details": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "path": {
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "path",
+                    "message"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            },
+            "required": [
+              "code",
+              "message"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "required": [
+          "error"
+        ],
+        "additionalProperties": false
+      }
+    }
+  }
+}
+```
+
+Télécharger le [document OpenAPI complet](/api-reference/openapi.json). Voir [Authentification](/api/authentication), [Requêtes et erreurs](/api/requests) et [Webhooks](/api/webhooks).

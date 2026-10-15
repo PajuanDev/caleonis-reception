@@ -1,63 +1,40 @@
 ---
-title: "Track usage and limits"
-description: "Track voice minutes, alert SMS segments, transfer attempts, knowledge storage, and paid-plan overages."
-sidebarTitle: "Usage and limits"
-contentType: "Reference"
+title: "Comprendre l’usage et les coûts"
+description: "Suivre la consommation disponible sans la confondre avec une facture définitive."
+sidebarTitle: "Utilisation et limites"
 ---
+La voix peut mobiliser l’opérateur téléphonique, le traitement IA, le stockage et d’autres services configurés. Un appel de test téléphonique peut donc avoir un coût.
 
-The **Settings** > **Usage** page shows hosted usage for the current billing period. Usage resets at the start of each period.
+## Vérifier la période et le périmètre
 
-## Usage metrics
+Ouvrez les informations d’usage dans les réglages disponibles de votre espace. Contrôlez la période, l’unité et la source de chaque mesure.
 
-| Metric | Meaning |
+| Mesure | Point de vigilance |
 | --- | --- |
-| Voice minutes | Time spent on live voice calls. Calls under 10 seconds and calls the receptionist ends as spam are excluded. |
-| Alert SMS segments | SMS notification segments sent by the system. |
-| Transfer attempts | Outgoing call legs to your team when the receptionist transfers a live caller. LobbyStack makes no other outgoing calls. |
-| Knowledge base | Stored knowledge content size. |
+| Durée d’appel | Distinguer durée de communication et facturation opérateur. |
+| Usage IA | Dépend du modèle et des données de coût disponibles. |
+| Numéro | Les frais de location sont distincts d’une conversation. |
+| SMS | Aucun envoi possible sur le numéro pilote Voice-only. |
+| Stockage | Peut inclure documents et audio selon la configuration. |
 
-## Included usage
+## Estimation et données manquantes
 
-| Metric | Free | Starter | Pro |
-| --- | --- | --- | --- |
-| Voice minutes | 30 browser min | 150 min | 500 min |
-| Alert SMS segments | - | 50 | 200 |
-| Transfer attempts | - | 20 attempts | 100 attempts |
-| Knowledge base | 25 MB | 100 MB | 500 MB |
+Un coût inconnu ne doit pas être interprété comme zéro. Un total partiel n’est pas une facture finale.
 
-## How limits work
+La synchronisation des prix et usages peut être différée. Ne multipliez pas les vérifications fournisseur ou appels réels pour forcer une mise à jour.
 
-Free has no phone number, so it can't send texts or transfer calls. Free hosted workspaces include a set usage pool for each billing period. When an included pool is used up, that usage type pauses until the next period or until the workspace upgrades.
+## Maîtriser les essais
 
-Starter and Pro support billable overages for voice, alert SMS, and transfer attempts. Knowledge base has a fixed plan allowance; remove old content or upgrade before adding more after the allowance is full.
+Utilisez des scénarios courts et vos propres coordonnées. Vérifiez les limites réellement affichées et arrêtez un test qui se prolonge sans utilité.
 
-## Overage rates
+Les prix, quotas et conditions sont [sur demande](/billing/plans) tant qu’ils ne sont pas approuvés. N’annoncez pas d’économie chiffrée ou de gain commercial sur la seule base des tests du pilote.
 
-| Usage type | Starter | Pro |
-| --- | --- | --- |
-| Voice | $0.20 per extra minute | $0.18 per extra minute |
-| Alert SMS | $0.02 per extra segment | $0.02 per extra segment |
-| Transfer attempts | $0.02 per extra attempt | $0.02 per extra attempt |
+{/* Caléonis qualification */}
 
-Annual subscriptions keep monthly usage resets. Unused included minutes do not roll over.
+## Volumes inclus, plafonds et rapprochement
 
-## View usage
+Les contrôles disponibles peuvent afficher consommation, usage restant, date de remise à zéro et plafond. Vérifiez la période et l'unité avant toute comparaison. Un plafond applicatif ne remplace pas les contrôles de dépense des comptes fournisseurs.
 
-<Steps>
-  <Step title="Open Settings">
-    In the dashboard, open **Settings**.
-  </Step>
-  <Step title="Open Usage">
-    Select **Usage** from the settings sidebar.
-  </Step>
-  <Step title="Review included usage">
-    Check current usage, remaining quota, usage status, and reset timing.
-  </Step>
-  <Step title="Review pay-as-you-go usage">
-    On Starter or Pro, review estimated overage counts and cost for the current period.
-  </Step>
-</Steps>
+Pour rapprocher une facture, comparez l'offre EUR approuvée, la devise du checkout, la période, les unités mesurées, les dépassements et les taxes. Le modèle de résumé d'appel peut différer du modèle de conversation ; son coût reste inconnu si aucun prix applicable n'est disponible.
 
-<Note>
-  Displayed overage amounts are estimates for the current period until the final invoice is created.
-</Note>
+Un total partiel n'est ni zéro dépense ni une marge réelle. Les nouveaux prix et usages peuvent être synchronisés avec retard ; n'effectuez pas d'appels ou contrôles fournisseur répétés pour les forcer.

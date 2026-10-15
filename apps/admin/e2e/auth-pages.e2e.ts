@@ -1,9 +1,28 @@
 import { expect, test } from "@playwright/test";
 
+test("auth reference captures preserve both locales on desktop and mobile", async ({ page }, testInfo) => {
+  test.setTimeout(90_000);
+  for (const viewport of [{ width: 1440, height: 1000 }, { width: 390, height: 844 }]) {
+    await page.setViewportSize(viewport);
+    for (const locale of ["fr", "en"] as const) {
+      for (const route of ["login", "signup"] as const) {
+        await page.goto(`/${locale}/${route}`);
+        await expect(page.locator("h1")).toBeVisible();
+        await expect(page.locator('input[type="email"]')).toBeVisible();
+        await expect(page.locator('input[type="password"]')).toBeVisible();
+        expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+        const screenshot = testInfo.outputPath(`p1-${route}-${locale}-${viewport.width}.png`);
+        await page.screenshot({ path: screenshot, fullPage: true });
+        await testInfo.attach(`${route} ${locale} ${viewport.width} — aucun compte ni envoi`, { path: screenshot, contentType: "image/png" });
+      }
+    }
+  }
+});
+
 test("login and signup pages expose accessible auth forms", async ({ page }) => {
   await page.goto("/en/login");
   await expect(page.getByRole("heading", { name: "Welcome back" })).toBeVisible();
-  await expect(page.getByLabel("Caleonis Reception", { exact: true })).toBeVisible();
+  await expect(page.getByLabel("Caléonis Receptionist", { exact: true })).toBeVisible();
   await expect(page.getByLabel("Email")).toBeVisible();
   await expect(page.getByLabel("Password")).toBeVisible();
   await expect(page.getByRole("link", { name: "Create one" })).toHaveAttribute("href", "/en/signup");

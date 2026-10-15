@@ -5,6 +5,7 @@ import { resolve } from "node:path";
 
 import { publicAssetVersion } from "./asset-version";
 import { releaseVersion } from "./src/lib/release-version";
+import { singleHostStagingBuildEnabled } from "./single-host-staging";
 import { embeddableSecurityHeaders, securityHeaders, toNextHeaderList } from "./security-headers";
 
 const serviceVersion = releaseVersion();
@@ -19,6 +20,7 @@ const nextConfig: NextConfig = {
   // in addition to the durable application caches in Postgres and Redis.
   cacheMaxMemorySize: 0,
   env: {
+    NEXT_PUBLIC_P1_SINGLE_HOST_STAGING: String(singleHostStagingBuildEnabled(process.env)),
     NEXT_PUBLIC_SERVICE_VERSION: serviceVersion,
     // Keys the immutable `?v=` asset URLs to the files' content, not to a
     // deployment variable that can stay unchanged across deploys.

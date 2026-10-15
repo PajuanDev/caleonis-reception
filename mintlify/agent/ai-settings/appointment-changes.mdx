@@ -1,97 +1,55 @@
 ---
-title: "Configure appointment changes"
-description: "Let your AI receptionist cancel and reschedule appointments during calls with configurable verification."
-sidebarTitle: "Appointment changes"
-contentType: "How-to"
+title: "Encadrer les changements de rendez-vous"
+description: "Préparer annulation et déplacement avec vérification, sans promettre un SMS indisponible."
+sidebarTitle: "Modifications de rendez-vous"
 ---
+Le code comprend des parcours d’identification, d’annulation et de déplacement. Ils doivent être activés et qualifiés dans votre espace avant usage client.
 
-When callers need to cancel or move an appointment, LobbyStack can handle the request during the call.
+Un test réussi de création Google ne prouve pas qu’un déplacement ou une annulation a été testé de bout en bout.
 
-Instead of waiting for your team to read a message, check the calendar, and reply manually, the AI receptionist can identify the appointment, confirm the request, and update the booking for you.
+## Préparer les règles
 
-## What the AI can handle
+Dans **Agent > Paramètres IA**, recherchez les changements de rendez-vous. Choisissez les actions autorisées et le niveau de vérification proposé.
 
-LobbyStack can help customers:
+L’identification peut s’appuyer sur le téléphone, le nom et des détails du rendez-vous. Une confirmation explicite doit précéder l’action. Si l’identité ou le rendez-vous reste ambigu, faites prendre un message à votre équipe.
 
-- Find their upcoming appointment.
-- Cancel an appointment they no longer need.
-- Reschedule to another available time.
-- Confirm the change before it is applied.
-- Complete the request during the call.
+## Attention au code à usage unique
 
-This is designed for everyday appointment changes that usually take your team away from higher-value work.
+Un mode de vérification par code nécessite un moyen d’envoi fonctionnel. Le numéro pilote Voice-only ne peut pas envoyer de SMS.
 
-## Built-in confirmation before changes
+N’activez pas une politique qui impose un code SMS sans avoir validé un expéditeur compatible et le parcours de réception. Ne contournez pas une vérification en affaiblissant les règles pour un client sensible.
 
-Appointment changes are not made from a casual request alone. LobbyStack asks for enough detail to make sure the customer is changing the right appointment.
+## Test de qualification
 
-By default, the receptionist uses:
+1. Créez un rendez-vous fictif dans un agenda de test.
+2. Vérifiez que l’appelant ne peut modifier que le rendez-vous attendu.
+3. Demandez une modification, puis confirmez-la explicitement.
+4. Relisez le nouveau statut et l’horaire dans l’application.
+5. Relisez l’événement chez Google.
+6. Contrôlez les refus : identité ambiguë, action désactivée et créneau indisponible.
 
-- The phone number from the call.
-- The customer's name.
-- An appointment detail, such as the appointment time or service.
-- A clear final confirmation before canceling or rescheduling.
+Ne répétez pas une action après une erreur réseau sans vérifier son résultat : vous pourriez créer une situation incohérente.
 
-If the receptionist cannot confirm the appointment confidently, it will not make the change automatically. It can hand the conversation to your team instead.
+## Notifications et reprise humaine
 
-<Note>
-  LobbyStack helps you apply consistent confirmation steps, but it does not replace your own legal or privacy review. Configure the level of verification that fits your business, region, and appointment type.
-</Note>
+Une modification peut réussir sans SMS ou email. L’état d’envoi doit être contrôlé séparément.
 
-## Add a one-time code for stricter verification
+En cas d’échec, relevez l’identifiant du rendez-vous et de l’appel. Confiez la correction à votre équipe ; ne promettez pas un transfert humain non qualifié.
 
-For businesses that want extra assurance, you can require a one-time code before the AI changes an appointment.
+{/* Caléonis qualification */}
 
-With one-time code verification turned on, the receptionist sends a code to the customer and waits for the correct code before canceling or rescheduling. This is useful when appointments are sensitive, high-value, or subject to stricter internal policies.
+## Actions et confirmation attendues
 
-## Automatic calendar updates
+Le parcours peut retrouver un rendez-vous à venir, demander confirmation, annuler ou proposer un autre créneau lorsque l'action est autorisée. Une demande vague ne doit pas provoquer de changement : faites confirmer service, date, heure locale et action exacte.
 
-When a change is approved, LobbyStack updates the appointment record and syncs the change to your connected calendar.
+La politique peut utiliser téléphone, nom et détail du rendez-vous. Ces éléments ne constituent pas une garantie universelle d'identité. En cas d'ambiguïté, recueillez une demande de suivi pour l'équipe.
 
-For cancellations, the appointment is marked as canceled and the calendar event is updated or removed according to the calendar connection.
+## Activer les contrôles séparément
 
-For rescheduling, LobbyStack checks availability before offering a new time. If the time is available, the appointment is moved and the calendar sync is refreshed.
+1. Ouvrez Agent > Paramètres IA pour la bonne entreprise.
+2. Recherchez les changements de rendez-vous.
+3. Réglez séparément annulation et déplacement.
+4. Choisissez la vérification après avoir validé son moyen de livraison.
+5. Enregistrez et vérifiez les valeurs après rechargement.
 
-<Tip>
-  Connect Google Calendar before relying on automatic rescheduling. This lets LobbyStack avoid offering times that are already busy.
-</Tip>
-
-## Turn appointment changes on or off
-
-You control whether the receptionist can cancel, reschedule, or require a one-time code.
-
-<Steps>
-  <Step title="Open AI settings">
-    In the dashboard sidebar, go to **Agent** > **AI settings**.
-  </Step>
-  <Step title="Find appointment changes">
-    Scroll to **Appointment changes**.
-  </Step>
-  <Step title="Choose what the AI can do">
-    Turn cancellation and rescheduling on or off.
-  </Step>
-  <Step title="Choose verification strength">
-    Turn on **Require one-time code before changing appointments** if you want stricter verification.
-  </Step>
-  <Step title="Save">
-    Save your changes.
-  </Step>
-</Steps>
-
-## Recommended setup
-
-For the best customer experience:
-
-- Add clear service entries so customers can describe what they booked.
-- Connect Google Calendar so LobbyStack can check availability and sync changes.
-- Keep your transfer number up to date for cases that need human review.
-- Use one-time code verification for sensitive or high-value appointments.
-
-<CardGroup cols={2}>
-  <Card title="Configure services" icon="calendar-check" href="/agent/services">
-    Add appointment types and service details that help customers identify their booking.
-  </Card>
-  <Card title="Connect Google Calendar" icon="calendar" href="/integrations/google-calendar">
-    Let LobbyStack check availability and sync booking changes automatically.
-  </Card>
-</CardGroup>
+Pour une annulation, relisez le statut et l'effet exact sur l'événement Google. Pour un déplacement, contrôlez le nouveau créneau, la durée et l'agenda. Vérifiez aussi code faux ou expiré lorsque cette politique s'applique. Conservez les services et les droits calendrier à jour.

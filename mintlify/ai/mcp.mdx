@@ -1,118 +1,126 @@
 ---
-title: "Run your receptionist from an AI assistant"
-description: "Connect Claude, ChatGPT and other MCP clients to LobbyStack to read calls, book appointments and update what your receptionist knows."
-sidebarTitle: "MCP server"
+title: "Gérer votre réceptionniste depuis un assistant IA"
+description: "Connectez Claude, ChatGPT et d'autres clients MCP à Caléonis Receptionist pour consulter les appels, réserver des rendez-vous et mettre à jour ce que sait votre réceptionniste."
+sidebarTitle: "Serveur MCP"
 contentType: "Reference"
 ---
 
-LobbyStack runs a Model Context Protocol (MCP) server. Connect an AI assistant to it and ask in plain language: "Who called yesterday and didn't book?", "Book Dana Whitfield for a cleaning on Tuesday morning", or "Close on Saturdays from now on."
+Caléonis Receptionist exploite un serveur Model Context Protocol (MCP). Connectez-y un assistant IA et posez vos questions en langage courant : « Qui a appelé hier sans réserver ? », « Réserve un nettoyage pour Dana Whitfield mardi matin » ou « Désormais, ferme le samedi ».
 
-The assistant works through the same rules as the [REST API](/api/overview). It sees one business, it can do only what its API key allows, and every change it makes lands in the business's audit log.
+L'assistant suit les mêmes règles que l'[API REST](/api/overview). Il voit une seule entreprise, il ne peut faire que ce que sa clé API autorise, et chaque modification qu'il fait est inscrite dans le journal d'audit de l'entreprise.
 
-## Connect
+## Se connecter
 
-| Setting | Value |
+| Paramètre | Valeur |
 | --- | --- |
-| Server URL | `https://app.lobbystack.com/api/mcp` |
+| URL du serveur | `https://receptionist.caleonis.com/api/mcp` |
 | Transport | Streamable HTTP |
-| Authentication | Sign in with LobbyStack (OAuth), or `Authorization: Bearer <API key>` |
+| Authentification | Connexion avec Caléonis Receptionist (OAuth), ou `Authorization: Bearer <API key>` |
 
-Self-hosted deployments serve the same path on their own domain, for example `https://lobbystack.example.com/api/mcp`.
+Les déploiements auto-hébergés servent le même chemin sur leur propre domaine, par exemple `https://receptionist.example.com/api/mcp`.
 
-Assistants connect one of two ways:
+Les assistants se connectent de deux façons :
 
-- **Sign in with LobbyStack.** Add the server URL to the assistant. It opens a LobbyStack page where you sign in, pick the business, and choose what the assistant can do. Use this for Claude and ChatGPT connectors.
-- **API key.** Create a key in **Settings** > **API keys** and put it in the assistant's configuration. Use this for scripts, CI, and clients that let you set request headers. See [Authentication](/api/authentication).
+- **Connexion avec Caléonis Receptionist.** Ajoutez l'URL du serveur à l'assistant. Il ouvre une page Caléonis Receptionist où vous vous connectez, choisissez l'entreprise et décidez de ce que l'assistant peut faire. Utilisez cette méthode pour les connecteurs Claude et ChatGPT.
+- **Clé API.** Créez une clé dans **Réglages** > **Clés API** et ajoutez-la à la configuration de l'assistant. Utilisez cette méthode pour les scripts, l'intégration continue et les clients qui permettent de définir des en-têtes de requête. Consultez [Authentification](/api/authentication).
 
-Follow the guide for [Claude](/ai/connect-claude), [ChatGPT](/ai/connect-chatgpt) or [another MCP client](/ai/connect-other-clients).
+Suivez le guide pour [Claude](/ai/connect-claude), [ChatGPT](/ai/connect-chatgpt) ou [un autre client MCP](/ai/connect-other-clients).
 
-## Sign in with LobbyStack
+## Connexion avec Caléonis Receptionist
 
-LobbyStack runs an OAuth 2.1 authorization server for MCP clients, as the [MCP authorization spec](https://modelcontextprotocol.io/specification/2026-07-28/basic/authorization) describes. Your assistant finds it on its own from the server URL.
+Caléonis Receptionist exploite un serveur d'autorisation OAuth 2.1 pour les clients MCP, comme le décrit la [spécification d'autorisation MCP](https://modelcontextprotocol.io/specification/2026-07-28/basic/authorization). Votre assistant le trouve seul à partir de l'URL du serveur.
 
-When you connect, LobbyStack asks you to:
+Lors de la connexion, Caléonis Receptionist vous demande de :
 
-1. Sign in, if you aren't signed in already.
-2. Pick the business. You see only businesses where you're an owner or admin.
-3. Choose what the assistant can do. Every permission it asked for starts checked; uncheck the ones you don't want.
+1. Vous connecter, si ce n'est pas déjà fait.
+2. Choisir l'entreprise. Vous ne voyez que les entreprises dont vous êtes propriétaire ou administrateur.
+3. Choisir ce que l'assistant peut faire. Chaque autorisation qu'il a demandée est cochée au départ ; décochez celles que vous ne voulez pas accorder.
 
-The assistant then gets access to that one business. Access tokens last an hour, and the assistant renews them for up to 30 days of inactivity without asking you again. Each renewal replaces the previous refresh token, and reusing an old one ends the connection.
+L'assistant obtient alors l'accès à cette seule entreprise. Les jetons d'accès durent une heure, et l'assistant les renouvelle sans vous redemander votre accord tant que la période d'inactivité ne dépasse pas 30 jours. Chaque renouvellement remplace le jeton d'actualisation précédent, et la réutilisation d'un ancien jeton met fin à la connexion.
 
-Owners and admins see every connected assistant for the business in **Settings** > **Connected apps**, with who connected it, its permissions, and when it last made a request. Click **Disconnect** to cut it off right away. If the person who connected it stops being an owner or admin, the connection stops working too.
+Les propriétaires et les administrateurs voient tous les assistants connectés à l'entreprise dans **Réglages** > **Applications connectées**, avec la personne qui les a connectés, leurs autorisations et la date de leur dernière requête. Cliquez sur **Déconnecter** pour couper l'accès immédiatement. Si la personne qui a connecté l'assistant n'est plus propriétaire ou administrateur, la connexion cesse aussi de fonctionner.
 
-<Accordion title="Details for MCP client developers">
-  | Item | Value |
+<Accordion title="Détails pour les développeurs de clients MCP">
+  | Élément | Valeur |
   | --- | --- |
-  | Protected resource metadata | `/.well-known/oauth-protected-resource/api/mcp` |
-  | Authorization server issuer | `https://app.lobbystack.com/api/auth` |
-  | Authorization server metadata | `/.well-known/oauth-authorization-server/api/auth` |
-  | Client registration | Client ID Metadata Documents (HTTPS `client_id`) or dynamic client registration at `/api/auth/oauth2/register` |
-  | Grants | `authorization_code` with PKCE (`S256`, required), `refresh_token` |
-  | Resource indicator | Send `resource=https://app.lobbystack.com/api/mcp`. Tokens for other resources are rejected. |
-  | Scopes | The tool scopes in the table below, plus `offline_access` for refresh tokens |
-  | Revocation | `/api/auth/oauth2/revoke` (RFC 7009) |
+  | Métadonnées de la ressource protégée | `/.well-known/oauth-protected-resource/api/mcp` |
+  | Émetteur du serveur d'autorisation | `https://receptionist.caleonis.com/api/auth` |
+  | Métadonnées du serveur d'autorisation | `/.well-known/oauth-authorization-server/api/auth` |
+  | Enregistrement du client | Client ID Metadata Documents (`client_id` en HTTPS) ou enregistrement dynamique du client à `/api/auth/oauth2/register` |
+  | Types d'autorisation | `authorization_code` avec PKCE (`S256`, obligatoire), `refresh_token` |
+  | Indicateur de ressource | Envoyez `resource=https://receptionist.caleonis.com/api/mcp`. Les jetons destinés à d'autres ressources sont refusés. |
+  | Portées | Les portées des outils du tableau ci-dessous, plus `offline_access` pour les jetons d'actualisation |
+  | Révocation | `/api/auth/oauth2/revoke` (RFC 7009) |
 
-  A `401` from `/api/mcp` carries `WWW-Authenticate: Bearer resource_metadata="..."`. Clients with loopback redirect URIs, such as `http://127.0.0.1:6276/callback`, register as native apps; other redirect URIs must use HTTPS.
+  Une réponse `401` de `/api/mcp` contient `WWW-Authenticate: Bearer resource_metadata="..."`. Les clients dont l'URI de redirection est une adresse de bouclage, comme `http://127.0.0.1:6276/callback`, s'enregistrent comme applications natives ; les autres URI de redirection doivent utiliser HTTPS.
 </Accordion>
 
-## Tools
+## Outils
 
-| Tool | Scope | What it does |
+| Outil | Portée | Ce qu'il fait |
 | --- | --- | --- |
-| `get_business` | `business:read` | Business name, time zone, opening hours and booking mode |
-| `list_services` | `business:read` | Services customers can book |
-| `list_staff` | `business:read` | People who take appointments and the services they do |
-| `update_business_hours` | `business:write` | Replaces the week's opening hours |
-| `list_calls` | `calls:read` | Calls newest first, filtered by start time |
-| `get_call` | `calls:read` | One call with its transcript |
-| `search_contacts` | `contacts:read` | Contacts by phone, email or part of the name |
-| `get_contact` | `contacts:read` | One contact |
-| `create_contact` | `contacts:write` | Adds a contact |
-| `update_contact` | `contacts:write` | Changes a contact's details |
-| `list_appointments` | `appointments:read` | Appointments filtered by status, start time or contact |
-| `get_appointment` | `appointments:read` | One appointment |
-| `check_availability` | `appointments:read` | Open times for a service, up to 7 days, for anyone or one staff member |
-| `book_appointment` | `appointments:write` | Books an open time |
-| `cancel_appointment` | `appointments:write` | Cancels an appointment |
-| `reschedule_appointment` | `appointments:write` | Moves an appointment to another open time or staff member |
-| `list_messages` | `messages:read` | Messages the receptionist took for your team |
-| `add_knowledge` | `knowledge:write` | Adds an FAQ or a text entry the receptionist can use |
+| `get_business` | `business:read` | Nom de l'entreprise, fuseau horaire, heures d'ouverture et mode de réservation |
+| `list_services` | `business:read` | Services que les clients peuvent réserver |
+| `list_staff` | `business:read` | Personnes qui prennent des rendez-vous et services qu'elles offrent |
+| `update_business_hours` | `business:write` | Remplace les heures d'ouverture de la semaine |
+| `list_calls` | `calls:read` | Appels, du plus récent au plus ancien, filtrés par heure de début |
+| `get_call` | `calls:read` | Un appel avec sa transcription |
+| `search_contacts` | `contacts:read` | Contacts par téléphone, email ou partie du nom |
+| `get_contact` | `contacts:read` | Un contact |
+| `create_contact` | `contacts:write` | Ajoute un contact |
+| `update_contact` | `contacts:write` | Modifie les coordonnées d'un contact |
+| `list_appointments` | `appointments:read` | Rendez-vous filtrés par statut, heure de début ou contact |
+| `get_appointment` | `appointments:read` | Un rendez-vous |
+| `check_availability` | `appointments:read` | Créneaux libres pour un service, sur 7 jours au plus, pour n'importe quel membre du personnel ou pour un seul |
+| `book_appointment` | `appointments:write` | Réserve un créneau libre |
+| `cancel_appointment` | `appointments:write` | Annule un rendez-vous |
+| `reschedule_appointment` | `appointments:write` | Déplace un rendez-vous vers un autre créneau libre ou un autre membre du personnel |
+| `list_messages` | `messages:read` | Messages que le réceptionniste a pris pour votre équipe |
+| `add_knowledge` | `knowledge:write` | Ajoute une FAQ ou un texte que le réceptionniste peut utiliser |
 
-Scopes are the same for OAuth and API keys. Tools return the same objects as the REST API, with times in UTC. Read-only tools carry the `readOnlyHint` annotation, and tools that cancel, move or replace data carry `destructiveHint`, so your assistant can ask you before it runs them.
+Les portées sont les mêmes pour OAuth et pour les clés API. Les outils renvoient les mêmes objets que l'API REST, avec les heures en UTC. Les outils en lecture seule portent l'annotation `readOnlyHint`, et les outils qui annulent, déplacent ou remplacent des données portent `destructiveHint`, pour que votre assistant puisse vous demander votre accord avant de les exécuter.
 
-The `webhooks:manage` scope has no MCP tools. A key with only that scope can't connect.
+La portée `webhooks:manage` n'a aucun outil MCP. Une clé qui n'a que cette portée ne peut pas se connecter.
 
-## Booking mode
+## Mode de réservation
 
-`book_appointment` and `reschedule_appointment` work only when **Appointments** is set to **Books appointments** (`booking_mode` `instant`). In other modes they return an error instead of booking:
+`book_appointment` et `reschedule_appointment` ne fonctionnent que si **Prise de rendez-vous** est réglé sur **Réserve les rendez-vous** (`booking_mode` `instant`). Dans les autres modes, ils renvoient une erreur au lieu de réserver :
 
-| Setting | `booking_mode` | Error code | What the assistant should do |
+| Réglage | `booking_mode` | Code d'erreur | Ce que l'assistant doit faire |
 | --- | --- | --- | --- |
-| **Takes requests** | `request` | `booking_requires_confirmation` | Tell you your team confirms requests from the inbox |
-| **Doesn't book** | `off` | `booking_disabled` | Tell you booking is turned off |
+| **Prend les demandes** | `request` | `booking_requires_confirmation` | Vous indiquer que votre équipe confirme les demandes depuis la boîte de réception |
+| **Ne réserve pas** | `off` | `booking_disabled` | Vous indiquer que la réservation est désactivée |
 
-You change this setting under **Agent** > **AI settings** > **Booking**. Cancelling works in every mode.
+Vous modifiez ce réglage dans **Agent** > **Paramètres IA** > **Rendez-vous**. L'annulation fonctionne dans tous les modes.
 
-## Errors
+## Erreurs
 
-A failed tool call returns a result marked as an error. Its text is JSON with the same codes as the [REST API](/api/requests):
+Un appel d'outil qui échoue renvoie un résultat marqué comme erreur. Son texte est du JSON avec les mêmes codes que l'[API REST](/api/requests) :
 
 ```json
 { "error": { "code": "slot_unavailable", "message": "That time is not available. Pick another time from GET /availability." } }
 ```
 
-The server itself answers `401` when the key or access token is missing, unknown, expired or revoked, and `403` when it has no scope the MCP server uses.
+Le serveur lui-même répond `401` quand la clé ou le jeton d'accès est absent, inconnu, expiré ou révoqué, et `403` quand il n'a aucune des portées utilisées par le serveur MCP.
 
-## Limits and retries
+## Limites et nouvelles tentatives
 
-Each tool call counts against a limit of 120 requests per minute. An API key shares its limit with REST requests made with the same key; each OAuth connection has its own. Listing tools doesn't count. Past the limit, the tool returns `rate_limited` with the seconds to wait.
+Chaque appel d'outil compte dans une limite de 120 requêtes par minute. Une clé API partage sa limite avec les requêtes REST faites avec la même clé ; chaque connexion OAuth a sa propre limite. Lister les outils ne compte pas. Au-delà de la limite, l'outil renvoie `rate_limited` avec le nombre de secondes à attendre.
 
-`book_appointment`, `create_contact` and `add_knowledge` accept an optional `idempotency_key`. Retry with the same value within 24 hours and you get the first result back instead of a duplicate. These keys are the same as the REST `Idempotency-Key` for `POST /appointments`, `POST /contacts` and `POST /knowledge`: a retry through MCP of a REST request, or the reverse, returns the first result. The same key with different details returns `idempotency_key_reused`.
+`book_appointment`, `create_contact` et `add_knowledge` acceptent un `idempotency_key` facultatif. Si vous réessayez avec la même valeur dans les 24 heures, vous obtenez le premier résultat au lieu d'un doublon. Ces clés sont les mêmes que l'en-tête REST `Idempotency-Key` pour `POST /appointments`, `POST /contacts` et `POST /knowledge` : une nouvelle tentative par MCP d'une requête REST, ou l'inverse, renvoie le premier résultat. La même clé avec des détails différents renvoie `idempotency_key_reused`.
 
-## Audit log
+## Journal d'audit
 
-LobbyStack records each change made through the MCP server in the business's audit log with the actor `mcp` and the API key's ID, or for OAuth, the connection's ID and the person who approved it. It never logs keys or tokens. To cut off an assistant, disconnect it in **Settings** > **Connected apps**, or revoke its key in **Settings** > **API keys**.
+Caléonis Receptionist inscrit chaque modification faite par le serveur MCP dans le journal d'audit de l'entreprise, avec l'acteur `mcp` et l'identifiant de la clé API ou, pour OAuth, l'identifiant de la connexion et la personne qui l'a approuvée. Il n'enregistre jamais les clés ni les jetons. Pour couper l'accès d'un assistant, déconnectez-le dans **Réglages** > **Applications connectées** ou révoquez sa clé dans **Réglages** > **Clés API**.
 
-## Guide for AI agents
+## Guide pour les agents IA
 
-The [LobbyStack skill](/ai/lobbystack-skill) explains the tools, common workflows and error handling in a form you can give to an agent as instructions.
+Le [skill Caléonis Receptionist](/ai/lobbystack-skill) explique les outils, les flux de travail courants et la gestion des erreurs sous une forme que vous pouvez donner à un agent comme instructions.
+
+{/* Caléonis qualification */}
+
+## Qualification du SaaS
+
+Ce serveur existant est une intégration développeur facultative ; il n'ajoute aucun Agent Builder ni agent métier supplémentaire. La description des jetons et permissions est un contrat technique du code, pas une preuve qu'un client tiers ou un renouvellement a été testé sur votre espace.
+
+Vérifiez l'entreprise en lecture, le refus d'une action sans permission et la révocation. Les changements de rendez-vous, Google durable et notifications conservent leurs qualifications séparées. N'insérez pas de secret dans une conversation.

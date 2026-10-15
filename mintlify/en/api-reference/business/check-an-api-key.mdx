@@ -1,0 +1,260 @@
+---
+title: "Check an API key"
+description: "GET /api/v1/me: parameters, permissions and full schemas."
+---
+
+`GET https://receptionist.caleonis.com/api/v1/me`
+
+This page describes the Caléonis runtime contract. Schema field names and technical descriptions are preserved verbatim for integration accuracy.
+
+Returns the key and its business. Any valid key can call it, whatever its scopes, so integrations use it to test a connection.
+
+## Authentication and permissions
+Send `Authorization: Bearer <API key>`. Any valid key can check its connection with this operation.
+
+## Parameters
+No path or query parameters.
+
+## Responses
+| HTTP | Description |
+| --- | --- |
+| `200` | OK |
+| `400` | The request is invalid (invalid_request). |
+| `401` | The API key is missing, invalid, or revoked (unauthorized). |
+| `429` | Too many requests (rate_limited). Wait for the Retry-After header's number of seconds. |
+
+Errors use error.code, error.message and sometimes error.details. Respect Retry-After and reuse the same idempotency key and body when retrying a supported creation.
+
+## HTTP example
+
+```http
+GET /api/v1/me HTTP/1.1
+Host: receptionist.caleonis.com
+Authorization: Bearer <server-side key>
+```
+
+## Full contract and schemas
+
+The block retains all fields, unions, formats, constraints and responses for this operation. Each $ref resolves in components.schemas included in the same block.
+
+```json
+{
+  "method": "GET",
+  "path": "/api/v1/me",
+  "operation": {
+    "operationId": "getMe",
+    "summary": "Check an API key",
+    "description": "Returns the key and its business. Any valid key can call it, whatever its scopes, so integrations use it to test a connection.",
+    "tags": [
+      "Business"
+    ],
+    "security": [
+      {
+        "bearerAuth": []
+      }
+    ],
+    "responses": {
+      "200": {
+        "description": "OK",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "required": [
+                "data"
+              ],
+              "properties": {
+                "data": {
+                  "$ref": "#/components/schemas/Me"
+                }
+              }
+            }
+          }
+        }
+      },
+      "400": {
+        "description": "The request is invalid (invalid_request).",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Error"
+            }
+          }
+        }
+      },
+      "401": {
+        "description": "The API key is missing, invalid, or revoked (unauthorized).",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Error"
+            }
+          }
+        }
+      },
+      "429": {
+        "description": "Too many requests (rate_limited). Wait for the Retry-After header's number of seconds.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Error"
+            }
+          }
+        },
+        "headers": {
+          "Retry-After": {
+            "schema": {
+              "type": "integer"
+            },
+            "description": "Seconds to wait."
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Me": {
+        "description": "The API key making the request and the business it belongs to.",
+        "type": "object",
+        "properties": {
+          "api_key": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "description": "Stable identifier (UUID).",
+                "type": "string",
+                "format": "uuid"
+              },
+              "name": {
+                "type": "string"
+              },
+              "prefix": {
+                "description": "The visible start of the key, for example lsk_1a2b3c4d.",
+                "type": "string"
+              },
+              "scopes": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "enum": [
+                    "business:read",
+                    "business:write",
+                    "calls:read",
+                    "contacts:read",
+                    "contacts:write",
+                    "appointments:read",
+                    "appointments:write",
+                    "messages:read",
+                    "knowledge:write",
+                    "webhooks:manage"
+                  ]
+                }
+              },
+              "created_at": {
+                "description": "ISO 8601 timestamp in UTC.",
+                "type": "string",
+                "format": "date-time"
+              }
+            },
+            "required": [
+              "id",
+              "name",
+              "prefix",
+              "scopes",
+              "created_at"
+            ],
+            "additionalProperties": false
+          },
+          "business": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "description": "Stable identifier (UUID).",
+                "type": "string",
+                "format": "uuid"
+              },
+              "name": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "id",
+              "name"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "required": [
+          "api_key",
+          "business"
+        ],
+        "additionalProperties": false
+      },
+      "Error": {
+        "type": "object",
+        "properties": {
+          "error": {
+            "type": "object",
+            "properties": {
+              "code": {
+                "type": "string",
+                "enum": [
+                  "invalid_request",
+                  "unauthorized",
+                  "forbidden",
+                  "insufficient_scope",
+                  "not_found",
+                  "conflict",
+                  "idempotency_key_reused",
+                  "idempotency_request_in_progress",
+                  "booking_disabled",
+                  "booking_requires_confirmation",
+                  "slot_unavailable",
+                  "rate_limited",
+                  "rate_limit_unavailable",
+                  "method_not_allowed",
+                  "internal_error"
+                ]
+              },
+              "message": {
+                "type": "string"
+              },
+              "details": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "path": {
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "path",
+                    "message"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            },
+            "required": [
+              "code",
+              "message"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "required": [
+          "error"
+        ],
+        "additionalProperties": false
+      }
+    }
+  }
+}
+```
+
+Download the [complete OpenAPI document](/api-reference/openapi.json). See [Authentication](/en/api/authentication), [Requests and errors](/en/api/requests) and [Webhooks](/en/api/webhooks).

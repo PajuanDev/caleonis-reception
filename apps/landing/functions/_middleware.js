@@ -1,11 +1,15 @@
 const MARKDOWN_TOKEN_COUNT = "120"
-const CONTENT_SIGNAL = "ai-train=yes, search=yes, ai-input=yes"
-const CANONICAL_HOST = "lobbystack.com"
-const WWW_HOST = "www.lobbystack.com"
-const PAGES_HOST = "lobbystack-landing.pages.dev"
+const CONTENT_SIGNAL = "ai-train=no, search=yes, ai-input=yes"
+const CANONICAL_HOST = "caleonis-receptionist-v1-review.willgosse225.chatgpt.site"
+const WWW_HOST = "www.caleonis-receptionist-v1-review.willgosse225.chatgpt.site"
+const PAGES_HOST = "caleonis-receptionist-preview.pages.dev"
 const DEFAULT_LOCALE = "en"
 const TRANSLATED_PATHS = new Set([
   "/",
+  "/resources/",
+  "/confidentialite/",
+  "/solutions/ai-receptionist-for-garages/",
+  "/solutions/ai-receptionist-for-medical-offices/",
   "/features/",
   "/pricing/",
   "/solutions/",
@@ -28,7 +32,6 @@ const TRANSLATED_PATHS = new Set([
   "/solutions/property-management-answering-service/",
   "/solutions/open-source-ai-receptionist/",
   "/missed-call-revenue-calculator/",
-  "/changelog/",
   "/blog/",
   "/blog/upfirst-alternative/",
   "/blog/my-ai-front-desk-alternative/",
@@ -45,6 +48,7 @@ const TRANSLATED_PATHS = new Set([
   "/blog/elevenlabs-reception-alternative/",
   "/blog/ai-receptionist-vs-virtual-receptionist/",
   "/blog/ai-receptionist-vs-voicemail/",
+  "/changelog/",
   "/blog/lobbystack-is-live/",
   "/blog/ai-receptionist-savings/",
   "/blog/how-to-choose-an-ai-receptionist/",
@@ -56,6 +60,22 @@ const TRANSLATED_PATHS = new Set([
   "/blog/why-lobbystack-is-moving-away-from-convex/",
   "/blog/lobbystack-mit-license-ai-receptionist-resellers/",
   "/blog/ai-voice-agent-gpt-live/",
+  "/blog/how-much-does-an-answering-service-cost/",
+  "/blog/best-answering-service-for-small-business/",
+  "/blog/best-hvac-answering-services/",
+  "/blog/automated-answering-service/",
+  "/blog/ruby-receptionists-alternative/",
+  "/blog/what-is-a-phone-answering-service/",
+  "/blog/free-ai-receptionist/",
+  "/blog/best-plumbing-answering-services/",
+  "/blog/best-property-management-answering-services/",
+  "/blog/best-answering-services-for-contractors/",
+  "/blog/law-firm-answering-service/",
+  "/blog/phone-answering-script/",
+  "/blog/how-to-forward-business-calls/",
+  "/blog/google-business-profile-calls/",
+  "/blog/outsourced-phone-answering-france/",
+  "/blog/ai-phone-system-small-business/",
   "/affiliate-program/",
   "/about/",
   "/docs/api/",

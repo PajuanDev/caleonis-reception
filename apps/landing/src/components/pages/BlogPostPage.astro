@@ -46,18 +46,18 @@ const articleBody = plainTextFromMarkdown(entry.body)
 const dateLocale = locale === "fr" ? "fr-FR" : "en-US"
 const pageCopy = {
   en: {
-    titleSuffix: "LobbyStack",
+    titleSuffix: "Caléonis Receptionist",
     updated: "Updated",
     by: "By",
     related: "Related reading",
-    product: "Continue with LobbyStack",
+    product: "Continue with Caléonis Receptionist",
   },
   fr: {
-    titleSuffix: "LobbyStack",
+    titleSuffix: "Caléonis Receptionist",
     updated: "Mis à jour",
     by: "Par",
     related: "À lire aussi",
-    product: "Continuer avec LobbyStack",
+    product: "Continuer avec Caléonis Receptionist",
   },
 } satisfies Record<
   Locale,
@@ -243,6 +243,17 @@ const productResources = slug.includes("open-source")
         )
       }
 
+      <aside
+        class="mb-8 rounded-xl border border-border/70 bg-muted/25 p-5 text-sm leading-relaxed"
+        data-upstream-archive
+      >
+        {
+          locale === "fr"
+            ? "Archive éditoriale LobbyStack, reproduite sous licence MIT, dans sa version source. Les prix, comparaisons, dates et fonctions cités décrivent ce texte historique et ne constituent pas une offre Caléonis. Sur le pilote français : numéro Voice-only sans SMS, transferts non qualifiés, aucun usage réel de données de santé. Consultez les tarifs projetés et l’aide pour le périmètre Caléonis."
+            : "LobbyStack editorial archive, reproduced under the MIT license in its original source version. Prices, comparisons, dates and features describe this historical text and do not constitute a Caléonis offer. The French pilot uses a Voice-only number without SMS; transfers are unqualified and real health data use is not enabled. Consult draft pricing and help for the Caléonis scope."
+        }
+        <a class="ml-1 underline" href="/third-party-notices.txt">MIT</a>
+      </aside>
       <div class="blog-copy max-w-none">
         <Content />
       </div>

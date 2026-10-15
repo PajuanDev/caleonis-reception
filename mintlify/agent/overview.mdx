@@ -1,41 +1,49 @@
 ---
-title: "Configure your AI receptionist"
-description: "Use the Agent section to configure AI settings, knowledge, services, and rules for your receptionist."
-sidebarTitle: "Agent overview"
+title: "Configurer votre réceptionniste IA"
+description: "Utilisez la section Agent pour configurer les paramètres IA, les connaissances, les services et les règles de votre réceptionniste."
+sidebarTitle: "Vue d'ensemble de l'agent"
 contentType: "Conceptual"
 ---
 
-The **Agent** section controls how your AI receptionist behaves. It is split into AI settings, Knowledge, Services, and Rules.
+La section **Agent** détermine le comportement de votre réceptionniste IA. Elle se divise en Paramètres IA, Connaissances, Services et Règles.
 
-Changes apply to new calls and website chat responses. They do not rewrite calls or messages that already happened.
+Les modifications s'appliquent aux nouveaux appels et aux nouvelles réponses du chat du site Web. Elles ne modifient pas les appels ni les messages passés.
 
 <CardGroup cols={2}>
-  <Card title="AI settings" icon="comment-dots" href="/agent/ai-settings/overview">
-    Set the opening line, fallback language, appointment changes, and default transfer number.
+  <Card title="Paramètres IA" icon="comment-dots" href="/agent/ai-settings/overview">
+    Définissez la phrase d'ouverture, la langue de repli, les modifications de rendez-vous et le numéro de transfert par défaut.
   </Card>
-  <Card title="Knowledge" icon="book-open" href="/agent/knowledge">
-    Add business information from text entries, documents, or a website import.
+  <Card title="Connaissances" icon="book-open" href="/agent/knowledge">
+    Ajoutez des informations sur votre entreprise à partir d'entrées de texte, de documents ou d'une importation de site Web.
   </Card>
   <Card title="Services" icon="calendar-check" href="/agent/services">
-    Add appointment types and the service information callers need.
+    Ajoutez vos types de rendez-vous et les informations dont les appelants ont besoin sur vos services.
   </Card>
-  <Card title="Rules" icon="list-check" href="/agent/rules">
-    Add operating instructions for transfers, callback requests, fallback behavior, and special cases.
+  <Card title="Règles" icon="list-check" href="/agent/rules">
+    Ajoutez des consignes pour les transferts, les demandes de rappel, le comportement de repli et les cas particuliers.
   </Card>
 </CardGroup>
 
-## How configuration is used
+## Comment la configuration est utilisée
 
-LobbyStack prepares the saved Agent settings for each live call, so callers get stable behavior for the duration of the conversation.
+Caléonis Receptionist prépare les réglages enregistrés de l'agent pour chaque appel en direct. Le comportement reste ainsi stable pendant toute la conversation.
 
-For website chat, LobbyStack uses the current business context and saved conversation state when generating replies.
+Pour le chat du site Web, Caléonis Receptionist s'appuie sur le contexte actuel de l'entreprise et sur l'état enregistré de la conversation pour générer les réponses.
 
-## Minimum setup for real callers
+## Configuration minimale avant les vrais appelants
 
-Before forwarding production calls, check that:
+Avant de renvoyer de vrais appels, vérifiez que :
 
-- Your greeting names your business and sets the right expectation.
-- The fallback language is set for cases where the caller's language is unclear.
-- A transfer number is saved if you want live human handoff.
-- Your knowledge entries include hours, location, services, pricing, policies, and common caller questions.
-- Your service entries and Google Calendar connection are ready before you rely on appointment booking or appointment changes.
+- Votre message d'accueil nomme votre entreprise et indique clairement à quoi l'appelant peut s'attendre.
+- La langue de repli est définie pour les cas où la langue de l'appelant n'est pas claire.
+- Un numéro de transfert est enregistré si vous voulez qu'un humain puisse prendre le relais en direct.
+- Vos entrées de connaissances couvrent les heures d'ouverture, l'adresse, les services, les prix, les politiques et les questions fréquentes des appelants.
+- Vos services et votre connexion Google Calendar sont prêts avant de compter sur la prise de rendez-vous ou les modifications de rendez-vous.
+
+{/* Caléonis qualification */}
+
+## Périmètre Caléonis V1
+
+Un seul agent est configuré par entreprise. Les rubriques IA, Connaissances, Services et Règles ne constituent pas un Agent Builder. Les modifications sont prises en compte dans les nouveaux échanges ; elles ne réécrivent pas un appel déjà commencé. Réalisez un nouveau test après enregistrement et traitement des sources.
+
+Une prise de message est le repli pendant qu'un transfert reste indisponible. Elle n'initie aucun appel sortant automatique. Voir [Capacités et qualification](/support/availability).

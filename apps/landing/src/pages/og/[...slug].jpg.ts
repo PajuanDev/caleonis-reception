@@ -1,6 +1,5 @@
 import path from "node:path"
 import type { APIRoute } from "astro"
-import { getCollection } from "astro:content"
 import React from "react"
 import satori from "satori"
 import sharp from "sharp"
@@ -17,18 +16,11 @@ type OgEntry = {
 const h = React.createElement
 
 const entryMap = async () => {
-  const posts = await getCollection("blog")
   const entries: OgEntry[] = [
     ...ogEntries.map((entry) => ({
       slug: entry.slug,
       title: entry.title,
       description: entry.description,
-    })),
-    ...posts.map((post) => ({
-      slug: `blog/${post.id}`,
-      title: post.data.title,
-      description: post.data.description,
-      coverImage: post.data.coverImage,
     })),
   ]
 
@@ -109,7 +101,7 @@ const textOverlay = (entry: OgEntry) => {
 
   return Buffer.from(`<svg width="${OG_IMAGE_WIDTH}" height="${OG_IMAGE_HEIGHT}" viewBox="0 0 ${OG_IMAGE_WIDTH} ${OG_IMAGE_HEIGHT}" xmlns="http://www.w3.org/2000/svg">
   <rect x="70" y="70" width="46" height="46" rx="12" fill="${light ? "#fafafa" : "#111827"}"/>
-  <text x="134" y="103" fill="${light ? "#fafafa" : "#111827"}" font-family="Arial, Helvetica, sans-serif" font-size="30" font-weight="700">LobbyStack</text>
+  <text x="134" y="103" fill="${light ? "#fafafa" : "#111827"}" font-family="Arial, Helvetica, sans-serif" font-size="30" font-weight="700">Caléonis Receptionist</text>
   <text x="70" y="382" fill="${light ? "#fafafa" : "#111827"}" font-family="Arial, Helvetica, sans-serif" font-size="${titleSize}" font-weight="700">
     ${titleLines
       .map(

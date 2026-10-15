@@ -1,0 +1,2376 @@
+{
+  "checkedAt": "2026-10-15T21:49:21.970Z",
+  "method": "HEAD only; no forms or provider mutations",
+  "records": [
+    {
+      "url": "https://developers.openai.com/api/docs/guides/live-delegation",
+      "status": "SKIPPED_ACTION_ENDPOINT",
+      "reason": "No account/provider action invoked by a public link audit."
+    },
+    {
+      "url": "https://developers.openai.com/api/docs/guides/tools-connectors-mcp",
+      "status": "SKIPPED_ACTION_ENDPOINT",
+      "reason": "No account/provider action invoked by a public link audit."
+    },
+    {
+      "url": "https://elevenlabs.io/docs/reception-ai/billing/plans-and-pricing",
+      "status": "SKIPPED_ACTION_ENDPOINT",
+      "reason": "No account/provider action invoked by a public link audit."
+    },
+    {
+      "url": "https://openai.com/api/pricing/",
+      "status": "SKIPPED_ACTION_ENDPOINT",
+      "reason": "No account/provider action invoked by a public link audit."
+    },
+    {
+      "url": "https://receptionist.caleonis.com/",
+      "status": "PENDING_COMBINED_STAGING",
+      "reason": "Existing app destinations or intended final-host canonical/API/help URLs. No test provider action or premature production rewrite."
+    },
+    {
+      "url": "https://receptionist.caleonis.com/aide/agent/ai-settings/appointment-changes/",
+      "status": "PENDING_COMBINED_STAGING",
+      "reason": "Existing app destinations or intended final-host canonical/API/help URLs. No test provider action or premature production rewrite."
+    },
+    {
+      "url": "https://receptionist.caleonis.com/aide/agent/ai-settings/overview/",
+      "status": "PENDING_COMBINED_STAGING",
+      "reason": "Existing app destinations or intended final-host canonical/API/help URLs. No test provider action or premature production rewrite."
+    },
+    {
+      "url": "https://receptionist.caleonis.com/aide/agent/knowledge/",
+      "status": "PENDING_COMBINED_STAGING",
+      "reason": "Existing app destinations or intended final-host canonical/API/help URLs. No test provider action or premature production rewrite."
+    },
+    {
+      "url": "https://receptionist.caleonis.com/aide/agent/overview/",
+      "status": "PENDING_COMBINED_STAGING",
+      "reason": "Existing app destinations or intended final-host canonical/API/help URLs. No test provider action or premature production rewrite."
+    },
+    {
+      "url": "https://receptionist.caleonis.com/aide/agent/rules/",
+      "status": "PENDING_COMBINED_STAGING",
+      "reason": "Existing app destinations or intended final-host canonical/API/help URLs. No test provider action or premature production rewrite."
+    },
+    {
+      "url": "https://receptionist.caleonis.com/aide/agent/services/",
+      "status": "PENDING_COMBINED_STAGING",
+      "reason": "Existing app destinations or intended final-host canonical/API/help URLs. No test provider action or premature production rewrite."
+    },
+    {
+      "url": "https://receptionist.caleonis.com/aide/ai/connect-chatgpt/",
+      "status": "PENDING_COMBINED_STAGING",
+      "reason": "Existing app destinations or intended final-host canonical/API/help URLs. No test provider action or premature production rewrite."
+    },
+    {
+      "url": "https://receptionist.caleonis.com/aide/ai/connect-claude/",
+      "status": "PENDING_COMBINED_STAGING",
+      "reason": "Existing app destinations or intended final-host canonical/API/help URLs. No test provider action or premature production rewrite."
+    },
+    {
+      "url": "https://receptionist.caleonis.com/aide/ai/connect-other-clients/",
+      "status": "PENDING_COMBINED_STAGING",
+      "reason": "Existing app destinations or intended final-host canonical/API/help URLs. No test provider action or premature production rewrite."
+    },
+    {
+      "url": "https://receptionist.caleonis.com/aide/ai/lobbystack-skill/",
+      "status": "PENDING_COMBINED_STAGING",
+      "reason": "Existing app destinations or intended final-host canonical/API/help URLs. No test provider action or premature production rewrite."
+    },
+    {
+      "url": "https://receptionist.caleonis.com/aide/ai/mcp/",
+      "status": "PENDING_COMBINED_STAGING",
+      "reason": "Existing app destinations or intended final-host canonical/API/help URLs. No test provider action or premature production rewrite."
+    },
+    {
+      "url": "https://receptionist.caleonis.com/aide/api-reference/appointmentbooked/",
+      "status": "PENDING_COMBINED_STAGING",
+      "reason": "Existing app destinations or intended final-host canonical/API/help URLs. No test provider action or premature production rewrite."
+    },
+    {
+      "url": "https://receptionist.caleonis.com/aide/api-reference/appointmentcancelled/",
+      "status": "PENDING_COMBINED_STAGING",
+      "reason": "Existing app destinations or intended final-host canonical/API/help URLs. No test provider action or premature production rewrite."
+    },
+    {
+      "url": "https://receptionist.caleonis.com/aide/api-reference/appointmentrescheduled/",
+      "status": "PENDING_COMBINED_STAGING",
+      "reason": "Existing app destinations or intended final-host canonical/API/help URLs. No test provider action or premature production rewrite."
+    },
+    {
+      "url": "https://receptionist.caleonis.com/aide/api-reference/appointments/book-an-appointment/",
+      "status": "PENDING_COMBINED_STAGING",
+      "reason": "Existing app destinations or intended final-host canonical/API/help URLs. No test provider action or premature production rewrite."
+    },
+    {
+      "url": "https://receptionist.caleonis.com/aide/api-reference/appointments/cancel-an-appointment/",
+      "status": "PENDING_COMBINED_STAGING",
+      "reason": "Existing app destinations or intended final-host canonical/API/help URLs. No test provider action or premature production rewrite."
+    },
+    {
+      "url": "https://receptionist.caleonis.com/aide/api-reference/appointments/get-an-appointment/",
+      "status": "PENDING_COMBINED_STAGING",
+      "reason": "Existing app destinations or intended final-host canonical/API/help URLs. No test provider action or premature production rewrite."
+    },
+    {
+      "url": "https://receptionist.caleonis.com/aide/api-reference/appointments/list-appointments/",
+      "status": "PENDING_COMBINED_STAGING",
+      "reason": "Existing app destinations or intended final-host canonical/API/help URLs. No test provider action or premature production rewrite."
+    },
+    {
+      "url": "https://receptionist.caleonis.com/aide/api-reference/appointments/list-open-appointment-times/",
+      "status": "PENDING_COMBINED_STAGING",
+      "reason": "Existing app destinations or intended final-host canonical/API/help URLs. No test provider action or premature production rewrite."
+    },
+    {
+      "url": "https://receptionist.caleonis.com/aide/api-reference/appointments/reschedule-an-appointment/",
+      "status": "PENDING_COMBINED_STAGING",
+      "reason": "Existing app destinations or intended final-host canonical/API/help URLs. No test provider action or premature production rewrite."
+    },
+    {
+      "url": "https://receptionist.caleonis.com/aide/api-reference/business/check-an-api-key/",
+      "status": "PENDING_COMBINED_STAGING",
+      "reason": "Existing app destinations or intended final-host canonical/API/help URLs. No test provider action or premature production rewrite."
+    },
+    {
+      "url": "https://receptionist.caleonis.com/aide/api-reference/business/get-the-business/",
+      "status": "PENDING_COMBINED_STAGING",
+      "reason": "Existing app destinations or intended final-host canonical/API/help URLs. No test provider action or premature production rewrite."
+    },
+    {
+      "url": "https://receptionist.caleonis.com/aide/api-reference/business/list-services/",
+      "status": "PENDING_COMBINED_STAGING",
+      "reason": "Existing app destinations or intended final-host canonical/API/help URLs. No test provider action or premature production rewrite."
+    },
+    {
+      "url": "https://receptionist.caleonis.com/aide/api-reference/business/list-staff/",
+      "status": "PENDING_COMBINED_STAGING",
+      "reason": "Existing app destinations or intended final-host canonical/API/help URLs. No test provider action or premature production rewrite."
+    },
+    {
+      "url": "https://receptionist.caleonis.com/aide/api-reference/business/update-the-business/",
+      "status": "PENDING_COMBINED_STAGING",
+      "reason": "Existing app destinations or intended final-host canonical/API/help URLs. No test provider action or premature production rewrite."
+    },
+    {
+      "url": "https://receptionist.caleonis.com/aide/api-reference/callcompleted/",
+      "status": "PENDING_COMBINED_STAGING",
+      "reason": "Existing app destinations or intended final-host canonical/API/help URLs. No test provider action or premature production rewrite."
+    },
+    {
+      "url": "https://receptionist.caleonis.com/aide/api-reference/calls/get-a-call/",
+      "status": "PENDING_COMBINED_STAGING",
+      "reason": "Existing app destinations or intended final-host canonical/API/help URLs. No test provider action or premature production rewrite."
+    },
+    {
+      "url": "https://receptionist.caleonis.com/aide/api-reference/calls/list-calls/",
+      "status": "PENDING_COMBINED_STAGING",
+      "reason": "Existing app destinations or intended final-host canonical/API/help URLs. No test provider action or premature production rewrite."
+    },
+    {
+      "url": "https://receptionist.caleonis.com/aide/api-reference/contactcreated/",
+      "status": "PENDING_COMBINED_STAGING",
+      "reason": "Existing app destinations or intended final-host canonical/API/help URLs. No test provider action or premature production rewrite."
+    },
+    {
+      "url": "https://receptionist.caleonis.com/aide/api-reference/contacts/create-a-contact/",
+      "status": "PENDING_COMBINED_STAGING",
+      "reason": "Existing app destinations or intended final-host canonical/API/help URLs. No test provider action or premature production rewrite."
+    },
+    {
+      "url": "https://receptionist.caleonis.com/aide/api-reference/contacts/get-a-contact/",
+      "status": "PENDING_COMBINED_STAGING",
+      "reason": "Existing app destinations or intended final-host canonical/API/help URLs. No test provider action or premature production rewrite."
+    },
+    {
+      "url": "https://receptionist.caleonis.com/aide/api-reference/contacts/list-contacts/",
+      "status": "PENDING_COMBINED_STAGING",
+      "reason": "Existing app destinations or intended final-host canonical/API/help URLs. No test provider action or premature production rewrite."
+    },
+    {
+      "url": "https://receptionist.caleonis.com/aide/api-reference/contacts/update-a-contact/",
+      "status": "PENDING_COMBINED_STAGING",
+      "reason": "Existing app destinations or intended final-host canonical/API/help URLs. No test provider action or premature production rewrite."
+    },
+    {
+      "url": "https://receptionist.caleonis.com/aide/api-reference/knowledge/add-a-knowledge-entry/",
+      "status": "PENDING_COMBINED_STAGING",
+      "reason": "Existing app destinations or intended final-host canonical/API/help URLs. No test provider action or premature production rewrite."
+    },
+    {
+      "url": "https://receptionist.caleonis.com/aide/api-reference/messages/list-messages/",
+      "status": "PENDING_COMBINED_STAGING",
+      "reason": "Existing app destinations or intended final-host canonical/API/help URLs. No test provider action or premature production rewrite."
+    },
+    {
+      "url": "https://receptionist.caleonis.com/aide/api-reference/messagetaken/",
+      "status": "PENDING_COMBINED_STAGING",
+      "reason": "Existing app destinations or intended final-host canonical/API/help URLs. No test provider action or premature production rewrite."
+    },
+    {
+      "url": "https://receptionist.caleonis.com/aide/api-reference/webhooks/create-a-webhook-endpoint/",
+      "status": "PENDING_COMBINED_STAGING",
+      "reason": "Existing app destinations or intended final-host canonical/API/help URLs. No test provider action or premature production rewrite."
+    },
+    {
+      "url": "https://receptionist.caleonis.com/aide/api-reference/webhooks/delete-a-webhook-endpoint/",
+      "status": "PENDING_COMBINED_STAGING",
+      "reason": "Existing app destinations or intended final-host canonical/API/help URLs. No test provider action or premature production rewrite."
+    },
+    {
+      "url": "https://receptionist.caleonis.com/aide/api-reference/webhooks/get-a-webhook-endpoint/",
+      "status": "PENDING_COMBINED_STAGING",
+      "reason": "Existing app destinations or intended final-host canonical/API/help URLs. No test provider action or premature production rewrite."
+    },
+    {
+      "url": "https://receptionist.caleonis.com/aide/api-reference/webhooks/list-webhook-endpoints/",
+      "status": "PENDING_COMBINED_STAGING",
+      "reason": "Existing app destinations or intended final-host canonical/API/help URLs. No test provider action or premature production rewrite."
+    },
+    {
+      "url": "https://receptionist.caleonis.com/aide/api-reference/webhooks/send-a-test-event/",
+      "status": "PENDING_COMBINED_STAGING",
+      "reason": "Existing app destinations or intended final-host canonical/API/help URLs. No test provider action or premature production rewrite."
+    },
+    {
+      "url": "https://receptionist.caleonis.com/aide/api-reference/webhooks/update-a-webhook-endpoint/",
+      "status": "PENDING_COMBINED_STAGING",
+      "reason": "Existing app destinations or intended final-host canonical/API/help URLs. No test provider action or premature production rewrite."
+    },
+    {
+      "url": "https://receptionist.caleonis.com/aide/api-reference/webhooktest/",
+      "status": "PENDING_COMBINED_STAGING",
+      "reason": "Existing app destinations or intended final-host canonical/API/help URLs. No test provider action or premature production rewrite."
+    },
+    {
+      "url": "https://receptionist.caleonis.com/aide/api/authentication/",
+      "status": "PENDING_COMBINED_STAGING",
+      "reason": "Existing app destinations or intended final-host canonical/API/help URLs. No test provider action or premature production rewrite."
+    },
+    {
+      "url": "https://receptionist.caleonis.com/aide/api/overview/",
+      "status": "PENDING_COMBINED_STAGING",
+      "reason": "Existing app destinations or intended final-host canonical/API/help URLs. No test provider action or premature production rewrite."
+    },
+    {
+      "url": "https://receptionist.caleonis.com/aide/api/requests/",
+      "status": "PENDING_COMBINED_STAGING",
+      "reason": "Existing app destinations or intended final-host canonical/API/help URLs. No test provider action or premature production rewrite."
+    },
+    {
+      "url": "https://receptionist.caleonis.com/aide/api/webhooks/",
+      "status": "PENDING_COMBINED_STAGING",
+      "reason": "Existing app destinations or intended final-host canonical/API/help URLs. No test provider action or premature production rewrite."
+    },
+    {
+      "url": "https://receptionist.caleonis.com/aide/attributions/",
+      "status": "PENDING_COMBINED_STAGING",
+      "reason": "Existing app destinations or intended final-host canonical/API/help URLs. No test provider action or premature production rewrite."
+    },
+    {
+      "url": "https://receptionist.caleonis.com/aide/billing/affiliate-program/",
+      "status": "PENDING_COMBINED_STAGING",
+      "reason": "Existing app destinations or intended final-host canonical/API/help URLs. No test provider action or premature production rewrite."
+    },
+    {
+      "url": "https://receptionist.caleonis.com/aide/billing/plans/",
+      "status": "PENDING_COMBINED_STAGING",
+      "reason": "Existing app destinations or intended final-host canonical/API/help URLs. No test provider action or premature production rewrite."
+    },
+    {
+      "url": "https://receptionist.caleonis.com/aide/billing/usage/",
+      "status": "PENDING_COMBINED_STAGING",
+      "reason": "Existing app destinations or intended final-host canonical/API/help URLs. No test provider action or premature production rewrite."
+    },
+    {
+      "url": "https://receptionist.caleonis.com/aide/dashboard/analytics/",
+      "status": "PENDING_COMBINED_STAGING",
+      "reason": "Existing app destinations or intended final-host canonical/API/help URLs. No test provider action or premature production rewrite."
+    },
+    {
+      "url": "https://receptionist.caleonis.com/aide/dashboard/appointments/",
+      "status": "PENDING_COMBINED_STAGING",
+      "reason": "Existing app destinations or intended final-host canonical/API/help URLs. No test provider action or premature production rewrite."
+    },
+    {
+      "url": "https://receptionist.caleonis.com/aide/dashboard/calls/",
+      "status": "PENDING_COMBINED_STAGING",
+      "reason": "Existing app destinations or intended final-host canonical/API/help URLs. No test provider action or premature production rewrite."
+    },
+    {
+      "url": "https://receptionist.caleonis.com/aide/dashboard/contacts/",
+      "status": "PENDING_COMBINED_STAGING",
+      "reason": "Existing app destinations or intended final-host canonical/API/help URLs. No test provider action or premature production rewrite."
+    },
+    {
+      "url": "https://receptionist.caleonis.com/aide/dashboard/home/",
+      "status": "PENDING_COMBINED_STAGING",
+      "reason": "Existing app destinations or intended final-host canonical/API/help URLs. No test provider action or premature production rewrite."
+    },
+    {
+      "url": "https://receptionist.caleonis.com/aide/dashboard/messages/",
+      "status": "PENDING_COMBINED_STAGING",
+      "reason": "Existing app destinations or intended final-host canonical/API/help URLs. No test provider action or premature production rewrite."
+    },
+    {
+      "url": "https://receptionist.caleonis.com/aide/en/agent/ai-settings/appointment-changes/",
+      "status": "PENDING_COMBINED_STAGING",
+      "reason": "Existing app destinations or intended final-host canonical/API/help URLs. No test provider action or premature production rewrite."
+    },
+    {
+      "url": "https://receptionist.caleonis.com/aide/en/agent/ai-settings/overview/",
+      "status": "PENDING_COMBINED_STAGING",
+      "reason": "Existing app destinations or intended final-host canonical/API/help URLs. No test provider action or premature production rewrite."
+    },
+    {
+      "url": "https://receptionist.caleonis.com/aide/en/agent/knowledge/",
+      "status": "PENDING_COMBINED_STAGING",
+      "reason": "Existing app destinations or intended final-host canonical/API/help URLs. No test provider action or premature production rewrite."
+    },
+    {
+      "url": "https://receptionist.caleonis.com/aide/en/agent/overview/",
+      "status": "PENDING_COMBINED_STAGING",
+      "reason": "Existing app destinations or intended final-host canonical/API/help URLs. No test provider action or premature production rewrite."
+    },
+    {
+      "url": "https://receptionist.caleonis.com/aide/en/agent/rules/",
+      "status": "PENDING_COMBINED_STAGING",
+      "reason": "Existing app destinations or intended final-host canonical/API/help URLs. No test provider action or premature production rewrite."
+    },
+    {
+      "url": "https://receptionist.caleonis.com/aide/en/agent/services/",
+      "status": "PENDING_COMBINED_STAGING",
+      "reason": "Existing app destinations or intended final-host canonical/API/help URLs. No test provider action or premature production rewrite."
+    },
+    {
+      "url": "https://receptionist.caleonis.com/aide/en/ai/connect-chatgpt/",
+      "status": "PENDING_COMBINED_STAGING",
+      "reason": "Existing app destinations or intended final-host canonical/API/help URLs. No test provider action or premature production rewrite."
+    },
+    {
+      "url": "https://receptionist.caleonis.com/aide/en/ai/connect-claude/",
+      "status": "PENDING_COMBINED_STAGING",
+      "reason": "Existing app destinations or intended final-host canonical/API/help URLs. No test provider action or premature production rewrite."
+    },
+    {
+      "url": "https://receptionist.caleonis.com/aide/en/ai/connect-other-clients/",
+      "status": "PENDING_COMBINED_STAGING",
+      "reason": "Existing app destinations or intended final-host canonical/API/help URLs. No test provider action or premature production rewrite."
+    },
+    {
+      "url": "https://receptionist.caleonis.com/aide/en/ai/lobbystack-skill/",
+      "status": "PENDING_COMBINED_STAGING",
+      "reason": "Existing app destinations or intended final-host canonical/API/help URLs. No test provider action or premature production rewrite."
+    },
+    {
+      "url": "https://receptionist.caleonis.com/aide/en/ai/mcp/",
+      "status": "PENDING_COMBINED_STAGING",
+      "reason": "Existing app destinations or intended final-host canonical/API/help URLs. No test provider action or premature production rewrite."
+    },
+    {
+      "url": "https://receptionist.caleonis.com/aide/en/api-reference/appointmentbooked/",
+      "status": "PENDING_COMBINED_STAGING",
+      "reason": "Existing app destinations or intended final-host canonical/API/help URLs. No test provider action or premature production rewrite."
+    },
+    {
+      "url": "https://receptionist.caleonis.com/aide/en/api-reference/appointmentcancelled/",
+      "status": "PENDING_COMBINED_STAGING",
+      "reason": "Existing app destinations or intended final-host canonical/API/help URLs. No test provider action or premature production rewrite."
+    },
+    {
+      "url": "https://receptionist.caleonis.com/aide/en/api-reference/appointmentrescheduled/",
+      "status": "PENDING_COMBINED_STAGING",
+      "reason": "Existing app destinations or intended final-host canonical/API/help URLs. No test provider action or premature production rewrite."
+    },
+    {
+      "url": "https://receptionist.caleonis.com/aide/en/api-reference/appointments/book-an-appointment/",
+      "status": "PENDING_COMBINED_STAGING",
+      "reason": "Existing app destinations or intended final-host canonical/API/help URLs. No test provider action or premature production rewrite."
+    },
+    {
+      "url": "https://receptionist.caleonis.com/aide/en/api-reference/appointments/cancel-an-appointment/",
+      "status": "PENDING_COMBINED_STAGING",
+      "reason": "Existing app destinations or intended final-host canonical/API/help URLs. No test provider action or premature production rewrite."
+    },
+    {
+      "url": "https://receptionist.caleonis.com/aide/en/api-reference/appointments/get-an-appointment/",
+      "status": "PENDING_COMBINED_STAGING",
+      "reason": "Existing app destinations or intended final-host canonical/API/help URLs. No test provider action or premature production rewrite."
+    },
+    {
+      "url": "https://receptionist.caleonis.com/aide/en/api-reference/appointments/list-appointments/",
+      "status": "PENDING_COMBINED_STAGING",
+      "reason": "Existing app destinations or intended final-host canonical/API/help URLs. No test provider action or premature production rewrite."
+    },
+    {
+      "url": "https://receptionist.caleonis.com/aide/en/api-reference/appointments/list-open-appointment-times/",
+      "status": "PENDING_COMBINED_STAGING",
+      "reason": "Existing app destinations or intended final-host canonical/API/help URLs. No test provider action or premature production rewrite."
+    },
+    {
+      "url": "https://receptionist.caleonis.com/aide/en/api-reference/appointments/reschedule-an-appointment/",
+      "status": "PENDING_COMBINED_STAGING",
+      "reason": "Existing app destinations or intended final-host canonical/API/help URLs. No test provider action or premature production rewrite."
+    },
+    {
+      "url": "https://receptionist.caleonis.com/aide/en/api-reference/business/check-an-api-key/",
+      "status": "PENDING_COMBINED_STAGING",
+      "reason": "Existing app destinations or intended final-host canonical/API/help URLs. No test provider action or premature production rewrite."
+    },
+    {
+      "url": "https://receptionist.caleonis.com/aide/en/api-reference/business/get-the-business/",
+      "status": "PENDING_COMBINED_STAGING",
+      "reason": "Existing app destinations or intended final-host canonical/API/help URLs. No test provider action or premature production rewrite."
+    },
+    {
+      "url": "https://receptionist.caleonis.com/aide/en/api-reference/business/list-services/",
+      "status": "PENDING_COMBINED_STAGING",
+      "reason": "Existing app destinations or intended final-host canonical/API/help URLs. No test provider action or premature production rewrite."
+    },
+    {
+      "url": "https://receptionist.caleonis.com/aide/en/api-reference/business/list-staff/",
+      "status": "PENDING_COMBINED_STAGING",
+      "reason": "Existing app destinations or intended final-host canonical/API/help URLs. No test provider action or premature production rewrite."
+    },
+    {
+      "url": "https://receptionist.caleonis.com/aide/en/api-reference/business/update-the-business/",
+      "status": "PENDING_COMBINED_STAGING",
+      "reason": "Existing app destinations or intended final-host canonical/API/help URLs. No test provider action or premature production rewrite."
+    },
+    {
+      "url": "https://receptionist.caleonis.com/aide/en/api-reference/callcompleted/",
+      "status": "PENDING_COMBINED_STAGING",
+      "reason": "Existing app destinations or intended final-host canonical/API/help URLs. No test provider action or premature production rewrite."
+    },
+    {
+      "url": "https://receptionist.caleonis.com/aide/en/api-reference/calls/get-a-call/",
+      "status": "PENDING_COMBINED_STAGING",
+      "reason": "Existing app destinations or intended final-host canonical/API/help URLs. No test provider action or premature production rewrite."
+    },
+    {
+      "url": "https://receptionist.caleonis.com/aide/en/api-reference/calls/list-calls/",
+      "status": "PENDING_COMBINED_STAGING",
+      "reason": "Existing app destinations or intended final-host canonical/API/help URLs. No test provider action or premature production rewrite."
+    },
+    {
+      "url": "https://receptionist.caleonis.com/aide/en/api-reference/contactcreated/",
+      "status": "PENDING_COMBINED_STAGING",
+      "reason": "Existing app destinations or intended final-host canonical/API/help URLs. No test provider action or premature production rewrite."
+    },
+    {
+      "url": "https://receptionist.caleonis.com/aide/en/api-reference/contacts/create-a-contact/",
+      "status": "PENDING_COMBINED_STAGING",
+      "reason": "Existing app destinations or intended final-host canonical/API/help URLs. No test provider action or premature production rewrite."
+    },
+    {
+      "url": "https://receptionist.caleonis.com/aide/en/api-reference/contacts/get-a-contact/",
+      "status": "PENDING_COMBINED_STAGING",
+      "reason": "Existing app destinations or intended final-host canonical/API/help URLs. No test provider action or premature production rewrite."
+    },
+    {
+      "url": "https://receptionist.caleonis.com/aide/en/api-reference/contacts/list-contacts/",
+      "status": "PENDING_COMBINED_STAGING",
+      "reason": "Existing app destinations or intended final-host canonical/API/help URLs. No test provider action or premature production rewrite."
+    },
+    {
+      "url": "https://receptionist.caleonis.com/aide/en/api-reference/contacts/update-a-contact/",
+      "status": "PENDING_COMBINED_STAGING",
+      "reason": "Existing app destinations or intended final-host canonical/API/help URLs. No test provider action or premature production rewrite."
+    },
+    {
+      "url": "https://receptionist.caleonis.com/aide/en/api-reference/knowledge/add-a-knowledge-entry/",
+      "status": "PENDING_COMBINED_STAGING",
+      "reason": "Existing app destinations or intended final-host canonical/API/help URLs. No test provider action or premature production rewrite."
+    },
+    {
+      "url": "https://receptionist.caleonis.com/aide/en/api-reference/messages/list-messages/",
+      "status": "PENDING_COMBINED_STAGING",
+      "reason": "Existing app destinations or intended final-host canonical/API/help URLs. No test provider action or premature production rewrite."
+    },
+    {
+      "url": "https://receptionist.caleonis.com/aide/en/api-reference/messagetaken/",
+      "status": "PENDING_COMBINED_STAGING",
+      "reason": "Existing app destinations or intended final-host canonical/API/help URLs. No test provider action or premature production rewrite."
+    },
+    {
+      "url": "https://receptionist.caleonis.com/aide/en/api-reference/webhooks/create-a-webhook-endpoint/",
+      "status": "PENDING_COMBINED_STAGING",
+      "reason": "Existing app destinations or intended final-host canonical/API/help URLs. No test provider action or premature production rewrite."
+    },
+    {
+      "url": "https://receptionist.caleonis.com/aide/en/api-reference/webhooks/delete-a-webhook-endpoint/",
+      "status": "PENDING_COMBINED_STAGING",
+      "reason": "Existing app destinations or intended final-host canonical/API/help URLs. No test provider action or premature production rewrite."
+    },
+    {
+      "url": "https://receptionist.caleonis.com/aide/en/api-reference/webhooks/get-a-webhook-endpoint/",
+      "status": "PENDING_COMBINED_STAGING",
+      "reason": "Existing app destinations or intended final-host canonical/API/help URLs. No test provider action or premature production rewrite."
+    },
+    {
+      "url": "https://receptionist.caleonis.com/aide/en/api-reference/webhooks/list-webhook-endpoints/",
+      "status": "PENDING_COMBINED_STAGING",
+      "reason": "Existing app destinations or intended final-host canonical/API/help URLs. No test provider action or premature production rewrite."
+    },
+    {
+      "url": "https://receptionist.caleonis.com/aide/en/api-reference/webhooks/send-a-test-event/",
+      "status": "PENDING_COMBINED_STAGING",
+      "reason": "Existing app destinations or intended final-host canonical/API/help URLs. No test provider action or premature production rewrite."
+    },
+    {
+      "url": "https://receptionist.caleonis.com/aide/en/api-reference/webhooks/update-a-webhook-endpoint/",
+      "status": "PENDING_COMBINED_STAGING",
+      "reason": "Existing app destinations or intended final-host canonical/API/help URLs. No test provider action or premature production rewrite."
+    },
+    {
+      "url": "https://receptionist.caleonis.com/aide/en/api-reference/webhooktest/",
+      "status": "PENDING_COMBINED_STAGING",
+      "reason": "Existing app destinations or intended final-host canonical/API/help URLs. No test provider action or premature production rewrite."
+    },
+    {
+      "url": "https://receptionist.caleonis.com/aide/en/api/authentication/",
+      "status": "PENDING_COMBINED_STAGING",
+      "reason": "Existing app destinations or intended final-host canonical/API/help URLs. No test provider action or premature production rewrite."
+    },
+    {
+      "url": "https://receptionist.caleonis.com/aide/en/api/overview/",
+      "status": "PENDING_COMBINED_STAGING",
+      "reason": "Existing app destinations or intended final-host canonical/API/help URLs. No test provider action or premature production rewrite."
+    },
+    {
+      "url": "https://receptionist.caleonis.com/aide/en/api/requests/",
+      "status": "PENDING_COMBINED_STAGING",
+      "reason": "Existing app destinations or intended final-host canonical/API/help URLs. No test provider action or premature production rewrite."
+    },
+    {
+      "url": "https://receptionist.caleonis.com/aide/en/api/webhooks/",
+      "status": "PENDING_COMBINED_STAGING",
+      "reason": "Existing app destinations or intended final-host canonical/API/help URLs. No test provider action or premature production rewrite."
+    },
+    {
+      "url": "https://receptionist.caleonis.com/aide/en/attributions/",
+      "status": "PENDING_COMBINED_STAGING",
+      "reason": "Existing app destinations or intended final-host canonical/API/help URLs. No test provider action or premature production rewrite."
+    },
+    {
+      "url": "https://receptionist.caleonis.com/aide/en/billing/affiliate-program/",
+      "status": "PENDING_COMBINED_STAGING",
+      "reason": "Existing app destinations or intended final-host canonical/API/help URLs. No test provider action or premature production rewrite."
+    },
+    {
+      "url": "https://receptionist.caleonis.com/aide/en/billing/plans/",
+      "status": "PENDING_COMBINED_STAGING",
+      "reason": "Existing app destinations or intended final-host canonical/API/help URLs. No test provider action or premature production rewrite."
+    },
+    {
+      "url": "https://receptionist.caleonis.com/aide/en/billing/usage/",
+      "status": "PENDING_COMBINED_STAGING",
+      "reason": "Existing app destinations or intended final-host canonical/API/help URLs. No test provider action or premature production rewrite."
+    },
+    {
+      "url": "https://receptionist.caleonis.com/aide/en/dashboard/analytics/",
+      "status": "PENDING_COMBINED_STAGING",
+      "reason": "Existing app destinations or intended final-host canonical/API/help URLs. No test provider action or premature production rewrite."
+    },
+    {
+      "url": "https://receptionist.caleonis.com/aide/en/dashboard/appointments/",
+      "status": "PENDING_COMBINED_STAGING",
+      "reason": "Existing app destinations or intended final-host canonical/API/help URLs. No test provider action or premature production rewrite."
+    },
+    {
+      "url": "https://receptionist.caleonis.com/aide/en/dashboard/calls/",
+      "status": "PENDING_COMBINED_STAGING",
+      "reason": "Existing app destinations or intended final-host canonical/API/help URLs. No test provider action or premature production rewrite."
+    },
+    {
+      "url": "https://receptionist.caleonis.com/aide/en/dashboard/contacts/",
+      "status": "PENDING_COMBINED_STAGING",
+      "reason": "Existing app destinations or intended final-host canonical/API/help URLs. No test provider action or premature production rewrite."
+    },
+    {
+      "url": "https://receptionist.caleonis.com/aide/en/dashboard/home/",
+      "status": "PENDING_COMBINED_STAGING",
+      "reason": "Existing app destinations or intended final-host canonical/API/help URLs. No test provider action or premature production rewrite."
+    },
+    {
+      "url": "https://receptionist.caleonis.com/aide/en/dashboard/messages/",
+      "status": "PENDING_COMBINED_STAGING",
+      "reason": "Existing app destinations or intended final-host canonical/API/help URLs. No test provider action or premature production rewrite."
+    },
+    {
+      "url": "https://receptionist.caleonis.com/aide/en/getting-started/account-setup/",
+      "status": "PENDING_COMBINED_STAGING",
+      "reason": "Existing app destinations or intended final-host canonical/API/help URLs. No test provider action or premature production rewrite."
+    },
+    {
+      "url": "https://receptionist.caleonis.com/aide/en/getting-started/claim-your-number/",
+      "status": "PENDING_COMBINED_STAGING",
+      "reason": "Existing app destinations or intended final-host canonical/API/help URLs. No test provider action or premature production rewrite."
+    },
+    {
+      "url": "https://receptionist.caleonis.com/aide/en/getting-started/number-countries/",
+      "status": "PENDING_COMBINED_STAGING",
+      "reason": "Existing app destinations or intended final-host canonical/API/help URLs. No test provider action or premature production rewrite."
+    },
+    {
+      "url": "https://receptionist.caleonis.com/aide/en/integrations/google-calendar/",
+      "status": "PENDING_COMBINED_STAGING",
+      "reason": "Existing app destinations or intended final-host canonical/API/help URLs. No test provider action or premature production rewrite."
+    },
+    {
+      "url": "https://receptionist.caleonis.com/aide/en/integrations/overview/",
+      "status": "PENDING_COMBINED_STAGING",
+      "reason": "Existing app destinations or intended final-host canonical/API/help URLs. No test provider action or premature production rewrite."
+    },
+    {
+      "url": "https://receptionist.caleonis.com/aide/en/integrations/sms/",
+      "status": "PENDING_COMBINED_STAGING",
+      "reason": "Existing app destinations or intended final-host canonical/API/help URLs. No test provider action or premature production rewrite."
+    },
+    {
+      "url": "https://receptionist.caleonis.com/aide/en/integrations/webhooks/",
+      "status": "PENDING_COMBINED_STAGING",
+      "reason": "Existing app destinations or intended final-host canonical/API/help URLs. No test provider action or premature production rewrite."
+    },
+    {
+      "url": "https://receptionist.caleonis.com/aide/en/introduction/",
+      "status": "PENDING_COMBINED_STAGING",
+      "reason": "Existing app destinations or intended final-host canonical/API/help URLs. No test provider action or premature production rewrite."
+    },
+    {
+      "url": "https://receptionist.caleonis.com/aide/en/overview/",
+      "status": "PENDING_COMBINED_STAGING",
+      "reason": "Existing app destinations or intended final-host canonical/API/help URLs. No test provider action or premature production rewrite."
+    },
+    {
+      "url": "https://receptionist.caleonis.com/aide/en/quickstart/",
+      "status": "PENDING_COMBINED_STAGING",
+      "reason": "Existing app destinations or intended final-host canonical/API/help URLs. No test provider action or premature production rewrite."
+    },
+    {
+      "url": "https://receptionist.caleonis.com/aide/en/self-hosting/docker-compose/",
+      "status": "PENDING_COMBINED_STAGING",
+      "reason": "Existing app destinations or intended final-host canonical/API/help URLs. No test provider action or premature production rewrite."
+    },
+    {
+      "url": "https://receptionist.caleonis.com/aide/en/self-hosting/environment-variables/",
+      "status": "PENDING_COMBINED_STAGING",
+      "reason": "Existing app destinations or intended final-host canonical/API/help URLs. No test provider action or premature production rewrite."
+    },
+    {
+      "url": "https://receptionist.caleonis.com/aide/en/self-hosting/overview/",
+      "status": "PENDING_COMBINED_STAGING",
+      "reason": "Existing app destinations or intended final-host canonical/API/help URLs. No test provider action or premature production rewrite."
+    },
+    {
+      "url": "https://receptionist.caleonis.com/aide/en/self-hosting/providers/",
+      "status": "PENDING_COMBINED_STAGING",
+      "reason": "Existing app destinations or intended final-host canonical/API/help URLs. No test provider action or premature production rewrite."
+    },
+    {
+      "url": "https://receptionist.caleonis.com/aide/en/settings/account/",
+      "status": "PENDING_COMBINED_STAGING",
+      "reason": "Existing app destinations or intended final-host canonical/API/help URLs. No test provider action or premature production rewrite."
+    },
+    {
+      "url": "https://receptionist.caleonis.com/aide/en/settings/notifications/",
+      "status": "PENDING_COMBINED_STAGING",
+      "reason": "Existing app destinations or intended final-host canonical/API/help URLs. No test provider action or premature production rewrite."
+    },
+    {
+      "url": "https://receptionist.caleonis.com/aide/en/settings/overview/",
+      "status": "PENDING_COMBINED_STAGING",
+      "reason": "Existing app destinations or intended final-host canonical/API/help URLs. No test provider action or premature production rewrite."
+    },
+    {
+      "url": "https://receptionist.caleonis.com/aide/en/settings/phone-number/",
+      "status": "PENDING_COMBINED_STAGING",
+      "reason": "Existing app destinations or intended final-host canonical/API/help URLs. No test provider action or premature production rewrite."
+    },
+    {
+      "url": "https://receptionist.caleonis.com/aide/en/settings/team/",
+      "status": "PENDING_COMBINED_STAGING",
+      "reason": "Existing app destinations or intended final-host canonical/API/help URLs. No test provider action or premature production rewrite."
+    },
+    {
+      "url": "https://receptionist.caleonis.com/aide/en/settings/widget/",
+      "status": "PENDING_COMBINED_STAGING",
+      "reason": "Existing app destinations or intended final-host canonical/API/help URLs. No test provider action or premature production rewrite."
+    },
+    {
+      "url": "https://receptionist.caleonis.com/aide/en/support/availability/",
+      "status": "PENDING_COMBINED_STAGING",
+      "reason": "Existing app destinations or intended final-host canonical/API/help URLs. No test provider action or premature production rewrite."
+    },
+    {
+      "url": "https://receptionist.caleonis.com/aide/en/support/faq/",
+      "status": "PENDING_COMBINED_STAGING",
+      "reason": "Existing app destinations or intended final-host canonical/API/help URLs. No test provider action or premature production rewrite."
+    },
+    {
+      "url": "https://receptionist.caleonis.com/aide/en/support/phone-forwarding/",
+      "status": "PENDING_COMBINED_STAGING",
+      "reason": "Existing app destinations or intended final-host canonical/API/help URLs. No test provider action or premature production rewrite."
+    },
+    {
+      "url": "https://receptionist.caleonis.com/aide/en/support/privacy/",
+      "status": "PENDING_COMBINED_STAGING",
+      "reason": "Existing app destinations or intended final-host canonical/API/help URLs. No test provider action or premature production rewrite."
+    },
+    {
+      "url": "https://receptionist.caleonis.com/aide/en/support/recordings/",
+      "status": "PENDING_COMBINED_STAGING",
+      "reason": "Existing app destinations or intended final-host canonical/API/help URLs. No test provider action or premature production rewrite."
+    },
+    {
+      "url": "https://receptionist.caleonis.com/aide/en/support/troubleshooting/",
+      "status": "PENDING_COMBINED_STAGING",
+      "reason": "Existing app destinations or intended final-host canonical/API/help URLs. No test provider action or premature production rewrite."
+    },
+    {
+      "url": "https://receptionist.caleonis.com/aide/getting-started/account-setup/",
+      "status": "PENDING_COMBINED_STAGING",
+      "reason": "Existing app destinations or intended final-host canonical/API/help URLs. No test provider action or premature production rewrite."
+    },
+    {
+      "url": "https://receptionist.caleonis.com/aide/getting-started/claim-your-number/",
+      "status": "PENDING_COMBINED_STAGING",
+      "reason": "Existing app destinations or intended final-host canonical/API/help URLs. No test provider action or premature production rewrite."
+    },
+    {
+      "url": "https://receptionist.caleonis.com/aide/getting-started/number-countries/",
+      "status": "PENDING_COMBINED_STAGING",
+      "reason": "Existing app destinations or intended final-host canonical/API/help URLs. No test provider action or premature production rewrite."
+    },
+    {
+      "url": "https://receptionist.caleonis.com/aide/integrations/google-calendar/",
+      "status": "PENDING_COMBINED_STAGING",
+      "reason": "Existing app destinations or intended final-host canonical/API/help URLs. No test provider action or premature production rewrite."
+    },
+    {
+      "url": "https://receptionist.caleonis.com/aide/integrations/overview/",
+      "status": "PENDING_COMBINED_STAGING",
+      "reason": "Existing app destinations or intended final-host canonical/API/help URLs. No test provider action or premature production rewrite."
+    },
+    {
+      "url": "https://receptionist.caleonis.com/aide/integrations/sms/",
+      "status": "PENDING_COMBINED_STAGING",
+      "reason": "Existing app destinations or intended final-host canonical/API/help URLs. No test provider action or premature production rewrite."
+    },
+    {
+      "url": "https://receptionist.caleonis.com/aide/integrations/webhooks/",
+      "status": "PENDING_COMBINED_STAGING",
+      "reason": "Existing app destinations or intended final-host canonical/API/help URLs. No test provider action or premature production rewrite."
+    },
+    {
+      "url": "https://receptionist.caleonis.com/aide/introduction/",
+      "status": "PENDING_COMBINED_STAGING",
+      "reason": "Existing app destinations or intended final-host canonical/API/help URLs. No test provider action or premature production rewrite."
+    },
+    {
+      "url": "https://receptionist.caleonis.com/aide/quickstart/",
+      "status": "PENDING_COMBINED_STAGING",
+      "reason": "Existing app destinations or intended final-host canonical/API/help URLs. No test provider action or premature production rewrite."
+    },
+    {
+      "url": "https://receptionist.caleonis.com/aide/self-hosting/docker-compose/",
+      "status": "PENDING_COMBINED_STAGING",
+      "reason": "Existing app destinations or intended final-host canonical/API/help URLs. No test provider action or premature production rewrite."
+    },
+    {
+      "url": "https://receptionist.caleonis.com/aide/self-hosting/environment-variables/",
+      "status": "PENDING_COMBINED_STAGING",
+      "reason": "Existing app destinations or intended final-host canonical/API/help URLs. No test provider action or premature production rewrite."
+    },
+    {
+      "url": "https://receptionist.caleonis.com/aide/self-hosting/overview/",
+      "status": "PENDING_COMBINED_STAGING",
+      "reason": "Existing app destinations or intended final-host canonical/API/help URLs. No test provider action or premature production rewrite."
+    },
+    {
+      "url": "https://receptionist.caleonis.com/aide/self-hosting/providers/",
+      "status": "PENDING_COMBINED_STAGING",
+      "reason": "Existing app destinations or intended final-host canonical/API/help URLs. No test provider action or premature production rewrite."
+    },
+    {
+      "url": "https://receptionist.caleonis.com/aide/settings/account/",
+      "status": "PENDING_COMBINED_STAGING",
+      "reason": "Existing app destinations or intended final-host canonical/API/help URLs. No test provider action or premature production rewrite."
+    },
+    {
+      "url": "https://receptionist.caleonis.com/aide/settings/notifications/",
+      "status": "PENDING_COMBINED_STAGING",
+      "reason": "Existing app destinations or intended final-host canonical/API/help URLs. No test provider action or premature production rewrite."
+    },
+    {
+      "url": "https://receptionist.caleonis.com/aide/settings/overview/",
+      "status": "PENDING_COMBINED_STAGING",
+      "reason": "Existing app destinations or intended final-host canonical/API/help URLs. No test provider action or premature production rewrite."
+    },
+    {
+      "url": "https://receptionist.caleonis.com/aide/settings/phone-number/",
+      "status": "PENDING_COMBINED_STAGING",
+      "reason": "Existing app destinations or intended final-host canonical/API/help URLs. No test provider action or premature production rewrite."
+    },
+    {
+      "url": "https://receptionist.caleonis.com/aide/settings/team/",
+      "status": "PENDING_COMBINED_STAGING",
+      "reason": "Existing app destinations or intended final-host canonical/API/help URLs. No test provider action or premature production rewrite."
+    },
+    {
+      "url": "https://receptionist.caleonis.com/aide/settings/widget/",
+      "status": "PENDING_COMBINED_STAGING",
+      "reason": "Existing app destinations or intended final-host canonical/API/help URLs. No test provider action or premature production rewrite."
+    },
+    {
+      "url": "https://receptionist.caleonis.com/aide/support/availability/",
+      "status": "PENDING_COMBINED_STAGING",
+      "reason": "Existing app destinations or intended final-host canonical/API/help URLs. No test provider action or premature production rewrite."
+    },
+    {
+      "url": "https://receptionist.caleonis.com/aide/support/faq/",
+      "status": "PENDING_COMBINED_STAGING",
+      "reason": "Existing app destinations or intended final-host canonical/API/help URLs. No test provider action or premature production rewrite."
+    },
+    {
+      "url": "https://receptionist.caleonis.com/aide/support/phone-forwarding/",
+      "status": "PENDING_COMBINED_STAGING",
+      "reason": "Existing app destinations or intended final-host canonical/API/help URLs. No test provider action or premature production rewrite."
+    },
+    {
+      "url": "https://receptionist.caleonis.com/aide/support/privacy/",
+      "status": "PENDING_COMBINED_STAGING",
+      "reason": "Existing app destinations or intended final-host canonical/API/help URLs. No test provider action or premature production rewrite."
+    },
+    {
+      "url": "https://receptionist.caleonis.com/aide/support/recordings/",
+      "status": "PENDING_COMBINED_STAGING",
+      "reason": "Existing app destinations or intended final-host canonical/API/help URLs. No test provider action or premature production rewrite."
+    },
+    {
+      "url": "https://receptionist.caleonis.com/aide/support/troubleshooting/",
+      "status": "PENDING_COMBINED_STAGING",
+      "reason": "Existing app destinations or intended final-host canonical/API/help URLs. No test provider action or premature production rewrite."
+    },
+    {
+      "url": "https://receptionist.caleonis.com/login",
+      "status": "PENDING_COMBINED_STAGING",
+      "reason": "Existing app destinations or intended final-host canonical/API/help URLs. No test provider action or premature production rewrite."
+    },
+    {
+      "url": "https://receptionist.caleonis.com/signup",
+      "status": "PENDING_COMBINED_STAGING",
+      "reason": "Existing app destinations or intended final-host canonical/API/help URLs. No test provider action or premature production rewrite."
+    },
+    {
+      "url": "https://receptionist.caleonis.com/signup?locale=en&source=calculator",
+      "status": "PENDING_COMBINED_STAGING",
+      "reason": "Existing app destinations or intended final-host canonical/API/help URLs. No test provider action or premature production rewrite."
+    },
+    {
+      "url": "https://receptionist.caleonis.com/signup?locale=fr&source=calculator",
+      "status": "PENDING_COMBINED_STAGING",
+      "reason": "Existing app destinations or intended final-host canonical/API/help URLs. No test provider action or premature production rewrite."
+    },
+    {
+      "url": "https://affiliate.retellai.com/",
+      "status": 200,
+      "finalUrl": "https://affiliate.retellai.com/",
+      "assessment": "PASS"
+    },
+    {
+      "url": "https://ai-receptionist.com/pricing",
+      "status": 200,
+      "finalUrl": "https://ai-receptionist.com/pricing/",
+      "assessment": "PASS"
+    },
+    {
+      "url": "https://airagent.fr/tarifs/",
+      "status": 200,
+      "finalUrl": "https://airagent.fr/tarifs/",
+      "assessment": "PASS"
+    },
+    {
+      "url": "https://amessagecenter.com/hvac-answering-service",
+      "status": 200,
+      "finalUrl": "https://amessagecenter.com/hvac-answering-service",
+      "assessment": "PASS"
+    },
+    {
+      "url": "https://amessagecenter.com/plumbing-answering-service",
+      "status": 200,
+      "finalUrl": "https://amessagecenter.com/plumbing-answering-service",
+      "assessment": "PASS"
+    },
+    {
+      "url": "https://amessagecenter.com/pricing",
+      "status": 200,
+      "finalUrl": "https://amessagecenter.com/pricing",
+      "assessment": "PASS"
+    },
+    {
+      "url": "https://answerfirst.com/pricing/",
+      "status": 200,
+      "finalUrl": "https://answerfirst.com/pricing/",
+      "assessment": "PASS"
+    },
+    {
+      "url": "https://answerhero.com/industries/service-providers/construction-companies/",
+      "status": 200,
+      "finalUrl": "https://answerhero.com/industries/service-providers/construction-companies/",
+      "assessment": "PASS"
+    },
+    {
+      "url": "https://answerhero.com/pricing-plans/",
+      "status": 200,
+      "finalUrl": "https://answerhero.com/pricing-plans/",
+      "assessment": "PASS"
+    },
+    {
+      "url": "https://answeringservicecare.com/pricing/",
+      "status": 403,
+      "finalUrl": "https://answeringservicecare.com/pricing/",
+      "assessment": "REQUIRES_BROWSER"
+    },
+    {
+      "url": "https://answeringservicesus.com/pricing/",
+      "status": 200,
+      "finalUrl": "https://answeringservicesus.com/pricing/",
+      "assessment": "PASS"
+    },
+    {
+      "url": "https://app.lobbystack.com/en/signup",
+      "status": 200,
+      "finalUrl": "https://app.lobbystack.com/en/signup",
+      "assessment": "PASS"
+    },
+    {
+      "url": "https://appfolio.com/features/maintenance",
+      "status": 200,
+      "finalUrl": "https://www.appfolio.com/property-manager/maintenance",
+      "assessment": "PASS"
+    },
+    {
+      "url": "https://assets.answerconnect.com/answerconnect/us/pdf/AnswerConnectUS_Pricing.pdf",
+      "status": 200,
+      "finalUrl": "https://assets.answerconnect.com/answerconnect/us/pdf/AnswerConnectUS_Pricing.pdf",
+      "assessment": "PASS"
+    },
+    {
+      "url": "https://business.bell.ca/support/small-business/phone/calling-features/how-to-use-call-forwarding",
+      "status": 200,
+      "finalUrl": "https://business.bell.ca/support/small-business/phone/calling-features/how-to-use-call-forwarding",
+      "assessment": "PASS"
+    },
+    {
+      "url": "https://business.comcast.com/support/article/voice/phone-managing-call-forwarding-routing",
+      "status": null,
+      "assessment": "UNVERIFIED",
+      "error": "TimeoutError: The operation was aborted due to timeout"
+    },
+    {
+      "url": "https://business.google.com/us/business-profile/",
+      "status": 200,
+      "finalUrl": "https://business.google.com/us/business-profile/?ucbcb=1",
+      "assessment": "PASS"
+    },
+    {
+      "url": "https://businessdigitalvoice.verizon.com/call-forwarding-end-user/",
+      "status": 200,
+      "finalUrl": "https://businessdigitalvoice.verizon.com/call-forwarding-end-user/",
+      "assessment": "PASS"
+    },
+    {
+      "url": "https://callsens.fr/tarifs",
+      "status": 200,
+      "finalUrl": "https://callsens.fr/tarifs",
+      "assessment": "PASS"
+    },
+    {
+      "url": "https://community.openai.com/t/introducing-gpt-live-1-in-the-api/1396471",
+      "status": 200,
+      "finalUrl": "https://community.openai.com/t/introducing-gpt-live-1-in-the-api/1396471",
+      "assessment": "PASS"
+    },
+    {
+      "url": "https://consumer.ftc.gov/articles/robocalls",
+      "status": 404,
+      "finalUrl": "https://consumer.ftc.gov/articles/robocalls",
+      "assessment": "FAIL"
+    },
+    {
+      "url": "https://dentina.ai/",
+      "status": 200,
+      "finalUrl": "https://dentina.ai/",
+      "assessment": "PASS"
+    },
+    {
+      "url": "https://deploymentsafety.openai.com/gpt-live",
+      "status": 200,
+      "finalUrl": "https://deploymentsafety.openai.com/gpt-live",
+      "assessment": "PASS"
+    },
+    {
+      "url": "https://developers.google.com/my-business/reference/performance/rest/v1/DailyMetric",
+      "status": 200,
+      "finalUrl": "https://developers.google.com/my-business/reference/performance/rest/v1/DailyMetric",
+      "assessment": "PASS"
+    },
+    {
+      "url": "https://developers.openai.com/codex/mcp",
+      "status": 200,
+      "finalUrl": "https://learn.chatgpt.com/docs/extend/mcp?surface=cli",
+      "assessment": "PASS"
+    },
+    {
+      "url": "https://dialzara.com/pricing",
+      "status": 200,
+      "finalUrl": "https://dialzara.com/pricing",
+      "assessment": "PASS"
+    },
+    {
+      "url": "https://docs.fcc.gov/public/attachments/FCC-24-17A1.pdf",
+      "status": 405,
+      "finalUrl": "https://docs.fcc.gov/public/attachments/FCC-24-17A1.pdf",
+      "assessment": "REQUIRES_BROWSER"
+    },
+    {
+      "url": "https://docs.lobbystack.com/self-hosting/docker-compose",
+      "status": 200,
+      "finalUrl": "https://docs.lobbystack.com/self-hosting/docker-compose",
+      "assessment": "PASS"
+    },
+    {
+      "url": "https://docs.lobbystack.com/self-hosting/overview",
+      "status": 200,
+      "finalUrl": "https://docs.lobbystack.com/self-hosting/overview",
+      "assessment": "PASS"
+    },
+    {
+      "url": "https://elevenlabs.io/docs/reception-ai/receptionist/overview",
+      "status": 200,
+      "finalUrl": "https://elevenlabs.io/docs/reception-ai/receptionist/overview",
+      "assessment": "PASS"
+    },
+    {
+      "url": "https://elevenlabs.io/reception",
+      "status": 200,
+      "finalUrl": "https://elevenlabs.io/reception",
+      "assessment": "PASS"
+    },
+    {
+      "url": "https://eliocall.com/tarifs",
+      "status": 200,
+      "finalUrl": "https://eliocall.com/tarifs/",
+      "assessment": "PASS"
+    },
+    {
+      "url": "https://github.com/BB-AI-Arena/helix-ai-virtual-receptionist",
+      "status": 200,
+      "finalUrl": "https://github.com/BB-AI-Arena/helix-ai-virtual-receptionist",
+      "assessment": "PASS"
+    },
+    {
+      "url": "https://github.com/PajuanDev/caleonis-reception",
+      "status": 200,
+      "finalUrl": "https://github.com/PajuanDev/caleonis-reception",
+      "assessment": "PASS"
+    },
+    {
+      "url": "https://github.com/PajuanDev/caleonis-reception/blob/main/docker-compose.yml",
+      "status": 200,
+      "finalUrl": "https://github.com/PajuanDev/caleonis-reception/blob/main/docker-compose.yml",
+      "assessment": "PASS"
+    },
+    {
+      "url": "https://github.com/PajuanDev/caleonis-reception/blob/main/docs/voice/runtime.md#set-up-the-phone-path",
+      "status": 200,
+      "finalUrl": "https://github.com/PajuanDev/caleonis-reception/blob/main/docs/voice/runtime.md",
+      "assessment": "PASS"
+    },
+    {
+      "url": "https://github.com/codewithmuh/hearthline",
+      "status": 200,
+      "finalUrl": "https://github.com/codewithmuh/hearthline",
+      "assessment": "PASS"
+    },
+    {
+      "url": "https://github.com/hkjarral/Asterisk-AI-Voice-Agent",
+      "status": 200,
+      "finalUrl": "https://github.com/hkjarral/AVA-AI-Voice-Agent-for-Asterisk",
+      "assessment": "PASS"
+    },
+    {
+      "url": "https://github.com/kirklandsig/AIReceptionist",
+      "status": 200,
+      "finalUrl": "https://github.com/kirklandsig/AIReceptionist",
+      "assessment": "PASS"
+    },
+    {
+      "url": "https://github.com/lobbystack/lobbystack",
+      "status": 404,
+      "finalUrl": "https://github.com/lobbystack/lobbystack",
+      "assessment": "FAIL"
+    },
+    {
+      "url": "https://github.com/lobbystack/lobbystack/blob/main/LICENSE",
+      "status": 404,
+      "finalUrl": "https://github.com/lobbystack/lobbystack/blob/main/LICENSE",
+      "assessment": "FAIL"
+    },
+    {
+      "url": "https://github.com/lobbystack/lobbystack/blob/main/docker-compose.yml",
+      "status": 404,
+      "finalUrl": "https://github.com/lobbystack/lobbystack/blob/main/docker-compose.yml",
+      "assessment": "FAIL"
+    },
+    {
+      "url": "https://github.com/lobbystack/lobbystack/blob/main/docs/voice/runtime.md#set-up-the-phone-path",
+      "status": 404,
+      "finalUrl": "https://github.com/lobbystack/lobbystack/blob/main/docs/voice/runtime.md",
+      "assessment": "FAIL"
+    },
+    {
+      "url": "https://github.com/modelcontextprotocol/inspector",
+      "status": 200,
+      "finalUrl": "https://github.com/modelcontextprotocol/inspector",
+      "assessment": "PASS"
+    },
+    {
+      "url": "https://gitlab.com/lobbystack-group/lobbystack",
+      "status": 200,
+      "finalUrl": "https://gitlab.com/lobbystack-group/lobbystack",
+      "assessment": "PASS"
+    },
+    {
+      "url": "https://help.cloudtalk.io/en/articles/14057883-voiceagent-templates-ai-receptionist",
+      "status": 200,
+      "finalUrl": "https://help.cloudtalk.io/en/articles/14057883-voiceagent-templates-ai-receptionist",
+      "assessment": "PASS"
+    },
+    {
+      "url": "https://help.getjobber.com/en/articles/receptionistpowered-by-jobber-ai/",
+      "status": 403,
+      "finalUrl": "https://help.getjobber.com/en/articles/receptionistpowered-by-jobber-ai/",
+      "assessment": "REQUIRES_BROWSER"
+    },
+    {
+      "url": "https://heyrosie.com/ai-answering-service-affiliate-program",
+      "status": 200,
+      "finalUrl": "https://heyrosie.com/ai-answering-service-affiliate-program",
+      "assessment": "PASS"
+    },
+    {
+      "url": "https://heyrosie.com/blog/rosie-ai-vs-smith-ai",
+      "status": 200,
+      "finalUrl": "https://heyrosie.com/blog/rosie-ai-vs-smith-ai",
+      "assessment": "PASS"
+    },
+    {
+      "url": "https://heyrosie.com/blog/virtual-receptionist-pricing",
+      "status": 200,
+      "finalUrl": "https://heyrosie.com/blog/virtual-receptionist-pricing",
+      "assessment": "PASS"
+    },
+    {
+      "url": "https://heyrosie.com/industries/hvac",
+      "status": 200,
+      "finalUrl": "https://heyrosie.com/industries/hvac",
+      "assessment": "PASS"
+    },
+    {
+      "url": "https://heyrosie.com/industries/plumbing",
+      "status": 200,
+      "finalUrl": "https://heyrosie.com/industries/plumbing",
+      "assessment": "PASS"
+    },
+    {
+      "url": "https://heyrosie.com/industries/property-management",
+      "status": 200,
+      "finalUrl": "https://heyrosie.com/industries/property-management",
+      "assessment": "PASS"
+    },
+    {
+      "url": "https://heyrosie.com/legal/terms",
+      "status": 200,
+      "finalUrl": "https://heyrosie.com/legal/terms",
+      "assessment": "PASS"
+    },
+    {
+      "url": "https://heyrosie.com/pricing",
+      "status": 200,
+      "finalUrl": "https://heyrosie.com/pricing",
+      "assessment": "PASS"
+    },
+    {
+      "url": "https://hirejosie.ai/pricing/",
+      "status": 200,
+      "finalUrl": "https://hirejosie.ai/pricing/",
+      "assessment": "PASS"
+    },
+    {
+      "url": "https://konten.fr/standard-telephonique-ia",
+      "status": 200,
+      "finalUrl": "https://konten.fr/standard-telephonique-ia",
+      "assessment": "PASS"
+    },
+    {
+      "url": "https://lesecretariat.fr/tarifs/",
+      "status": 200,
+      "finalUrl": "https://lesecretariat.fr/tarifs/",
+      "assessment": "PASS"
+    },
+    {
+      "url": "https://lexidesk.ai/",
+      "status": 200,
+      "finalUrl": "https://lexidesk.ai/us",
+      "assessment": "PASS"
+    },
+    {
+      "url": "https://lexidesk.ai/pricing",
+      "status": 200,
+      "finalUrl": "https://lexidesk.ai/pricing",
+      "assessment": "PASS"
+    },
+    {
+      "url": "https://lobbystack.com/",
+      "status": 200,
+      "finalUrl": "https://lobbystack.com/",
+      "assessment": "PASS"
+    },
+    {
+      "url": "https://lobbystack.com/features/",
+      "status": 200,
+      "finalUrl": "https://lobbystack.com/features/",
+      "assessment": "PASS"
+    },
+    {
+      "url": "https://lobbystack.com/fr/",
+      "status": 200,
+      "finalUrl": "https://lobbystack.com/fr/",
+      "assessment": "PASS"
+    },
+    {
+      "url": "https://lobbystack.com/fr/pricing/",
+      "status": 200,
+      "finalUrl": "https://lobbystack.com/fr/pricing/",
+      "assessment": "PASS"
+    },
+    {
+      "url": "https://lobbystack.com/pricing/",
+      "status": 200,
+      "finalUrl": "https://lobbystack.com/pricing/",
+      "assessment": "PASS"
+    },
+    {
+      "url": "https://modelcontextprotocol.io/specification/2026-07-28/basic/authorization",
+      "status": 200,
+      "finalUrl": "https://modelcontextprotocol.io/specification/2026-07-28/basic/authorization",
+      "assessment": "PASS"
+    },
+    {
+      "url": "https://modphone.ai/signup",
+      "status": 200,
+      "finalUrl": "https://modphone.ai/signup",
+      "assessment": "PASS"
+    },
+    {
+      "url": "https://moneypenny.com/us/plans-pricing-ai/",
+      "status": 200,
+      "finalUrl": "https://www.moneypenny.com/us/pricing",
+      "assessment": "PASS"
+    },
+    {
+      "url": "https://news.zoom.com/standalone-zoom-virtual-agent-receptionist/",
+      "status": 200,
+      "finalUrl": "https://news.zoom.com/standalone-zoom-virtual-agent-receptionist/",
+      "assessment": "PASS"
+    },
+    {
+      "url": "https://oncrew.ai/ai-answering-service",
+      "status": 200,
+      "finalUrl": "https://oncrew.ai/ai-answering-service",
+      "assessment": "PASS"
+    },
+    {
+      "url": "https://oncrew.ai/pricing",
+      "status": 200,
+      "finalUrl": "https://oncrew.ai/pricing",
+      "assessment": "PASS"
+    },
+    {
+      "url": "https://optel-services.fr/secretariat-externalise-tarifs/",
+      "status": 200,
+      "finalUrl": "https://optel-services.fr/secretariat-externalise-tarifs/",
+      "assessment": "PASS"
+    },
+    {
+      "url": "https://posh.com/en-ca/pricing/",
+      "status": 200,
+      "finalUrl": "https://posh.com/en-ca/pricing/",
+      "assessment": "PASS"
+    },
+    {
+      "url": "https://posh.com/pricing/",
+      "status": 200,
+      "finalUrl": "https://posh.com/pricing/",
+      "assessment": "PASS"
+    },
+    {
+      "url": "https://railway.com/button.svg",
+      "status": 200,
+      "finalUrl": "https://railway.com/button.svg",
+      "assessment": "PASS"
+    },
+    {
+      "url": "https://railway.com/deploy/lobbystack",
+      "status": 200,
+      "finalUrl": "https://railway.com/deploy/lobbystack",
+      "assessment": "PASS"
+    },
+    {
+      "url": "https://rubyhelpcenter.helpjuice.com/billing-plans/am-i-on-the-right-billing-plan",
+      "status": 200,
+      "finalUrl": "https://rubyhelpcenter.helpjuice.com/billing-plans/am-i-on-the-right-billing-plan",
+      "assessment": "PASS"
+    },
+    {
+      "url": "https://sameday.ai/",
+      "status": 200,
+      "finalUrl": "https://sameday.ai/",
+      "assessment": "PASS"
+    },
+    {
+      "url": "https://sameday.ai/industries/plumbing-industry",
+      "status": 200,
+      "finalUrl": "https://sameday.ai/industries/plumbing-industry",
+      "assessment": "PASS"
+    },
+    {
+      "url": "https://sameday.ai/pricing",
+      "status": 200,
+      "finalUrl": "https://sameday.ai/pricing",
+      "assessment": "PASS"
+    },
+    {
+      "url": "https://serviceagent.ai/pricing",
+      "status": 200,
+      "finalUrl": "https://serviceagent.ai/pricing",
+      "assessment": "PASS"
+    },
+    {
+      "url": "https://smith.ai/ai-receptionist",
+      "status": 200,
+      "finalUrl": "https://smith.ai/ai-receptionist",
+      "assessment": "PASS"
+    },
+    {
+      "url": "https://smith.ai/industries/home-office-contractors-answering-service",
+      "status": 200,
+      "finalUrl": "https://smith.ai/industries/home-office-contractors-answering-service",
+      "assessment": "PASS"
+    },
+    {
+      "url": "https://smith.ai/industries/legal-law-firms-answering-service",
+      "status": 200,
+      "finalUrl": "https://smith.ai/industries/legal-law-firms-answering-service",
+      "assessment": "PASS"
+    },
+    {
+      "url": "https://smith.ai/industries/plumbers-answering-service",
+      "status": 200,
+      "finalUrl": "https://smith.ai/industries/plumbers-answering-service",
+      "assessment": "PASS"
+    },
+    {
+      "url": "https://smith.ai/industries/property-management-answering-service",
+      "status": 200,
+      "finalUrl": "https://smith.ai/industries/property-management-answering-service",
+      "assessment": "PASS"
+    },
+    {
+      "url": "https://smith.ai/integrations",
+      "status": 200,
+      "finalUrl": "https://smith.ai/integrations",
+      "assessment": "PASS"
+    },
+    {
+      "url": "https://smith.ai/partners/referral-affiliate-program",
+      "status": 200,
+      "finalUrl": "https://smith.ai/partners/referral-affiliate-program",
+      "assessment": "PASS"
+    },
+    {
+      "url": "https://smith.ai/pricing/ai-receptionist",
+      "status": 200,
+      "finalUrl": "https://smith.ai/pricing/ai-receptionist",
+      "assessment": "PASS"
+    },
+    {
+      "url": "https://smith.ai/pricing/receptionists",
+      "status": 200,
+      "finalUrl": "https://smith.ai/pricing/receptionists",
+      "assessment": "PASS"
+    },
+    {
+      "url": "https://support.bell.ca/mobility/rate_plans_features/how_to_use_call_forwarding_on_my_mobile_phone",
+      "status": 200,
+      "finalUrl": "https://support.bell.ca/mobility/rate_plans_features/how_to_use_call_forwarding_on_my_mobile_phone",
+      "assessment": "PASS"
+    },
+    {
+      "url": "https://support.google.com/business/answer/14919056?hl=en",
+      "status": 404,
+      "finalUrl": "https://support.google.com/business/answer/14919056?hl=en",
+      "assessment": "FAIL"
+    },
+    {
+      "url": "https://support.google.com/business/answer/14919056?hl=fr",
+      "status": 404,
+      "finalUrl": "https://support.google.com/business/answer/14919056?hl=fr",
+      "assessment": "FAIL"
+    },
+    {
+      "url": "https://support.google.com/business/answer/15300403?hl=en",
+      "status": 404,
+      "finalUrl": "https://support.google.com/business/answer/15300403?hl=en",
+      "assessment": "FAIL"
+    },
+    {
+      "url": "https://support.google.com/business/answer/15300403?hl=fr",
+      "status": 404,
+      "finalUrl": "https://support.google.com/business/answer/15300403?hl=fr",
+      "assessment": "FAIL"
+    },
+    {
+      "url": "https://support.google.com/business/answer/16750496?hl=en",
+      "status": 404,
+      "finalUrl": "https://support.google.com/business/answer/16750496?hl=en",
+      "assessment": "FAIL"
+    },
+    {
+      "url": "https://support.google.com/business/answer/16750496?hl=fr",
+      "status": 404,
+      "finalUrl": "https://support.google.com/business/answer/16750496?hl=fr",
+      "assessment": "FAIL"
+    },
+    {
+      "url": "https://support.google.com/business/answer/3038177?hl=en",
+      "status": 404,
+      "finalUrl": "https://support.google.com/business/answer/3038177?hl=en",
+      "assessment": "FAIL"
+    },
+    {
+      "url": "https://support.google.com/business/answer/3038177?hl=fr",
+      "status": 404,
+      "finalUrl": "https://support.google.com/business/answer/3038177?hl=fr",
+      "assessment": "FAIL"
+    },
+    {
+      "url": "https://support.google.com/business/answer/3039617?hl=en",
+      "status": 404,
+      "finalUrl": "https://support.google.com/business/answer/3039617?hl=en",
+      "assessment": "FAIL"
+    },
+    {
+      "url": "https://support.google.com/business/answer/3039617?hl=fr",
+      "status": 404,
+      "finalUrl": "https://support.google.com/business/answer/3039617?hl=fr",
+      "assessment": "FAIL"
+    },
+    {
+      "url": "https://support.google.com/business/answer/6212928?hl=en",
+      "status": 404,
+      "finalUrl": "https://support.google.com/business/answer/6212928?hl=en",
+      "assessment": "FAIL"
+    },
+    {
+      "url": "https://support.google.com/business/answer/6212928?hl=fr",
+      "status": 404,
+      "finalUrl": "https://support.google.com/business/answer/6212928?hl=fr",
+      "assessment": "FAIL"
+    },
+    {
+      "url": "https://support.google.com/business/answer/6303076?hl=en",
+      "status": 404,
+      "finalUrl": "https://support.google.com/business/answer/6303076?hl=en",
+      "assessment": "FAIL"
+    },
+    {
+      "url": "https://support.google.com/business/answer/6303076?hl=fr",
+      "status": 404,
+      "finalUrl": "https://support.google.com/business/answer/6303076?hl=fr",
+      "assessment": "FAIL"
+    },
+    {
+      "url": "https://support.google.com/business/answer/7690269?hl=en",
+      "status": 404,
+      "finalUrl": "https://support.google.com/business/answer/7690269?hl=en",
+      "assessment": "FAIL"
+    },
+    {
+      "url": "https://support.google.com/business/answer/7690269?hl=fr",
+      "status": 404,
+      "finalUrl": "https://support.google.com/business/answer/7690269?hl=fr",
+      "assessment": "FAIL"
+    },
+    {
+      "url": "https://support.google.com/business/answer/9876800?hl=en",
+      "status": 404,
+      "finalUrl": "https://support.google.com/business/answer/9876800?hl=en",
+      "assessment": "FAIL"
+    },
+    {
+      "url": "https://support.google.com/business/answer/9876800?hl=fr",
+      "status": 404,
+      "finalUrl": "https://support.google.com/business/answer/9876800?hl=fr",
+      "assessment": "FAIL"
+    },
+    {
+      "url": "https://support.google.com/business/answer/9918094?hl=en",
+      "status": 404,
+      "finalUrl": "https://support.google.com/business/answer/9918094?hl=en",
+      "assessment": "FAIL"
+    },
+    {
+      "url": "https://support.google.com/business/answer/9918094?hl=fr",
+      "status": 404,
+      "finalUrl": "https://support.google.com/business/answer/9918094?hl=fr",
+      "assessment": "FAIL"
+    },
+    {
+      "url": "https://support.google.com/gmm/answer/2839844?hl=en",
+      "status": 404,
+      "finalUrl": "https://support.google.com/maps/answer/2839844?hl=en",
+      "assessment": "FAIL"
+    },
+    {
+      "url": "https://support.google.com/gmm/answer/2839844?hl=fr",
+      "status": 404,
+      "finalUrl": "https://support.google.com/maps/answer/2839844?hl=fr",
+      "assessment": "FAIL"
+    },
+    {
+      "url": "https://support.google.com/voice/answer/165221?hl=en&co=GENIE.Platform%3DDesktop",
+      "status": 404,
+      "finalUrl": "https://support.google.com/voice/answer/165221?hl=en&co=GENIE.Platform%3DDesktop",
+      "assessment": "FAIL"
+    },
+    {
+      "url": "https://support.grasshopper.com/help/change-an-extensions-ring-time",
+      "status": 403,
+      "finalUrl": "https://support.grasshopper.com/help/change-an-extensions-ring-time",
+      "assessment": "REQUIRES_BROWSER"
+    },
+    {
+      "url": "https://support.grasshopper.com/help/forward-incoming-calls-for-an-extension",
+      "status": 403,
+      "finalUrl": "https://support.grasshopper.com/help/forward-incoming-calls-for-an-extension",
+      "assessment": "REQUIRES_BROWSER"
+    },
+    {
+      "url": "https://support.quo.com/core-concepts/ai-automations/sona/sona-pricing",
+      "status": 200,
+      "finalUrl": "https://support.quo.com/core-concepts/ai-automations/sona/sona-pricing",
+      "assessment": "PASS"
+    },
+    {
+      "url": "https://support.ringcentral.com/shared/content/app/setting-up-user-call-forwarding-in-the-ringcentral-app-desktop-a.html",
+      "status": 200,
+      "finalUrl": "https://support.ringcentral.com/shared/content/app/setting-up-user-call-forwarding-in-the-ringcentral-app-desktop-a.html",
+      "assessment": "PASS"
+    },
+    {
+      "url": "https://support.zoom.com/hc/en/article?id=zm_kb&sysparm_article=KB0085189",
+      "status": 200,
+      "finalUrl": "https://support.zoom.com/hc/en/article?id=zm_kb&sysparm_article=KB0085189",
+      "assessment": "PASS"
+    },
+    {
+      "url": "https://synthflow.ai/pricing",
+      "status": 200,
+      "finalUrl": "https://synthflow.ai/pricing",
+      "assessment": "PASS"
+    },
+    {
+      "url": "https://theperfectanswer.com/pricing/",
+      "status": 200,
+      "finalUrl": "https://theperfectanswer.com/pricing/",
+      "assessment": "PASS"
+    },
+    {
+      "url": "https://upfirst.ai/affiliate-program",
+      "status": 200,
+      "finalUrl": "https://upfirst.ai/affiliate-program",
+      "assessment": "PASS"
+    },
+    {
+      "url": "https://upfirst.ai/features/scheduling",
+      "status": 200,
+      "finalUrl": "https://upfirst.ai/features/scheduling",
+      "assessment": "PASS"
+    },
+    {
+      "url": "https://upfirst.ai/industries/law-firms",
+      "status": 200,
+      "finalUrl": "https://upfirst.ai/industries/law-firms",
+      "assessment": "PASS"
+    },
+    {
+      "url": "https://upfirst.ai/pricing",
+      "status": 200,
+      "finalUrl": "https://upfirst.ai/pricing",
+      "assessment": "PASS"
+    },
+    {
+      "url": "https://upfirst.ai/solutions/ai-receptionist",
+      "status": 200,
+      "finalUrl": "https://upfirst.ai/solutions/ai-receptionist",
+      "assessment": "PASS"
+    },
+    {
+      "url": "https://vapi.ai/pricing",
+      "status": 200,
+      "finalUrl": "https://vapi.ai/pricing",
+      "assessment": "PASS"
+    },
+    {
+      "url": "https://vezareception.com/",
+      "status": 200,
+      "finalUrl": "https://vezareception.com/",
+      "assessment": "PASS"
+    },
+    {
+      "url": "https://vezareception.com/pricing/",
+      "status": 200,
+      "finalUrl": "https://vezareception.com/pricing/",
+      "assessment": "PASS"
+    },
+    {
+      "url": "https://www.abby.com/industries/legal/",
+      "status": 200,
+      "finalUrl": "https://www.abby.com/industries/legal/",
+      "assessment": "PASS"
+    },
+    {
+      "url": "https://www.abby.com/pricing/",
+      "status": 200,
+      "finalUrl": "https://www.abby.com/pricing/",
+      "assessment": "PASS"
+    },
+    {
+      "url": "https://www.abby.com/products/human-receptionist/",
+      "status": 200,
+      "finalUrl": "https://www.abby.com/products/human-receptionist/",
+      "assessment": "PASS"
+    },
+    {
+      "url": "https://www.aiphone360.com/affiliates",
+      "status": 200,
+      "finalUrl": "https://www.aiphone360.com/affiliates",
+      "assessment": "PASS"
+    },
+    {
+      "url": "https://www.alertcommunications.com/plans/",
+      "status": 200,
+      "finalUrl": "https://www.alertcommunications.com/plans/",
+      "assessment": "PASS"
+    },
+    {
+      "url": "https://www.ambscallcenter.com/answering-service-pricing",
+      "status": 200,
+      "finalUrl": "https://www.ambscallcenter.com/answering-service-pricing",
+      "assessment": "PASS"
+    },
+    {
+      "url": "https://www.ambscallcenter.com/property-management-answering-service",
+      "status": 200,
+      "finalUrl": "https://www.ambscallcenter.com/property-management-answering-service/",
+      "assessment": "PASS"
+    },
+    {
+      "url": "https://www.answerconnect.com/view-pricing",
+      "status": 200,
+      "finalUrl": "https://www.answerconnect.com/view-pricing",
+      "assessment": "PASS"
+    },
+    {
+      "url": "https://www.answerforce.com/contractors-answering-service",
+      "status": 200,
+      "finalUrl": "https://www.answerforce.com/contractors-answering-service",
+      "assessment": "PASS"
+    },
+    {
+      "url": "https://www.answerforce.com/hvac-answering-service",
+      "status": 200,
+      "finalUrl": "https://www.answerforce.com/hvac-answering-service",
+      "assessment": "PASS"
+    },
+    {
+      "url": "https://www.answerforce.com/industries/roofing",
+      "status": 200,
+      "finalUrl": "https://www.answerforce.com/industries/roofing",
+      "assessment": "PASS"
+    },
+    {
+      "url": "https://www.answerforce.com/plans-direct",
+      "status": 200,
+      "finalUrl": "https://www.answerforce.com/plans-direct",
+      "assessment": "PASS"
+    },
+    {
+      "url": "https://www.answerforce.com/plumbing-answering-service",
+      "status": 200,
+      "finalUrl": "https://www.answerforce.com/plumbing-answering-service",
+      "assessment": "PASS"
+    },
+    {
+      "url": "https://www.answeringlegal.com/",
+      "status": 200,
+      "finalUrl": "https://www.answeringlegal.com/",
+      "assessment": "PASS"
+    },
+    {
+      "url": "https://www.answeringlegal.com/answering-service-pricing-plans",
+      "status": 200,
+      "finalUrl": "https://www.answeringlegal.com/answering-service-pricing-plans",
+      "assessment": "PASS"
+    },
+    {
+      "url": "https://www.answeringlegal.com/integrations",
+      "status": 200,
+      "finalUrl": "https://www.answeringlegal.com/integrations",
+      "assessment": "PASS"
+    },
+    {
+      "url": "https://www.appfolio.com/blog/smart-maintenance",
+      "status": 200,
+      "finalUrl": "https://www.appfolio.com/blog/smart-maintenance",
+      "assessment": "PASS"
+    },
+    {
+      "url": "https://www.appfolio.com/pricing",
+      "status": 200,
+      "finalUrl": "https://www.appfolio.com/pricing",
+      "assessment": "PASS"
+    },
+    {
+      "url": "https://www.att.com/device-support/article/141868/AT&T/verge-2-5g/",
+      "status": 200,
+      "finalUrl": "https://www.att.com/device-support/article/141868/AT&T/verge-2-5g/",
+      "assessment": "PASS"
+    },
+    {
+      "url": "https://www.att.com/device-support/article/142305/apple/iphone-air/",
+      "status": 200,
+      "finalUrl": "https://www.att.com/device-support/article/142305/apple/iphone-air/",
+      "assessment": "PASS"
+    },
+    {
+      "url": "https://www.att.com/support/article/wireless/KM1011513/",
+      "status": 200,
+      "finalUrl": "https://www.att.com/support/article/wireless/KM1011513/",
+      "assessment": "PASS"
+    },
+    {
+      "url": "https://www.att.com/support/smallbusiness/article/smb-digital-phone/KM1000459/",
+      "status": 200,
+      "finalUrl": "https://www.att.com/support/smallbusiness/article/smb-digital-phone/KM1000459/",
+      "assessment": "PASS"
+    },
+    {
+      "url": "https://www.att.com/support/smallbusiness/article/smb-local-long-distance/KM1181691/",
+      "status": 200,
+      "finalUrl": "https://www.att.com/support/smallbusiness/article/smb-local-long-distance/KM1181691/",
+      "assessment": "PASS"
+    },
+    {
+      "url": "https://www.avoca.ai/",
+      "status": 200,
+      "finalUrl": "https://www.avoca.ai/",
+      "assessment": "PASS"
+    },
+    {
+      "url": "https://www.avoca.ai/industries/plumbing",
+      "status": 200,
+      "finalUrl": "https://www.avoca.ai/industries/plumbing",
+      "assessment": "PASS"
+    },
+    {
+      "url": "https://www.bls.gov/ooh/Office-and-Administrative-Support/Receptionists.htm",
+      "status": 403,
+      "finalUrl": "https://www.bls.gov/ooh/Office-and-Administrative-Support/Receptionists.htm",
+      "assessment": "REQUIRES_BROWSER"
+    },
+    {
+      "url": "https://www.bls.gov/ooh/office-and-administrative-support/receptionists.htm",
+      "status": 403,
+      "finalUrl": "https://www.bls.gov/ooh/office-and-administrative-support/receptionists.htm",
+      "assessment": "REQUIRES_BROWSER"
+    },
+    {
+      "url": "https://www.buildium.com/maintenance-contact-center/",
+      "status": 200,
+      "finalUrl": "https://www.buildium.com/maintenance-contact-center/",
+      "assessment": "PASS"
+    },
+    {
+      "url": "https://www.bureau24.fr/service-t%C3%A9l%C3%A9phonique/prix",
+      "status": 200,
+      "finalUrl": "https://www.bureau24.fr/service-t%C3%A9l%C3%A9phonique/prix",
+      "assessment": "PASS"
+    },
+    {
+      "url": "https://www.cloudtalk.io/ai-receptionist/",
+      "status": 200,
+      "finalUrl": "https://www.cloudtalk.io/ai-receptionist/",
+      "assessment": "PASS"
+    },
+    {
+      "url": "https://www.cloudtalk.io/pricing/",
+      "status": 200,
+      "finalUrl": "https://www.cloudtalk.io/pricing/",
+      "assessment": "PASS"
+    },
+    {
+      "url": "https://www.continentalmessage.com/blog/best-property-management-answering-services/",
+      "status": 200,
+      "finalUrl": "https://www.continentalmessage.com/blog/best-property-management-answering-services/",
+      "assessment": "PASS"
+    },
+    {
+      "url": "https://www.continentalmessage.com/pricing/",
+      "status": 200,
+      "finalUrl": "https://www.continentalmessage.com/pricing/",
+      "assessment": "PASS"
+    },
+    {
+      "url": "https://www.davincivirtual.com/live-receptionists",
+      "status": 200,
+      "finalUrl": "https://www.davincivirtual.com/live-receptionists",
+      "assessment": "PASS"
+    },
+    {
+      "url": "https://www.ftc.gov/news-events/news/press-releases/2024/09/ftc-announces-crackdown-deceptive-ai-claims-schemes",
+      "status": 404,
+      "finalUrl": "https://www.ftc.gov/news-events/news/press-releases/2024/09/ftc-announces-crackdown-deceptive-ai-claims-schemes",
+      "assessment": "FAIL"
+    },
+    {
+      "url": "https://www.getaira.io/agents/receptionist/pricing",
+      "status": 200,
+      "finalUrl": "https://www.getaira.io/agents/receptionist/pricing",
+      "assessment": "PASS"
+    },
+    {
+      "url": "https://www.getjobber.com/pricing/",
+      "status": 403,
+      "finalUrl": "https://www.getjobber.com/pricing/",
+      "assessment": "REQUIRES_BROWSER"
+    },
+    {
+      "url": "https://www.getviva.ai/#pricing",
+      "status": 200,
+      "finalUrl": "https://www.getviva.ai/",
+      "assessment": "PASS"
+    },
+    {
+      "url": "https://www.goodcall.com/answering-services/hvac-company",
+      "status": 200,
+      "finalUrl": "https://www.goodcall.com/answering-services/hvac-company",
+      "assessment": "PASS"
+    },
+    {
+      "url": "https://www.goodcall.com/answering-services/plumbers",
+      "status": 200,
+      "finalUrl": "https://www.goodcall.com/answering-services/plumbers",
+      "assessment": "PASS"
+    },
+    {
+      "url": "https://www.goodcall.com/business-productivity-ai/rentmanager",
+      "status": 200,
+      "finalUrl": "https://www.goodcall.com/business-productivity-ai/rentmanager",
+      "assessment": "PASS"
+    },
+    {
+      "url": "https://www.goodcall.com/faq",
+      "status": 200,
+      "finalUrl": "https://www.goodcall.com/faq",
+      "assessment": "PASS"
+    },
+    {
+      "url": "https://www.goodcall.com/pricing",
+      "status": 200,
+      "finalUrl": "https://www.goodcall.com/pricing",
+      "assessment": "PASS"
+    },
+    {
+      "url": "https://www.hhs.gov/hipaa/for-professionals/special-topics/health-information-technology/cloud-computing/",
+      "status": 403,
+      "finalUrl": "https://www.hhs.gov/hipaa/for-professionals/special-topics/health-information-technology/cloud-computing/",
+      "assessment": "REQUIRES_BROWSER"
+    },
+    {
+      "url": "https://www.housecallpro.com/features/ai-team/csr-ai/",
+      "status": 200,
+      "finalUrl": "https://www.housecallpro.com/features/ai-team/csr-ai/",
+      "assessment": "PASS"
+    },
+    {
+      "url": "https://www.housecallpro.com/pricing/",
+      "status": 200,
+      "finalUrl": "https://www.housecallpro.com/pricing/",
+      "assessment": "PASS"
+    },
+    {
+      "url": "https://www.housecallpro.com/resources/best-ai-answering-services-contractors/",
+      "status": 200,
+      "finalUrl": "https://www.housecallpro.com/resources/best-ai-answering-services-contractors/",
+      "assessment": "PASS"
+    },
+    {
+      "url": "https://www.kandbaz.com/services/telephonie/permanence-telephonique/",
+      "status": 200,
+      "finalUrl": "https://www.kandbaz.com/services/telephonie/permanence-telephonique/",
+      "assessment": "PASS"
+    },
+    {
+      "url": "https://www.lexreception.com/",
+      "status": 200,
+      "finalUrl": "https://www.lexreception.com/",
+      "assessment": "PASS"
+    },
+    {
+      "url": "https://www.mapcommunications.com/industries/contractors/hvac-answering-service/",
+      "status": 200,
+      "finalUrl": "https://www.mapcommunications.com/industries/contractors/hvac-answering-service/",
+      "assessment": "PASS"
+    },
+    {
+      "url": "https://www.mapcommunications.com/industries/contractors/plumbers-answering-service/",
+      "status": 200,
+      "finalUrl": "https://www.mapcommunications.com/industries/contractors/plumbers-answering-service/",
+      "assessment": "PASS"
+    },
+    {
+      "url": "https://www.mapcommunications.com/industries/property-management/",
+      "status": 200,
+      "finalUrl": "https://www.mapcommunications.com/industries/property-management/",
+      "assessment": "PASS"
+    },
+    {
+      "url": "https://www.mapcommunications.com/pricing/",
+      "status": 200,
+      "finalUrl": "https://www.mapcommunications.com/pricing/",
+      "assessment": "PASS"
+    },
+    {
+      "url": "https://www.mapcommunications.com/terms/",
+      "status": 200,
+      "finalUrl": "https://www.mapcommunications.com/terms/",
+      "assessment": "PASS"
+    },
+    {
+      "url": "https://www.moneypenny.com/us/ai-receptionist/",
+      "status": 200,
+      "finalUrl": "https://www.moneypenny.com/us/ai-receptionist",
+      "assessment": "PASS"
+    },
+    {
+      "url": "https://www.moneypenny.com/us/pricing/",
+      "status": 200,
+      "finalUrl": "https://www.moneypenny.com/us/pricing",
+      "assessment": "PASS"
+    },
+    {
+      "url": "https://www.myaifrontdesk.com/affiliate",
+      "status": 200,
+      "finalUrl": "https://www.myaifrontdesk.com/affiliate",
+      "assessment": "PASS"
+    },
+    {
+      "url": "https://www.myaifrontdesk.com/ai-receptionist",
+      "status": 200,
+      "finalUrl": "https://www.myaifrontdesk.com/ai-receptionist",
+      "assessment": "PASS"
+    },
+    {
+      "url": "https://www.myaifrontdesk.com/blogs/rosie-ai-answering-service-pricing-2025-cost-breakdown-and-plan-comparison-67384",
+      "status": 200,
+      "finalUrl": "https://www.myaifrontdesk.com/blogs/rosie-ai-answering-service-pricing-2025-cost-breakdown-and-plan-comparison-67384",
+      "assessment": "PASS"
+    },
+    {
+      "url": "https://www.myaifrontdesk.com/blogs/rosie-ai-answering-service-reviews-is-it-the-right-choice-for-your-business-d14ae",
+      "status": 200,
+      "finalUrl": "https://www.myaifrontdesk.com/blogs/rosie-ai-answering-service-reviews-is-it-the-right-choice-for-your-business-d14ae",
+      "assessment": "PASS"
+    },
+    {
+      "url": "https://www.myaifrontdesk.com/pricing",
+      "status": 200,
+      "finalUrl": "https://www.myaifrontdesk.com/pricing",
+      "assessment": "PASS"
+    },
+    {
+      "url": "https://www.myphoneflow.com/",
+      "status": 200,
+      "finalUrl": "https://www.myphoneflow.com/",
+      "assessment": "PASS"
+    },
+    {
+      "url": "https://www.nexa.com/industries/hvac/",
+      "status": 200,
+      "finalUrl": "https://www.nexa.com/industries/hvac/",
+      "assessment": "PASS"
+    },
+    {
+      "url": "https://www.nexa.com/plans/",
+      "status": 200,
+      "finalUrl": "https://www.nexa.com/plans/",
+      "assessment": "PASS"
+    },
+    {
+      "url": "https://www.nextiva.com/products/ai-receptionist",
+      "status": 200,
+      "finalUrl": "https://www.nextiva.com/products/ai-receptionist",
+      "assessment": "PASS"
+    },
+    {
+      "url": "https://www.nextiva.com/products/xbert",
+      "status": 200,
+      "finalUrl": "https://www.nextiva.com/products/xbert",
+      "assessment": "PASS"
+    },
+    {
+      "url": "https://www.npmjs.com/package/mcp-remote",
+      "status": 403,
+      "finalUrl": "https://www.npmjs.com/package/mcp-remote",
+      "assessment": "REQUIRES_BROWSER"
+    },
+    {
+      "url": "https://www.ooma.com/small-business-phone-systems/how-to/how-to-add-a-new-shared-external-line/",
+      "status": 200,
+      "finalUrl": "https://www.ooma.com/small-business-phone-systems/how-to/how-to-add-a-new-shared-external-line/",
+      "assessment": "PASS"
+    },
+    {
+      "url": "https://www.ooma.com/small-business-phone-systems/how-to/how-to-direct-incoming-calls/",
+      "status": 200,
+      "finalUrl": "https://www.ooma.com/small-business-phone-systems/how-to/how-to-direct-incoming-calls/",
+      "assessment": "PASS"
+    },
+    {
+      "url": "https://www.optilib.com/offre-standard-telephonique-externalise",
+      "status": 200,
+      "finalUrl": "https://www.optilib.com/offre-standard-telephonique-externalise",
+      "assessment": "PASS"
+    },
+    {
+      "url": "https://www.patlive.com/industries/construction/",
+      "status": 200,
+      "finalUrl": "https://www.patlive.com/industries/construction/",
+      "assessment": "PASS"
+    },
+    {
+      "url": "https://www.patlive.com/industries/hvac",
+      "status": 200,
+      "finalUrl": "https://www.patlive.com/industries/hvac/",
+      "assessment": "PASS"
+    },
+    {
+      "url": "https://www.patlive.com/industries/legal/",
+      "status": 200,
+      "finalUrl": "https://www.patlive.com/industries/legal/",
+      "assessment": "PASS"
+    },
+    {
+      "url": "https://www.patlive.com/industries/plumbing",
+      "status": 200,
+      "finalUrl": "https://www.patlive.com/industries/plumbing/",
+      "assessment": "PASS"
+    },
+    {
+      "url": "https://www.patlive.com/industries/property-management",
+      "status": 200,
+      "finalUrl": "https://www.patlive.com/industries/property-management/",
+      "assessment": "PASS"
+    },
+    {
+      "url": "https://www.patlive.com/pricing/",
+      "status": 200,
+      "finalUrl": "https://www.patlive.com/pricing/",
+      "assessment": "PASS"
+    },
+    {
+      "url": "https://www.peerlogic.com/pricing-page",
+      "status": 200,
+      "finalUrl": "https://www.peerlogic.com/pricing-page",
+      "assessment": "PASS"
+    },
+    {
+      "url": "https://www.quo.com/pricing",
+      "status": 200,
+      "finalUrl": "https://www.quo.com/pricing",
+      "assessment": "PASS"
+    },
+    {
+      "url": "https://www.quo.com/sona",
+      "status": 200,
+      "finalUrl": "https://www.quo.com/sona",
+      "assessment": "PASS"
+    },
+    {
+      "url": "https://www.rentmanager.com/247-call-support-made-easy-with-rent-manager-call-center/",
+      "status": 503,
+      "finalUrl": "https://www.rentmanager.com/247-call-support-made-easy-with-rent-manager-call-center/",
+      "assessment": "FAIL"
+    },
+    {
+      "url": "https://www.rentmanager.com/integrations/continental-message-solution/",
+      "status": 503,
+      "finalUrl": "https://www.rentmanager.com/integrations/continental-message-solution/",
+      "assessment": "FAIL"
+    },
+    {
+      "url": "https://www.retellai.com/pricing",
+      "status": 200,
+      "finalUrl": "https://www.retellai.com/pricing",
+      "assessment": "PASS"
+    },
+    {
+      "url": "https://www.ringcentral.com/ai-receptionist.html",
+      "status": 200,
+      "finalUrl": "https://www.ringcentral.com/ai-receptionist.html",
+      "assessment": "PASS"
+    },
+    {
+      "url": "https://www.ringcentral.com/au/en/pricing/ai-receptionist.html",
+      "status": 200,
+      "finalUrl": "https://www.ringcentral.com/au/en/pricing/ai-receptionist.html",
+      "assessment": "PASS"
+    },
+    {
+      "url": "https://www.ringcentral.com/ca/en/pricing/ai-receptionist.html",
+      "status": 200,
+      "finalUrl": "https://www.ringcentral.com/ca/en/pricing/ai-receptionist.html",
+      "assessment": "PASS"
+    },
+    {
+      "url": "https://www.ringcentral.com/gb/en/pricing/ai-receptionist.html",
+      "status": 200,
+      "finalUrl": "https://www.ringcentral.com/gb/en/pricing/ai-receptionist.html",
+      "assessment": "PASS"
+    },
+    {
+      "url": "https://www.ringcentral.com/legal/add-on-services.html",
+      "status": 200,
+      "finalUrl": "https://www.ringcentral.com/legal/add-on-services.html",
+      "assessment": "PASS"
+    },
+    {
+      "url": "https://www.ringcentral.com/office/plansandpricing.html",
+      "status": 200,
+      "finalUrl": "https://www.ringcentral.com/office/plansandpricing.html",
+      "assessment": "PASS"
+    },
+    {
+      "url": "https://www.ringcentral.com/pricing/ai-receptionist.html",
+      "status": 200,
+      "finalUrl": "https://www.ringcentral.com/pricing/ai-receptionist.html",
+      "assessment": "PASS"
+    },
+    {
+      "url": "https://www.ringcentral.com/us/en/blog/ai-receptionist-texts-call-queues-integrations/",
+      "status": 200,
+      "finalUrl": "https://www.ringcentral.com/us/en/blog/ai-receptionist-texts-call-queues-integrations/",
+      "assessment": "PASS"
+    },
+    {
+      "url": "https://www.rogers.com/support/mobility/use-call-forwarding",
+      "status": 200,
+      "finalUrl": "https://www.rogers.com/support/mobility/use-call-forwarding",
+      "assessment": "PASS"
+    },
+    {
+      "url": "https://www.ruby.com/",
+      "status": 200,
+      "finalUrl": "https://www.ruby.com/",
+      "assessment": "PASS"
+    },
+    {
+      "url": "https://www.ruby.com/ai/",
+      "status": 200,
+      "finalUrl": "https://www.ruby.com/ai/",
+      "assessment": "PASS"
+    },
+    {
+      "url": "https://www.ruby.com/answering-service/",
+      "status": 200,
+      "finalUrl": "https://www.ruby.com/answering-service/",
+      "assessment": "PASS"
+    },
+    {
+      "url": "https://www.ruby.com/faqs/",
+      "status": 200,
+      "finalUrl": "https://www.ruby.com/faqs/",
+      "assessment": "PASS"
+    },
+    {
+      "url": "https://www.ruby.com/industries/hvac/",
+      "status": 200,
+      "finalUrl": "https://www.ruby.com/industries/hvac/",
+      "assessment": "PASS"
+    },
+    {
+      "url": "https://www.ruby.com/industries/legal/",
+      "status": 200,
+      "finalUrl": "https://www.ruby.com/industries/legal/",
+      "assessment": "PASS"
+    },
+    {
+      "url": "https://www.ruby.com/industries/plumbing/",
+      "status": 200,
+      "finalUrl": "https://www.ruby.com/industries/plumbing/",
+      "assessment": "PASS"
+    },
+    {
+      "url": "https://www.ruby.com/plans-and-pricing/",
+      "status": 200,
+      "finalUrl": "https://www.ruby.com/plans-and-pricing/",
+      "assessment": "PASS"
+    },
+    {
+      "url": "https://www.ruby.com/solutions/integrations/",
+      "status": 200,
+      "finalUrl": "https://www.ruby.com/solutions/integrations/",
+      "assessment": "PASS"
+    },
+    {
+      "url": "https://www.ruby.com/terms/",
+      "status": 200,
+      "finalUrl": "https://www.ruby.com/terms/",
+      "assessment": "PASS"
+    },
+    {
+      "url": "https://www.specialtyansweringservice.net/industries/construction/hvac-answering-service/",
+      "status": 200,
+      "finalUrl": "https://www.specialtyansweringservice.net/industries/construction/hvac-answering-service/",
+      "assessment": "PASS"
+    },
+    {
+      "url": "https://www.specialtyansweringservice.net/industries/construction/plumbers-answering-service/",
+      "status": 200,
+      "finalUrl": "https://www.specialtyansweringservice.net/industries/construction/plumbers-answering-service/",
+      "assessment": "PASS"
+    },
+    {
+      "url": "https://www.specialtyansweringservice.net/industries/real-estate/property-management-answering-service/",
+      "status": 200,
+      "finalUrl": "https://www.specialtyansweringservice.net/industries/real-estate/property-management-answering-service/",
+      "assessment": "PASS"
+    },
+    {
+      "url": "https://www.specialtyansweringservice.net/pricing/",
+      "status": 200,
+      "finalUrl": "https://www.specialtyansweringservice.net/pricing/",
+      "assessment": "PASS"
+    },
+    {
+      "url": "https://www.spectrum.com/business/enterprise/support/faq/account/what-are-the-handset-star-codes-for-my-spectrum-business-voice",
+      "status": 403,
+      "finalUrl": "https://www.spectrum.com/business/enterprise/support/faq/account/what-are-the-handset-star-codes-for-my-spectrum-business-voice",
+      "assessment": "REQUIRES_BROWSER"
+    },
+    {
+      "url": "https://www.spectrum.net/support/mobile/spectrum-mobile-call-forwarding",
+      "status": 200,
+      "finalUrl": "https://www.spectrum.net/support/mobile/spectrum-mobile-call-forwarding",
+      "assessment": "PASS"
+    },
+    {
+      "url": "https://www.standardwebhooks.com/",
+      "status": 200,
+      "finalUrl": "https://www.standardwebhooks.com/",
+      "assessment": "PASS"
+    },
+    {
+      "url": "https://www.t-mobile.com/support/plans-features/calling-services",
+      "status": 403,
+      "finalUrl": "https://www.t-mobile.com/support/plans-features/calling-services",
+      "assessment": "REQUIRES_BROWSER"
+    },
+    {
+      "url": "https://www.t-mobile.com/support/plans-features/self-service-short-codes",
+      "status": 403,
+      "finalUrl": "https://www.t-mobile.com/support/plans-features/self-service-short-codes",
+      "assessment": "REQUIRES_BROWSER"
+    },
+    {
+      "url": "https://www.tala-assistant.com/pricing",
+      "status": 200,
+      "finalUrl": "https://www.tala-assistant.com/pricing",
+      "assessment": "PASS"
+    },
+    {
+      "url": "https://www.telus.com/en/support/article/call-forward-mobile",
+      "status": 403,
+      "finalUrl": "https://www.telus.com/en/support/article/call-forward-mobile",
+      "assessment": "REQUIRES_BROWSER"
+    },
+    {
+      "url": "https://www.thelem.fr/tarifs/",
+      "status": 200,
+      "finalUrl": "https://www.thelem.fr/tarifs/",
+      "assessment": "PASS"
+    },
+    {
+      "url": "https://www.trustpilot.com/review/heyrosie.com",
+      "status": 403,
+      "finalUrl": "https://www.trustpilot.com/review/heyrosie.com",
+      "assessment": "REQUIRES_BROWSER"
+    },
+    {
+      "url": "https://www.twilio.com/en-us/voice/pricing/us",
+      "status": 200,
+      "finalUrl": "https://www.twilio.com/en-us/voice/pricing/us",
+      "assessment": "PASS"
+    },
+    {
+      "url": "https://www.verizon.com/support/call-forwarding-faqs/",
+      "status": 200,
+      "finalUrl": "https://www.verizon.com/support/call-forwarding-faqs/",
+      "assessment": "PASS"
+    },
+    {
+      "url": "https://www.verizon.com/support/knowledge-base-181139/",
+      "status": 200,
+      "finalUrl": "https://www.verizon.com/support/knowledge-base-181139/",
+      "assessment": "PASS"
+    },
+    {
+      "url": "https://www.withallo.com/pricing",
+      "status": 200,
+      "finalUrl": "https://www.withallo.com/pricing",
+      "assessment": "PASS"
+    },
+    {
+      "url": "https://www.yardibreeze.com/blog/2022/04/rentcafe-connect-all-hours-maintenance-call-center/",
+      "status": 200,
+      "finalUrl": "https://www.yardibreeze.com/blog/2022/04/rentcafe-connect-all-hours-maintenance-call-center/",
+      "assessment": "PASS"
+    },
+    {
+      "url": "https://www.zoom.com/en/products/voip-phone/features/ai-receptionist/",
+      "status": 200,
+      "finalUrl": "https://www.zoom.com/en/products/voip-phone/features/ai-receptionist/?cms_guid=false",
+      "assessment": "PASS"
+    },
+    {
+      "url": "https://zoom.us/pricing/virtual-agent",
+      "status": 200,
+      "finalUrl": "https://zoom.us/pricing/virtual-agent",
+      "assessment": "PASS"
+    }
+  ]
+}

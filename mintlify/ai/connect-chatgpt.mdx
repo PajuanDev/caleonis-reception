@@ -1,35 +1,28 @@
 ---
-title: "Connect ChatGPT and OpenAI agents"
-description: "Add LobbyStack to ChatGPT as an app, or use it from the OpenAI Responses API and Codex."
+title: "Connecter ChatGPT et les agents OpenAI"
+description: "Ajoutez Caléonis Receptionist à ChatGPT comme application, ou utilisez-le depuis l'API Responses d'OpenAI et Codex."
 sidebarTitle: "ChatGPT"
 contentType: "How-to"
 ---
 
-The server URL is `https://app.lobbystack.com/api/mcp`. Replace `app.lobbystack.com` with your own domain if you self-host. ChatGPT connects to it from the internet, so a self-hosted LobbyStack needs a public HTTPS address.
+L'URL du serveur est `https://receptionist.caleonis.com/api/mcp`. Si vous auto-hébergez Caléonis Receptionist, remplacez `receptionist.caleonis.com` par votre propre domaine. ChatGPT s'y connecte depuis Internet : un Caléonis Receptionist auto-hébergé a donc besoin d'une adresse HTTPS publique.
 
-See [MCP server](/ai/mcp) for the tools each permission unlocks.
+Consultez [Serveur MCP](/ai/mcp) pour savoir quels outils chaque autorisation débloque.
 
 ## ChatGPT
 
-ChatGPT adds custom MCP servers as apps in developer mode, which OpenAI offers on Plus, Pro, Business, Enterprise and Education accounts on the web.
+Vérifiez dans votre version de ChatGPT que l'ajout d'un serveur MCP distant est disponible et autorisé par votre organisation. Les menus et offres de ce logiciel tiers ne constituent pas une fonction incluse de Caléonis.
 
-<Steps>
-  <Step title="Turn on developer mode">
-    In ChatGPT, open **Settings** > **Security and login** and turn on **Developer mode**.
-  </Step>
-  <Step title="Create the app">
-    Open ChatGPT's plugins, click **+**, and create a developer-mode app. Name it `LobbyStack`, paste the server URL, and choose **OAuth** for authentication. Leave any client ID and secret empty; ChatGPT registers itself with LobbyStack.
-  </Step>
-  <Step title="Sign in and choose access">
-    ChatGPT opens LobbyStack. Sign in, pick the business, uncheck anything ChatGPT shouldn't do, and click **Allow access**.
-  </Step>
-</Steps>
+1. Ouvrez le parcours d'ajout MCP proposé par votre version.
+2. Saisissez `https://receptionist.caleonis.com/api/mcp` et le mode d'authentification effectivement ouvert dans votre espace.
+3. En cas de consentement OAuth, vérifiez l'entreprise et limitez les permissions.
+4. Testez `get_business`, un refus d'action sans permission et la révocation.
 
-To disconnect, go to **Settings** > **Connected apps** in LobbyStack and click **Disconnect** next to ChatGPT.
+La documentation officielle des [connexions MCP OpenAI](https://developers.openai.com/api/docs/guides/tools-connectors-mcp) précise les paramètres API. La connexion du SaaS avec chaque client doit être qualifiée séparément. Ne collez jamais une clé dans une conversation.
 
-## OpenAI Responses API
+## API Responses d'OpenAI
 
-The Responses API calls remote MCP servers for you. Pass an API key in `headers`:
+L'API Responses appelle les serveurs MCP distants pour vous. Passez une clé API dans `headers` :
 
 ```bash
 curl https://api.openai.com/v1/responses \
@@ -40,7 +33,7 @@ curl https://api.openai.com/v1/responses \
     "tools": [{
       "type": "mcp",
       "server_label": "lobbystack",
-      "server_url": "https://app.lobbystack.com/api/mcp",
+      "server_url": "https://receptionist.caleonis.com/api/mcp",
       "headers": { "Authorization": "Bearer '"$LOBBYSTACK_API_KEY"'" },
       "require_approval": "always"
     }],
@@ -48,16 +41,18 @@ curl https://api.openai.com/v1/responses \
   }'
 ```
 
-`require_approval: "always"` makes the API stop before each tool call so your code can confirm it. Loosen it only for keys with read scopes.
+`require_approval: "always"` arrête l'API avant chaque appel d'outil pour que votre code puisse le confirmer. N'assouplissez ce réglage que pour les clés qui ont seulement des portées de lecture.
 
 ## Codex
 
-Add LobbyStack to `~/.codex/config.toml`. Codex reads the API key from the environment variable you name:
+Ajoutez Caléonis Receptionist à `~/.codex/config.toml`. Codex lit la clé API dans la variable d'environnement que vous indiquez :
 
 ```toml ~/.codex/config.toml
 [mcp_servers.lobbystack]
-url = "https://app.lobbystack.com/api/mcp"
+url = "https://receptionist.caleonis.com/api/mcp"
 bearer_token_env_var = "LOBBYSTACK_API_KEY"
 ```
 
-Export `LOBBYSTACK_API_KEY` in your shell, start Codex, and ask it to call `get_business` to check the connection.
+Exportez `LOBBYSTACK_API_KEY` dans votre terminal, lancez Codex et demandez-lui d'appeler `get_business` pour vérifier la connexion.
+
+Référence officielle pour la configuration Codex : [MCP](https://developers.openai.com/codex/mcp).

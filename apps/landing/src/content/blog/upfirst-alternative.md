@@ -13,7 +13,7 @@ locale: "en"
 canonicalSlug: "upfirst-alternative"
 ---
 
-You can test an **Upfirst alternative** in your browser without buying a plan. With LobbyStack, you get 30 browser voice minutes on Free, without a telephone number. Upfirst's first published tier costs $24.95 for 30 calls.
+You can test an **Upfirst alternative** without buying a plan. With LobbyStack, you get 30 voice minutes on Free and a US or Canadian number free for 14 days. Upfirst's first published tier costs $24.95 for 30 calls.
 
 Upfirst charges by handled call, while LobbyStack charges by voice minute. LobbyStack adds public source code, provider control, and self-hosting that Upfirst's reviewed pages do not advertise.
 
@@ -21,11 +21,11 @@ Upfirst charges by handled call, while LobbyStack charges by voice minute. Lobby
 
 | Area | Upfirst | LobbyStack |
 | --- | --- | --- |
-| Ongoing free plan | No; 14-day trial advertised | 30 browser voice minutes, no card, no telephone number |
+| Ongoing free plan | No; 14-day trial advertised | 30 voice minutes, no card, US or Canadian number free for 14 days |
 | Entry plan | $24.95 for 30 calls | Free for 30 voice minutes |
 | Paid usage | Call allowances and per-call overages | Minute allowances and per-minute overages |
 | Booking | Direct calendar scheduling | Booking, changes, and business rules |
-| Transfers | Warm and waterfall transfers | Human handoff with call context |
+| Transfers | Warm and waterfall transfers | Blind transfer to one number |
 | Languages | More than 35 advertised | Answers in the caller's language |
 | Deployment | Hosted service | Managed cloud or self-hosted |
 | Source code | Public pages do not advertise source access | Public MIT-licensed repository |
@@ -34,7 +34,7 @@ Pricing and features were checked on July 30, 2026. Review both vendors' current
 
 ## LobbyStack starts free and stays under your control
 
-You can use Free to test greetings and answers in your browser. Choose a paid plan with a dedicated number to test telephone calls and transfers.
+You can use Free to test greetings, answers and real calls on a US or Canadian number for 14 days. Choose a paid plan to keep a dedicated number and transfer calls to your team.
 
 Upfirst's per-call model can favor a company with long intake conversations. LobbyStack's minute model can cost less when callers ask brief questions. Ninety one-minute calls fit inside LobbyStack Starter at $30, while Upfirst lists 90 calls at $59.95.
 
@@ -74,7 +74,7 @@ Take one month of call history and calculate both units. Twenty long intake call
 
 Upfirst's reviewed official pages describe a hosted service. They do not advertise public source code or a self-hosted deployment.
 
-[LobbyStack is open source](https://github.com/lobbystack/lobbystack). You can use the managed cloud, inspect the code, or run the stack in infrastructure you control. A self-hosted team can manage its own provider accounts, secrets, retention policies, upgrade timing, and integrations.
+[LobbyStack is open source](https://gitlab.com/lobbystack-group/lobbystack). You can use the managed cloud, inspect the code, or run the stack in infrastructure you control. A self-hosted team can manage its own provider accounts, secrets, retention policies, upgrade timing, and integrations.
 
 That control carries work. Someone must operate the deployment, monitor calls, manage backups, and test upgrades. Upfirst removes that burden. LobbyStack gives you the choice.
 
@@ -114,4 +114,4 @@ Choose LobbyStack for free browser voice testing, public code, self-hosting, or 
 
 LobbyStack offers the stronger default starting point: free browser testing, minute-based pricing, and an ownership path Upfirst does not advertise. Upfirst can still fit long-call businesses that value its language coverage and per-call billing.
 
-[Start LobbyStack free](/pricing/) and price your actual call mix. If control matters after the trial, [inspect the code on GitHub](https://github.com/lobbystack/lobbystack).
+[Start LobbyStack free](/pricing/) and price your actual call mix. If control matters after the trial, [inspect the code on GitHub](https://gitlab.com/lobbystack-group/lobbystack).

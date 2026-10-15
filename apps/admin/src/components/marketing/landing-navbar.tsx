@@ -9,6 +9,7 @@ import {
 import { cn } from "@/lib/utils"
 import { versionedAssetUrl } from "@/lib/versioned-assets"
 import { localizePublicPath } from "@/lib/locale-path"
+import { helpSiteUrl } from "@/lib/help-site-url"
 import {
   BookOpen,
   CalendarCheck,
@@ -16,7 +17,6 @@ import {
   ChevronDown,
   DoorOpen,
   ExternalLink,
-  Gift,
   Hammer,
   History,
   Home,
@@ -65,13 +65,12 @@ const labels = {
     resources: "Resources",
     pricing: "Pricing",
     login: "Log in",
-    tryFree: "Try for free",
+    tryDemo: "Try the demo",
     blog: "Blog",
     changelog: "Changelog",
     helpCenter: "Help Center",
     comparison: "Comparison",
     calculator: "Missed call calculator",
-    affiliateProgram: "Affiliate Program",
   },
   fr: {
     solutions: "Solutions",
@@ -79,13 +78,12 @@ const labels = {
     resources: "Ressources",
     pricing: "Tarifs",
     login: "Connexion",
-    tryFree: "Essayer gratuitement",
+    tryDemo: "Essayer la démo",
     blog: "Blog",
     changelog: "Journal des changements",
     helpCenter: "Centre d'aide",
     comparison: "Comparaison",
     calculator: "Calculateur d'appels manqués",
-    affiliateProgram: "Programme d'affiliation",
   },
 } satisfies Record<MarketingLocale, Record<string, string>>
 
@@ -136,7 +134,7 @@ const resourceLinks = (locale: MarketingLocale) =>
     { label: labels[locale].changelog, href: "/changelog/", icon: History },
     {
       label: labels[locale].helpCenter,
-      href: "https://caleonis.com",
+      href: helpSiteUrl(),
       external: true,
       icon: BookOpen,
     },
@@ -149,11 +147,6 @@ const resourceLinks = (locale: MarketingLocale) =>
       label: labels[locale].calculator,
       href: "/missed-call-revenue-calculator/",
       icon: Calculator,
-    },
-    {
-      label: labels[locale].affiliateProgram,
-      href: "/affiliate-program/",
-      icon: Gift,
     },
   ] satisfies NavChildLink[]
 
@@ -268,7 +261,23 @@ const solutionColumns = (locale: MarketingLocale) =>
     },
   ].filter(Boolean) as NavColumn[]
 
-const navLinks = (locale: MarketingLocale): NavLink[] => [
+// The corporate site does not host the SaaS marketing routes. Keep the existing
+// navigation ready for an explicitly configured, published product site.
+function marketingSiteConfigured(): boolean {
+  try {
+    const url = new URL(process.env.NEXT_PUBLIC_LANDING_SITE_URL?.trim() ?? "")
+    return url.protocol === "http:" || url.protocol === "https:"
+  } catch {
+    return false
+  }
+}
+
+function navigationHref(locale: MarketingLocale, href: string): string {
+  if (/^\/(?:fr\/|en\/)?essai\/?$/.test(href)) return localizePublicPath("/essai", locale)
+  return localizeMarketingHref(locale, href)
+}
+
+const navLinks = (locale: MarketingLocale): NavLink[] => marketingSiteConfigured() ? [
   {
     type: "group",
     label: labels[locale].solutions,
@@ -286,7 +295,7 @@ const navLinks = (locale: MarketingLocale): NavLink[] => [
     ],
   },
   { type: "link", label: labels[locale].pricing, href: "/pricing/" },
-]
+] : []
 
 type LandingNavbarProps = {
   locale?: MarketingLocale
@@ -316,12 +325,12 @@ export function LandingNavbar({ locale = "en" }: LandingNavbarProps) {
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-6">
         {/* Logo */}
         <a
-          href={localizeMarketingHref(locale, "/")}
+          href={marketingSiteConfigured() ? localizeMarketingHref(locale, "/") : localizePublicPath("/essai", locale)}
           className="flex items-center focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
         >
           <img
             src={versionedAssetUrl("/brand/logo-wordmark.svg")}
-            alt="Caleonis Reception"
+            alt="Caléonis Receptionist"
             width={155}
             height={43}
             decoding="async"
@@ -376,7 +385,7 @@ export function LandingNavbar({ locale = "en" }: LandingNavbarProps) {
                           return (
                             <a
                               key={resourceLink.label}
-                              href={localizeMarketingHref(locale, resourceLink.href)}
+                              href={navigationHref(locale, resourceLink.href)}
                               target={
                                 resourceLink.external ? "_blank" : undefined
                               }
@@ -447,14 +456,13 @@ export function LandingNavbar({ locale = "en" }: LandingNavbarProps) {
             {copy.login}
           </a>
           <a
-            href={localizePublicPath("/signup", locale)}
+            href={localizePublicPath("/essai", locale)}
             className={cn(buttonVariants(), "rounded-full px-5")}
-            data-ph-signup-cta
             data-ph-capture-attribute-section="navbar"
-            data-ph-capture-attribute-action="try_for_free"
-            data-ph-capture-attribute-destination="/signup"
+            data-ph-capture-attribute-action="try_demo"
+            data-ph-capture-attribute-destination="/essai"
           >
-            {copy.tryFree}
+            {copy.tryDemo}
           </a>
         </div>
 
@@ -518,7 +526,7 @@ export function LandingNavbar({ locale = "en" }: LandingNavbarProps) {
                             return (
                               <a
                                 key={resourceLink.label}
-                                href={localizeMarketingHref(locale, resourceLink.href)}
+                                href={navigationHref(locale, resourceLink.href)}
                                 target={
                                   resourceLink.external ? "_blank" : undefined
                                 }
@@ -587,14 +595,13 @@ export function LandingNavbar({ locale = "en" }: LandingNavbarProps) {
                 {copy.login}
               </a>
               <a
-                href={localizePublicPath("/signup", locale)}
+                href={localizePublicPath("/essai", locale)}
                 className={cn(buttonVariants(), "rounded-full")}
-                data-ph-signup-cta
                 data-ph-capture-attribute-section="mobile_navbar"
-                data-ph-capture-attribute-action="try_for_free"
-                data-ph-capture-attribute-destination="/signup"
+                data-ph-capture-attribute-action="try_demo"
+                data-ph-capture-attribute-destination="/essai"
               >
-                {copy.tryFree}
+                {copy.tryDemo}
               </a>
             </div>
           </div>

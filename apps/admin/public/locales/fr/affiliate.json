@@ -1,10 +1,10 @@
 {
   "eyebrow": "Programme d'affiliation",
   "title": "Programme d'affiliation",
-  "description": "Partagez Caleonis Reception avec des opérateurs et agences. Nous suivons les parrainages, commissions et paiements PayPal mensuels ici.",
+  "description": "Partagez Caléonis Receptionist avec des opérateurs et agences. Nous suivons les parrainages, commissions et paiements PayPal mensuels ici.",
   "referral": {
     "title": "Lien de parrainage",
-    "description": "Partagez ce lien partout où vous recommandez Caleonis Reception.",
+    "description": "Partagez ce lien partout où vous recommandez Caléonis Receptionist.",
     "active": "Actif",
     "copy": "Copier le lien",
     "code": "Code de parrainage : {{code}}"
@@ -45,11 +45,11 @@
   "quickstart": {
     "share": {
       "title": "Partagez votre lien",
-      "description": "Utilisez votre lien Caleonis Reception dans vos publications, infolettres, sites web et recommandations directes."
+      "description": "Utilisez votre lien Caléonis Receptionist dans vos publications, infolettres, sites web et recommandations directes."
     },
     "resources": {
       "title": "Utilisez des affirmations exactes",
-      "description": "Décrivez Caleonis Reception honnêtement et indiquez que vous pouvez gagner une commission."
+      "description": "Décrivez Caléonis Receptionist honnêtement et indiquez que vous pouvez gagner une commission."
     },
     "receive": {
       "title": "Recevez vos revenus",
@@ -105,7 +105,7 @@
     },
     "method": {
       "question": "Comment les paiements sont-ils envoyés ?",
-      "answer": "Caleonis Reception paie les affiliés via PayPal avec le courriel PayPal enregistré."
+      "answer": "Caléonis Receptionist paie les affiliés via PayPal avec le courriel PayPal enregistré."
     },
     "refunds": {
       "question": "Que se passe-t-il après un remboursement ?",
@@ -117,5 +117,11 @@
     "copied": "Lien de parrainage copié.",
     "paypalSaved": "Courriel PayPal enregistré.",
     "paypalFailed": "Impossible d'enregistrer le courriel PayPal."
+  },
+  "availability": {
+    "title": "Programme d’affiliation",
+    "description": "Le programme n’est pas ouvert pour ce service.",
+    "notice": "Les conditions, commissions et modalités de paiement Caléonis Receptionist restent à valider. Aucun engagement d’affiliation ni paiement n’est proposé pendant le pilote.",
+    "help": "Aide et accompagnement pilote"
   }
 }

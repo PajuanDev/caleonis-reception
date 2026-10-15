@@ -1,42 +1,42 @@
 ---
-title: "Authenticate with API keys"
-description: "Create API keys, choose scopes, send the key with each request, and stay within rate limits."
-sidebarTitle: "Authentication"
+title: "S'authentifier avec des clés API"
+description: "Créez des clés API, choisissez leurs portées, envoyez la clé avec chaque requête et respectez les limites de débit."
+sidebarTitle: "Authentification"
 contentType: "How-to"
 ---
 
-Every request needs an API key for one business. Owners and admins create and revoke keys in the dashboard. The same keys connect AI assistants through the [MCP server](/ai/mcp).
+Chaque requête nécessite une clé API liée à une entreprise. Les propriétaires et les administrateurs créent et révoquent les clés dans le tableau de bord. Les mêmes clés connectent les assistants IA par le [serveur MCP](/ai/mcp).
 
-## Create a key
+## Créer une clé
 
 <Steps>
-  <Step title="Open API keys">
-    Go to **Settings** > **API keys**. Only owners and admins see the page.
+  <Step title="Ouvrir Clés API">
+    Allez dans **Réglages** > **Clés API**. Seuls les propriétaires et les administrateurs voient cette page.
   </Step>
-  <Step title="Name the key and pick its access">
-    Use a name you'll recognize later, such as `Zapier`. Select only the scopes the tool needs.
+  <Step title="Nommer la clé et choisir son accès">
+    Utilisez un nom que vous reconnaîtrez plus tard, comme `Zapier`. Sélectionnez seulement les portées dont l'outil a besoin.
   </Step>
-  <Step title="Copy the key">
-    LobbyStack shows the full key once. Store it in your tool or a password manager. LobbyStack keeps only a hash, so nobody can show the key again.
+  <Step title="Copier la clé">
+    Caléonis Receptionist affiche la clé complète une seule fois. Conservez-la dans votre outil ou dans un gestionnaire de mots de passe. Caléonis Receptionist ne garde qu'un hachage, donc personne ne peut afficher la clé de nouveau.
   </Step>
 </Steps>
 
-Keys look like `lsk_1a2b3c4d_` followed by 32 random characters. The dashboard lists each key by its prefix, `lsk_1a2b3c4d`, with its scopes, who created it, and when it was last used.
+Les clés ressemblent à `lsk_1a2b3c4d_` suivi de 32 caractères aléatoires. Le tableau de bord liste chaque clé par son préfixe, `lsk_1a2b3c4d`, avec ses portées, la personne qui l'a créée et la date de sa dernière utilisation.
 
-## Send the key
+## Envoyer la clé
 
-Put the key in the `Authorization` header:
+Placez la clé dans l'en-tête `Authorization` :
 
 ```bash
-curl https://app.lobbystack.com/api/v1/calls \
+curl https://receptionist.caleonis.com/api/v1/calls \
   -H "Authorization: Bearer $LOBBYSTACK_API_KEY"
 ```
 
-A missing, unknown or revoked key returns `401` with the code `unauthorized`.
+Une clé manquante, inconnue ou révoquée renvoie `401` avec le code `unauthorized`.
 
-## Test a key
+## Tester une clé
 
-`GET /me` works with any valid key, whatever its scopes. It returns the key and its business, so an integration can check a connection before it needs a specific scope:
+`GET /me` fonctionne avec toute clé valide, quelles que soient ses portées. Il renvoie la clé et son entreprise, pour qu'une intégration puisse vérifier une connexion avant d'avoir besoin d'une portée précise :
 
 ```json
 {
@@ -53,11 +53,11 @@ A missing, unknown or revoked key returns `401` with the code `unauthorized`.
 }
 ```
 
-## Scopes
+## Portées
 
-Each endpoint except `GET /me` requires one scope. A key without it gets `403` with the code `insufficient_scope`, and the message names the missing scope.
+Chaque point de terminaison, sauf `GET /me`, exige une portée. Une clé qui ne l'a pas reçoit `403` avec le code `insufficient_scope`, et le message nomme la portée manquante.
 
-| Scope | Allows |
+| Portée | Autorise |
 | --- | --- |
 | `business:read` | `GET /business`, `GET /services`, `GET /staff` |
 | `business:write` | `PATCH /business` |
@@ -68,29 +68,39 @@ Each endpoint except `GET /me` requires one scope. A key without it gets `403` w
 | `appointments:write` | `POST /appointments`, `POST /appointments/{appointment_id}/cancel`, `POST /appointments/{appointment_id}/reschedule` |
 | `messages:read` | `GET /messages` |
 | `knowledge:write` | `POST /knowledge` |
-| `webhooks:manage` | `GET`, `POST`, `PATCH` and `DELETE` on `/webhooks`, and `POST /webhooks/{webhook_id}/test` |
+| `webhooks:manage` | `GET`, `POST`, `PATCH` et `DELETE` sur `/webhooks`, et `POST /webhooks/{webhook_id}/test` |
 
-## Revoke a key
+## Révoquer une clé
 
-On **Settings** > **API keys**, click **Revoke** next to the key. Requests with it fail right away, and you can't undo it. Create a new key if you still need access.
+Dans **Réglages** > **Clés API**, cliquez sur **Révoquer** à côté de la clé. Les requêtes qui l'utilisent échouent immédiatement, et vous ne pouvez pas annuler cette action. Créez une nouvelle clé si vous avez encore besoin d'accès.
 
-## Rate limits
+Caléonis Receptionist désactive aussi les points de terminaison webhook que la clé a créés. Pour en garder un, réactivez-le depuis la carte **Webhooks** dans **Intégrations**.
 
-Each key can make 120 requests per minute. Self-hosted deployments can change this with `PUBLIC_API_RATE_LIMIT_PER_MINUTE`. The window resets at the start of each minute.
+## Limites de débit
 
-Every response carries these headers:
+Chaque clé peut faire 120 requêtes par minute. Les déploiements auto-hébergés peuvent modifier cette valeur avec `PUBLIC_API_RATE_LIMIT_PER_MINUTE`. La fenêtre se réinitialise au début de chaque minute.
 
-| Header | Meaning |
+Chaque réponse contient ces en-têtes :
+
+| En-tête | Signification |
 | --- | --- |
-| `X-RateLimit-Limit` | Requests allowed per minute. |
-| `X-RateLimit-Remaining` | Requests left in the current minute. |
-| `X-RateLimit-Reset` | Unix time, in seconds, when the window resets. |
+| `X-RateLimit-Limit` | Requêtes autorisées par minute. |
+| `X-RateLimit-Remaining` | Requêtes restantes dans la minute en cours. |
+| `X-RateLimit-Reset` | Heure Unix, en secondes, à laquelle la fenêtre se réinitialise. |
 
-Past the limit, the API returns `429` with the code `rate_limited` and a `Retry-After` header with the seconds to wait.
+Au-delà de la limite, l'API renvoie `429` avec le code `rate_limited` et un en-tête `Retry-After` qui indique le nombre de secondes à attendre.
 
-## Keep keys safe
+## Protéger vos clés
 
-- Use one key per tool so you can revoke one without breaking the others.
-- Give each key the fewest scopes that work.
-- Never put a key in browser code or a mobile app. Call the API from a server.
-- LobbyStack logs each request with the key's ID, never the key itself, and records changes made with a key in the business's audit log.
+- Utilisez une clé par outil, pour pouvoir en révoquer une sans briser les autres.
+- Donnez à chaque clé seulement les portées dont elle a besoin.
+- Ne placez jamais une clé dans du code exécuté dans le navigateur ou dans une application mobile. Appelez l'API depuis un serveur.
+- Caléonis Receptionist journalise chaque requête avec l'identifiant de la clé, jamais la clé elle-même, et consigne les changements faits avec une clé dans le journal d'audit de l'entreprise.
+
+{/* Caléonis qualification */}
+
+## Compatibilité des permissions Caléonis
+
+Conservez le préfixe `lsk_` et les identifiants internes. Les secrets ne doivent jamais être intégrés au widget, à une URL ou à du code navigateur. Vérifiez le refus d'une ressource d'une autre entreprise.
+
+La version Caléonis documentée requiert `webhooks:manage` pour gérer les destinations. Les nouvelles restrictions d'abonnement par portée d'événement de l'amont ne sont pas déclarées actives sans modification du runtime.

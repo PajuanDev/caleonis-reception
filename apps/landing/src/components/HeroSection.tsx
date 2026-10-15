@@ -12,19 +12,20 @@ type HeroSectionProps = {
 
 const heroCopy = {
   en: {
-    h1Start: "LobbyStack turns",
+    h1Start: "Caléonis Receptionist turns",
     h1Emphasis: "missed calls",
     h1End: "into booked work.",
-    body: "LobbyStack is an AI receptionist for small businesses. It answers your phone, books appointments into your calendar, and sends urgent calls to your team. Use it for every call, or only when you're busy.",
-    pricing: "Free plan with 30 minutes a month. Paid plans from $30.",
+    body: "Caléonis Receptionist is an AI receptionist for small businesses. It answers your phone, books appointments into your calendar, and records the details your team needs for a callback. Use it for every call, or only when you're busy.",
+    pricing:
+      "Pilot access subject to approval. Draft packages from €30/month; no purchase in this preview.",
   },
   fr: {
-    h1Start: "LobbyStack transforme",
+    h1Start: "Caléonis Receptionist transforme",
     h1Emphasis: "appels manqués",
     h1End: "en rendez‑vous.",
-    body: "LobbyStack est un réceptionniste IA pour les petites entreprises. Il répond au téléphone, planifie les rendez‑vous dans votre calendrier et transfère les appels urgents à votre équipe. Activez-le pour tous vos appels ou seulement quand vous êtes occupé.",
+    body: "Caléonis Receptionist est un réceptionniste IA pour les petites entreprises. Il répond au téléphone, planifie les rendez‑vous dans votre calendrier et recueille les informations pour un rappel humain. Activez-le pour tous vos appels ou seulement quand vous êtes occupé.",
     pricing:
-      "Forfait gratuit avec 30 minutes par mois. Forfaits payants à partir de 30 $.",
+      "Accès pilote sur validation. Catalogue projeté dès 30 €/mois ; aucune souscription dans cette prévisualisation.",
   },
 } satisfies Record<Locale, Record<string, string>>
 
@@ -60,11 +61,11 @@ export function HeroSection({ children, locale = "en" }: HeroSectionProps) {
               )}
             </h1>
 
-            <p className="animate-fade-up body-copy mt-6 max-w-[65ch] stagger-2 md:text-lg">
+            <p className="animate-fade-up body-copy stagger-2 mt-6 max-w-[65ch] md:text-lg">
               {localCopy.body}
             </p>
 
-            <div className="animate-fade-up mt-8 flex items-center gap-4 stagger-3">
+            <div className="animate-fade-up stagger-3 mt-8 flex items-center gap-4">
               <a
                 href={APP_SIGNUP_URL}
                 className={cn(
@@ -82,12 +83,12 @@ export function HeroSection({ children, locale = "en" }: HeroSectionProps) {
             </div>
 
             {/* Micro-copy */}
-            <p className="animate-fade-up fine-print mt-5 stagger-4">
+            <p className="animate-fade-up fine-print stagger-4 mt-5">
               {localCopy.pricing}
             </p>
           </div>
 
-          <div className="animate-fade-up mx-auto flex w-full max-w-[22rem] min-w-0 justify-center stagger-5 md:max-w-[30rem] xl:max-w-none xl:justify-end">
+          <div className="animate-fade-up stagger-5 mx-auto flex w-full max-w-[22rem] min-w-0 justify-center md:max-w-[30rem] xl:max-w-none xl:justify-end">
             {children}
           </div>
         </div>

@@ -13,13 +13,13 @@ const ctaCopy = {
     headingStart: "Never miss another",
     headingMiddle: "ready-to-book",
     headingEnd: "caller",
-    body: "Test 30 browser voice minutes for free. No telephone number included.",
+    body: "Discover a welcome tailored to your business, appointments in Google Calendar and clear call history. Request a pilot with terms agreed before activation.",
   },
   fr: {
     headingStart: "Ne manquez plus aucun",
     headingMiddle: "appel prêt à réserver",
     headingEnd: "",
-    body: "Testez 30 minutes vocales dans le navigateur gratuitement. Aucun numéro de téléphone inclus.",
+    body: "Découvrez un accueil adapté à votre entreprise, les rendez‑vous Google Calendar et un suivi clair des appels. Demandez un pilote aux conditions convenues avant activation.",
   },
 } satisfies Record<Locale, Record<string, string>>
 
@@ -57,7 +57,7 @@ export function CtaSection({ locale = "en" }: CtaSectionProps) {
           </a>
         </div>
         <p className="fine-print mt-3">
-          {copy.common.noCreditCardCancelAnytime}
+          {copy.common.cancelAnytime}
         </p>
       </div>
     </section>

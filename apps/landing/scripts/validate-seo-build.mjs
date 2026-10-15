@@ -10,6 +10,8 @@ import {
 const distPath = fileURLToPath(new URL("../dist/", import.meta.url))
 const siteOrigin = new URL(SITE_URL).origin
 const errors = []
+// This build is deliberately private/noindex. The sitemap is a reviewed-route manifest.
+const isPrivatePreview = true
 
 const walk = (dir) =>
   readdirSync(dir, { withFileTypes: true }).flatMap((entry) => {
@@ -100,8 +102,8 @@ for (const entry of sitemapEntries) {
   }
 
   const html = htmlByPath.get(url.pathname)
-  if (/name=["']robots["'][^>]*noindex/i.test(html)) {
-    errors.push(`Noindex URL appears in sitemap: ${entry.loc}`)
+  if (isPrivatePreview && !/name=["']robots["'][^>]*noindex/i.test(html)) {
+    errors.push(`Preview URL is missing noindex: ${entry.loc}`)
   }
 
   const title = decodeHtmlEntities(
@@ -232,5 +234,5 @@ if (errors.length > 0) {
 }
 
 console.log(
-  `SEO build validation passed for ${sitemapEntries.length} indexable URLs across ${childUrls.length} child sitemaps.`
+  `SEO build validation passed for ${sitemapEntries.length} reviewed noindex preview URLs across ${childUrls.length} child sitemaps.`
 )

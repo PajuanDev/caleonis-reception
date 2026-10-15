@@ -1,54 +1,56 @@
 ---
-title: "Deploy with Docker Compose"
-description: "Run LobbyStack on one server with Docker Compose. You'll configure PostgreSQL, Redis, file storage, and HTTPS, then verify the deployment before going live."
+title: "Déployer avec Docker Compose"
+description: "Exécutez Caléonis Receptionist sur un seul serveur avec Docker Compose. Vous configurerez PostgreSQL, Redis, le stockage de fichiers et le HTTPS, puis vérifierez le déploiement avant la mise en service."
 sidebarTitle: "Docker Compose"
 contentType: "Tutorial"
 ---
 
-## Prerequisites
+## Prérequis
 
-- Docker Engine 24 or later with Compose v2
-- Node.js 22 or later, to generate secrets
-- at least 2 vCPU, 4 GB of RAM, and durable disk storage
-- a public DNS name for the dashboard
-- Twilio and OpenAI accounts for live calls, and a Twilio Elastic SIP trunk for phone calls
+L'exemple ci-dessous clone le socle MIT public pour une installation indépendante. Il ne clone pas la production Caléonis ni ses correctifs/configurations privés. Pour reproduire un candidat Caléonis précis, utilisez le dépôt autorisé et son commit audité, avec vos propres secrets et comptes.
 
-## Configure the environment
+- Docker Engine 24 ou une version ultérieure avec Compose v2
+- Node.js 22 ou une version ultérieure, pour générer les secrets
+- au moins 2 vCPU, 4 Go de RAM et un stockage disque durable
+- un nom DNS public pour le tableau de bord
+- des comptes Twilio et OpenAI pour les appels en direct, et un trunk Twilio Elastic SIP pour les appels téléphoniques
+
+## Configurer l'environnement
 
 ```bash
-git clone https://github.com/lobbystack/lobbystack.git
+git clone https://gitlab.com/lobbystack-group/lobbystack.git
 cd lobbystack
 node scripts/generate-env.mjs
 ```
 
-The script copies `.env.example` to `.env` and fills every PostgreSQL role password and internal secret with a random 64-character value. It won't overwrite an existing `.env` unless you pass `--force`, which also replaces every secret in it.
+Le script copie `.env.example` vers `.env` et remplit chaque mot de passe de rôle PostgreSQL et chaque secret interne avec une valeur aléatoire de 64 caractères. Il n'écrase pas un `.env` existant, sauf si vous passez `--force`, qui remplace aussi tous les secrets qu'il contient.
 
-Then open `.env` and set `APP_BASE_URL`, `OPENAI_API_KEY`, and your Twilio credentials. Services build their database connection strings from the role passwords, so you don't need to write any database URLs.
+Ouvrez ensuite `.env` et définissez `APP_BASE_URL`, `OPENAI_API_KEY` et vos identifiants Twilio. Les services construisent leurs chaînes de connexion à la base de données à partir des mots de passe des rôles. Vous n'avez donc à écrire aucune URL de base de données.
 
-Compose sets `STORAGE_PROVIDER=local` by default. The admin and worker mount the same persistent `storage_data` volume at `/var/lib/lobbystack/storage`.
+Compose définit `STORAGE_PROVIDER=local` par défaut. L'admin et le worker montent le même volume persistant `storage_data` dans `/var/lib/lobbystack/storage`.
 
 <Warning>
-  Do not expose a stack that still uses the example passwords or `change-me` secrets.
+  N'exposez pas une pile qui utilise encore les mots de passe d'exemple ou les secrets `change-me`.
 </Warning>
 
-## Start LobbyStack
+## Démarrer Caléonis Receptionist
 
 ```bash
 docker compose --env-file .env up -d --build
 docker compose ps
 ```
 
-The migrator applies PostgreSQL migrations before the admin and worker services start. Health checks hold dependent services until their prerequisites are ready.
+Le migrator applique les migrations PostgreSQL avant le démarrage des services admin et worker. Les vérifications d'état retiennent les services dépendants jusqu'à ce que leurs prérequis soient prêts.
 
-The admin readiness response includes database and storage checks. The worker readiness response includes PostgreSQL, Redis, and storage status.
+La réponse de disponibilité de l'admin inclut des vérifications de PostgreSQL, de Redis et du stockage. La réponse de disponibilité du worker inclut l'état de PostgreSQL, de Redis et du stockage.
 
-LobbyStack does not run monitoring containers. Application logs remain available through `docker compose logs`, and the health endpoints continue to work.
+Caléonis Receptionist n'exécute pas de conteneurs de surveillance. Les journaux de l'application restent accessibles avec `docker compose logs`, et les points de terminaison de santé continuent de fonctionner.
 
-## Choose a storage backend
+## Choisir un backend de stockage
 
-The default local provider supports a single Docker host. Back up the `storage_data` volume with PostgreSQL and restore both from the same recovery point.
+Le fournisseur local par défaut prend en charge un seul hôte Docker. Sauvegardez le volume `storage_data` en même temps que PostgreSQL et restaurez les deux à partir du même point de restauration.
 
-Use S3 when the admin and worker run on different hosts. Set these values in `.env`:
+Utilisez S3 quand l'admin et le worker tournent sur des hôtes différents. Définissez ces valeurs dans `.env` :
 
 ```dotenv
 STORAGE_PROVIDER=s3
@@ -60,9 +62,9 @@ S3_SECRET_ACCESS_KEY=replace-with-secret-key
 S3_FORCE_PATH_STYLE=false
 ```
 
-AWS workloads may omit the access-key variables when the container can use an AWS credential role.
+Les charges de travail AWS peuvent omettre les variables de clé d'accès quand le conteneur peut utiliser un rôle d'identifiants AWS.
 
-MinIO remains available through a Compose profile. Configure the S3 variables for MinIO, then start the stack with the profile:
+MinIO reste disponible par un profil Compose. Configurez les variables S3 pour MinIO, puis démarrez la pile avec ce profil :
 
 ```dotenv
 STORAGE_PROVIDER=s3
@@ -77,32 +79,32 @@ S3_FORCE_PATH_STYLE=true
 docker compose --env-file .env --profile minio up -d --build
 ```
 
-For local email inspection, start Mailpit:
+Pour inspecter les emails en local, démarrez Mailpit :
 
 ```bash
 docker compose --env-file .env --profile development up -d mailpit
 ```
 
-## Export OpenTelemetry data
+## Exporter les données OpenTelemetry
 
-OpenTelemetry export is disabled when `OTEL_EXPORTER_OTLP_ENDPOINT` is empty. To send traces, metrics, and OpenTelemetry logs to PostHog, add these values to `.env`:
+L'export OpenTelemetry est désactivé quand `OTEL_EXPORTER_OTLP_ENDPOINT` est vide. Pour envoyer des traces, des métriques et des journaux OpenTelemetry à PostHog, ajoutez ces valeurs à `.env` :
 
 ```dotenv
 OTEL_EXPORTER_OTLP_ENDPOINT=https://us.i.posthog.com/i
 OTEL_EXPORTER_OTLP_HEADERS=Authorization=Bearer your_posthog_project_token_here
 ```
 
-Use your regional PostHog host and project token. LobbyStack appends `/v1/traces`, `/v1/metrics`, and `/v1/logs` to the base URL. You can use the same variables with another OTLP-compatible backend.
+Utilisez l'hôte PostHog de votre région et le jeton de votre projet. Caléonis Receptionist ajoute `/v1/traces`, `/v1/metrics` et `/v1/logs` à l'URL de base. Vous pouvez utiliser les mêmes variables avec un autre backend compatible OTLP.
 
-Restart the application containers after changing the values:
+Redémarrez les conteneurs de l'application après avoir modifié les valeurs :
 
 ```bash
 docker compose --env-file .env up -d
 ```
 
-Direct product analytics and error reporting use their own PostHog configuration.
+L'analytique produit directe et le signalement des erreurs utilisent leur propre configuration PostHog.
 
-## Verify the deployment
+## Vérifier le déploiement
 
 ```bash
 curl -fsS http://127.0.0.1:3000/api/health/ready
@@ -110,21 +112,21 @@ curl -fsS http://127.0.0.1:3002/health/ready
 docker compose logs --since=10m admin worker
 ```
 
-The default service ports bind to localhost. Put public traffic through Caddy or another trusted reverse proxy.
+Les ports de service par défaut écoutent sur localhost. Faites passer le trafic public par Caddy ou par un autre proxy inverse de confiance.
 
-## Production checklist
+## Liste de vérification pour la production
 
-- replace all development credentials and limit `.env` permissions
-- use a production HTTPS value for `APP_BASE_URL`
-- set `OPENAI_WEBHOOK_SECRET` and `TWILIO_SIP_TRUNK_SID` to answer phone calls. The worker won't provision a phone number without `TWILIO_SIP_TRUNK_SID`. The [voice calls variables](/self-hosting/environment-variables#voice-calls) list what each one does
-- set `WEB_CALL_ALLOWED_ORIGINS` to the exact sites that host your public demo call, if you run one
-- configure off-host PostgreSQL and file-storage backups
-- run a restore drill before accepting production traffic
-- restrict PostgreSQL, Redis, and optional MinIO ports to private networks
-- monitor admin, worker, queue, database, and object-storage health
-- pin image versions before planned upgrades
+- remplacez tous les identifiants de développement et limitez les permissions de `.env`
+- utilisez une valeur HTTPS de production pour `APP_BASE_URL`
+- définissez `OPENAI_WEBHOOK_SECRET` et `TWILIO_SIP_TRUNK_SID` pour répondre aux appels téléphoniques. Le worker ne provisionne pas de numéro de téléphone sans `TWILIO_SIP_TRUNK_SID`. Les [variables des appels vocaux](/self-hosting/environment-variables#appels-vocaux) décrivent le rôle de chacune
+- définissez `WEB_CALL_ALLOWED_ORIGINS` avec les sites exacts qui hébergent votre appel de démo public, si vous en avez un
+- configurez des sauvegardes de PostgreSQL et du stockage de fichiers hors de l'hôte
+- faites un exercice de restauration avant d'accepter du trafic de production
+- limitez les ports de PostgreSQL, de Redis et de MinIO (facultatif) aux réseaux privés
+- surveillez l'état de l'admin, du worker, de la file d'attente, de la base de données et du stockage d'objets
+- épinglez les versions des images avant les mises à niveau planifiées
 
-## Upgrades
+## Mises à niveau
 
 ```bash
 git pull --ff-only
@@ -132,4 +134,12 @@ docker compose --env-file .env build
 docker compose --env-file .env up -d
 ```
 
-Back up PostgreSQL and the configured storage backend before upgrading. Review new migrations and environment variables before restarting services.
+Sauvegardez PostgreSQL et le backend de stockage configuré avant la mise à niveau. Passez en revue les nouvelles migrations et variables d'environnement avant de redémarrer les services.
+
+{/* Caléonis qualification */}
+
+## Périmètre d'exécution
+
+N'exécutez ces commandes que dans votre installation indépendante. Ne réutilisez aucun secret, compte fournisseur ni destinataire client de la production Caléonis. Le générateur `--force` remplace des secrets et peut rendre les anciens accès ou données chiffrées inutilisables.
+
+Un lancement ne doit pas déclencher involontairement d'email, d'achat de numéro, d'appel ou de paiement réel. Les changements de DNS/routage et la publication de la production Caléonis demandent une validation distincte.

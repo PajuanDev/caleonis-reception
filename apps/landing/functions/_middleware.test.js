@@ -3,7 +3,7 @@ import { describe, expect, it, vi } from "vitest"
 import { onRequest } from "./_middleware.js"
 
 describe("canonical host redirects", () => {
-  it.each(["www.lobbystack.com", "lobbystack-landing.pages.dev"])(
+  it.each(["www.caleonis-receptionist-v1-review.willgosse225.chatgpt.site", "caleonis-receptionist-preview.pages.dev"])(
     "redirects %s to the canonical host",
     async (hostname) => {
       const next = vi.fn()
@@ -18,7 +18,7 @@ describe("canonical host redirects", () => {
 
       expect(response.status).toBe(301)
       expect(response.headers.get("Location")).toBe(
-        "https://lobbystack.com/solutions/self-hosted-ai-receptionist/?utm_source=test"
+        "https://caleonis-receptionist-v1-review.willgosse225.chatgpt.site/solutions/self-hosted-ai-receptionist/?utm_source=test"
       )
       expect(next).not.toHaveBeenCalled()
     }
@@ -28,14 +28,14 @@ describe("canonical host redirects", () => {
 describe("canonical host path normalisation", () => {
   it("adds the trailing slash in the same redirect", async () => {
     const response = await onRequest({
-      request: new Request("https://www.lobbystack.com/pricing"),
+      request: new Request("https://www.caleonis-receptionist-v1-review.willgosse225.chatgpt.site/pricing"),
       env: {},
       next: vi.fn(),
     })
 
     expect(response.status).toBe(301)
     expect(response.headers.get("Location")).toBe(
-      "https://lobbystack.com/pricing/"
+      "https://caleonis-receptionist-v1-review.willgosse225.chatgpt.site/pricing/"
     )
   })
 
@@ -43,13 +43,13 @@ describe("canonical host path normalisation", () => {
     "leaves %s untouched",
     async (pathname) => {
       const response = await onRequest({
-        request: new Request(`https://www.lobbystack.com${pathname}`),
+        request: new Request(`https://www.caleonis-receptionist-v1-review.willgosse225.chatgpt.site${pathname}`),
         env: {},
         next: vi.fn(),
       })
 
       expect(response.headers.get("Location")).toBe(
-        `https://lobbystack.com${pathname}`
+        `https://caleonis-receptionist-v1-review.willgosse225.chatgpt.site${pathname}`
       )
     }
   )
@@ -63,7 +63,7 @@ describe("homepage Markdown content negotiation", () => {
       const next = vi.fn()
 
       const response = await onRequest({
-        request: new Request(`https://lobbystack.com${pathname}`, {
+        request: new Request(`https://caleonis-receptionist-v1-review.willgosse225.chatgpt.site${pathname}`, {
           headers: { Accept: "text/markdown" },
         }),
         env: { ASSETS: { fetch: assetFetch } },

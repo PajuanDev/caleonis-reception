@@ -1,0 +1,37 @@
+Caléonis Receptionist — attribution and asset provenance
+
+Software and documentation foundation: LobbyStack.
+Original licensed fork retained at e8e23bae4955f64fa3f99cb525faad908439077e.
+Current public source: https://gitlab.com/lobbystack-group/lobbystack
+Snapshot: 46b217807cb251a6679a5e64b8142d2441ccecd3 (15 October 2026).
+The source repository's MIT license applies to the software and associated documentation; its copyright notice is retained verbatim below. No separate blanket transfer of third-party trademark or portrait rights is assumed.
+
+Neutral repository illustrations are reused under that source license, with unchanged bytes and SHA-256 recorded in docs/p1/marketing-assets.json. Source comparative articles retain the original full text and illustrations as clearly labelled editorial archives; third-party names and marks remain references to their owners, with no endorsement claim.
+
+The LobbyStack logo is not used as the Caléonis identity. Branded marketing infographics, embedded portraits without separately documented provenance, and the upstream dashboard screenshot are replaced on active Caléonis marketing surfaces. New code-native SVG diagrams preserve white-card composition and label workflows honestly; they are illustrative diagrams, not product screenshots. Real product screenshots come from the actual application running synthetic isolated test fixtures. Upstream assets remain in source for auditable provenance and are not all approved for campaign publication.
+
+Caléonis wordmark: existing operator-owned corporate brand asset caleonis-logo-on-light.svg, with Receptionist text suffix. The operator must confirm brand rights in final launch review.
+Fonts used in this build: Geist/Geist Mono via Astro's configured Fontsource provider. Historical General Sans font files remain unused; their separate rights are not asserted.
+Lucide ISC license: /licenses/lucide-license.txt (including retained Feather portions notice). Geist SIL OFL 1.1 license: /licenses/geist-ofl.txt, fetched from the official vercel/geist-font source. No new icon family was introduced.
+
+MIT License
+
+Copyright (c) 2026 LobbyStack contributors
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.

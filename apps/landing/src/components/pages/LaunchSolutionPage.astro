@@ -1,0 +1,120 @@
+---
+import Layout from "@/layouts/main.astro"
+import { Navbar } from "@/components/Navbar"
+import { Footer } from "@/components/Footer"
+import { CtaSection } from "@/components/CtaSection"
+import { launchSolutions } from "@/lib/launch-content"
+import { localizePath, type Locale } from "@/i18n"
+const { locale = "fr", slug } = Astro.props as { locale?: Locale; slug: string }
+const item = launchSolutions.find((item) => item.slug === slug)
+if (!item) throw new Error(`Unknown reviewed solution: ${slug}`)
+const isMedical = slug === "ai-receptionist-for-medical-offices"
+---
+
+<Layout
+  seo={{ locale, canonicalPath: localizePath(locale, `/solutions/${slug}/`) }}
+  ><Navbar locale={locale} /><main id="main-content">
+    <section class="mx-auto max-w-7xl px-6 py-16 md:py-24">
+      <a
+        class="text-sm underline underline-offset-4"
+        href={localizePath(locale, "/solutions/")}>Solutions</a
+      ><h1 class="display-heading mt-6">
+        {
+          locale === "fr"
+            ? `Accueil téléphonique pour ${item.fr.toLowerCase()}`
+            : `Phone reception for ${item.en.toLowerCase()}`
+        }
+      </h1><p class="body-copy mt-6 max-w-3xl md:text-lg">
+        {locale === "fr" ? item.frLead : item.enLead}
+      </p><div class="mt-12 grid gap-6 md:grid-cols-2">
+        <article class="rounded-xl border border-border/70 p-6 md:p-8">
+          <h2 class="card-heading">
+            {
+              locale === "fr"
+                ? "Le contexte utile à recueillir"
+                : "Useful context to collect"
+            }
+          </h2><ul class="mt-5 list-disc space-y-4 pl-5 text-muted-foreground">
+            {
+              (locale === "fr" ? item.frQuestions : item.enQuestions).map(
+                (question) => <li>{question}</li>
+              )
+            }
+          </ul>
+        </article><article
+          class="rounded-xl border border-border/70 bg-muted/20 p-6 md:p-8"
+        >
+          <h2 class="card-heading">
+            {
+              locale === "fr"
+                ? "Le cadre à respecter"
+                : "Keep the right boundaries"
+            }
+          </h2><p class="body-copy mt-5">
+            {locale === "fr" ? item.frBoundary : item.enBoundary}
+          </p>
+        </article>
+      </div>
+    </section><section class="border-y border-border/60 bg-muted/15 py-16">
+      <div class="mx-auto max-w-7xl px-6">
+        <h2 class="section-heading">
+          {
+            locale === "fr"
+              ? "Un parcours clair avant chaque activation"
+              : "A clear workflow before activation"
+          }
+        </h2><div class="mt-8 grid gap-8 md:grid-cols-3">
+          {
+            (locale === "fr"
+              ? [
+                  [
+                    "1. Définir les réponses",
+                    "Validez les informations publiques, la zone couverte et les demandes que l’accueil peut accepter.",
+                  ],
+                  [
+                    "2. Préparer le suivi",
+                    isMedical
+                      ? "Évaluation administrative fictive uniquement. Aucune connexion à un dossier patient, aucun agenda contenant des données de santé."
+                      : "Choisissez les demandes qui donnent lieu à un message ou à un rendez-vous de rappel dans l’agenda connecté.",
+                  ],
+                  [
+                    "3. Tester et relire",
+                    "Testez les appels avant ouverture puis relisez les transcriptions et résultats avec votre équipe.",
+                  ],
+                ]
+              : [
+                  [
+                    "1. Define answers",
+                    "Validate public information, service area and the enquiries the receptionist may accept.",
+                  ],
+                  [
+                    "2. Prepare follow-up",
+                    isMedical
+                      ? "Fictional administrative evaluation only. No patient record or calendar containing health data may be connected."
+                      : "Choose which enquiries lead to a message or a callback appointment in your connected calendar.",
+                  ],
+                  [
+                    "3. Test and review",
+                    "Test calls before opening and review transcripts and outcomes with your team.",
+                  ],
+                ]
+            ).map(([title, body]) => (
+              <article>
+                <>
+                  <h3 class="card-heading">{title}</h3>
+                  <p class="body-copy mt-4">{body}</p>
+                </>
+              </article>
+            ))
+          }
+        </div><p class="fine-print mt-8">
+          {
+            locale === "fr"
+              ? "Numéro pilote Voice-only ; SMS et transfert humain non présentés comme activés. Conditions et tarifs sur demande."
+              : "Voice-only pilot number; SMS and human transfer are not advertised as enabled. Terms and pricing on request."
+          }
+        </p>
+      </div>
+    </section><CtaSection locale={locale} />
+  </main><Footer locale={locale} /></Layout
+>

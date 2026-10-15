@@ -6,37 +6,37 @@ const homeSectionsCopy = {
   en: {
     extension: {
       heading: "Turn missed calls into booked work",
-      body: "LobbyStack captures what callers need, books appointments when they are ready, and routes urgent calls with context.",
+      body: "Caléonis Receptionist records what callers need, books available appointments and keeps the context for a callback.",
     },
     extensionCards: [
       {
         title: "Turn unanswered calls into booked work",
         description:
-          "LobbyStack answers when your team cannot, captures what the caller needs, and helps them book or request a callback.",
+          "Caléonis Receptionist answers when your team cannot, captures what the caller needs, and helps them book or request a callback.",
         cta: "See how it works",
         href: "#how-it-works",
-        image: "/illustrations/missed-calls-booked-work.webp",
+        image: "/illustrations/missed-calls-booked-work-caleonis.svg",
         alt: "Incoming call answered and appointment confirmed for Tuesday at 3:00 PM",
         imageAspectClass: "aspect-[9/4]",
         imageScaleClass: "h-[155%] w-[155%]",
       },
       {
-        title: "Send the right calls to your team",
+        title: "Give your team the details to call back",
         description:
-          "LobbyStack can answer routine calls, take a message, or route urgent conversations to your team with the caller's details and reason attached.",
-        cta: "Set routing rules",
+          "Find the caller's details, message and reason for calling in one place, ready for your team's follow-up.",
+        cta: "Prepare your call handling",
         href: "#control",
-        image: "/illustrations/call-routing-team.webp",
-        alt: "Incoming call summary routed to the right team member with customer context",
+        image: "/illustrations/call-routing-team-caleonis.svg",
+        alt: "Call summary with caller details and context for a human callback",
         imageAspectClass: "aspect-[9/4]",
         imageScaleClass: "h-full w-full object-cover object-[50%_44%]",
       },
     ],
     connected: {
       imageAlt:
-        "Business knowledge sources connected to LobbyStack answer routing",
+        "Business knowledge sources connected to Caléonis Receptionist answer routing",
       heading: "Answers from everything your business knows",
-      body: "Import your website, PDFs, documents, spreadsheets, service lists, policies, and FAQs so LobbyStack can answer with the same context your team uses every day.",
+      body: "Import your website, PDFs, documents, spreadsheets, service lists, policies, and FAQs so Caléonis Receptionist can answer with the same context your team uses every day.",
     },
     quality: {
       heading: "AI receptionist for teams who care about response quality",
@@ -47,9 +47,9 @@ const homeSectionsCopy = {
         {
           title: "A receptionist that picks up when you need it to",
           description:
-            "Let LobbyStack answer every call, or only step in when your team is busy, after hours, or unable to pick up.",
-          image: "/illustrations/call-capture.webp",
-          alt: "Incoming call routing to team members or LobbyStack when the team is unavailable",
+            "Prepare a welcome for calls arriving on your configured pilot number, including when your team cannot pick up.",
+          image: "/illustrations/call-capture-caleonis.svg",
+          alt: "Incoming call routing to team members or Caléonis Receptionist when the team is unavailable",
           imageContainerClass: "bg-[#F4F4F2] aspect-[4/3]",
           imageClassName: "h-full w-full object-cover object-center",
           imageWidth: 2048,
@@ -58,20 +58,20 @@ const homeSectionsCopy = {
         {
           title: "Appointments booked without the back-and-forth",
           description:
-            "Offer available times, confirm appointments, and send follow-up details without manual back-and-forth.",
-          image: "/illustrations/booking-flow.webp",
-          alt: "LobbyStack offering available appointment times and confirming a booking with caller confirmation",
+            "Offer available times and keep the booking in Google Calendar and call history. Voice-only calls do not send SMS confirmations.",
+          image: "/illustrations/booking-flow-caleonis.svg",
+          alt: "Available times and a booking recorded in Google Calendar, with no SMS confirmation",
           imageContainerClass: "bg-[#F4F4F2] aspect-[4/3]",
           imageClassName: "h-full w-full object-cover object-center",
           imageWidth: 2048,
           imageHeight: 2048,
         },
         {
-          title: "Human handoff when a call needs it",
+          title: "A clear message for a human callback",
           description:
-            "Route urgent or unusual calls to a human with the caller's reason, contact details, and conversation context attached.",
-          image: "/illustrations/human-handoff.webp",
-          alt: "Urgent caller message transferred to a team member with reason and context attached",
+            "Keep the caller's reason, contact details and conversation context for your team. Live transfer remains subject to qualification.",
+          image: "/illustrations/human-handoff-caleonis.svg",
+          alt: "Callback message with reason and caller details; live transfer requires qualification",
           imageContainerClass: "bg-[#F4F4F2] aspect-[4/3]",
           imageClassName: "h-full w-full object-cover object-center",
           imageWidth: 2048,
@@ -80,15 +80,15 @@ const homeSectionsCopy = {
       ],
     },
     workflow: {
-      heading: "Launch your AI receptionist in minutes",
-      body: "Set up the receptionist once, then refine how it answers, books, routes, and summarizes as your business grows.",
+      heading: "Prepare your AI receptionist step by step",
+      body: "Set up your welcome, business information and calendar, then check the experience with your team before activation.",
       guideLabel: "Read the buyer guide",
       guideHref: "/blog/how-to-choose-an-ai-receptionist/",
       steps: [
         {
           title: "Connect your phone",
           description:
-            "Use a new local number or forward calls from the business number customers already call.",
+            "Confirm the number and call setup approved for your pilot before receiving calls.",
         },
         {
           title: "Add your knowledge",
@@ -98,20 +98,20 @@ const homeSectionsCopy = {
         {
           title: "Set the rules",
           description:
-            "Decide when LobbyStack should answer, book appointments, take a message, or hand the call to a person.",
+            "Choose the greeting, booking rules and information to capture for a callback.",
         },
         {
-          title: "Go live",
+          title: "Check and activate",
           description:
-            "LobbyStack starts answering calls, helping customers, and sending confirmations and summaries automatically.",
+            "Check a test call, its summary and any calendar booking, then agree activation with the operator.",
         },
       ],
     },
     control: {
       heading: "Keep control of every call",
-      body: "LobbyStack handles routine conversations, but your team decides what it knows, what it can do, and when the call should come back to a person.",
+      body: "Your team chooses the business information, booking rules and details needed to follow up after a call.",
       imageAlt:
-        "LobbyStack dashboard with call metrics, action required, upcoming appointments, and recent calls",
+        "Actual Caléonis Receptionist Voice-only Messages screen with fictional pilot data",
       cards: [
         {
           title: "Control what your AI receptionist can say",
@@ -128,29 +128,29 @@ const homeSectionsCopy = {
       ],
     },
     pricing: {
-      heading: "Start free. Upgrade when calls grow.",
-      body: "Try LobbyStack with included usage, then move to Starter or Pro when you are ready for production call coverage.",
-      badge: "Most Popular",
+      heading: "Draft packages for growing call volumes.",
+      body: "Compare the draft Free, Starter and Pro target packages. Pilot access, activation and French number allocation require separate approval.",
+      badge: "Pro target",
       viewDetails: "View pricing details",
-      note: "No credit card required to start.",
+      note: "Draft catalogue. No subscription or payment here. Tax and French eligibility require approval.",
       plans: [
         {
           name: "Free",
-          price: "$0",
+          price: "€0",
           description:
-            "30 browser voice minutes. No telephone number or credit card required.",
+            "Target: 30 voice minutes. No automatic free entitlement or French number allocation.",
         },
         {
           name: "Starter",
-          price: "$30/mo",
+          price: "€30/mo",
           description:
-            "150 voice minutes, 50 alert SMS segments, 20 transfer attempts, and email support.",
+            "150 voice minutes, 50 target alert SMS segments and 20 target transfers (not enabled on the pilot).",
         },
         {
           name: "Pro",
-          price: "$100/mo",
+          price: "€100/mo",
           description:
-            "500 voice minutes, 200 alert SMS segments, 100 transfer attempts, and priority email support.",
+            "500 voice minutes, 200 target alert SMS segments and 100 target transfers (not enabled on the pilot).",
         },
         {
           name: "Enterprise",
@@ -162,45 +162,45 @@ const homeSectionsCopy = {
     },
     openSource: {
       heading: "Proudly open-source, self-hosted",
-      body: "Run LobbyStack on your own servers and keep call recordings and customer data in your own infrastructure.",
-      cta: "View on GitHub",
+      body: "Run Caléonis Receptionist on your own servers and keep call recordings and customer data in your own infrastructure.",
+      cta: "Upstream MIT source",
       selfHostedCta: "Self-Hosting Overview",
     },
   },
   fr: {
     extension: {
       heading: "Transformez les appels manqués en rendez‑vous",
-      body: "LobbyStack comprend le besoin de l'appelant, réserve quand la personne est prête et transfère les urgences avec le bon contexte.",
+      body: "Caléonis Receptionist note le besoin de l’appelant, réserve les créneaux disponibles et garde le contexte pour un rappel.",
     },
     extensionCards: [
       {
         title: "Transformez les appels sans réponse en rendez‑vous",
         description:
-          "LobbyStack répond quand votre équipe ne peut pas décrocher, comprend le besoin de l’appelant et l’aide à réserver ou à demander un rappel.",
+          "Caléonis Receptionist répond quand votre équipe ne peut pas décrocher, comprend le besoin de l’appelant et l’aide à réserver ou à demander un rappel.",
         cta: "Voir le fonctionnement",
         href: "#how-it-works",
-        image: "/illustrations/missed-calls-booked-work.webp",
+        image: "/illustrations/missed-calls-booked-work-caleonis.svg",
         alt: "Appel entrant répondu et rendez‑vous confirmé pour mardi à 15 h",
         imageAspectClass: "aspect-[9/4]",
         imageScaleClass: "h-[155%] w-[155%]",
       },
       {
-        title: "Envoyez les bons appels à la bonne personne",
+        title: "Préparez le rappel de la bonne personne",
         description:
-          "LobbyStack traite les appels courants, prend un message ou transfère les conversations urgentes avec les détails et le motif de l’appel.",
+          "Retrouvez les coordonnées, le message et le motif de l’appel au même endroit pour préparer le suivi de votre équipe.",
         cta: "Définir les règles",
         href: "#control",
-        image: "/illustrations/call-routing-team.webp",
-        alt: "Résumé d’appel entrant routé vers la bonne personne avec le contexte client",
+        image: "/illustrations/call-routing-team-caleonis.svg",
+        alt: "Résumé d’appel avec les coordonnées et le contexte utiles à un rappel humain",
         imageAspectClass: "aspect-[9/4]",
         imageScaleClass: "h-full w-full object-cover object-[50%_44%]",
       },
     ],
     connected: {
       imageAlt:
-        "Sources de connaissances métier connectées à la réception téléphonique LobbyStack",
+        "Sources de connaissances métier connectées à la réception téléphonique Caléonis Receptionist",
       heading: "Des réponses fondées sur ce que votre entreprise sait déjà",
-      body: "Importez votre site, vos PDF, documents, feuilles de calcul, services, politiques et FAQ pour que LobbyStack réponde avec le même contexte que votre équipe.",
+      body: "Importez votre site, vos PDF, documents, feuilles de calcul, services, politiques et FAQ pour que Caléonis Receptionist réponde avec le même contexte que votre équipe.",
     },
     quality: {
       heading:
@@ -212,9 +212,9 @@ const homeSectionsCopy = {
         {
           title: "Une réceptionniste qui décroche quand vous en avez besoin",
           description:
-            "Laissez LobbyStack répondre à chaque appel, ou seulement prendre le relais quand votre équipe est occupée, fermée ou indisponible.",
-          image: "/illustrations/call-capture.webp",
-          alt: "Routage d’appel entrant vers l’équipe ou LobbyStack quand l’équipe est indisponible",
+            "Préparez un accueil pour les appels reçus sur votre numéro pilote configuré, y compris quand votre équipe ne peut pas décrocher.",
+          image: "/illustrations/call-capture-caleonis.svg",
+          alt: "Routage d’appel entrant vers l’équipe ou Caléonis Receptionist quand l’équipe est indisponible",
           imageContainerClass: "bg-[#F4F4F2] aspect-[4/3]",
           imageClassName: "h-full w-full object-cover object-center",
           imageWidth: 2048,
@@ -223,20 +223,20 @@ const homeSectionsCopy = {
         {
           title: "Des rendez‑vous pris sans allers-retours",
           description:
-            "Proposez des créneaux disponibles, confirmez les rendez‑vous et envoyez les informations de suivi sans échanges manuels.",
-          image: "/illustrations/booking-flow.webp",
-          alt: "LobbyStack propose des créneaux disponibles et confirme un rendez‑vous avec envoi de confirmation à l’appelant",
+            "Proposez les créneaux disponibles et retrouvez la réservation dans Google Calendar et l’historique. Aucun SMS de confirmation sur le pilote Voice-only.",
+          image: "/illustrations/booking-flow-caleonis.svg",
+          alt: "Créneaux disponibles et réservation enregistrée dans Google Calendar, sans SMS de confirmation",
           imageContainerClass: "bg-[#F4F4F2] aspect-[4/3]",
           imageClassName: "h-full w-full object-cover object-center",
           imageWidth: 2048,
           imageHeight: 2048,
         },
         {
-          title: "Transfert humain quand l’appel l’exige",
+          title: "Un message clair pour un rappel humain",
           description:
-            "Transférez les appels urgents ou inhabituels vers une personne avec le motif, les coordonnées et le contexte de la conversation.",
-          image: "/illustrations/human-handoff.webp",
-          alt: "Message urgent d’un appelant transféré à un membre de l’équipe avec le motif et le contexte",
+            "Gardez le motif, les coordonnées et le contexte de la conversation pour votre équipe. Le transfert en direct reste à qualifier.",
+          image: "/illustrations/human-handoff-caleonis.svg",
+          alt: "Message de rappel avec le motif et les coordonnées ; transfert en direct à qualifier",
           imageContainerClass: "bg-[#F4F4F2] aspect-[4/3]",
           imageClassName: "h-full w-full object-cover object-center",
           imageWidth: 2048,
@@ -245,15 +245,15 @@ const homeSectionsCopy = {
       ],
     },
     workflow: {
-      heading: "Lancez votre réceptionniste IA en quelques minutes",
-      body: "Configurez-la une première fois, puis ajustez ses réponses, ses rendez‑vous, ses transferts et ses résumés au fil de votre croissance.",
+      heading: "Préparez votre réceptionniste IA pas à pas",
+      body: "Configurez l’accueil, les informations métier et l’agenda, puis vérifiez l’expérience avec votre équipe avant activation.",
       guideLabel: "Lire le guide d'achat",
       guideHref: "/blog/how-to-choose-an-ai-receptionist/",
       steps: [
         {
           title: "Connectez votre téléphone",
           description:
-            "Utilisez un nouveau numéro local ou transférez les appels depuis le numéro que vos clients composent déjà.",
+            "Confirmez le numéro et le dispositif d’appel autorisés pour votre pilote avant de recevoir des appels.",
         },
         {
           title: "Ajoutez vos connaissances",
@@ -263,20 +263,20 @@ const homeSectionsCopy = {
         {
           title: "Définissez les règles",
           description:
-            "Décidez quand LobbyStack doit répondre, réserver, prendre un message ou passer l’appel à une personne.",
+            "Choisissez l’accueil, les règles de réservation et les informations utiles à un rappel.",
         },
         {
-          title: "Passez en production",
+          title: "Vérifiez puis activez",
           description:
-            "LobbyStack commence à répondre, aider les clients et envoyer confirmations et résumés automatiquement.",
+            "Vérifiez un appel de test, son résumé et la réservation éventuelle dans l’agenda, puis convenez de l’activation avec l’opérateur.",
         },
       ],
     },
     control: {
       heading: "Gardez le contrôle de chaque appel",
-      body: "LobbyStack gère les conversations courantes, mais votre équipe décide ce qu’il sait, ce qu’il peut faire et quand l’appel doit revenir à une personne.",
+      body: "Votre équipe choisit les informations métier, les règles de réservation et les détails utiles au suivi après chaque appel.",
       imageAlt:
-        "Tableau de bord LobbyStack avec indicateurs d’appels, actions requises, rendez‑vous à venir et appels récents",
+        "Vraie page Messages Voice-only Caléonis Receptionist avec données fictives du pilote",
       cards: [
         {
           title: "Contrôlez ce que votre réceptionniste IA peut dire",
@@ -294,29 +294,29 @@ const homeSectionsCopy = {
     },
     pricing: {
       heading:
-        "Commencez gratuitement. Passez au forfait supérieur quand les appels augmentent.",
-      body: "Essayez LobbyStack avec l’usage inclus, puis passez à Starter ou Pro quand vous êtes prêt à couvrir vos appels en production.",
-      badge: "Le plus populaire",
+        "Des forfaits projetés selon votre volume d’appels.",
+      body: "Comparez les forfaits cibles Free, Starter et Pro. L’accès au pilote, son activation et l’attribution d’un numéro français exigent une validation distincte.",
+      badge: "Cible Pro",
       viewDetails: "Voir le détail des tarifs",
-      note: "Aucune carte bancaire requise pour commencer.",
+      note: "Catalogue en projet. Aucune souscription ni paiement ici ; TVA et attribution FR à valider.",
       plans: [
         {
           name: "Free",
-          price: "$0",
+          price: "€0",
           description:
-            "30 minutes vocales dans le navigateur. Aucun numéro de téléphone ni carte bancaire requis.",
+            "Cible : 30 minutes vocales. Aucun droit gratuit automatique ni numéro français attribué.",
         },
         {
           name: "Starter",
-          price: "$30/mois",
+          price: "€30/mois",
           description:
-            "150 minutes vocales, 50 segments SMS d’alerte, 20 tentatives de transfert et support par courriel.",
+            "150 minutes vocales, 50 segments SMS et 20 transferts cibles (indisponibles sur le pilote).",
         },
         {
           name: "Pro",
-          price: "$100/mois",
+          price: "€100/mois",
           description:
-            "500 minutes vocales, 200 segments SMS d’alerte, 100 tentatives de transfert et support prioritaire par courriel.",
+            "500 minutes vocales, 200 segments SMS et 100 transferts cibles (indisponibles sur le pilote).",
         },
         {
           name: "Enterprise",
@@ -328,8 +328,8 @@ const homeSectionsCopy = {
     },
     openSource: {
       heading: "Open source, prêt pour l'auto-hébergement",
-      body: "Hébergez LobbyStack sur vos propres serveurs et gardez les enregistrements d’appels et les données client dans votre infrastructure.",
-      cta: "Voir sur GitHub",
+      body: "Hébergez Caléonis Receptionist sur vos propres serveurs et gardez les enregistrements d’appels et les données client dans votre infrastructure.",
+      cta: "Source d’origine MIT",
       selfHostedCta: "Aperçu de l'auto-hébergement",
     },
   },
@@ -347,7 +347,9 @@ export function ProductExtensionSection({ locale = "en" }: LocalizedProps) {
       <div className="mx-auto max-w-7xl px-6">
         <div className="mb-10 max-w-3xl">
           <h2 className="section-heading">{sectionCopy.extension.heading}</h2>
-          <p className="section-intro mt-4">{sectionCopy.extension.body}</p>
+          <p className="section-intro mt-4">
+            {sectionCopy.extension.body}
+          </p>
         </div>
         <div className="grid gap-6 lg:grid-cols-2">
           {sectionCopy.extensionCards.map((card) => (
@@ -374,7 +376,9 @@ export function ProductExtensionSection({ locale = "en" }: LocalizedProps) {
               </div>
               <div className="p-8 md:p-10">
                 <h3 className="card-heading">{card.title}</h3>
-                <p className="body-copy mt-5">{card.description}</p>
+                <p className="body-copy mt-5">
+                  {card.description}
+                </p>
                 <div className="mt-6">
                   <a
                     href={card.href}
@@ -548,7 +552,7 @@ function ControlOwnershipSection({ locale = "en" }: LocalizedProps) {
 
         <div className="mt-14 overflow-hidden rounded-[1.35rem] border border-border/70 bg-background">
           <img
-            src="/screenshots/dashboard.webp"
+            src="/screenshots/messages-voice-only-fr-desktop.png"
             alt={sectionCopy.imageAlt}
             width={3020}
             height={1898}
@@ -574,7 +578,9 @@ function ControlOwnershipSection({ locale = "en" }: LocalizedProps) {
                 </div>
                 <div className="mt-8">
                   <h3 className="card-heading">{card.title}</h3>
-                  <p className="body-copy mt-5">{card.description}</p>
+                  <p className="body-copy mt-5">
+                    {card.description}
+                  </p>
                 </div>
               </article>
             )
@@ -662,12 +668,12 @@ function OpenSourceSection({ locale = "en" }: LocalizedProps) {
 
         <div className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row sm:flex-wrap">
           <a
-            href="https://github.com/lobbystack/lobbystack"
+            href="https://gitlab.com/lobbystack-group/lobbystack"
             target="_blank"
             rel="noopener noreferrer"
             data-ph-capture-attribute-section="open_source"
             data-ph-capture-attribute-action="view_github"
-            data-ph-capture-attribute-destination="https://github.com/lobbystack/lobbystack"
+            data-ph-capture-attribute-destination="https://gitlab.com/lobbystack-group/lobbystack"
             className="inline-flex h-11 items-center justify-center gap-3 rounded-full bg-primary px-6 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/80"
           >
             {sectionCopy.cta}

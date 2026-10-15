@@ -10,6 +10,12 @@ import { createDatabaseClient } from "@lobbystack/db";
 const password = "Replacement-E2E-Password-123!";
 const prefix = "replacement-e2e";
 
+function fixtureIdentity(name: string, testInfo: TestInfo): string {
+  // Database cleanup does not reset Redis's per-recipient verification limits.
+  // Every attempt must be a fresh signup, including retries after a UI failure.
+  return `${name}-${testInfo.workerIndex}-${testInfo.retry}-${Date.now().toString(36)}`;
+}
+
 async function cleanupFixtures(): Promise<void> {
   const databaseUrl = process.env.REPLACEMENT_E2E_DATABASE_URL;
   if (databaseUrl) {
@@ -136,10 +142,107 @@ async function completeOnboardingBySkippingOptionalInputs(page: Page): Promise<v
   await expect(page.getByRole("heading", { name: "Choose your plan", exact: true })).toBeVisible();
   await expect(page.getByText("Checkout completed", { exact: true })).toHaveCount(0);
   await expect(page).toHaveURL("/onboarding/plan?checkout=success");
-  await page.getByRole("button", { name: "Start free" }).click();
+  await page.getByRole("button", { name: /^(Start free|Continue pilot setup)$/ }).click();
   await expect(page).toHaveURL("/onboarding/attribution");
   await page.getByRole("button", { name: "Skip", exact: true }).click();
   await expect(page).toHaveURL("/");
+}
+
+async function verifyVoiceOnlyMessages(page: Page, businessId: string, testInfo: TestInfo): Promise<void> {
+  let hasThread = false;
+  let outboundRequests = 0;
+  let phoneRequests = 0;
+  const phoneRoute = "**/api/phone-numbers?*";
+  const messagesRoute = "**/api/messages?*";
+  await page.route(phoneRoute, async route => {
+    expect(new URL(route.request().url()).searchParams.get("businessId")).toBe(businessId);
+    phoneRequests += 1;
+    await route.fulfill({ json: { phoneNumbers: [{ id: "voice-only-fixture", e164: "+33900000000", voiceEnabled: true, smsEnabled: false, status: "active", reclaimScheduledAt: null }], activeClaim: null, replacement: { usedAt: null, activeClaim: null } } });
+  });
+  await page.route(messagesRoute, async route => {
+    expect(new URL(route.request().url()).searchParams.get("businessId")).toBe(businessId);
+    if (route.request().method() !== "GET") { outboundRequests += 1; await route.abort(); return; }
+    await route.fulfill({ json: { messages: hasThread ? [{ id: "message-fixture", conversationId: "conversation-fixture", contactName: "Contact de démonstration", contactPhone: "+33600000000", visitorName: null, visitorEmail: null, channel: "sms", automationState: "ai_active", body: "Bonjour, je souhaite un devis.", direction: "inbound", status: "received", createdAt: "2026-10-15T10:00:00Z" }] : [] } });
+  });
+  const locale = async (value: "fr" | "en") => {
+    const status = await page.evaluate(async value => {
+      const response = await fetch("/api/preferences/locale", { method: "PATCH", credentials: "include", headers: { "content-type": "application/json" }, body: JSON.stringify({ locale: value }) });
+      return response.status;
+    }, value);
+    expect(status).toBe(200);
+  };
+  try {
+    await locale("fr");
+    // Capture real candidate screens with this disposable tenant, never a
+    // production account. These replace branded upstream documentation images.
+    for (const viewport of [{ width: 1440, height: 1000 }, { width: 390, height: 844 }]) {
+      await page.setViewportSize(viewport);
+      for (const [screen, path] of [["home", "/"], ["calls", "/calls"], ["analytics", "/analytics"]] as const) {
+        const dataPath = screen === "home" ? "/api/dashboard" : screen === "calls" ? "/api/calls" : "/api/analytics";
+        const loaded = page.waitForResponse(response => new URL(response.url()).pathname === dataPath && response.request().method() === "GET");
+        await page.goto(`${path}?lng=fr`);
+        expect((await loaded).ok()).toBe(true);
+        await expect(page.locator("html")).toHaveAttribute("lang", "fr");
+        const content = page.locator("#dashboard-main-content");
+        await expect(content).toBeVisible();
+        await expect(content.getByRole("heading", { name: screen === "home" ? "Accueil" : screen === "calls" ? "Appels" : "Analytique", exact: true })).toBeVisible();
+        await expect(content).not.toContainText("Application error");
+        // A mounted shell is not a finished screen. Wait for data and the lazy
+        // charts before keeping documentation evidence from this test tenant.
+        await expect(page.locator('[data-slot="skeleton"]')).toHaveCount(0, { timeout: 30_000 });
+        if (screen !== "calls") await expect(content.locator(".recharts-surface").first()).toBeVisible();
+        const screenshot = testInfo.outputPath(`p1-${screen}-fr-${viewport.width}.png`);
+        await page.screenshot({ path: screenshot, fullPage: true, animations: "disabled" });
+        await testInfo.attach(`${screen} FR ${viewport.width} — espace de test isolé`, { path: screenshot, contentType: "image/png" });
+      }
+    }
+    await page.setViewportSize({ width: 1440, height: 1000 });
+    // Use the supported explicit locale entry point so server-rendered copy and
+    // the client namespace loader start in French before sidebar navigation.
+    await page.goto("/calls?lng=fr");
+    await expect(page.locator("html")).toHaveAttribute("lang", "fr");
+    await page.getByRole("link", { name: "Messages", exact: true }).click();
+    await expect(page).toHaveURL("/messages");
+    await expect.poll(() => phoneRequests, { message: "The Messages page must load this workspace's Voice-only capability fixture." }).toBeGreaterThan(0);
+    await expect(page.getByText("Numéro Voice-only : appels uniquement", { exact: true })).toBeVisible();
+    await expect(page.getByText("Aucune conversation pour le moment", { exact: true })).toBeVisible();
+    await expect(page.getByRole("link", { name: "Voir les réglages du numéro" })).toHaveAttribute("href", "/settings/phone-number");
+    const desktopEmpty = testInfo.outputPath("p1-messages-voice-only-desktop-empty.png");
+    await page.screenshot({ path: desktopEmpty, fullPage: true });
+    await testInfo.attach("Messages FR — desktop, numéro Voice-only (données de test)", { path: desktopEmpty, contentType: "image/png" });
+
+    hasThread = true;
+    await page.reload();
+    await page.getByRole("button", { name: /Contact de démonstration/ }).click();
+    await expect(page.getByRole("textbox", { name: "Votre réponse", exact: true })).toBeDisabled();
+    await expect(page.getByRole("button", { name: "Envoyer", exact: true })).toBeDisabled();
+
+    await page.setViewportSize({ width: 390, height: 844 });
+    await page.goto("/calls");
+    await page.getByRole("button", { name: "Toggle sidebar" }).click();
+    await page.getByRole("dialog").getByRole("button", { name: "Messages", exact: true }).click();
+    await expect(page.getByRole("dialog")).toHaveCount(0);
+    await expect(page.getByRole("heading", { name: "Messages", exact: true })).toBeVisible();
+    const mobileList = testInfo.outputPath("p1-messages-voice-only-mobile-list.png");
+    await page.screenshot({ path: mobileList, fullPage: true });
+    await testInfo.attach("Messages FR — mobile, liste (données de test)", { path: mobileList, contentType: "image/png" });
+    await page.getByRole("button", { name: /Contact de démonstration/ }).click();
+    await expect(page.getByRole("textbox", { name: "Votre réponse", exact: true })).toBeDisabled();
+    await expect(page.getByRole("button", { name: "Revenir aux conversations" })).toBeVisible();
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
+    const mobileThread = testInfo.outputPath("p1-messages-voice-only-mobile-thread.png");
+    await page.screenshot({ path: mobileThread, fullPage: true });
+    await testInfo.attach("Messages FR — mobile, fil en lecture seule (données de test)", { path: mobileThread, contentType: "image/png" });
+    await page.getByRole("button", { name: "Revenir aux conversations" }).click();
+    await expect(page.getByRole("heading", { name: "Messages", exact: true })).toBeVisible();
+    expect(outboundRequests).toBe(0);
+  } finally {
+    await page.unroute(phoneRoute);
+    await page.unroute(messagesRoute);
+    await locale("en");
+    await page.setViewportSize({ width: 1280, height: 720 });
+    await page.goto("/?lng=en");
+  }
 }
 
 async function close(context: BrowserContext): Promise<void> {
@@ -154,11 +257,14 @@ test("operator authentication, workspace access, isolation, and revocation", asy
   await page.goto("/");
   await expect(page).toHaveURL(/\/en\/login$/);
 
-  await signUp(page, "owner-a", testInfo);
-  const ownBusinessId = await createWorkspace(page, "owner-a");
+  const ownerIdentity = fixtureIdentity("owner-a", testInfo);
+  const ownerEmail = `${prefix}-${ownerIdentity}@example.invalid`;
+  await signUp(page, ownerIdentity, testInfo);
+  const ownBusinessId = await createWorkspace(page, ownerIdentity);
   await completeOnboardingBySkippingOptionalInputs(page);
   await page.goto("/");
   await expect(page.getByRole("button", { name: /Replacement E2E owner-a/ })).toBeVisible();
+  await verifyVoiceOnlyMessages(page, ownBusinessId, testInfo);
 
   await page.goto("/agent/integrations");
   await expect(page).toHaveURL("/agent");
@@ -170,10 +276,10 @@ test("operator authentication, workspace access, isolation, and revocation", asy
   await expect(page.getByText("Prepare a demo", { exact: true })).toBeVisible();
   await expect(page.getByRole("button", { name: "Create isolated demo", exact: true })).toBeVisible();
 
-  await page.getByRole("button", { name: `${prefix}-owner-a@example.invalid` }).click();
+  await page.getByRole("button", { name: ownerEmail }).click();
   await page.getByRole("menuitem", { name: "Sign out" }).click();
   await expect(page).toHaveURL(/\/en\/login$/);
-  await page.getByLabel("Email").fill(`${prefix}-owner-a@example.invalid`);
+  await page.getByLabel("Email").fill(ownerEmail);
   await page.locator('input[type="password"]').fill(password);
   await page.getByRole("button", { name: "Sign in" }).click();
   await expect(page).toHaveURL("/");
@@ -181,8 +287,9 @@ test("operator authentication, workspace access, isolation, and revocation", asy
   const foreignContext = await browser.newContext();
   try {
     const foreignPage = await foreignContext.newPage();
-    await signUp(foreignPage, "owner-b", testInfo);
-    const foreignBusinessId = await createWorkspace(foreignPage, "owner-b");
+    const foreignIdentity = fixtureIdentity("owner-b", testInfo);
+    await signUp(foreignPage, foreignIdentity, testInfo);
+    const foreignBusinessId = await createWorkspace(foreignPage, foreignIdentity);
 
     const isolation = await page.evaluate(async ({ own, foreign }) => {
       const [ownResponse, foreignResponse] = await Promise.all([
@@ -196,7 +303,7 @@ test("operator authentication, workspace access, isolation, and revocation", asy
     await close(foreignContext);
   }
 
-  await page.getByRole("button", { name: `${prefix}-owner-a@example.invalid` }).click();
+  await page.getByRole("button", { name: ownerEmail }).click();
   await page.getByRole("menuitem", { name: "Sign out" }).click();
   await expect(page).toHaveURL(/\/en\/login$/);
   const revokedStatus = await page.evaluate(async () => (await fetch("/api/businesses", { credentials: "include" })).status);
@@ -207,7 +314,7 @@ test("operator authentication, workspace access, isolation, and revocation", asy
 test("French signup retains the chosen locale through onboarding and reload", async ({ page }, testInfo) => {
   test.setTimeout(180_000);
   await page.addInitScript(() => localStorage.setItem("lobbystack.locale", "fr"));
-  await signUp(page, "french-owner", testInfo);
+  await signUp(page, fixtureIdentity("french-owner", testInfo), testInfo);
   expect(await page.evaluate(async () => (await (await fetch("/api/preferences/locale")).json()).locale)).toBe("fr");
   await page.reload();
   await expect.poll(() => page.evaluate(() => localStorage.getItem("lobbystack.locale"))).toBe("fr");

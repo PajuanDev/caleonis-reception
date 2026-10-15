@@ -1,3 +1,4 @@
+import { launchSeo } from "@/lib/launch-content"
 import { en } from "@/i18n/en"
 import { fr } from "@/i18n/fr"
 import { DEFAULT_LOCALE, assertLocale, type Locale } from "@/i18n/config"
@@ -40,6 +41,23 @@ export const getRouteSeo = ({
   path: string
 }) => {
   const activeLocale = assertLocale(locale)
+  if (
+    [
+      "/resources/",
+      "/solutions/ai-receptionist-for-garages/",
+      "/solutions/ai-receptionist-for-medical-offices/",
+    ].includes(path)
+  )
+    return launchSeo(activeLocale, path)
+  if (path === "/confidentialite/")
+    return {
+      title:
+        activeLocale === "fr"
+          ? "Confidentialité SaaS et Google — projet | Caléonis Receptionist"
+          : "Privacy draft | Caléonis Receptionist",
+      description:
+        "Projet de confidentialité SaaS Caléonis Receptionist et connexion Google, en cours de validation. Aucun texte contractuel définitif n’est publié.",
+    }
   const copy = getCopy(activeLocale)
   const localizedRoutes = copy.routes as Record<
     string,

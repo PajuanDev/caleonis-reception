@@ -18,38 +18,37 @@ import {
   type LucideIcon,
 } from "lucide-react"
 
-const AFFILIATE_DOCS_URL =
-  "https://docs.lobbystack.com/billing/affiliate-program"
+const AFFILIATE_DOCS_URL = "/aide/billing/affiliate-program"
 
 const copy = {
   en: {
     hero: {
-      headingPrefix: "Become a",
-      headingAccent: "LobbyStack",
-      headingSuffix: "affiliate",
+      headingPrefix: "Draft for a",
+      headingAccent: "Caléonis Receptionist",
+      headingSuffix: "affiliate programme",
       subhead:
-        "Refer businesses to LobbyStack hosted plans and earn 20% of their payments for 12 months. Referrals save 5% when they sign up through your link.",
-      cta: "Join the program",
+        "Source proposal for review: Target: 20% for 12 months and a 5% referral discount. Caléonis has not approved or activated this programme, any commission or any discount.",
+      cta: "Read the draft",
     },
     benefits: {
-      heading: "What you'll get",
+      heading: "Source model to review",
       items: [
         {
-          title: "20% for 12 months",
+          title: "Target: 20% for 12 months",
           description:
-            "You earn 20% on each hosted plan payment during the customer's first year. The commission repeats monthly while they stay subscribed.",
+            "Source target: 20% during the first year. No Caléonis commission is earned or payable before programme approval and separate terms.",
           icon: TrendingUp,
         },
         {
-          title: "5% off for referrals",
+          title: "Target: 5% referral discount",
           description:
-            "Referrals get 5% off hosted LobbyStack plans at signup.",
+            "Source target: 5% discount. No referral discount is currently activated on Caléonis.",
           icon: Gift,
         },
         {
-          title: "Simple payouts",
+          title: "Payout rules to approve",
           description:
-            "We hold commissions for 30 days. Balances of $100 or more get paid monthly through PayPal.",
+            "Source model: 30-day hold and a 100-unit payout threshold. Currency, payment provider and French terms are unapproved; no payout is available.",
           icon: Wallet,
         },
       ],
@@ -59,12 +58,13 @@ const copy = {
         heading: "How it works",
         steps: [
           <>
-            Log in and open <strong>Affiliate Program</strong> from the gift icon
-            in the top-right header.
+            Log in and open <strong>Affiliate Program</strong> from the gift
+            icon in the source product. This action is not enabled on the
+            Caléonis pilot.
           </>,
           <>
-            Add your <strong>PayPal email</strong> in affiliate settings for
-            payouts.
+            The source records a <strong>PayPal email</strong>; Caléonis does
+            not collect affiliate payout information in this review.
           </>,
           "Share your referral link in newsletters, websites, videos, and direct recommendations.",
           "Watch clicks, referrals, pending commissions, and payouts in your dashboard.",
@@ -78,8 +78,8 @@ const copy = {
             leads from phone calls
           </>,
           <>
-            <strong>Web designers and SEO consultants</strong> with small-business
-            clients who miss calls
+            <strong>Web designers and SEO consultants</strong> with
+            small-business clients who miss calls
           </>,
           <>
             <strong>Business and automation consultants</strong> improving
@@ -98,7 +98,7 @@ const copy = {
         {
           title: "Keep it honest",
           description:
-            "Describe LobbyStack accurately. Recommend it for missed calls, after-hours coverage, booking, and routing problems you have actually seen.",
+            "Describe Caléonis Receptionist accurately. Recommend it for missed calls, after-hours coverage, booking, and routing problems you have actually seen.",
         },
         {
           title: "Disclose compensation",
@@ -108,18 +108,20 @@ const copy = {
         {
           title: "No paid search on our trademarks",
           description:
-            "Do not bid on LobbyStack trademarks or confusingly similar terms in paid search ads.",
+            "Do not bid on Caléonis Receptionist trademarks or confusingly similar terms in paid search ads.",
         },
         {
           title: "No spam or abuse",
           description:
-            "No fake reviews, misleading claims, self-referrals, coupon abuse, fake traffic, or pretending to be LobbyStack.",
+            "No fake reviews, misleading claims, self-referrals, coupon abuse, fake traffic, or pretending to be Caléonis Receptionist.",
         },
         {
           title: "Termination rights",
-          descriptionPrefix: "Attribution, holds, refunds, and payout rules are in our",
+          descriptionPrefix:
+            "Attribution, holds, refunds, and payout rules are in our",
           termsLabel: "Terms of Service",
-          descriptionSuffix: "LobbyStack can change or pause the program at any time.",
+          descriptionSuffix:
+            "Caléonis Receptionist can change or pause the program at any time.",
         },
       ],
       footerPrefix: "Questions? Email",
@@ -129,32 +131,32 @@ const copy = {
   },
   fr: {
     hero: {
-      headingPrefix: "Devenez affilié",
-      headingAccent: "LobbyStack",
+      headingPrefix: "Projet d’affiliation",
+      headingAccent: "Caléonis Receptionist",
       headingSuffix: "",
       subhead:
-        "Parrainez des entreprises vers les forfaits hébergés LobbyStack et touchez 20 % de leurs paiements pendant 12 mois. Les parrainages obtiennent 5 % de rabais lorsqu'ils s'inscrivent via votre lien.",
-      cta: "Rejoindre le programme",
+        "Projet source à examiner : Cible : 20 % pendant 12 mois et remise de 5 %. Caléonis n’a approuvé ni activé ce programme, ses commissions ou ses remises.",
+      cta: "Lire le projet",
     },
     benefits: {
-      heading: "Ce que vous obtenez",
+      heading: "Modèle source à examiner",
       items: [
         {
-          title: "20 % pendant 12 mois",
+          title: "Cible : 20 % pendant 12 mois",
           description:
-            "Vous touchez 20 % sur chaque paiement de forfait hébergé pendant la première année du client. La commission se renouvelle chaque mois tant qu'il reste abonné.",
+            "Cible source : 20 % pendant la première année. Aucune commission Caléonis n’est acquise ou payable sans approbation et conditions distinctes.",
           icon: TrendingUp,
         },
         {
-          title: "5 % de rabais pour les parrainages",
+          title: "Cible : remise de 5 %",
           description:
-            "Les parrainages obtiennent 5 % de rabais sur les forfaits hébergés LobbyStack à l'inscription.",
+            "Cible source : remise de 5 %. Aucune remise de parrainage Caléonis n’est actuellement activée.",
           icon: Gift,
         },
         {
-          title: "Paiements simples",
+          title: "Paiements à valider",
           description:
-            "Nous retenons chaque commission 30 jours. Les soldes de 100 $ ou plus sont payés chaque mois via PayPal.",
+            "Modèle source : retenue de 30 jours et seuil de 100 unités. Devise, prestataire de paiement et conditions françaises à valider ; aucun paiement disponible.",
           icon: Wallet,
         },
       ],
@@ -164,12 +166,14 @@ const copy = {
         heading: "Comment ça marche",
         steps: [
           <>
-            Connectez-vous et ouvrez <strong>Programme d'affiliation</strong> via
-            l'icône cadeau en haut à droite.
+            Connectez-vous et ouvrez <strong>Programme d'affiliation</strong>{" "}
+            via l’interface source. Cette action n’est pas activée sur le pilote
+            Caléonis.
           </>,
           <>
-            Ajoutez votre <strong>adresse e-mail PayPal</strong> dans les
-            paramètres d'affiliation pour les paiements.
+            Le produit source prévoit une <strong>adresse e-mail PayPal</strong>{" "}
+            ; Caléonis ne recueille aucune information de paiement affilié dans
+            cette revue.
           </>,
           "Partagez votre lien de parrainage dans vos newsletters, sites web, vidéos et recommandations directes.",
           "Suivez les clics, les parrainages, les commissions en attente et les paiements dans votre tableau de bord.",
@@ -183,8 +187,8 @@ const copy = {
             capturer des prospects par téléphone
           </>,
           <>
-            <strong>Web designers et consultants SEO</strong> avec des clients PME
-            qui manquent des appels
+            <strong>Web designers et consultants SEO</strong> avec des clients
+            PME qui manquent des appels
           </>,
           <>
             <strong>Consultants en affaires et en automatisation</strong>{" "}
@@ -204,7 +208,7 @@ const copy = {
         {
           title: "Restez honnête",
           description:
-            "Décrivez LobbyStack avec précision. Recommandez-le pour les appels manqués, la couverture hors horaires, la réservation et le routage que vous avez vus sur le terrain.",
+            "Décrivez Caléonis Receptionist avec précision. Recommandez-le pour les appels manqués, la couverture hors horaires, la réservation et le routage que vous avez vus sur le terrain.",
         },
         {
           title: "Divulguez votre rémunération",
@@ -214,18 +218,20 @@ const copy = {
         {
           title: "Pas de recherche payante sur nos marques",
           description:
-            "N'enchérissez pas sur les marques LobbyStack ou des termes similaires pouvant prêter à confusion dans les annonces de recherche payante.",
+            "N'enchérissez pas sur les marques Caléonis Receptionist ou des termes similaires pouvant prêter à confusion dans les annonces de recherche payante.",
         },
         {
           title: "Pas de spam ni d'abus",
           description:
-            "Pas de faux avis, d'allégations trompeuses, d'auto-parrainage, d'abus de coupons, de trafic artificiel ni d'usurpation de LobbyStack.",
+            "Pas de faux avis, d'allégations trompeuses, d'auto-parrainage, d'abus de coupons, de trafic artificiel ni d'usurpation de Caléonis Receptionist.",
         },
         {
           title: "Droit de résiliation",
-          descriptionPrefix: "L'attribution, les retenues, les remboursements et les règles de paiement sont dans nos",
+          descriptionPrefix:
+            "L'attribution, les retenues, les remboursements et les règles de paiement sont dans nos",
           termsLabel: "Conditions d'utilisation",
-          descriptionSuffix: "LobbyStack peut modifier ou suspendre le programme à tout moment.",
+          descriptionSuffix:
+            "Caléonis Receptionist peut modifier ou suspendre le programme à tout moment.",
         },
       ],
       footerPrefix: "Des questions ? Écrivez à",
@@ -424,7 +430,9 @@ export function AffiliateProgramGuidelines({
         <div className="mt-16 grid gap-8 md:grid-cols-2 lg:grid-cols-3">
           {t.items.map((item) => (
             <div key={item.title}>
-              <h3 className="font-heading text-base font-medium">{item.title}</h3>
+              <h3 className="font-heading text-base font-medium">
+                {item.title}
+              </h3>
               <p className="body-copy mt-2 text-muted-foreground">
                 {"description" in item ? (
                   item.description
@@ -448,10 +456,10 @@ export function AffiliateProgramGuidelines({
         <p className="body-copy mt-16 text-center text-muted-foreground">
           {t.footerPrefix}{" "}
           <a
-            href="mailto:support@lobbystack.com"
+            href="mailto:contact@caleonis.com"
             className="text-foreground underline underline-offset-4 hover:text-primary"
           >
-            support@lobbystack.com
+            contact@caleonis.com
           </a>{" "}
           {t.footerMiddle}{" "}
           <a

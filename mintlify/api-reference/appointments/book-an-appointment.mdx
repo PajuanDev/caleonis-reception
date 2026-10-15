@@ -1,0 +1,405 @@
+---
+title: "Réserver un rendez-vous"
+description: "POST /api/v1/appointments : paramètres, permissions et schémas complets."
+---
+
+`POST https://receptionist.caleonis.com/api/v1/appointments`
+
+Cette fiche décrit le contrat du runtime Caléonis. Les identifiants, champs et descriptions techniques du schéma sont conservés pour éviter toute ambiguïté.
+
+Books only when the business's booking_mode is instant. Returns 409 booking_requires_confirmation in request mode and 409 booking_disabled when booking is off.
+
+## Authentification et permissions
+Envoyez `Authorization: Bearer <clé API>`. Permission exigée : `appointments:write`.
+
+<Warning>Cette opération produit un effet réel. Utilisez une entreprise de test autorisée ; aucun appel ne doit être exécuté pour simplement lire la référence.</Warning>
+
+Respectez mode de réservation, horaires, disponibilité, fuseau et permissions. Un résultat applicatif ne prouve pas la synchronisation Google ni une notification. La ligne française Voice-only ne peut pas envoyer de SMS.
+
+## Paramètres
+| Champ | Emplacement | Type | Requis | Description |
+| --- | --- | --- | --- | --- |
+| `Idempotency-Key` | header | string | Non | A unique value, up to 255 characters, that makes retries of this request safe for 24 hours. |
+
+## Corps de la requête
+
+`Content-Type: application/json`
+
+| Champ | Type | Requis | Description / contraintes |
+| --- | --- | --- | --- |
+| `service_id` | string (uuid) | Oui | Stable identifier (UUID). |
+| `starts_at` | string (date-time) | Oui | Start time. Use a starts_at value from GET /availability. |
+| `contact_id` | string (uuid) | Non | An existing contact with a phone number. Provide contact_id or contact_phone. |
+| `contact_phone` | string | Non | Phone number in E.164 format. pattern="^\\+[1-9]\\d{6,14}$" |
+| `contact_name` | string | Non |  minLength=1; maxLength=200 |
+| `staff_id` | string (uuid) | Non | Book with this active staff member. Without it, the receptionist picks one who is free. |
+| `sms_consent` | boolean | Non | True only if the customer agreed to receive confirmation and reminder texts. |
+
+## Réponses
+| HTTP | Description |
+| --- | --- |
+| `201` | Created |
+| `400` | The request is invalid (invalid_request). |
+| `401` | The API key is missing, invalid, or revoked (unauthorized). |
+| `403` | The API key lacks the appointments:write scope (insufficient_scope). |
+| `409` | The request conflicts with the current state. |
+| `429` | Too many requests (rate_limited). Wait for the Retry-After header's number of seconds. |
+
+Les réponses d’erreur utilisent `error.code`, `error.message` et parfois `error.details`. Respectez `Retry-After` et conservez la même clé d’idempotence et le même corps pour reprendre une création prise en charge.
+
+## Exemple HTTP
+
+```http
+POST /api/v1/appointments HTTP/1.1
+Host: receptionist.caleonis.com
+Authorization: Bearer <clé conservée côté serveur>
+Content-Type: application/json
+```
+
+## Contrat et schémas complets
+
+Le bloc conserve tous les champs, unions, formats, contraintes et réponses de cette opération. Les `$ref` se résolvent dans `components.schemas` fourni dans le même bloc.
+
+```json
+{
+  "method": "POST",
+  "path": "/api/v1/appointments",
+  "operation": {
+    "operationId": "createAppointment",
+    "summary": "Book an appointment",
+    "description": "Books only when the business's booking_mode is instant. Returns 409 booking_requires_confirmation in request mode and 409 booking_disabled when booking is off.",
+    "tags": [
+      "Appointments"
+    ],
+    "security": [
+      {
+        "bearerAuth": []
+      }
+    ],
+    "x-required-scope": "appointments:write",
+    "parameters": [
+      {
+        "name": "Idempotency-Key",
+        "in": "header",
+        "description": "A unique value, up to 255 characters, that makes retries of this request safe for 24 hours.",
+        "schema": {
+          "type": "string",
+          "maxLength": 255
+        }
+      }
+    ],
+    "requestBody": {
+      "required": true,
+      "content": {
+        "application/json": {
+          "schema": {
+            "$ref": "#/components/schemas/AppointmentCreate"
+          }
+        }
+      }
+    },
+    "responses": {
+      "201": {
+        "description": "Created",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "required": [
+                "data"
+              ],
+              "properties": {
+                "data": {
+                  "$ref": "#/components/schemas/Appointment"
+                }
+              }
+            }
+          }
+        }
+      },
+      "400": {
+        "description": "The request is invalid (invalid_request).",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Error"
+            }
+          }
+        }
+      },
+      "401": {
+        "description": "The API key is missing, invalid, or revoked (unauthorized).",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Error"
+            }
+          }
+        }
+      },
+      "403": {
+        "description": "The API key lacks the appointments:write scope (insufficient_scope).",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Error"
+            }
+          }
+        }
+      },
+      "409": {
+        "description": "The request conflicts with the current state.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Error"
+            }
+          }
+        }
+      },
+      "429": {
+        "description": "Too many requests (rate_limited). Wait for the Retry-After header's number of seconds.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Error"
+            }
+          }
+        },
+        "headers": {
+          "Retry-After": {
+            "schema": {
+              "type": "integer"
+            },
+            "description": "Seconds to wait."
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "AppointmentCreate": {
+        "type": "object",
+        "properties": {
+          "service_id": {
+            "description": "Stable identifier (UUID).",
+            "type": "string",
+            "format": "uuid"
+          },
+          "starts_at": {
+            "description": "Start time. Use a starts_at value from GET /availability.",
+            "type": "string",
+            "format": "date-time"
+          },
+          "contact_id": {
+            "description": "An existing contact with a phone number. Provide contact_id or contact_phone.",
+            "type": "string",
+            "format": "uuid"
+          },
+          "contact_phone": {
+            "description": "Phone number in E.164 format.",
+            "type": "string",
+            "pattern": "^\\+[1-9]\\d{6,14}$"
+          },
+          "contact_name": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 200
+          },
+          "staff_id": {
+            "description": "Book with this active staff member. Without it, the receptionist picks one who is free.",
+            "type": "string",
+            "format": "uuid"
+          },
+          "sms_consent": {
+            "description": "True only if the customer agreed to receive confirmation and reminder texts.",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "service_id",
+          "starts_at"
+        ],
+        "additionalProperties": false
+      },
+      "Appointment": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "description": "Stable identifier (UUID).",
+            "type": "string",
+            "format": "uuid"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "confirmed",
+              "cancelled"
+            ]
+          },
+          "starts_at": {
+            "description": "ISO 8601 timestamp in UTC.",
+            "type": "string",
+            "format": "date-time"
+          },
+          "ends_at": {
+            "description": "ISO 8601 timestamp in UTC.",
+            "type": "string",
+            "format": "date-time"
+          },
+          "timezone": {
+            "type": "string"
+          },
+          "service_id": {
+            "description": "Stable identifier (UUID).",
+            "type": "string",
+            "format": "uuid"
+          },
+          "service_name": {
+            "type": "string"
+          },
+          "staff_id": {
+            "description": "Stable identifier (UUID).",
+            "type": "string",
+            "format": "uuid"
+          },
+          "staff_name": {
+            "type": "string"
+          },
+          "contact_id": {
+            "description": "Stable identifier (UUID).",
+            "type": "string",
+            "format": "uuid"
+          },
+          "contact_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "contact_phone": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "source": {
+            "description": "Where the booking came from, for example voice, web_chat, dashboard or api.",
+            "type": "string"
+          },
+          "calendar_sync_status": {
+            "type": "string",
+            "enum": [
+              "pending",
+              "synced",
+              "failed",
+              "not_required"
+            ]
+          },
+          "created_at": {
+            "description": "ISO 8601 timestamp in UTC.",
+            "type": "string",
+            "format": "date-time"
+          },
+          "updated_at": {
+            "description": "ISO 8601 timestamp in UTC.",
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "required": [
+          "id",
+          "status",
+          "starts_at",
+          "ends_at",
+          "timezone",
+          "service_id",
+          "service_name",
+          "staff_id",
+          "staff_name",
+          "contact_id",
+          "contact_name",
+          "contact_phone",
+          "source",
+          "calendar_sync_status",
+          "created_at",
+          "updated_at"
+        ],
+        "additionalProperties": false
+      },
+      "Error": {
+        "type": "object",
+        "properties": {
+          "error": {
+            "type": "object",
+            "properties": {
+              "code": {
+                "type": "string",
+                "enum": [
+                  "invalid_request",
+                  "unauthorized",
+                  "forbidden",
+                  "insufficient_scope",
+                  "not_found",
+                  "conflict",
+                  "idempotency_key_reused",
+                  "idempotency_request_in_progress",
+                  "booking_disabled",
+                  "booking_requires_confirmation",
+                  "slot_unavailable",
+                  "rate_limited",
+                  "rate_limit_unavailable",
+                  "method_not_allowed",
+                  "internal_error"
+                ]
+              },
+              "message": {
+                "type": "string"
+              },
+              "details": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "path": {
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "path",
+                    "message"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            },
+            "required": [
+              "code",
+              "message"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "required": [
+          "error"
+        ],
+        "additionalProperties": false
+      }
+    }
+  }
+}
+```
+
+Télécharger le [document OpenAPI complet](/api-reference/openapi.json). Voir [Authentification](/api/authentication), [Requêtes et erreurs](/api/requests) et [Webhooks](/api/webhooks).

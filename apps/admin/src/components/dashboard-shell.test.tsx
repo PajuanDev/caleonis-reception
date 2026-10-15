@@ -18,7 +18,7 @@ beforeEach(() => {
   route.pathname = "/"; window.innerWidth = 1440;
   vi.stubGlobal("matchMedia", vi.fn(query => ({ matches: false, media: query, addEventListener: vi.fn(), removeEventListener: vi.fn() })));
 });
-afterEach(() => { cleanup(); clients.forEach(client => client.clear()); clients.length = 0; vi.unstubAllGlobals(); vi.clearAllMocks(); });
+afterEach(() => { cleanup(); clients.forEach(client => client.clear()); clients.length = 0; vi.unstubAllGlobals(); vi.unstubAllEnvs(); vi.clearAllMocks(); });
 function setup(role = "business_owner") {
   const client = new QueryClient({ defaultOptions: { queries: { retry: false, staleTime: Infinity } } }); clients.push(client);
   client.setQueryData(["businesses"], { businesses: [{ businessId: "business", name: "Tenant name", active: true, role }] });
@@ -30,15 +30,31 @@ function setup(role = "business_owner") {
   return { ...view, navigate(pathname: string) { route.pathname = pathname; view.rerender(content()); } };
 }
 describe("original shared navigation", () => {
+  it("points Home to the gated staging dashboard while preserving Messages and legacy deep links", () => {
+    vi.stubEnv("NEXT_PUBLIC_P1_SINGLE_HOST_STAGING", "true");
+    route.pathname = "/dashboard";
+    setup();
+    expect(screen.getByRole("link", { name: "nav:items.home" }).getAttribute("href")).toBe("/dashboard");
+    expect(screen.getByRole("link", { name: "nav:items.messages" }).getAttribute("href")).toBe("/messages");
+    expect(screen.getByRole("link", { name: "nav:items.calls" }).getAttribute("href")).toBe("/calls");
+  });
   it("keeps the original group ordering and integrations link", () => {
     setup();
     // The sidebar header carries the workspace switcher alone; no brand mark.
     expect(screen.queryByRole("img", { name: "LobbyStack" })).toBeNull();
-    expect(screen.getAllByRole("link").map(link => link.getAttribute("href"))).toEqual(["#dashboard-main-content", "/", "/calls", "/contacts", "/agent", "/agent/knowledge", "/agent/services", "/agent/rules", "/analytics", "/integrations", "/settings/usage"]);
+    expect(screen.getAllByRole("link").map(link => link.getAttribute("href"))).toEqual(["#dashboard-main-content", "/", "/calls", "/messages", "/contacts", "/agent", "/agent/knowledge", "/agent/services", "/agent/rules", "/analytics", "/integrations", "/settings/usage"]);
     expect(document.getElementById("dashboard-main-content")?.tabIndex).toBe(-1);
   });
   it("keeps integrations visible for viewers", () => {
     setup("viewer"); expect(screen.getByRole("link", { name: "settings:sections.integrations" })).toBeTruthy();
+  });
+  it("keeps Messages discoverable across routes without adding a widget sidebar category", () => {
+    const view = setup("viewer");
+    for (const pathname of ["/", "/calls", "/agent", "/settings/phone-number", "/messages", "/settings/widget"]) {
+      view.navigate(pathname);
+      expect(screen.getByRole("link", { name: "nav:items.messages" }).getAttribute("href")).toBe("/messages");
+      expect(screen.queryByRole("link", { name: "settings:sections.widget" })).toBeNull();
+    }
   });
   it("resets the content scroll position after navigation", () => {
     const view = setup(); const main = view.container.querySelector('[data-slot="sidebar-inset"]') as HTMLElement;
@@ -48,7 +64,7 @@ describe("original shared navigation", () => {
   it("supports repeated mobile navigation across every original group", async () => {
     window.innerWidth = 390;
     const view = setup();
-    for (const [label, href] of [["nav:items.calls", "/calls"], ["agent:sections.knowledge.title", "/agent/knowledge"], ["settings:sections.integrations", "/integrations"]]) {
+    for (const [label, href] of [["nav:items.calls", "/calls"], ["nav:items.messages", "/messages"], ["agent:sections.knowledge.title", "/agent/knowledge"], ["settings:sections.integrations", "/integrations"]]) {
       await userEvent.click(screen.getByRole("button", { name: "Toggle sidebar" }));
       const dialog = await screen.findByRole("dialog");
       await userEvent.click(within(dialog).getByRole("button", { name: label! }));

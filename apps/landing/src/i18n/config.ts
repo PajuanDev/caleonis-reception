@@ -19,4 +19,3 @@ export const assertLocale = (value: string | undefined): Locale => {
   if (isLocale(value)) return value
   return DEFAULT_LOCALE
 }
-

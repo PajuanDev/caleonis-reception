@@ -1,0 +1,161 @@
+---
+import Layout from "@/layouts/main.astro"
+import { Navbar } from "@/components/Navbar"
+import { Footer } from "@/components/Footer"
+import { FaqAccordion } from "@/components/FaqAccordion"
+import { launchCopy } from "@/lib/launch-content"
+import { localizePath, type Locale } from "@/i18n"
+const { locale = "fr" } = Astro.props as { locale?: Locale }
+const guides =
+  locale === "fr"
+    ? [
+        {
+          id: "demarrage",
+          title: "Préparer votre premier essai",
+          body: "Dans l’application, renseignez le nom de l’entreprise, l’accueil, les horaires, les services et les consignes. Choisissez un besoin simple, par exemple une demande de rappel pour un devis. Testez d’abord dans le navigateur, puis sur le numéro attribué. Vérifiez le résumé, la transcription et le rendez-vous avant de faire tester par un prospect.",
+        },
+        {
+          id: "agenda",
+          title: "Google Calendar : connexion et rendez-vous",
+          body: "Connectez le compte Google autorisé, choisissez le calendrier et vérifiez les disponibilités, la durée et le fuseau horaire. Après un premier rendez-vous créé par la voix, ouvrez Google Calendar et contrôlez la date, l’heure et l’objet. Si l’accès expire ou est révoqué, reconnectez Google depuis les intégrations. Ne confirmez pas une réservation au client si sa présence dans l’agenda n’a pas été vérifiée.",
+        },
+        {
+          id: "telephone",
+          title: "Téléphone, numéro et renvoi",
+          body: "Le numéro pilote français est destiné à la voix. Pour tester un renvoi depuis votre numéro habituel, utilisez les instructions de votre opérateur et contrôlez un appel entrant de bout en bout. Les tarifs et possibilités varient selon l’opérateur. L’attribution d’un numéro ne vaut ni portabilité ni garantie de transfert humain. Gardez un parcours de rappel humain tant que ces fonctions ne sont pas validées.",
+        },
+        {
+          id: "messages",
+          title: "Messages et SMS : une distinction essentielle",
+          body: "La prise d’un message pendant un appel apparaît dans le suivi de l’appel. Une page Messages peut aussi être disponible dans l’application. Un numéro Voice-only ne reçoit ni n’envoie de SMS. Aucun reçu, alerte ou confirmation externe ne doit être promis sans capacité compatible, consentement et test de l’intégration concernée.",
+        },
+        {
+          id: "enregistrements",
+          title: "Transcriptions, enregistrements et consentement",
+          body: "Avant un pilote réel, définissez l’information des appelants et les règles d’enregistrement adaptées à votre activité. Les enregistrements activés sont privés et accessibles aux personnes autorisées. Ne partagez pas un lien d’enregistrement ou une transcription avec un prospect sans vérifier son contenu et les droits d’accès. Les durées de conservation et la gestion des sauvegardes font partie de la revue des conditions du service.",
+        },
+        {
+          id: "depannage",
+          title: "Un appel n’aboutit pas ou une action manque",
+          body: "Vérifiez le numéro appelé, le renvoi éventuel, l’activation du compte et les consignes. Relevez l’heure et la fiche d’appel ; consultez la transcription pour identifier ce qui a été demandé. Pour un rendez-vous manquant, contrôlez la connexion Google et le bon calendrier. Pour un SMS absent, vérifiez d’abord la capacité du numéro : le pilote Voice-only n’en permet pas. Utilisez l’aide ou votre interlocuteur pilote sans transmettre de secret ni de donnée sensible.",
+        },
+        {
+          id: "couts",
+          title: "Usage, coûts et périmètre",
+          body: "Consultez les informations d’usage disponibles dans les réglages. Les coûts téléphoniques et d’IA dépendent des services activés ; les prix et limites du pilote sont à convenir avant ouverture. Facturation, affiliation, API et webhooks ne constituent pas des offres commerciales validées du seul fait que leur code ou une page existe dans le fork.",
+        },
+        {
+          id: "securite",
+          title: "Sécurité, confidentialité et cabinets médicaux",
+          body: "Utilisez des comptes individuels autorisés et vérifiez les invitations et accès de votre organisation avant de partager des données. Le pilote ne revendique aucune qualification HDS. Aucun scénario réel comportant des données de santé ne doit être activé ; les démonstrations de cabinet restent administratives et fictives. Les textes juridiques et engagements contractuels sont encore en revue.",
+        },
+      ]
+    : [
+        {
+          id: "getting-started",
+          title: "Prepare your first trial",
+          body: "In the app, enter your business name, greeting, hours, services and instructions. Start with a simple callback enquiry. Test in the browser, then on the assigned phone number. Review the transcript, summary and appointment before inviting a prospect.",
+        },
+        {
+          id: "calendar",
+          title: "Google Calendar connection and booking",
+          body: "Connect an authorised Google account, select the calendar and check availability, duration and time zone. Verify the first voice booking directly in Google Calendar. If access expires or is revoked, reconnect Google in Integrations. Do not promise a booking that has not been verified.",
+        },
+        {
+          id: "phone",
+          title: "Phone numbers and forwarding",
+          body: "The French pilot number supports voice only. Follow your carrier’s instructions for call forwarding and test the complete incoming call. Carrier options and charges vary. A number assignment is not number portability or proof of a human-transfer capability. Keep a human callback workflow until those capabilities are validated.",
+        },
+        {
+          id: "messages",
+          title: "Messages and SMS",
+          body: "A message taken during a call belongs to that call’s history. A Messages page may also be available. A Voice-only number cannot send or receive SMS. Never promise external receipts, alerts or confirmations without a compatible capability, consent and a verified integration.",
+        },
+        {
+          id: "recordings",
+          title: "Transcripts, recordings and consent",
+          body: "Before real calls, define the caller information and recording policy appropriate to your business. Enabled recordings remain private and limited to authorised people. Check content and access rights before sharing a recording or transcript. Retention and backup handling remain part of the service terms review.",
+        },
+        {
+          id: "troubleshooting",
+          title: "When a call or action fails",
+          body: "Check the dialled number, forwarding, account activation and instructions. Record the time and call record, then review the transcript. For missing bookings, check Google access and calendar selection. For missing SMS, check number capability first: the Voice-only pilot does not support them. Contact pilot support without sharing secrets or sensitive information.",
+        },
+        {
+          id: "usage",
+          title: "Usage, charges and scope",
+          body: "Review the usage information available in Settings. Telephony and AI charges depend on enabled services; agree prices and limits before opening the pilot. Billing, affiliation, API and webhook code are not proof that those services are commercially available.",
+        },
+        {
+          id: "security",
+          title: "Security, privacy and medical offices",
+          body: "Use authorised individual accounts and verify organisation access before sharing data. The pilot does not claim HDS qualification. Do not enable real workflows containing health data; medical-office demonstrations must remain fictional and administrative. Legal and contractual commitments remain under review.",
+        },
+      ]
+---
+
+<Layout seo={{ locale, canonicalPath: localizePath(locale, "/resources/") }}
+  ><Navbar locale={locale} /><main id="main-content">
+    <section class="mx-auto max-w-7xl px-6 py-16 md:py-24">
+      <h1 class="display-heading">
+        {
+          locale === "fr"
+            ? "Aide et ressources pour votre pilote"
+            : "Help and resources for your pilot"
+        }
+      </h1><p class="body-copy mt-6 max-w-3xl">
+        {
+          locale === "fr"
+            ? "Préparez les premiers appels et identifiez les limites de la configuration actuelle. Ces guides décrivent le SaaS Caléonis ; la documentation développeur du socle Caléonis Receptionist reste distincte."
+            : "Prepare your first calls and understand the current configuration. These guides describe Caléonis SaaS; upstream Caléonis Receptionist developer documentation is separate."
+        }
+      </p><a
+        class="mt-6 inline-block underline underline-offset-4"
+        href="/aide/"
+        >{
+          locale === "fr"
+            ? "Ouvrir le centre d’aide complet"
+            : "Open the full help centre (French)"
+        }</a
+      ><nav
+        aria-label={locale === "fr" ? "Dans cette page" : "On this page"}
+        class="mt-8 flex flex-wrap gap-3"
+      >
+        {
+          guides.map((guide) => (
+            <a
+              class="rounded-full border border-border px-4 py-3 text-sm hover:bg-muted"
+              href={`#${guide.id}`}
+            >
+              {guide.title}
+            </a>
+          ))
+        }
+      </nav><div class="mt-12 grid gap-6 lg:grid-cols-2">
+        {
+          guides.map((guide) => (
+            <article
+              id={guide.id}
+              class="scroll-mt-24 rounded-xl border border-border/70 p-6 md:p-8"
+            >
+              <>
+                <h2 class="card-heading">{guide.title}</h2>
+                <p class="body-copy mt-5">{guide.body}</p>
+              </>
+            </article>
+          ))
+        }
+      </div><section class="mt-16 max-w-3xl">
+        <h2 class="section-heading">
+          {
+            locale === "fr"
+              ? "Questions fréquentes"
+              : "Frequently asked questions"
+          }
+        </h2><div class="mt-8">
+          <FaqAccordion faqs={[...launchCopy[locale].faqs]} />
+        </div>
+      </section>
+    </section>
+  </main><Footer locale={locale} /></Layout
+>

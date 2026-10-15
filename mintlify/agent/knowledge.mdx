@@ -1,92 +1,98 @@
 ---
-title: "Add business knowledge"
-description: "Add text, documents, and website content so your receptionist can answer common business questions from accurate source material."
-sidebarTitle: "Knowledge"
+title: "Ajouter les connaissances de votre entreprise"
+description: "Ajoutez du texte, des documents et le contenu de votre site Web pour que votre réceptionniste réponde aux questions courantes à partir de sources exactes."
+sidebarTitle: "Connaissances"
 contentType: "How-to"
 ---
 
-The **Knowledge** page is where you add information the receptionist can use when answering callers. Use it for facts that should be straightforward to retrieve: hours, location, parking, pricing notes, service descriptions, policies, intake requirements, and FAQs.
+La page **Connaissances** vous permet d'ajouter les informations que la réceptionniste utilise pour répondre aux appelants. Servez-vous-en pour les faits simples à retrouver : heures d'ouverture, adresse, parking, notes sur les prix, descriptions des services, politiques, documents à fournir et FAQ.
 
-LobbyStack supports three knowledge sources: text entries, uploaded documents, and public website imports.
+Caléonis Receptionist prend en charge trois sources de connaissances : les entrées de texte, les documents importés et les importations de sites Web publics.
 
-<Note>
-  Hosted knowledge base is capped at 25 MB on Free, 100 MB on Starter, and 500 MB on Pro. The app also rejects individual document uploads larger than 10 MB.
-</Note>
+<Note>Les quotas Caléonis sont ceux de votre offre approuvée et des contrôles de votre espace ; les anciens quotas commerciaux amont ne les définissent pas.</Note>
 
-## Text entries
+## Entrées de texte
 
-Text entries are best for short, authoritative facts.
+Les entrées de texte conviennent le mieux aux faits courts qui font autorité.
 
-| Entry title | Good content |
+| Titre de l'entrée | Bon contenu |
 | --- | --- |
-| Holiday hours | We are closed on statutory holidays. If a caller asks about a specific holiday, take a message so the team can confirm. |
-| Parking | Customers can use the lot behind the building. Street parking is also available on Pine Street after 6 PM. |
-| Cancellation policy | Please call at least 24 hours before the appointment to cancel or reschedule. |
-| New customer intake | New customers should bring ID, insurance information if relevant, and any referral or service notes they have. |
+| Horaire des jours fériés | Nous sommes fermés les jours fériés. Si un appelant pose une question sur un jour férié précis, prenez un message pour que l'équipe confirme. |
+| Stationnement | Les clients peuvent utiliser le parking derrière l'immeuble. Le parking sur rue est aussi permis sur la rue Pine après 18 h. |
+| Politique d'annulation | Veuillez appeler au moins 24 heures avant le rendez-vous pour l'annuler ou le déplacer. |
+| Accueil des nouveaux clients | Les nouveaux clients doivent apporter une pièce d'identité, leurs renseignements d'assurance s'il y a lieu, ainsi que toute lettre de recommandation ou note de service en leur possession. |
 
 <Steps>
-  <Step title="Open Knowledge">
-    Go to **Agent** > **Knowledge**.
+  <Step title="Ouvrez Connaissances">
+    Allez dans **Agent** > **Connaissances**.
   </Step>
-  <Step title="Choose text">
-    Click **Add Knowledge** and choose **Text**.
+  <Step title="Choisissez Texte">
+    Cliquez sur **Ajouter** et choisissez **Texte**.
   </Step>
-  <Step title="Add title and content">
-    Use a short title and put the full answer in the content field.
+  <Step title="Ajoutez un titre et un contenu">
+    Utilisez un titre court et rédigez la réponse complète dans le champ de contenu.
   </Step>
-  <Step title="Save">
-    Click **Save**. The entry appears in the table.
+  <Step title="Enregistrez">
+    Cliquez sur **Enregistrer**. L'entrée apparaît dans le tableau.
   </Step>
 </Steps>
 
-## Document uploads
+## Documents importés
 
-Use document uploads for PDFs, Word documents, text files, and Markdown files that contain useful caller-facing information.
+Téléversez des fichiers PDF, des documents Word, des fichiers texte et des fichiers Markdown qui contiennent des informations utiles pour les appelants.
 
-| Limit | Value |
+| Limite | Valeur |
 | --- | --- |
-| Supported types | PDF, DOCX, TXT, Markdown |
-| Maximum size | 10 MB per file |
+| Types pris en charge | PDF, DOCX, TXT, Markdown |
+| Taille maximale | 10 Mo par fichier |
 
-Uploaded documents enter a processing flow before they are ready. The table shows status values such as queued, indexing, ready, or error.
+Caléonis Receptionist traite les documents importés avant qu'ils soient prêts. Le tableau affiche des statuts comme en file d'attente, en indexation, prêt ou erreur.
 
 <Note>
-  Keep uploaded documents caller-ready. Use current, approved material so the receptionist answers with the same information your team would share.
+  Ne téléversez que des documents prêts à être communiqués aux appelants. Utilisez du contenu à jour et approuvé pour que la réceptionniste donne les mêmes informations que votre équipe.
 </Note>
 
-## Website imports
+## Importation du site Web
 
-Website import crawls a public URL and adds useful pages to the knowledge base. It is intended for public pages such as services, about, FAQ, hours, locations, menus, pricing, and contact pages.
+L'importation du site Web parcourt une URL publique et ajoute les pages utiles à la base de connaissances. Elle vise les pages publiques comme les services, la page À propos, la FAQ, les heures d'ouverture, les emplacements, les menus, les prix et la page de contact.
 
-Website import focuses on public, caller-facing pages and skips:
+L'importation du site Web se concentre sur les pages publiques destinées aux appelants et ignore :
 
-- Localhost, local network, or direct IP URLs.
-- Pages behind a login.
-- Low-signal pages such as checkout, cart, account, search, privacy, and terms pages.
-- Static assets such as images, PDFs, spreadsheets, ZIP files, scripts, and stylesheets.
+- Les URL localhost, de réseau local ou d'adresse IP directe.
+- Les pages qui exigent une connexion.
+- Les pages peu utiles comme le paiement, le panier, le compte, la recherche, la confidentialité et les conditions d'utilisation.
+- Les fichiers statiques comme les images, les PDF, les feuilles de calcul, les fichiers ZIP, les scripts et les feuilles de style.
 
 <Steps>
-  <Step title="Open the website import dialog">
-    Go to **Agent** > **Knowledge**, click **Add Knowledge**, and choose **Website**.
+  <Step title="Ouvrez la fenêtre d'importation du site Web">
+    Allez dans **Agent** > **Connaissances**, cliquez sur **Ajouter** et choisissez **Site web**.
   </Step>
-  <Step title="Enter a public URL">
-    Paste the homepage or section URL you want LobbyStack to crawl.
+  <Step title="Entrez une URL publique">
+    Collez l'URL de la page d'accueil ou de la section que Caléonis Receptionist doit parcourir.
   </Step>
-  <Step title="Start import">
-    Click **Import Website**. Imported pages appear as they finish processing.
+  <Step title="Lancez l'importation">
+    Cliquez sur **Importer le site web**. Les pages importées apparaissent au fur et à mesure de leur traitement.
   </Step>
 </Steps>
 
-## Manage entries
+## Gérer les entrées
 
-From the Knowledge table you can:
+Depuis le tableau Connaissances, vous pouvez :
 
-- Search entries.
-- Open a row to view extracted document text.
-- Disable an entry without deleting it.
-- Re-enable a disabled entry.
-- Delete an entry permanently.
+- Chercher des entrées.
+- Ouvrir une ligne pour voir le texte extrait d'un document.
+- Désactiver une entrée sans la supprimer.
+- Réactiver une entrée désactivée.
+- Supprimer définitivement une entrée.
 
 <Tip>
-  Prefer a smaller set of accurate entries over a large library of stale content. Caller-facing accuracy matters more than volume.
+  Mieux vaut un petit ensemble d'entrées exactes qu'une grande bibliothèque de contenu périmé. Pour les appelants, l'exactitude compte plus que le volume.
 </Tip>
+
+{/* Caléonis qualification */}
+
+## Contrôler les sources et les limites de votre espace
+
+Les quotas commerciaux publics de l'amont ne sont pas des quotas Caléonis approuvés. Consultez les limites réellement configurées et l'offre validée avant d'importer un volume important. Le formulaire et la version du déploiement définissent les formats et tailles acceptés.
+
+Relisez le texte extrait, surtout pour un scan ou un tableau. Une entrée en attente ou en erreur n'est pas prête pour l'agent. Après une modification, posez une question précise dans un nouvel appel et vérifiez la transcription. Vous devez disposer des droits sur les sources. N'ajoutez pas de données de santé dans le pilote.

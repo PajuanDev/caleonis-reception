@@ -6,7 +6,8 @@
     "dev": "mint dev",
     "dev:no-open": "mint dev --no-open",
     "validate": "mint validate",
-    "broken-links": "mint broken-links"
+    "broken-links": "mint broken-links",
+    "check:content": "node check-content.mjs"
   },
   "devDependencies": {
     "mint": "4.2.876"

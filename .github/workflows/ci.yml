@@ -35,10 +35,20 @@ jobs:
           cache: pnpm
       - run: pnpm install --frozen-lockfile
       - run: pnpm test:build-config
+      - run: node --test scripts/p1-parity-contract.test.mjs
+      - run: node --test scripts/p1-single-host-gateway.test.mjs
       - run: pnpm typecheck
       - run: pnpm --filter @lobbystack/admin --filter @lobbystack/landing lint
       - run: pnpm telemetry:coverage
       - run: pnpm build
+      - name: Validate the French help center and exported review links
+        run: |
+          pnpm docs:validate
+          pnpm --filter @lobbystack/docs check:content
+          pnpm docs:broken-links
+          node scripts/build-help-preview.mjs apps/landing/dist/aide
+          node scripts/verify-v1-preview.mjs apps/landing/dist
+          node scripts/p1-parity-contract.mjs apps/landing/dist
       - name: Verify the committed embed loader matches the build
         run: git diff --exit-code -- apps/admin/public/embed/embed.js
       - run: pnpm test
@@ -151,6 +161,16 @@ jobs:
         run: pnpm --filter @lobbystack/admin exec playwright install --with-deps chromium
       - name: Run supported browser journeys against an isolated stack
         run: bash scripts/e2e-local.sh
+      - name: Keep rendered fixture screenshots for review
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: operator-browser-screenshots
+          path: |
+            apps/admin/test-results/**/*.png
+            apps/admin/test-results/**/p1-gateway-real-next-evidence.json
+          if-no-files-found: ignore
+          retention-days: 7
 
   images:
     uses: ./.github/workflows/runtime-images.yml

@@ -47,8 +47,12 @@ async function signUp(page: Page, identity: string, testInfo: TestInfo): Promise
     return await submitted;
   });
   expect(response.ok()).toBe(true);
+  // The URL and server-rendered input appear before hydration. The first
+  // client workspace query proves the input's React handlers are mounted.
+  const workspaceReady = page.waitForResponse(response => new URL(response.url()).pathname === "/api/businesses" && response.request().method() === "GET");
   await completeSignupEmailVerification(page, email, password);
   await expect(page).toHaveURL(/\/onboarding\/business$/);
+  expect((await workspaceReady).ok()).toBe(true);
 }
 
 test("the continue button stays pending until the next onboarding step is on screen", async ({ page }, testInfo) => {
@@ -71,6 +75,7 @@ test("the continue button stays pending until the next onboarding step is on scr
   // the form to be ready rather than racing that query.
   const submit = page.getByRole("button", { name: "Continue", exact: true });
   await page.getByLabel("Business name").fill(`${prefix} continue`);
+  await expect(page.getByLabel("Business name")).toHaveValue(`${prefix} continue`);
   await expect(submit).toBeEnabled({ timeout: 30_000 });
   const saved = page.waitForResponse(response => response.url().endsWith("/api/businesses") && response.request().method() === "POST");
   await submit.click();

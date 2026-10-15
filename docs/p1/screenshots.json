@@ -1,0 +1,27 @@
+{
+  "repository": "PajuanDev/caleonis-reception",
+  "headSha": "207dc2ce6c5e92ef9179cf08e0a747b21f5a21d1",
+  "checkoutMergeSha": "ed91cf238b55b512fa00958564d18d3212862355",
+  "baseSha": "e8e23bae4955f64fa3f99cb525faad908439077e",
+  "runUrl": "https://github.com/PajuanDev/caleonis-reception/actions/runs/38803741713",
+  "artifactUrl": "https://github.com/PajuanDev/caleonis-reception/actions/runs/38803741713/artifacts/12005352465",
+  "artifactSha256": "5631dd3247b9d47177e03bab0e99c6de390a5afbf2adfd46ff578bd5cb1399e1",
+  "browserResult": { "passed": 14, "skipped": 2, "failed": 0 },
+  "source": "Actual application rendering in an isolated browser fixture, synthetic data, no production account or provider operation.",
+  "visuallyInspected": true,
+  "files": [
+    {
+      "path": "apps/landing/public/screenshots/messages-voice-only-fr-desktop.png",
+      "width": 1440,
+      "height": 1000,
+      "sha256": "7b64b29f29f3cb97d7b54c56b4f169966959bbfdee868e812a6b1490f7ac7feb"
+    },
+    {
+      "path": "apps/landing/public/screenshots/messages-voice-only-fr-mobile.png",
+      "width": 390,
+      "height": 844,
+      "sha256": "0f57f76e0ea3e4f15b4862df4545d21bd08c29430ac6b554d73019a2a9c2ae52"
+    }
+  ],
+  "limits": ["No real SMS or PSTN qualification", "Not a certification of full V1 parity"]
+}

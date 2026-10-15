@@ -1,19 +1,24 @@
 "use client";
 
 import { PhoneCall, ShieldCheck, Sparkles } from "lucide-react";
+import { useTranslation } from "react-i18next";
+import Link from "next/link";
 
 import { AuraVoiceDemo } from "@/components/web-voice/AuraVoiceDemo";
+import { localizePublicPath } from "@/lib/locale-path";
+import { resolveLocale } from "@/lib/locale";
 
 export function PublicReceptionDemo() {
+  const { t, i18n } = useTranslation("common");
   return (
     <main className="min-h-svh bg-background text-foreground">
       <div className="mx-auto flex min-h-svh w-full max-w-6xl flex-col px-6 py-10 lg:px-10">
         <header className="flex items-center justify-between">
-          <a href="/" className="text-lg font-semibold tracking-tight">
-            Caleonis <span className="font-medium text-muted-foreground">Reception</span>
-          </a>
+          <Link href={localizePublicPath("/essai", resolveLocale(i18n.resolvedLanguage, i18n.language))} className="text-lg font-semibold tracking-tight">
+            Caléonis <span className="font-medium text-muted-foreground">Receptionist</span>
+          </Link>
           <span className="rounded-full border px-3 py-1 text-xs text-muted-foreground">
-            Démonstration
+            {t("publicDemo.badge")}
           </span>
         </header>
 
@@ -21,46 +26,43 @@ export function PublicReceptionDemo() {
           <div className="max-w-2xl">
             <div className="mb-5 inline-flex items-center gap-2 rounded-full border bg-muted/40 px-3 py-1.5 text-sm">
               <Sparkles className="size-4" />
-              Réceptionniste IA disponible 24h/24
+              {t("publicDemo.eyebrow")}
             </div>
             <h1 className="text-4xl font-semibold tracking-tight sm:text-5xl lg:text-6xl">
-              Parlez à Caleonis Reception.
+              {t("publicDemo.title")}
             </h1>
             <p className="mt-6 max-w-xl text-lg leading-8 text-muted-foreground">
-              Testez directement la réceptionniste IA depuis votre navigateur. Elle peut répondre aux questions,
-              qualifier une demande et prendre un message comme elle le ferait pour votre entreprise.
+              {t("publicDemo.description")}
             </p>
 
             <div className="mt-8 grid gap-3 text-sm sm:grid-cols-2">
               <div className="flex items-start gap-3 rounded-xl border p-4">
                 <PhoneCall className="mt-0.5 size-5 shrink-0" />
                 <div>
-                  <p className="font-medium">Essayez une vraie demande</p>
-                  <p className="mt-1 text-muted-foreground">Demandez les services, laissez un message ou simulez un prospect.</p>
+                  <p className="font-medium">{t("publicDemo.requestTitle")}</p>
+                  <p className="mt-1 text-muted-foreground">{t("publicDemo.requestDescription")}</p>
                 </div>
               </div>
               <div className="flex items-start gap-3 rounded-xl border p-4">
                 <ShieldCheck className="mt-0.5 size-5 shrink-0" />
                 <div>
-                  <p className="font-medium">Vous parlez à une IA</p>
-                  <p className="mt-1 text-muted-foreground">La démonstration l’indique clairement et ne remplace pas un service d’urgence.</p>
+                  <p className="font-medium">{t("publicDemo.aiTitle")}</p>
+                  <p className="mt-1 text-muted-foreground">{t("publicDemo.aiDescription")}</p>
                 </div>
               </div>
             </div>
 
             <p className="mt-8 text-sm text-muted-foreground">
-              Exemples : « Que peut faire Caleonis Reception ? » · « Je voudrais laisser un message » ·
-              « Comment pourriez-vous répondre aux appels de mon entreprise ? »
+              {t("publicDemo.examples")}
             </p>
           </div>
 
           <div className="mx-auto w-full max-w-[32rem]">
             <div className="rounded-3xl border bg-card p-6 shadow-sm sm:p-8">
-              <p className="text-center text-sm font-medium">Cliquez sur le téléphone pour commencer</p>
-              <p className="mt-1 text-center text-xs text-muted-foreground">Votre navigateur vous demandera l’accès au microphone.</p>
+              <p className="text-center text-sm font-medium">{t("publicDemo.start")}</p>
+              <p className="mt-1 text-center text-xs text-muted-foreground">{t("publicDemo.microphone")}</p>
               <p className="mt-3 text-center text-xs leading-5 text-muted-foreground">
-                La conversation est enregistrée et transcrite, puis consultable dans l’historique du compte de démonstration.
-                Utilisez uniquement des informations fictives.
+                {t("publicDemo.recordingNotice")}
               </p>
               <AuraVoiceDemo
                 auraTone="light"
@@ -73,7 +75,7 @@ export function PublicReceptionDemo() {
         </section>
 
         <footer className="pb-2 text-center text-xs text-muted-foreground">
-          Caleonis Reception · Démonstration vocale IA
+          {t("publicDemo.footer")}
         </footer>
       </div>
     </main>

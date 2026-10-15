@@ -1,79 +1,50 @@
 ---
-title: "Configure SMS alerts and consent"
-description: "How LobbyStack collects consent for outbound appointment and workspace alert SMS."
-sidebarTitle: "SMS alerts and consent"
-contentType: "Reference"
+title: "Comprendre les SMS et le consentement"
+description: "Vérifier les capacités d’envoi sans confondre voix, boîte Messages et notifications."
+sidebarTitle: "Alertes SMS et consentement"
 ---
+<Warning>
+Le numéro pilote français est Voice-only : aucun SMS ne peut être envoyé ou reçu sur ce numéro.
+</Warning>
 
-LobbyStack uses one toll-free SMS number for outbound, non-marketing account notifications.
+La présence de **Messages** ou de préférences SMS dans le logiciel n’active pas le service chez l’opérateur.
 
-This number sends:
+## Trois usages distincts
 
-- A booking confirmation and one reminder 24 hours before the appointment, to customers who agree.
-- Workspace alerts to verified operators.
+| Usage | Condition |
+| --- | --- |
+| SMS client et réponse manuelle | Numéro SMS actif, autorisations et capacités vérifiées. |
+| Notification de rendez-vous | Expéditeur compatible, consentement et traitement d’envoi effectif. |
+| Alerte opérateur | Téléphone vérifié, consentement et expéditeur disponible. |
 
-This number does not send marketing, promotions, age-gated content, AI SMS replies, or manual SMS conversations.
+L’IA ne répond pas automatiquement aux SMS entrants en V1.
 
-The Free plan has no phone number and doesn't send SMS.
+## Si le service est disponible dans un autre espace
 
-When a customer texts your business number, LobbyStack saves the message in **Messages** and alerts your team. The AI doesn't reply. `STOP` and `HELP` get fixed replies.
+Avant activation, faites confirmer le numéro expéditeur, les pays desservis, les coûts et les règles de consentement applicables.
 
-## Consent model
+Dans **Réglages > Notifications**, un contrôle désactivé peut indiquer l’absence d’expéditeur SMS ou de téléphone vérifié. Respectez cette limitation.
 
-LobbyStack collects SMS consent before sending alerts.
+Le consentement aux alertes d’un membre de l’équipe est distinct du consentement d’un client aux confirmations.
 
-Appointment customers and operators use the same toll-free number, but they consent in different places.
+## Refus et états de livraison
 
-### Appointment customers
+Un refus doit être respecté, même si une réservation a été créée. « En attente » ne veut pas dire « envoyé », et « envoyé » ne prouve pas la réception finale.
 
-When a customer books by phone, the AI receptionist asks for verbal SMS consent before sending an appointment confirmation or reminder.
+L’état « skipped » indique qu’une notification n’a pas été envoyée. Il ne s’agit pas d’une erreur à contourner en choisissant un autre canal sans accord.
 
-The disclosure is:
+Pour le pilote Voice-only, consultez le rendez-vous dans l’application et Google plutôt que d’annoncer un SMS.
 
-> Can I text this number with your appointment confirmation and reminder? Message and data rates may apply. Reply STOP to opt out or HELP for help.
+{/* Caléonis qualification */}
 
-If the caller says yes, LobbyStack records the opt-in and sends appointment SMS for that phone number.
+## Consentement client lors d'une réservation
 
-If the caller says no, the appointment is still booked and no appointment SMS is sent.
+Demandez l'accord avant de conserver un opt-in ; le téléphone du contact ne suffit pas. Si l'appelant refuse, gardez le rendez-vous et n'envoyez ni confirmation ni rappel SMS. Le consentement ne peut pas donner une capacité SMS à une ligne Voice-only.
 
-### Operators
+Lors du test pilote sans SMS, l'événement Google a été créé sans invité ; la confirmation interne était skipped et aucun SMS, email ou alerte opérateur n'a été envoyé pour cette réservation. Vérifiez séparément tout autre scénario.
 
-Operators are verified workspace users.
+## Désabonnement, aide et future ouverture
 
-Before operator workspace alerts are sent by SMS, the operator must enable SMS alerts in **Settings** > **Notifications** and accept the SMS disclosure in the dashboard.
+L'éventuelle ouverture d'un service distinct nécessiterait validation du pays, de l'expéditeur, des coûts, des preuves de consentement, de la suppression des destinataires opposés et du résultat fournisseur. Les anciens textes STOP/HELP et conditions nord-américaines ne sont pas présentés comme les mentions françaises finales.
 
-The operator disclosure is:
-
-> I agree to receive SMS alerts from LobbyStack about missed calls, new messages, appointment activity, and workspace notifications at my verified phone number. Message frequency varies. Msg & data rates may apply. Reply STOP to opt out or HELP for help. SMS alerts are optional.
-
-Operators can disable SMS alerts later in notification settings.
-
-## Example messages
-
-Appointment confirmation:
-
-> Example Business: Your haircut appointment is confirmed for May 24 at 2:00 PM. Msg & data rates may apply. Reply STOP to opt out or HELP for help.
-
-Operator alert:
-
-> LobbyStack: New voice message for Example Business. Open your dashboard to review. Msg & data rates may apply. Reply STOP to opt out or HELP for help.
-
-## Opt-out and help
-
-Recipients can reply `STOP` to opt out of future SMS from the toll-free alert number.
-
-Recipients can reply `START` or `SUBSCRIBE` to resubscribe where supported.
-
-Recipients can reply `HELP` for support information.
-
-For help, contact [hello@lobbystack.com](mailto:hello@lobbystack.com) or visit [https://lobbystack.com](https://lobbystack.com).
-
-Message and data rates may apply.
-
-## SMS is optional
-
-SMS alerts are optional.
-
-Customers can book appointments without receiving SMS confirmations or reminders.
-
-Operators can use the dashboard without enabling SMS alerts.
+L'email et le tableau de bord restent des parcours distincts ; n'utilisez pas un autre canal pour contourner un refus de notification. Un test d'envoi nécessite un destinataire personnel autorisé et le contrôle du résultat réel.

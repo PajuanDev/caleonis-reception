@@ -1,59 +1,59 @@
 ---
-title: "Connect Claude"
-description: "Add LobbyStack to Claude as a connector, or to Claude Code, Claude Desktop and the Claude API with an API key."
+title: "Connecter Claude"
+description: "Ajoutez Caléonis Receptionist à Claude comme connecteur, ou à Claude Code, Claude Desktop et l'API Claude avec une clé API."
 sidebarTitle: "Claude"
 contentType: "How-to"
 ---
 
-The server URL is `https://app.lobbystack.com/api/mcp`. Replace `app.lobbystack.com` with your own domain if you self-host. Claude connects to it from the internet, so a self-hosted LobbyStack needs a public HTTPS address.
+L'URL du serveur est `https://receptionist.caleonis.com/api/mcp`. Si vous auto-hébergez Caléonis Receptionist, remplacez `receptionist.caleonis.com` par votre propre domaine. Claude s'y connecte depuis Internet : un Caléonis Receptionist auto-hébergé a donc besoin d'une adresse HTTPS publique.
 
-See [MCP server](/ai/mcp) for the tools each permission unlocks.
+Consultez [Serveur MCP](/ai/mcp) pour savoir quels outils chaque autorisation débloque.
 
-## Claude and Claude Desktop connectors
+## Connecteurs Claude et Claude Desktop
 
 <Steps>
-  <Step title="Add the connector">
-    In Claude, go to **Customize** > **Connectors**, click **+**, then **Add custom connector**. Name it `LobbyStack`, paste the server URL, and click **Add**. Leave **Advanced settings** empty.
+  <Step title="Ajouter le connecteur">
+    Dans Claude, allez dans **Customize** > **Connectors**, cliquez sur **+**, puis sur **Add custom connector**. Nommez-le `Caléonis Receptionist`, collez l'URL du serveur et cliquez sur **Add**. Laissez **Advanced settings** vide.
 
-    On Team and Enterprise plans, an owner adds it under **Organization settings** > **Connectors**, and each member connects it from **Customize** > **Connectors**.
+    Avec les forfaits Team et Enterprise, un propriétaire l'ajoute dans **Organization settings** > **Connectors**, puis chaque membre le connecte depuis **Customize** > **Connectors**.
   </Step>
-  <Step title="Connect and sign in">
-    Click **Connect**. Claude opens LobbyStack. Sign in if you aren't signed in already.
+  <Step title="Connecter et se connecter">
+    Cliquez sur **Connect**. Claude ouvre Caléonis Receptionist. Connectez-vous si ce n'est pas déjà fait.
   </Step>
-  <Step title="Choose the business and permissions">
-    Pick the business, uncheck anything Claude shouldn't do, and click **Allow access**. You go back to Claude, connected.
+  <Step title="Choisir l'entreprise et les autorisations">
+    Choisissez l'entreprise, décochez ce que Claude ne doit pas faire et cliquez sur **Autoriser l'accès**. Vous revenez dans Claude, connecté.
   </Step>
 </Steps>
 
-To disconnect, go to **Settings** > **Connected apps** in LobbyStack and click **Disconnect** next to Claude.
+Pour déconnecter Claude, allez dans **Réglages** > **Applications connectées** dans Caléonis Receptionist et cliquez sur **Déconnecter** à côté de Claude.
 
 ## Claude Code
 
-Add the server, then sign in from Claude Code:
+Ajoutez le serveur, puis connectez-vous depuis Claude Code :
 
 ```bash
-claude mcp add --transport http lobbystack https://app.lobbystack.com/api/mcp
+claude mcp add --transport http lobbystack https://receptionist.caleonis.com/api/mcp
 ```
 
-Start Claude Code, run `/mcp`, select `lobbystack` and choose to authenticate. Your browser opens the LobbyStack sign-in and consent page.
+Lancez Claude Code, exécutez `/mcp`, sélectionnez `lobbystack` et choisissez de vous authentifier. Votre navigateur ouvre la page de connexion et d'autorisation de Caléonis Receptionist.
 
-To use an API key instead, pass it as a header:
+Pour utiliser plutôt une clé API, passez-la dans un en-tête :
 
 ```bash
-claude mcp add --transport http lobbystack https://app.lobbystack.com/api/mcp \
+claude mcp add --transport http lobbystack https://receptionist.caleonis.com/api/mcp \
   --header "Authorization: Bearer $LOBBYSTACK_API_KEY"
 ```
 
-## Claude Desktop with an API key
+## Claude Desktop avec une clé API
 
-If you'd rather use an API key than the connector, run [`mcp-remote`](https://www.npmjs.com/package/mcp-remote) from Claude Desktop's config file. It forwards requests to LobbyStack with your key. You need Node.js on your computer.
+Si vous préférez utiliser une clé API plutôt que le connecteur, exécutez [`mcp-remote`](https://www.npmjs.com/package/mcp-remote) depuis le fichier de configuration de Claude Desktop. Il transmet les requêtes à Caléonis Receptionist avec votre clé. Node.js doit être installé sur votre ordinateur.
 
 <Steps>
-  <Step title="Open the config file">
-    In Claude Desktop, go to **Settings** > **Developer** and click **Edit Config**.
+  <Step title="Ouvrir le fichier de configuration">
+    Dans Claude Desktop, allez dans **Settings** > **Developer** et cliquez sur **Edit Config**.
   </Step>
-  <Step title="Add LobbyStack">
-    Add this entry under `mcpServers` and paste your key in place of `lsk_...`:
+  <Step title="Ajouter Caléonis Receptionist">
+    Ajoutez cette entrée sous `mcpServers` et collez votre clé à la place de `lsk_...` :
 
     ```json claude_desktop_config.json
     {
@@ -63,7 +63,7 @@ If you'd rather use an API key than the connector, run [`mcp-remote`](https://ww
           "args": [
             "-y",
             "mcp-remote",
-            "https://app.lobbystack.com/api/mcp",
+            "https://receptionist.caleonis.com/api/mcp",
             "--header",
             "Authorization:${LOBBYSTACK_AUTH}"
           ],
@@ -75,16 +75,16 @@ If you'd rather use an API key than the connector, run [`mcp-remote`](https://ww
     }
     ```
 
-    The header value sits in `env` because some systems split arguments on spaces.
+    La valeur de l'en-tête se trouve dans `env`, car certains systèmes découpent les arguments au niveau des espaces.
   </Step>
-  <Step title="Restart Claude Desktop">
-    Quit and reopen the app. LobbyStack's tools appear under the tools menu in a new chat.
+  <Step title="Redémarrer Claude Desktop">
+    Quittez puis rouvrez l'application. Les outils de Caléonis Receptionist apparaissent dans le menu des outils d'une nouvelle conversation.
   </Step>
 </Steps>
 
-## Claude API
+## API Claude
 
-The Messages API connects to remote MCP servers with the MCP connector. Send an API key, or an OAuth access token your app obtained, as `authorization_token`:
+L'API Messages se connecte aux serveurs MCP distants avec le connecteur MCP. Envoyez une clé API, ou un jeton d'accès OAuth obtenu par votre application, dans `authorization_token` :
 
 ```bash
 curl https://api.anthropic.com/v1/messages \
@@ -97,7 +97,7 @@ curl https://api.anthropic.com/v1/messages \
     "max_tokens": 4096,
     "mcp_servers": [{
       "type": "url",
-      "url": "https://app.lobbystack.com/api/mcp",
+      "url": "https://receptionist.caleonis.com/api/mcp",
       "name": "lobbystack",
       "authorization_token": "'"$LOBBYSTACK_API_KEY"'"
     }],
@@ -106,13 +106,21 @@ curl https://api.anthropic.com/v1/messages \
   }'
 ```
 
-## Check the connection
+## Vérifier la connexion
 
-Ask Claude to call `get_business`. It should answer with your business name, time zone and booking mode. If the call fails:
+Demandez à Claude d'appeler `get_business`. Il doit répondre avec le nom de votre entreprise, son fuseau horaire et son mode de réservation. Si l'appel échoue :
 
-| Symptom | Fix |
+| Symptôme | Solution |
 | --- | --- |
-| The sign-in page says you can't connect apps | Ask an owner of the business to connect Claude, or to make you an admin. |
-| `401` or "unauthorized" | Connect again. With an API key, check that you copied the whole key and that nobody revoked it. |
-| `403` or "insufficient_scope" | Connect again and allow at least one permission. With an API key, create one with a scope other than `webhooks:manage`. |
-| A tool is missing | Connect again and allow the permission that tool needs. |
+| La page de connexion indique que vous ne pouvez pas connecter d'applications | Demandez à un propriétaire de l'entreprise de connecter Claude ou de vous nommer administrateur. |
+| `401` ou « unauthorized » | Reconnectez-vous. Avec une clé API, vérifiez que vous avez copié la clé en entier et que personne ne l'a révoquée. |
+| `403` ou « insufficient_scope » | Reconnectez-vous et accordez au moins une autorisation. Avec une clé API, créez-en une avec une portée autre que `webhooks:manage`. |
+| Un outil est absent | Reconnectez-vous et accordez l'autorisation dont cet outil a besoin. |
+
+{/* Caléonis qualification */}
+
+## Avant une utilisation réelle
+
+Les configurations ci-dessus sont des exemples à adapter à la version de votre client, à son offre et au mode d'accès autorisé. Aucun abonnement tiers ni connecteur préinstallé n'est inclus par cette documentation. Vérifiez d'abord `get_business`, une action refusée et la révocation sur un espace de test.
+
+Gardez les clés dans un gestionnaire de secrets ou une variable d'environnement, jamais dans une instruction de conversation. Les opérations d'écriture doivent être autorisées pour leurs effets réels.

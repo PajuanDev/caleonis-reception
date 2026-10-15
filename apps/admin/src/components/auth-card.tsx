@@ -20,6 +20,7 @@ import { cn } from "@/lib/utils";
 import { captureAffiliateReferralFromUrl, getAffiliateVisitorId } from "@/lib/affiliate-referral";
 
 import { buildAuthPathWithReturnTo, getSafeReturnTo } from "@/lib/auth-return-to";
+import { appAuthenticationReturnTo, appHomePath } from "@/lib/app-home";
 
 export function AuthCard({ mode }: { mode: "login" | "signup" }) {
   const router = useRouter();
@@ -128,9 +129,9 @@ export function AuthCard({ mode }: { mode: "login" | "signup" }) {
     const event = login ? "web.auth.login_succeeded" : "web.auth.signup_succeeded";
     if (signupSource) recordAuthSuccess(event, { source: signupSource });
     else recordAuthSuccess(event);
-    const safeReturnTo = getSafeReturnTo(new URLSearchParams(window.location.search).get("returnTo")) ?? "/";
+    const safeReturnTo = appAuthenticationReturnTo(new URLSearchParams(window.location.search).get("returnTo"));
     const target = new URL(safeReturnTo, window.location.origin);
-    window.location.assign(target.origin === window.location.origin ? `${target.pathname}${target.search}${target.hash}` : "/");
+    window.location.assign(target.origin === window.location.origin ? `${target.pathname}${target.search}${target.hash}` : appHomePath());
   }
 
   async function requestVerificationCode(challengeToken: string | null) {

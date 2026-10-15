@@ -1,13 +1,13 @@
 {
   "openapi": "3.1.0",
   "info": {
-    "title": "LobbyStack API",
+    "title": "Caléonis Receptionist API",
     "version": "v1",
-    "description": "Read calls, contacts, appointments and messages, book appointments, and subscribe to webhooks. Authenticate with an API key in the Authorization header. Each key allows 120 requests per minute by default."
+    "description": "API développeur existante : appels, contacts, rendez-vous, messages et webhooks. Accès limité à une entreprise par clé. Disponibilité et qualification à vérifier dans votre espace."
   },
   "servers": [
     {
-      "url": "https://app.lobbystack.com/api/v1"
+      "url": "https://receptionist.caleonis.com/api/v1"
     }
   ],
   "security": [
@@ -4298,7 +4298,7 @@
             "maxLength": 200
           },
           "staff_id": {
-            "description": "Book with this active staff member. Without it, LobbyStack picks one who is free.",
+            "description": "Book with this active staff member. Without it, the receptionist picks one who is free.",
             "type": "string",
             "format": "uuid"
           },

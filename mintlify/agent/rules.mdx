@@ -1,60 +1,68 @@
 ---
-title: "Write receptionist rules"
-description: "Use plain text rules to define how your agent should act during calls and conversations."
-sidebarTitle: "Rules"
+title: "Rédiger les règles de la réceptionniste"
+description: "Utilisez des règles en texte simple pour définir comment votre agent doit agir pendant les appels et les conversations."
+sidebarTitle: "Règles"
 contentType: "How-to"
 ---
 
-The **Rules** page lets you shape your agent's behavior in plain text. Instead of building workflows or maintaining decision trees, write the instruction the way you would explain it to a teammate.
+La page **Règles** vous permet de façonner le comportement de votre agent en texte simple. Pas besoin de créer des flux de travail ni de maintenir des arbres de décision : écrivez la consigne comme vous l'expliqueriez à un collègue.
 
-Rules are useful for actions, policies, and judgment calls: when to transfer a caller, when to take a callback message, what to do after hours, and how to handle questions that need a human response.
+Les règles servent aux actions, aux politiques et aux décisions qui demandent du jugement : quand transférer un appelant, quand prendre un message de rappel, quoi faire hors des heures d'ouverture et comment traiter les questions qui exigent une réponse humaine.
 
-## What to put in rules
+## Quoi mettre dans les règles
 
-Good rules are specific and action-oriented:
+Une bonne règle est précise et orientée vers l'action :
 
-- "If a caller says there is an emergency, transfer to the default transfer number."
-- "If the caller asks for a human and transfer is unavailable, take a callback message with their name, phone number, and preferred callback time."
-- "If the receptionist is not sure of an answer, say that the team will follow up instead of guessing."
-- "For after-hours callers, take a message and include the caller's preferred callback window."
+- « Si un appelant signale une urgence, transférer l'appel au numéro de transfert par défaut. »
+- « Si l'appelant demande à parler à un humain et que le transfert est impossible, prendre un message de rappel avec son nom, son numéro de téléphone et le moment où il préfère être rappelé. »
+- « Si la réceptionniste n'est pas sûre d'une réponse, dire que l'équipe fera un suivi au lieu de deviner. »
+- « Pour les appels hors des heures d'ouverture, prendre un message et noter la plage horaire de rappel que préfère l'appelant. »
 
 <Note>
-  Rules let you define agent behavior in clear language. Keep each rule updated as your process changes.
+  Les règles vous permettent de définir le comportement de l'agent en langage clair. Mettez chaque règle à jour quand votre façon de faire change.
 </Note>
 
-## Rule templates
+## Modèles de règles
 
-| Scenario | Template |
+| Situation | Modèle |
 | --- | --- |
-| Live transfer | If a caller asks for a human or describes an urgent issue, transfer to the default transfer number. |
-| Callback | If the caller wants a callback, collect their name, phone number, reason for calling, and preferred callback window. |
-| Uncertain answer | If the receptionist is not confident, take a message for the team instead of guessing. |
-| After-hours | Outside business hours, take a message and tell the caller the team will follow up during the next business day. |
-| Pricing questions | If pricing depends on the customer's situation, explain the starting point and offer to have the team follow up with details. |
+| Transfert en direct | Si un appelant demande à parler à un humain ou décrit un problème urgent, transférer l'appel au numéro de transfert par défaut. |
+| Rappel | Si l'appelant veut être rappelé, recueillir son nom, son numéro de téléphone, le motif de l'appel et la plage horaire de rappel qu'il préfère. |
+| Réponse incertaine | Si la réceptionniste n'est pas sûre de la réponse, prendre un message pour l'équipe au lieu de deviner. |
+| Hors des heures d'ouverture | En dehors des heures d'ouverture, prendre un message et dire à l'appelant que l'équipe fera un suivi le jour ouvrable suivant. |
+| Questions sur les prix | Si le prix dépend de la situation du client, donner le prix de départ et proposer que l'équipe le recontacte avec les détails. |
 
-## Add a rule
+## Ajouter une règle
 
 <Steps>
-  <Step title="Open Rules">
-    In the dashboard sidebar, go to **Agent** > **Rules**.
+  <Step title="Ouvrez Règles">
+    Dans la barre latérale du tableau de bord, allez dans **Agent** > **Règles**.
   </Step>
-  <Step title="Add a rule">
-    Click **Add Rule**.
+  <Step title="Ajoutez une règle">
+    Cliquez sur **Ajouter une règle**.
   </Step>
-  <Step title="Write the instruction">
-    Add a short title and the full instruction in the content field. Use tags if they help you find the rule later.
+  <Step title="Rédigez la consigne">
+    Ajoutez un titre court et la consigne complète dans le champ de contenu. Utilisez des étiquettes si elles vous aident à retrouver la règle plus tard.
   </Step>
-  <Step title="Save">
-    Click **Save**. The rule is available to the receptionist after it is saved and indexed.
+  <Step title="Enregistrez">
+    Cliquez sur **Enregistrer**. La réceptionniste peut utiliser la règle une fois qu'elle est enregistrée et indexée.
   </Step>
 </Steps>
 
-## Transfers and callbacks
+## Transferts et rappels
 
-Transfers use the default transfer number in **Agent** > **AI settings**. When a live handoff is not the right next step, the receptionist can create a follow-up task with callback details. Those tasks appear in the dashboard and on call detail pages.
+Les transferts utilisent le numéro de transfert par défaut défini dans **Agent** > **Paramètres IA**. Quand un transfert en direct n'est pas la bonne solution, la réceptionniste peut créer une tâche de suivi avec les coordonnées pour le rappel. Ces tâches apparaissent dans le tableau de bord et sur les pages de détail des appels.
 
-## Recording and transcripts
+## Enregistrements et transcriptions
 
-LobbyStack stores call transcripts and can store call recordings. Operators review recordings from the **Calls** page when a recording is available.
+Caléonis Receptionist conserve les transcriptions des appels et peut conserver les enregistrements. Vous pouvez écouter les enregistrements depuis la page **Appels** quand ils sont disponibles.
 
-Use rules for call-handling behavior. Manage recording and retention policy in your workspace and compliance settings.
+Utilisez les règles pour le traitement des appels. Gérez la politique d'enregistrement et de conservation avec les réglages de votre espace de travail et de conformité.
+
+{/* Caléonis qualification */}
+
+## Limites de capacité et qualification
+
+Une règle n'active ni SMS sur une ligne Voice-only ni transfert SIP. Les exemples de transfert ne s'appliquent qu'après qualification du parcours téléphonique ; dans le pilote, prenez un message pour l'équipe. Les politiques structurées de réservation et d'identité restent prioritaires.
+
+Pour vérifier une règle, testez le cas attendu puis le refus d'une action non autorisée. La réponse de l'agent doit annoncer le résultat réel. Ne promettez aucun rappel automatique ni livraison d'une notification sans preuve.

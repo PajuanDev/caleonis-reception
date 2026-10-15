@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { LoaderCircle } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { AuthCard } from "./auth-card";
-import { getSafeReturnTo } from "@/lib/auth-return-to";
+import { appAuthenticationReturnTo, appHomePath } from "@/lib/app-home";
 import { stripLocalePrefix } from "@/lib/locale-path";
 
 export function GuestAuthCard({ mode }: { mode: "login" | "signup" }) {
@@ -23,9 +23,9 @@ export function GuestAuthCard({ mode }: { mode: "login" | "signup" }) {
         const session = await response.json() as { user?: { id?: string }; session?: { id?: string } } | null;
         if (!active) return;
         if (session?.user?.id && session.session?.id) {
-          const returnTo = getSafeReturnTo(new URLSearchParams(window.location.search).get("returnTo")) ?? "/";
+          const returnTo = appAuthenticationReturnTo(new URLSearchParams(window.location.search).get("returnTo"));
           const path = stripLocalePrefix(new URL(returnTo, window.location.origin).pathname).replace(/\/$/, "");
-          router.replace(path === "/login" || path === "/signup" ? "/" : returnTo);
+          router.replace(path === "/login" || path === "/signup" ? appHomePath() : returnTo);
           return;
         }
       } catch {

@@ -1,34 +1,32 @@
 ---
-title: "Configure workspace notifications"
-description: "Choose which call, message, calendar, and provider events send email or SMS alerts to your team."
+title: "Régler les notifications"
+description: "Choisir les alertes sans confondre préférence et livraison réelle."
 sidebarTitle: "Notifications"
-contentType: "How-to"
 ---
+Les **Réglages > Notifications** définissent les événements pour lesquels votre équipe souhaite être alertée.
 
-The **Settings** > **Notifications** page controls alerts for the active business. You can enable email, SMS, or both for events that need staff attention.
+## Choisir les événements
 
-## Choose notification channels
+Les options peuvent concerner une demande de rappel, un message entrant, une synchronisation calendrier en échec ou un problème technique.
 
-Enable the channels your team monitors:
+Activez uniquement les événements qu’une personne de votre équipe traite. Les options visibles dépendent de votre espace.
 
-- **Email**: Sends alerts to the account email address
-- **SMS**: Sends urgent alerts to the verified operator phone number
+## Email
 
-SMS alerts require explicit consent. Review [SMS alerts and consent](/integrations/sms) before enabling them.
+Une préférence email ne prouve ni la configuration de l’expéditeur ni la livraison d’un message. Vérifiez le destinataire et le résultat d’un test autorisé avant de vous y fier.
 
-## Choose alert events
+L’email transactionnel n’est pas une boîte email gérée par l’IA.
 
-LobbyStack can notify your team about:
+## SMS
 
-- A voice message that requires a callback
-- A new text message sent to your business number
-- A new website chat that needs attention
-- A failed customer SMS notification
-- A calendar synchronization issue
-- A failed live-call transfer
+L’activation nécessite un téléphone opérateur vérifié, un expéditeur SMS disponible et le consentement demandé.
 
-Enable alerts that require a person to act. Keep routine delivery events disabled if your team does not need them.
+Le numéro pilote Voice-only ne permet pas les SMS. Si le contrôle indique un expéditeur manquant ou un numéro non vérifié, ne le contournez pas.
 
-## Apply the settings
+## Enregistrer et tester
 
-LobbyStack saves each channel or event change when you make it. Confirm that the account email and verified phone number belong to someone responsible for the workspace.
+Certaines préférences sont enregistrées immédiatement. Vérifiez leur état après rechargement.
+
+Un test peut envoyer un message réel : utilisez vos propres coordonnées et un scénario autorisé. Consultez le journal ou le statut fournisseur avant d’annoncer une livraison.
+
+Une réservation sans notification reste possible. Le refus SMS doit être respecté. Consultez [SMS et consentement](/integrations/sms).

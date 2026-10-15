@@ -18,7 +18,7 @@ vi.mock("next/navigation", () => ({ useRouter: () => router }));
 vi.mock("react-i18next", () => ({ useTranslation: () => ({ t: (key: string, options?: { completed?: number; total?: number }) => key === "sidebar.setupGuide.description" ? `${options?.completed}/${options?.total}` : key }) }));
 const order = ["fullScan", "sources", "testCall", "phoneNumber"];
 const clients: QueryClient[] = [];
-afterEach(() => { cleanup(); clients.forEach(client => client.clear()); clients.length = 0; vi.unstubAllGlobals(); vi.clearAllMocks(); });
+afterEach(() => { cleanup(); clients.forEach(client => client.clear()); clients.length = 0; vi.unstubAllGlobals(); vi.unstubAllEnvs(); vi.clearAllMocks(); });
 function setup(completed: string[] = [], skipped: string[] = []) {
   const client = new QueryClient({ defaultOptions: { queries: { retry: false, staleTime: Infinity } } }); clients.push(client);
   client.setQueryData(["businesses"], { businesses: [{ businessId: "business", active: true, role: "business_owner" }] });
@@ -32,6 +32,11 @@ function setup(completed: string[] = [], skipped: string[] = []) {
   return fetchMock;
 }
 describe("original setup guide interactions", () => {
+  it("returns completed staging setup to the application dashboard", async () => {
+    vi.stubEnv("NEXT_PUBLIC_P1_SINGLE_HOST_STAGING", "true");
+    setup(["fullScan", "sources", "testCall", "phoneNumber"]);
+    await waitFor(() => expect(router.replace).toHaveBeenCalledWith("/dashboard"));
+  });
   it("opens the first incomplete step with checklist progress", () => {
     setup(["fullScan", "phoneNumber"]); expect(screen.getByText("2/4")).toBeTruthy();
     expect(screen.getByRole("button", { name: "sidebar.setupGuide.stepActions.sources" })).toBeTruthy();

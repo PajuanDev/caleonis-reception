@@ -39,4 +39,3 @@ export type LandingMessages = {
 }
 
 export type LocalizedCatalog = Record<Locale, LandingMessages>
-

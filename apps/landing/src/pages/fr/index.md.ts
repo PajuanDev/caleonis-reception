@@ -3,16 +3,16 @@ import { markdownResponse } from "@/lib/markdown-response"
 import { absoluteUrl } from "@/lib/seo"
 
 const markdown = `---
-title: LobbyStack | Réceptionniste IA open source
-description: LobbyStack est le réceptionniste IA open source qui répond aux appels, qualifie les demandes, planifie des rendez‑vous et transfère les urgences 24/7.
+title: Caléonis Receptionist | Réceptionniste IA open source
+description: Caléonis Receptionist est le réceptionniste IA open source qui répond aux appels, qualifie les demandes, planifie des rendez‑vous et transfère les urgences 24/7.
 url: ${absoluteUrl("/fr/")}
 ---
 
-# LobbyStack
+# Caléonis Receptionist
 
-LobbyStack est un réceptionniste IA open source pour les petites entreprises qui dépendent des appels, des rendez‑vous et d’une réponse rapide.
+Caléonis Receptionist est un réceptionniste IA open source pour les petites entreprises qui dépendent des appels, des rendez‑vous et d’une réponse rapide.
 
-## Ce que fait LobbyStack
+## Ce que fait Caléonis Receptionist
 
 - Répond aux appels entrants 24/7.
 - Utilise vos connaissances d’entreprise pour répondre aux questions courantes.
@@ -26,14 +26,14 @@ LobbyStack est un réceptionniste IA open source pour les petites entreprises qu
 - Solutions : ${absoluteUrl("/fr/solutions/")}
 - Calculateur : ${absoluteUrl("/fr/missed-call-revenue-calculator/")}
 - Blog : ${absoluteUrl("/fr/blog/")}
-- GitHub : https://github.com/lobbystack/lobbystack
+- GitHub : https://gitlab.com/lobbystack-group/lobbystack
 `
 
 export const GET: APIRoute = () =>
   markdownResponse({
     markdown,
     canonical: absoluteUrl("/fr/"),
-    title: "LobbyStack | Réceptionniste IA open source",
+    title: "Caléonis Receptionist | Réceptionniste IA open source",
     description:
-      "LobbyStack est le réceptionniste IA open source qui répond aux appels, qualifie les demandes, planifie des rendez‑vous et transfère les urgences 24/7.",
+      "Caléonis Receptionist est le réceptionniste IA open source qui répond aux appels, qualifie les demandes, planifie des rendez‑vous et transfère les urgences 24/7.",
   })

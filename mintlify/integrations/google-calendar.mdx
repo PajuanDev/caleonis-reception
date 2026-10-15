@@ -1,48 +1,53 @@
 ---
-title: "Connect Google Calendar"
-description: "Connect a Google account, choose a writable calendar, and let LobbyStack use it for appointment availability and booking sync."
+title: "Connecter et vérifier Google Calendar"
+description: "Sélectionner un agenda, vérifier une réservation et reconnaître une connexion à rétablir."
 sidebarTitle: "Google Calendar"
-contentType: "How-to"
 ---
+Google Calendar permet de vérifier les disponibilités et de synchroniser les rendez-vous lorsque l’intégration est configurée. Utilisez un agenda de test avant les rendez-vous clients.
 
-Google Calendar lets LobbyStack read calendar availability, create booking events, and track calendar sync state for appointments. It also helps LobbyStack cancel or reschedule appointments automatically when appointment changes are enabled.
+## Connecter un compte
 
-<Note>
-  Connect Google Calendar after you add the services callers can request. This gives LobbyStack a calendar for checking availability, adding bookings, and syncing approved appointment changes.
-</Note>
+1. Vérifiez l’entreprise active et votre rôle administrateur.
+2. Ouvrez **Gestion > Intégrations**.
+3. Sélectionnez **Google Calendar**, puis **Connecter**.
+4. Connectez-vous au compte Google approprié.
+5. Lisez les permissions et autorisez la connexion.
+6. Au retour dans Caléonis, choisissez l’agenda voulu.
+7. Enregistrez ce choix et contrôlez l’état de synchronisation.
 
-## How the integration works
+Choisissez un agenda dans lequel le compte peut créer des événements. Un agenda simplement visible peut être en lecture seule.
 
-LobbyStack uses Google OAuth. You connect a Google account, LobbyStack stores the connection securely, and you select the calendar that should receive bookings. The integration can also sync busy time so LobbyStack avoids offering unavailable slots for new bookings and reschedule requests.
+## Vérifier une réservation
 
-## Connect Google Calendar
+Ajoutez un service et vérifiez les horaires, la durée, le mode de réservation et le fuseau **Europe/Paris**.
 
-<Steps>
-  <Step title="Open Integrations">
-    In the dashboard, open **Integrations**.
-  </Step>
-  <Step title="Start Google connection">
-    Find **Google Calendar** and click **Connect**.
-  </Step>
-  <Step title="Authorize Google">
-    Sign in to Google and approve the requested calendar permissions.
-  </Step>
-  <Step title="Select a calendar">
-    After returning to LobbyStack, click the connected Google card, choose a calendar from the dropdown, and click **Save calendar**.
-  </Step>
-</Steps>
+Réalisez une réservation fictive autorisée, puis ouvrez l’événement directement dans Google. Comparez le jour, l’heure, la durée et l’agenda. L’état applicatif seul ne suffit pas à valider le résultat externe.
 
-## Change the selected calendar
+Un rendez-vous peut être créé sans invité, sans SMS et sans email de confirmation. Ne déduisez aucun envoi de la présence de l’événement.
 
-1. Open **Integrations**.
-2. Click the Google Calendar card.
-3. Choose another calendar.
-4. Click **Save calendar**.
+## Connexion durable : ce qui doit être vérifié
 
-LobbyStack uses the newly selected calendar for future availability checks and bookings.
+Une connexion réussie immédiatement après autorisation ne prouve pas sa durabilité. La configuration OAuth Google et les droits accordés influencent la nécessité d’une reconnexion.
 
-## Reconnect or disconnect
+Au 15 octobre 2026, la configuration OAuth du pilote est signalée en mode Google « Testing », avec une limite de renouvellement de sept jours à traiter par l’équipe d’exploitation. Une correction en cours doit être requalifiée avant toute promesse de connexion durable.
 
-If Google access expires or is revoked, the card shows that reconnect is required. Click **Reconnect Google** and complete OAuth again.
+Le contrôle de renouvellement reste en qualification séparée. Ce guide ne garantit ni absence de déconnexion ni durée d’autorisation après changement de configuration.
 
-To remove the integration, open the Google Calendar card and click **Disconnect**. LobbyStack removes the current connection for bookings.
+Avant le lancement, faites vérifier un accès renouvelé puis une nouvelle lecture ou réservation après ce renouvellement. La configuration du projet OAuth relève de l’opérateur ; ne modifiez pas la console Google pour contourner une erreur.
+
+## Reconnecter ou diagnostiquer
+
+Si la carte demande une reconnexion, si la synchronisation échoue ou si aucun agenda n’apparaît :
+
+- Vérifiez le compte Google, les droits d’écriture et l’agenda sélectionné.
+- Utilisez **Reconnecter** si l’interface le propose.
+- Reprenez l’autorisation avec le bon compte.
+- Contrôlez une action de test avant de réactiver la réservation client.
+
+Évitez de recréer plusieurs fois un rendez-vous tant que son état chez Google est inconnu. Relevez l’heure, la fiche d’appel et le statut de synchronisation pour le [support](/support/troubleshooting).
+
+## Changer d’agenda ou déconnecter
+
+Changer l’agenda sélectionné affecte les opérations futures ; cela ne déplace pas automatiquement l’historique. Déconnecter le compte ne doit pas être interprété comme une suppression de tous les événements existants.
+
+Prévenez votre équipe et prévoyez un traitement manuel des demandes pendant l’interruption.

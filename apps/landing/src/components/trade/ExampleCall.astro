@@ -41,7 +41,9 @@ const article = /^(?:[aeiou]|HVAC)/i.test(details.noun) ? "an" : "a"
           </span>
           <div>
             <p class="text-xs font-semibold text-foreground">
-              {line.speaker === "lobbystack" ? "LobbyStack" : "Caller"}
+              {line.speaker === "lobbystack"
+                ? "Caléonis Receptionist"
+                : "Caller"}
             </p>
             <p
               class={

@@ -5,6 +5,7 @@ import { canVisitOnboardingStage, getActiveOnboardingState, resolveOnboardingRou
 
 import { getAppDatabase } from "./api-helpers";
 import { getSession } from "./auth";
+import { appAuthenticationReturnTo } from "./app-home";
 
 const routeStages: Record<string, OnboardingStage> = {
   "/onboarding/business": "create_business",
@@ -21,7 +22,7 @@ export async function requireOnboardingStage(pathname: string, options: { allowC
   if (!session) redirect("/login");
   const state = await getActiveOnboardingState(getAppDatabase().db, session.user.id);
   const expected = routeStages[pathname];
-  if (!expected) redirect(resolveOnboardingRoute(state.stage));
+  if (!expected) redirect(appAuthenticationReturnTo(resolveOnboardingRoute(state.stage)));
   if (options.allowCreate && expected === "create_business" && state.businessId === null) return;
-  if (!canVisitOnboardingStage(state.stage, expected)) redirect(resolveOnboardingRoute(state.stage));
+  if (!canVisitOnboardingStage(state.stage, expected)) redirect(appAuthenticationReturnTo(resolveOnboardingRoute(state.stage)));
 }

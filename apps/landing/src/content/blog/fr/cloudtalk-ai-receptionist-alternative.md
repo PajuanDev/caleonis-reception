@@ -15,13 +15,13 @@ canonicalSlug: "cloudtalk-ai-receptionist-alternative"
 
 Une **alternative à CloudTalk AI Receptionist** ne devrait pas exiger un abonnement de centre de contact pour répondre et réserver. CloudTalk affiche 99 $ pour 200 minutes IA et 199 $ pour 500, en plus de sa plateforme téléphonique. LobbyStack offre 150 minutes pour 30 $ et 500 pour 100 $, sans siège CloudTalk.
 
-Vous pouvez tester LobbyStack avec 30 minutes vocales gratuites dans votre navigateur, sans numéro de téléphone. Choisissez Starter ou Pro pour recevoir des appels sur un numéro dédié.
+Vous pouvez tester LobbyStack sur le forfait gratuit avec 30 minutes vocales et un numéro américain ou canadien gratuit pendant 14 jours. Choisissez Starter ou Pro pour recevoir des appels sur un numéro dédié.
 
 ## CloudTalk et LobbyStack
 
 | Critère | CloudTalk | LobbyStack |
 | --- | --- | --- |
-| Forfait gratuit durable | Non, 50 minutes le premier mois | 30 minutes vocales dans le navigateur, sans carte ni numéro de téléphone |
+| Forfait gratuit durable | Non, 50 minutes le premier mois | 30 minutes vocales, sans carte, numéro américain ou canadien gratuit pendant 14 jours |
 | Entrée IA | 99 $ pour 200 minutes | 30 $ pour 150 minutes |
 | Niveau 500 minutes | 199 $ | 100 $ |
 | Plateforme de base | Abonnement par utilisateur | Aucun centre de contact requis |
@@ -51,7 +51,7 @@ LobbyStack ne remplace pas un centre de contact complet. Il gère les appels ent
 
 CloudTalk affiche 99 $ pour 200 minutes, 199 $ pour 500, 299 $ pour 1 000 et 699 $ pour 2 500. La plateforme commence autour de 19 à 25 $ par utilisateur sur la page publique.
 
-Un client CloudTalk traite ses sièges comme un coût existant. Un nouvel acheteur doit les ajouter.
+Un client CloudTalk traite ses sièges comme un coût existant. Un nouvel acheteur doit les ajouter. Faites le même calcul pour le [prix de RingCentral AI Receptionist en option avec un siège RingEX](/fr/blog/ringcentral-ai-receptionist-alternative/).
 
 LobbyStack affiche 30 $ pour 150 minutes et 100 $ pour 500. À 500 minutes, son prix public est inférieur. CloudTalk inclut une plateforme de communications plus large.
 

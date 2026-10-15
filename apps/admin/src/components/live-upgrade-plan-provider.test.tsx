@@ -14,11 +14,26 @@ afterEach(() => { cleanup(); clients.forEach(client => client.clear()); clients.
 function OpenButton() { const open = useOpenUpgradePlanDialog(); return <button onClick={open}>Open plans</button>; }
 
 describe("restarting a plan that lapsed", () => {
+  it("shows pilot support without prices or purchase actions when checkout is closed", async () => {
+    const client = new QueryClient({ defaultOptions: { queries: { retry: false, staleTime: Infinity } } });
+    clients.push(client);
+    client.setQueryData(["businesses"], { businesses: [{ businessId: "business", active: true, role: "business_owner" }] });
+    client.setQueryData(["billing", "business"], { checkoutAvailable: false, account: { plan: "free_cloud" }, availableCheckoutPlans: [], availableCheckoutIntervals: { starter: [], pro: [] } });
+    const fetchMock = vi.fn();
+    vi.stubGlobal("fetch", fetchMock);
+    render(<QueryClientProvider client={client}><LiveUpgradePlanProvider><OpenButton /></LiveUpgradePlanProvider></QueryClientProvider>);
+    await userEvent.click(screen.getByRole("button", { name: "Open plans" }));
+    expect(screen.getByRole("dialog")).toBeTruthy();
+    expect(screen.getByRole("link", { name: "billing.availability.help" }).getAttribute("href")).toBe("/fr/essai");
+    expect(screen.queryByText("$30")).toBeNull();
+    expect(screen.queryByRole("button", { name: "billing.upgradeDialog.actions.pro" })).toBeNull();
+    expect(fetchMock).not.toHaveBeenCalled();
+  });
   async function openPlansFor(subscriptionState: string | null) {
     const client = new QueryClient({ defaultOptions: { queries: { retry: false, staleTime: Infinity } } });
     clients.push(client);
     client.setQueryData(["businesses"], { businesses: [{ businessId: "business", active: true, role: "business_owner" }] });
-    client.setQueryData(["billing", "business"], { account: { plan: "starter", subscriptionState }, availableCheckoutPlans: ["starter", "pro"], availableCheckoutIntervals: { starter: ["annual", "monthly"], pro: ["annual", "monthly"] } });
+    client.setQueryData(["billing", "business"], { checkoutAvailable: true, account: { plan: "starter", subscriptionState }, availableCheckoutPlans: ["starter", "pro"], availableCheckoutIntervals: { starter: ["annual", "monthly"], pro: ["annual", "monthly"] } });
     vi.stubGlobal("fetch", vi.fn(async () => Response.json({ error: "Checkout unavailable" }, { status: 503 })));
     render(<QueryClientProvider client={client}><LiveUpgradePlanProvider><OpenButton /></LiveUpgradePlanProvider></QueryClientProvider>);
     await userEvent.click(screen.getByRole("button", { name: "Open plans" }));
@@ -50,7 +65,7 @@ describe("checkout workspace isolation", () => {
     const client = new QueryClient({ defaultOptions: { queries: { retry: false, staleTime: Infinity } } });
     clients.push(client);
     client.setQueryData(["businesses"], { businesses: [{ businessId: "business", active: true, role: "business_owner" }] });
-    client.setQueryData(["billing", "business"], { account: { plan: "free_cloud" }, availableCheckoutPlans: ["starter", "pro"], availableCheckoutIntervals: { starter: ["annual", "monthly"], pro: ["annual", "monthly"] } });
+    client.setQueryData(["billing", "business"], { checkoutAvailable: true, account: { plan: "free_cloud" }, availableCheckoutPlans: ["starter", "pro"], availableCheckoutIntervals: { starter: ["annual", "monthly"], pro: ["annual", "monthly"] } });
     const fetchMock = vi.fn(async () => Response.json({ error: "Checkout unavailable" }, { status: 503 }));
     vi.stubGlobal("fetch", fetchMock);
     render(<QueryClientProvider client={client}><LiveUpgradePlanProvider><OpenButton /></LiveUpgradePlanProvider></QueryClientProvider>);
@@ -71,7 +86,7 @@ describe("checkout workspace isolation", () => {
     clients.push(client);
     const workspaces = (active: string) => ({ businesses: ["a", "b"].map(businessId => ({ businessId, active: businessId === active, role: "business_owner" })) });
     client.setQueryData(["businesses"], workspaces("a"));
-    for (const businessId of ["a", "b"]) client.setQueryData(["billing", businessId], { account: { plan: "free_cloud" }, availableCheckoutPlans: ["starter", "pro"], availableCheckoutIntervals: { starter: ["annual"], pro: ["annual"] } });
+    for (const businessId of ["a", "b"]) client.setQueryData(["billing", businessId], { checkoutAvailable: true, account: { plan: "free_cloud" }, availableCheckoutPlans: ["starter", "pro"], availableCheckoutIntervals: { starter: ["annual"], pro: ["annual"] } });
     let resolve!: (response: Response) => void;
     let reject!: (error: Error) => void;
     const pending = new Promise<Response>((accept, fail) => { resolve = accept; reject = fail; });

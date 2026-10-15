@@ -1,0 +1,48 @@
+{
+  "capturedAtUtc": "2026-10-15T21:33:30.449Z",
+  "scope": "LOCAL_ONLY_REAL_STATIC_BUILD_WITH_MOCK_NEXT",
+  "staticRoot": "apps/landing/dist",
+  "staticRouteCount": 633,
+  "httpMockTestsPassed": 9,
+  "nextRuntimeVerified": false,
+  "websocketStatus": "PENDING_NOT_IMPLEMENTED",
+  "routes": [
+    {
+      "path": "/",
+      "status": 200,
+      "contentType": "text/html; charset=utf-8",
+      "sha256": "e1678867d42336325fa94ca1261406218739b09bd8c5bed6888cb961c8323fe4",
+      "robots": "noindex, nofollow"
+    },
+    {
+      "path": "/fr",
+      "status": 200,
+      "contentType": "text/html; charset=utf-8",
+      "sha256": "c1f3e088764d59c807378a48ad430c693df4495611bd558eefbfc64fee64a728",
+      "robots": "noindex, nofollow"
+    },
+    {
+      "path": "/fr/pricing",
+      "status": 200,
+      "contentType": "text/html; charset=utf-8",
+      "sha256": "64fe42571490d734ebfb445e41b7109a7f3ca2cdc3429305ec1c46dac17adf38",
+      "robots": "noindex, nofollow"
+    },
+    {
+      "path": "/aide",
+      "status": 200,
+      "contentType": "text/html; charset=utf-8",
+      "sha256": "149c6bd83cb1e182f854884c8400f2cf59a94dae48ca7695d4aceaef323f09d6",
+      "robots": "noindex, nofollow"
+    },
+    {
+      "path": "/api/never-existing-p1-route",
+      "status": 404,
+      "contentType": "application/json",
+      "sha256": "a961b8c72aba7e2a04300e6482f82521b45bbeb1d8d74a6ab1290a7b0723f6b2",
+      "robots": "noindex, nofollow"
+    }
+  ],
+  "httpMockTestsVerifiedAtUtc": "2026-10-15T21:34:53.424Z",
+  "httpMockTestCommand": "node --test scripts/p1-single-host-gateway.test.mjs"
+}

@@ -53,21 +53,26 @@ const demoCopy = {
     start: "Start call",
     connecting: "Connecting…",
     prompt: "Want it answering your phone?",
-    cta: "Set up LobbyStack free",
+    cta: "Request Caléonis Receptionist access",
   },
   fr: {
     start: "Lancer l’appel",
     connecting: "Connexion…",
     prompt: "Vous voulez qu’il réponde à votre téléphone ?",
-    cta: "Configurer LobbyStack gratuitement",
+    cta: "Demander un accès Caléonis Receptionist",
   },
 }
 
-function getButtonLabel(status: WebVoiceWidgetStatus, muted: boolean, locale: "en" | "fr") {
+function getButtonLabel(
+  status: WebVoiceWidgetStatus,
+  muted: boolean,
+  locale: "en" | "fr"
+) {
   if (locale === "fr") {
     if (status === "connected") return "Terminer la démo vocale"
     if (status === "ending") return "Fin de la démo vocale"
-    if (status === "requesting_microphone") return "Autorisez l’accès au microphone"
+    if (status === "requesting_microphone")
+      return "Autorisez l’accès au microphone"
     if (status === "connecting") return "Connexion à la démo vocale"
     if (status === "error") return "Réessayer la démo vocale"
     return "Démarrer la démo vocale"
@@ -116,6 +121,14 @@ export function LobbyStackAuraVoiceDemo({
     widgetId,
     onEvent,
   })
+
+  const beginApprovedDemo = () => {
+    if (!businessSlug || /(?:^localhost$|^127\.0\.0\.1$|\.chatgpt\.site$)/i.test(window.location.hostname)) {
+      window.location.assign("https://receptionist.caleonis.com/login")
+      return
+    }
+    void startCall()
+  }
 
   const canvasRef = useRef<HTMLCanvasElement | null>(null)
   const wrapRef = useRef<HTMLDivElement | null>(null)
@@ -383,7 +396,11 @@ export function LobbyStackAuraVoiceDemo({
   return (
     <div className="mx-auto flex w-full min-w-0 flex-col items-center text-center">
       <audio ref={remoteAudioRef} autoPlay playsInline />
-      <RecordingConsentDialog open={recordingConsentOpen} onDecision={resolveRecordingConsent} locale={locale} />
+      <RecordingConsentDialog
+        open={recordingConsentOpen}
+        onDecision={resolveRecordingConsent}
+        locale={locale}
+      />
 
       <div
         ref={wrapRef}
@@ -409,20 +426,25 @@ export function LobbyStackAuraVoiceDemo({
         />
 
         <p className="sr-only" role="status" aria-live="polite">
-          {errorMessage ?? (locale === "fr" ? webVoiceStatusLabelFr : webVoiceStatusLabel)[status]}
+          {errorMessage ??
+            (locale === "fr" ? webVoiceStatusLabelFr : webVoiceStatusLabel)[
+              status
+            ]}
         </p>
 
         {/* Voice demo button, centered alone inside the aura */}
         <button
           type="button"
-          onClick={isCallActive ? endCall : startCall}
+          onClick={isCallActive ? endCall : beginApprovedDemo}
           disabled={isBusy || status === "ending"}
           aria-label={getButtonLabel(status, muted, locale)}
           className={cn(
             "voice-aura-button relative z-10 flex aspect-square w-36 items-center justify-center rounded-full",
             "transition-[scale,opacity] duration-200 ease-(--ease-out)",
             "cursor-pointer disabled:cursor-not-allowed disabled:opacity-40",
-            !isCallActive && !isBusy && "hover:scale-[1.03] active:scale-[0.97]",
+            !isCallActive &&
+              !isBusy &&
+              "hover:scale-[1.03] active:scale-[0.97]",
             isActive && "scale-105"
           )}
         >
@@ -452,12 +474,15 @@ export function LobbyStackAuraVoiceDemo({
 
         {/* Controls */}
         {status === "idle" || status === "error" ? (
-          <div key="idle" className="swap-in absolute inset-x-0 top-1/2 z-20 mt-32 flex items-center justify-center">
+          <div
+            key="idle"
+            className="swap-in absolute inset-x-0 top-1/2 z-20 mt-32 flex items-center justify-center"
+          >
             <Button
               type="button"
               size="sm"
               variant="outline"
-              onClick={startCall}
+              onClick={beginApprovedDemo}
               className="cursor-pointer rounded-full border-border bg-background text-foreground shadow-sm hover:bg-muted"
             >
               <Phone className="size-4" aria-hidden="true" />
@@ -465,7 +490,10 @@ export function LobbyStackAuraVoiceDemo({
             </Button>
           </div>
         ) : status === "requesting_microphone" || status === "connecting" ? (
-          <div key="connecting" className="swap-in absolute inset-x-0 top-1/2 z-20 mt-32 flex items-center justify-center">
+          <div
+            key="connecting"
+            className="swap-in absolute inset-x-0 top-1/2 z-20 mt-32 flex items-center justify-center"
+          >
             <Button
               type="button"
               size="sm"
@@ -477,7 +505,10 @@ export function LobbyStackAuraVoiceDemo({
             </Button>
           </div>
         ) : isCallActive ? (
-          <div key="live" className="swap-in absolute inset-x-0 top-1/2 z-20 mt-32 flex items-center justify-center">
+          <div
+            key="live"
+            className="swap-in absolute inset-x-0 top-1/2 z-20 mt-32 flex items-center justify-center"
+          >
             <Button
               type="button"
               size="sm"
@@ -490,7 +521,10 @@ export function LobbyStackAuraVoiceDemo({
             </Button>
           </div>
         ) : status === "ended" ? (
-          <div key="ended" className="swap-in absolute inset-x-0 top-1/2 z-20 mt-28 flex flex-col items-center gap-3 px-4">
+          <div
+            key="ended"
+            className="swap-in absolute inset-x-0 top-1/2 z-20 mt-28 flex flex-col items-center gap-3 px-4"
+          >
             <p className="text-sm font-medium text-foreground">
               {demoCopy[locale].prompt}
             </p>

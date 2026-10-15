@@ -132,4 +132,4 @@ Start with [LobbyStack Cloud](https://lobbystack.com/) if you want to test the p
 
 Use the [self-hosting overview](https://docs.lobbystack.com/self-hosting/overview) and [Docker Compose guide](https://docs.lobbystack.com/self-hosting/docker-compose) if you want to run the stack yourself.
 
-The code is public on [GitHub](https://github.com/lobbystack/lobbystack). If an open-source AI receptionist stack would help your business or client work, a star helps more people find it.
+The code is public on [GitHub](https://gitlab.com/lobbystack-group/lobbystack). If an open-source AI receptionist stack would help your business or client work, a star helps more people find it.

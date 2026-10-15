@@ -26,6 +26,7 @@ import { FieldError } from "@/components/ui/field";
 import { useTelemetry } from "@/components/product-analytics";
 import { clearAffiliateReferralCode, getStoredAffiliateReferralCode } from "@/lib/affiliate-referral";
 import { cn } from "@/lib/utils";
+import { appHomePath } from "@/lib/app-home";
 
 type Business = { businessId: string; active: boolean };
 type AttributionSource = "ai_assistant" | "newsletter" | "podcast" | "news" | "work" | "school" | "x" | "reddit" | "facebook" | "youtube" | "instagram" | "linkedin" | "google" | "tiktok" | "other";
@@ -76,7 +77,7 @@ export function OnboardingAttributionSurface() {
     onSuccess: (_result, source) => {
       if (business && source) telemetry.track("web.onboarding.attribution_submitted", { businessId: business.businessId, source });
       clearAffiliateReferralCode();
-      router.push("/");
+      router.push(appHomePath());
       router.refresh();
     },
   });

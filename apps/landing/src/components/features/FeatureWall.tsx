@@ -1,3 +1,4 @@
+import { qualifyPilotText, qualifyPilotLabel } from "@/lib/pilot-qualification"
 import type React from "react"
 import type { LucideIcon } from "lucide-react"
 import type { Locale } from "@/i18n"
@@ -52,7 +53,7 @@ const largeCards: FeatureCard[] = [
   {
     title: "Build workflows with words, not flowcharts",
     description:
-      "Train LobbyStack the way you would train a real employee. Tell it what to ask, what to say, when to quote, when to book, when to transfer, and who to notify without touching a workflow builder.",
+      "Train Caléonis Receptionist the way you would train a real employee. Tell it what to ask, what to say, when to quote, when to book, when to transfer, and who to notify without touching a workflow builder.",
     icon: Pencil,
     size: "large",
     visual: "workflow",
@@ -60,7 +61,7 @@ const largeCards: FeatureCard[] = [
   {
     title: "Book appointments while the customer is still ready",
     description:
-      "LobbyStack checks availability, offers times, books the appointment, and sends the confirmation before the caller moves on to someone else.",
+      "Caléonis Receptionist checks availability, offers times, books the appointment, and sends the confirmation before the caller moves on to someone else.",
     icon: CalendarCheck,
     size: "large",
     visual: "calendar",
@@ -68,7 +69,7 @@ const largeCards: FeatureCard[] = [
   {
     title: "Give quotes without making callers wait",
     description:
-      "For approved services, LobbyStack can give exact prices, starting prices, or price ranges. For custom work, it asks the right questions and passes the details to your team.",
+      "For approved services, Caléonis Receptionist can give exact prices, starting prices, or price ranges. For custom work, it asks the right questions and passes the details to your team.",
     icon: DollarSign,
     size: "large",
     visual: "quote",
@@ -76,7 +77,7 @@ const largeCards: FeatureCard[] = [
   {
     title: "Transfer the calls that need a person",
     description:
-      "LobbyStack handles routine calls first, then transfers based on your instructions. Urgent requests, upset customers, high-value leads, and special cases can go straight to the right person.",
+      "Caléonis Receptionist handles routine calls first, then transfers based on your instructions. Urgent requests, upset customers, high-value leads, and special cases can go straight to the right person.",
     icon: ArrowRightLeft,
     size: "large",
     visual: "routing",
@@ -84,7 +85,7 @@ const largeCards: FeatureCard[] = [
   {
     title: "Pay for real calls, not junk",
     description:
-      "LobbyStack excludes spam calls and calls under 10 seconds from usage, so wrong numbers, robocalls, instant hang-ups, and pocket dials do not eat your plan.",
+      "Caléonis Receptionist excludes spam calls and calls under 10 seconds from usage, so wrong numbers, robocalls, instant hang-ups, and pocket dials do not eat your plan.",
     icon: ShieldBan,
     size: "large",
     visual: "usage",
@@ -95,7 +96,7 @@ const mediumCards: FeatureCard[] = [
   {
     title: "Your phone, always staffed",
     description:
-      "LobbyStack can answer every call or step in only when your team is busy, closed, or unavailable.",
+      "Caléonis Receptionist can answer every call or step in only when your team is busy, closed, or unavailable.",
     icon: Phone,
     size: "medium",
     tag: "Always on",
@@ -103,7 +104,7 @@ const mediumCards: FeatureCard[] = [
   {
     title: "Answers in your caller's language",
     description:
-      "LobbyStack replies in the language the caller speaks, so customers who don't speak English can still book and ask questions.",
+      "Caléonis Receptionist replies in the language the caller speaks, so customers who don't speak English can still book and ask questions.",
     icon: Globe,
     size: "medium",
     tag: "Multilingual",
@@ -119,21 +120,21 @@ const mediumCards: FeatureCard[] = [
   {
     title: "Natural conversations",
     description:
-      "Customers can speak normally. LobbyStack handles interruptions, follow-up questions, and messy real-world calls.",
+      "Customers can speak normally. Caléonis Receptionist handles interruptions, follow-up questions, and messy real-world calls.",
     icon: AudioWaveform,
     size: "medium",
   },
   {
     title: "Dedicated call lines",
     description:
-      "Use LobbyStack for a sales line, quote line, booking line, support line, or intake line.",
+      "Use Caléonis Receptionist for a sales line, quote line, booking line, support line, or intake line.",
     icon: Hash,
     size: "medium",
   },
   {
     title: "Lead qualification",
     description:
-      "Have LobbyStack ask about budget, timeline, location, service type, urgency, and buying intent before booking or transferring.",
+      "Have Caléonis Receptionist ask about budget, timeline, location, service type, urgency, and buying intent before booking or transferring.",
     icon: UserCheck,
     size: "medium",
   },
@@ -147,7 +148,7 @@ const mediumCards: FeatureCard[] = [
   {
     title: "Appointment confirmation texts",
     description:
-      "After booking, LobbyStack sends the customer a confirmation text with the appointment details.",
+      "After booking, Caléonis Receptionist sends the customer a confirmation text with the appointment details.",
     icon: MessageSquareText,
     size: "medium",
   },
@@ -161,14 +162,14 @@ const mediumCards: FeatureCard[] = [
   {
     title: "Cancellations",
     description:
-      "LobbyStack can handle cancellations according to your policies and notify your team.",
+      "Caléonis Receptionist can handle cancellations according to your policies and notify your team.",
     icon: CalendarX,
     size: "medium",
   },
   {
     title: "Appointment reminders",
     description:
-      "If the caller agrees, LobbyStack texts them a reminder 24 hours before the appointment.",
+      "If the caller agrees, Caléonis Receptionist texts them a reminder 24 hours before the appointment.",
     icon: Bell,
     size: "medium",
   },
@@ -188,8 +189,7 @@ const mediumCards: FeatureCard[] = [
   },
   {
     title: "Call recordings",
-    description:
-      "Listen to any call again from your dashboard.",
+    description: "Listen to any call again from your dashboard.",
     icon: Mic,
     size: "medium",
   },
@@ -203,7 +203,7 @@ const mediumCards: FeatureCard[] = [
   {
     title: "Business knowledge",
     description:
-      "Add your services, prices, hours, locations, policies, FAQs, and staff details so LobbyStack knows what to say.",
+      "Add your services, prices, hours, locations, policies, FAQs, and staff details so Caléonis Receptionist knows what to say.",
     icon: BookOpen,
     size: "medium",
   },
@@ -217,21 +217,21 @@ const mediumCards: FeatureCard[] = [
   {
     title: "Do-not-say instructions",
     description:
-      "Tell LobbyStack what it should never promise, explain, diagnose, quote, or book.",
+      "Tell Caléonis Receptionist what it should never promise, explain, diagnose, quote, or book.",
     icon: CircleSlash,
     size: "medium",
   },
   {
     title: "Fallback behavior",
     description:
-      "When LobbyStack does not know something, it can ask follow-up questions, take a message, transfer, or notify the team.",
+      "When Caléonis Receptionist does not know something, it can ask follow-up questions, take a message, transfer, or notify the team.",
     icon: LifeBuoy,
     size: "medium",
   },
   {
     title: "Failed-transfer fallback",
     description:
-      "If no one picks up, LobbyStack takes a message and sends your team a summary.",
+      "If no one picks up, Caléonis Receptionist takes a message and sends your team a summary.",
     icon: PhoneForwarded,
     size: "medium",
   },
@@ -269,7 +269,7 @@ const largeCardsFr: FeatureCard[] = [
   {
     title: "Décrivez vos règles avec des mots, pas avec des organigrammes",
     description:
-      "Formez LobbyStack comme une vraie personne à l’accueil. Dites-lui quoi demander, quoi répondre, quand donner une fourchette, quand planifier, quand transférer et qui prévenir.",
+      "Formez Caléonis Receptionist comme une vraie personne à l’accueil. Dites-lui quoi demander, quoi répondre, quand donner une fourchette, quand planifier, quand transférer et qui prévenir.",
     icon: Pencil,
     size: "large",
     visual: "workflow",
@@ -277,7 +277,7 @@ const largeCardsFr: FeatureCard[] = [
   {
     title: "Prenez le rendez‑vous pendant que le client est encore disponible",
     description:
-      "LobbyStack vérifie les disponibilités, propose des créneaux, planifie le rendez‑vous et envoie la confirmation avant que l’appelant passe à un autre fournisseur.",
+      "Caléonis Receptionist vérifie les disponibilités, propose des créneaux, planifie le rendez‑vous et envoie la confirmation avant que l’appelant passe à un autre fournisseur.",
     icon: CalendarCheck,
     size: "large",
     visual: "calendar",
@@ -285,7 +285,7 @@ const largeCardsFr: FeatureCard[] = [
   {
     title: "Donnez une fourchette sans faire attendre les appelants",
     description:
-      "Pour les services approuvés, LobbyStack peut donner un prix exact, un prix de départ ou une fourchette. Pour les demandes sur mesure, il pose les bonnes questions et transmet les détails à votre équipe.",
+      "Pour les services approuvés, Caléonis Receptionist peut donner un prix exact, un prix de départ ou une fourchette. Pour les demandes sur mesure, il pose les bonnes questions et transmet les détails à votre équipe.",
     icon: DollarSign,
     size: "large",
     visual: "quote",
@@ -293,7 +293,7 @@ const largeCardsFr: FeatureCard[] = [
   {
     title: "Transférez les appels qui ont besoin d’une personne",
     description:
-      "LobbyStack traite d’abord les appels simples, puis transfère selon vos consignes. Urgences, clients mécontents, prospects importants et cas particuliers peuvent arriver directement à la bonne personne.",
+      "Caléonis Receptionist traite d’abord les appels simples, puis transfère selon vos consignes. Urgences, clients mécontents, prospects importants et cas particuliers peuvent arriver directement à la bonne personne.",
     icon: ArrowRightLeft,
     size: "large",
     visual: "routing",
@@ -301,7 +301,7 @@ const largeCardsFr: FeatureCard[] = [
   {
     title: "Payez pour les vrais appels, pas pour le bruit",
     description:
-      "LobbyStack exclut les appels indésirables et les appels de moins de 10 secondes, afin que mauvais numéros, appels automatisés et raccrochages immédiats ne consomment pas votre forfait.",
+      "Caléonis Receptionist exclut les appels indésirables et les appels de moins de 10 secondes, afin que mauvais numéros, appels automatisés et raccrochages immédiats ne consomment pas votre forfait.",
     icon: ShieldBan,
     size: "large",
     visual: "usage",
@@ -312,7 +312,7 @@ const mediumCardsFr: FeatureCard[] = [
   {
     title: "Votre téléphone, toujours couvert",
     description:
-      "LobbyStack peut répondre à chaque appel ou seulement prendre le relais quand votre équipe est occupée, fermée ou indisponible.",
+      "Caléonis Receptionist peut répondre à chaque appel ou seulement prendre le relais quand votre équipe est occupée, fermée ou indisponible.",
     icon: Phone,
     size: "medium",
     tag: "Toujours prêt",
@@ -320,7 +320,7 @@ const mediumCardsFr: FeatureCard[] = [
   {
     title: "Répond dans la langue de l’appelant",
     description:
-      "LobbyStack répond dans la langue que parle l’appelant. Les clients qui ne parlent pas français peuvent quand même réserver et poser leurs questions.",
+      "Caléonis Receptionist répond dans la langue que parle l’appelant. Les clients qui ne parlent pas français peuvent quand même réserver et poser leurs questions.",
     icon: Globe,
     size: "medium",
     tag: "Multilingue",
@@ -336,21 +336,21 @@ const mediumCardsFr: FeatureCard[] = [
   {
     title: "Conversations naturelles",
     description:
-      "Les clients parlent normalement. LobbyStack gère les interruptions, les questions de suivi et les appels désordonnés.",
+      "Les clients parlent normalement. Caléonis Receptionist gère les interruptions, les questions de suivi et les appels désordonnés.",
     icon: AudioWaveform,
     size: "medium",
   },
   {
     title: "Lignes dédiées",
     description:
-      "Utilisez LobbyStack pour une ligne de vente, de devis, de réservation, de support ou d’accueil.",
+      "Utilisez Caléonis Receptionist pour une ligne de vente, de devis, de réservation, de support ou d’accueil.",
     icon: Hash,
     size: "medium",
   },
   {
     title: "Qualification des demandes",
     description:
-      "Demandez à LobbyStack de vérifier budget, délai, adresse, type de service, urgence et intention d’achat avant de planifier ou transférer.",
+      "Demandez à Caléonis Receptionist de vérifier budget, délai, adresse, type de service, urgence et intention d’achat avant de planifier ou transférer.",
     icon: UserCheck,
     size: "medium",
   },
@@ -364,7 +364,7 @@ const mediumCardsFr: FeatureCard[] = [
   {
     title: "SMS de confirmation",
     description:
-      "Après la prise de rendez‑vous, LobbyStack envoie au client un SMS avec les détails.",
+      "Après la prise de rendez‑vous, Caléonis Receptionist envoie au client un SMS avec les détails.",
     icon: MessageSquareText,
     size: "medium",
   },
@@ -378,14 +378,14 @@ const mediumCardsFr: FeatureCard[] = [
   {
     title: "Annulations",
     description:
-      "LobbyStack peut gérer les annulations selon vos politiques et prévenir votre équipe.",
+      "Caléonis Receptionist peut gérer les annulations selon vos politiques et prévenir votre équipe.",
     icon: CalendarX,
     size: "medium",
   },
   {
     title: "Rappels de rendez‑vous",
     description:
-      "Si l’appelant accepte, LobbyStack lui envoie un SMS de rappel 24 heures avant le rendez‑vous.",
+      "Si l’appelant accepte, Caléonis Receptionist lui envoie un SMS de rappel 24 heures avant le rendez‑vous.",
     icon: Bell,
     size: "medium",
   },
@@ -405,8 +405,7 @@ const mediumCardsFr: FeatureCard[] = [
   },
   {
     title: "Enregistrements d’appels",
-    description:
-      "Réécoutez n’importe quel appel depuis votre tableau de bord.",
+    description: "Réécoutez n’importe quel appel depuis votre tableau de bord.",
     icon: Mic,
     size: "medium",
   },
@@ -420,7 +419,7 @@ const mediumCardsFr: FeatureCard[] = [
   {
     title: "Connaissances métier",
     description:
-      "Ajoutez services, prix, horaires, adresses, politiques, FAQ et informations d’équipe pour que LobbyStack sache quoi répondre.",
+      "Ajoutez services, prix, horaires, adresses, politiques, FAQ et informations d’équipe pour que Caléonis Receptionist sache quoi répondre.",
     icon: BookOpen,
     size: "medium",
   },
@@ -434,21 +433,21 @@ const mediumCardsFr: FeatureCard[] = [
   {
     title: "Consignes à ne jamais dire",
     description:
-      "Indiquez ce que LobbyStack ne doit jamais promettre, expliquer, diagnostiquer, chiffrer ou réserver.",
+      "Indiquez ce que Caléonis Receptionist ne doit jamais promettre, expliquer, diagnostiquer, chiffrer ou réserver.",
     icon: CircleSlash,
     size: "medium",
   },
   {
     title: "Comportement de secours",
     description:
-      "Quand LobbyStack ne sait pas répondre, il peut poser une question, prendre un message, transférer ou prévenir l’équipe.",
+      "Quand Caléonis Receptionist ne sait pas répondre, il peut poser une question, prendre un message, transférer ou prévenir l’équipe.",
     icon: LifeBuoy,
     size: "medium",
   },
   {
     title: "Secours après transfert manqué",
     description:
-      "Si personne ne décroche, LobbyStack prend un message et envoie un résumé à votre équipe.",
+      "Si personne ne décroche, Caléonis Receptionist prend un message et envoie un résumé à votre équipe.",
     icon: PhoneForwarded,
     size: "medium",
   },
@@ -486,10 +485,10 @@ const featureWallCopy = {
   en: {
     heading: "Everything your front desk should already be doing",
     intro:
-      "LobbyStack answers, books, qualifies, quotes, transfers, filters junk, and keeps your team in the loop.",
+      "Caléonis Receptionist answers, books, qualifies, quotes, transfers, filters junk, and keeps your team in the loop.",
     calloutTitle: "Your business is not a flowchart",
     calloutBody:
-      "Real calls are messy. Customers interrupt, change their mind, ask multiple questions, and explain things out of order. LobbyStack lets you describe the outcome in plain English instead of building fragile call trees.",
+      "Real calls are messy. Customers interrupt, change their mind, ask multiple questions, and explain things out of order. Caléonis Receptionist lets you describe the outcome in plain English instead of building fragile call trees.",
     calloutExample:
       "If a customer asks for pricing, ask the required quote questions, give the approved price range, and take a message for the team if they need exact pricing.",
     visuals: {
@@ -505,7 +504,7 @@ const featureWallCopy = {
         rows: [
           { label: "Service", value: "Renovation estimate" },
           { label: "Location", value: "Downtown" },
-          { label: "Budget", value: "$8k – $12k" },
+          { label: "Budget", value: "€8k – €12k" },
           { label: "Timeline", value: "Next month" },
         ],
         outcome: "Price range shared · Team notified",
@@ -530,10 +529,10 @@ const featureWallCopy = {
   fr: {
     heading: "Tout ce qu’un accueil efficace devrait déjà faire",
     intro:
-      "LobbyStack répond, planifie, qualifie, donne des fourchettes, transfère, filtre les appels inutiles et garde votre équipe informée.",
+      "Caléonis Receptionist répond, planifie, qualifie, donne des fourchettes, transfère, filtre les appels inutiles et garde votre équipe informée.",
     calloutTitle: "Votre entreprise n’est pas un organigramme",
     calloutBody:
-      "Les vrais appels sont rarement linéaires. Les clients interrompent, changent d’idée, posent plusieurs questions et donnent les informations dans le désordre. LobbyStack vous laisse décrire le résultat attendu en français courant, sans construire un arbre d’appels fragile.",
+      "Les vrais appels sont rarement linéaires. Les clients interrompent, changent d’idée, posent plusieurs questions et donnent les informations dans le désordre. Caléonis Receptionist vous laisse décrire le résultat attendu en français courant, sans construire un arbre d’appels fragile.",
     calloutExample:
       "Si un client demande un prix, posez les questions de devis, donnez la fourchette approuvée et prenez un message pour l’équipe s’il faut confirmer le montant exact.",
     visuals: {
@@ -750,10 +749,10 @@ function LargeFeatureCard({
 
       {/* Copy */}
       <h3 className="mt-4 font-heading text-lg leading-snug font-medium tracking-tight">
-        {card.title}
+        {qualifyPilotLabel(card.title, locale)}
       </h3>
       <p className="mt-2 text-[13.5px] leading-relaxed text-muted-foreground md:min-h-[4.5rem]">
-        {card.description}
+        {qualifyPilotText(card.description, locale)}
       </p>
 
       {/* Visual */}
@@ -766,7 +765,13 @@ function LargeFeatureCard({
   )
 }
 
-function MediumFeatureCard({ card }: { card: FeatureCard }) {
+function MediumFeatureCard({
+  card,
+  locale,
+}: {
+  card: FeatureCard
+  locale: Locale
+}) {
   const Icon = card.icon
 
   return (
@@ -785,10 +790,10 @@ function MediumFeatureCard({ card }: { card: FeatureCard }) {
 
       {/* Copy */}
       <h3 className="mt-4 font-heading text-[15px] leading-snug font-medium tracking-tight">
-        {card.title}
+        {qualifyPilotLabel(card.title, locale)}
       </h3>
       <p className="mt-1.5 text-[13px] leading-relaxed text-muted-foreground">
-        {card.description}
+        {qualifyPilotText(card.description, locale)}
       </p>
     </article>
   )
@@ -842,7 +847,7 @@ export function FeatureWall({ locale = "en" }: FeatureWallProps) {
         <div className="grid gap-4 md:grid-cols-2">
           {localizedLargeCards.map((card, index) => (
             <LargeFeatureCard
-              key={card.title}
+              key={qualifyPilotLabel(card.title, locale)}
               card={card}
               locale={locale}
               fullWidth={
@@ -861,7 +866,7 @@ export function FeatureWall({ locale = "en" }: FeatureWallProps) {
         {/* Medium cards, 3-to-4-column grid */}
         <div className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
           {localizedMediumCards.map((card) => (
-            <MediumFeatureCard key={card.title} card={card} />
+            <MediumFeatureCard key={qualifyPilotLabel(card.title, locale)} card={card} locale={locale} />
           ))}
         </div>
       </div>

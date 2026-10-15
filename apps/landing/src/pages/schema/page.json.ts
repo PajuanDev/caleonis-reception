@@ -38,7 +38,7 @@ export const GET = createSchemaEndpoint({
           ? []
           : [
               {
-                name: page.title.replace(" - LobbyStack", ""),
+                name: page.title.replace(" - Caléonis Receptionist", ""),
                 path: page.path,
               },
             ]),

@@ -1,9 +1,4 @@
-import {
-  existsSync,
-  readdirSync,
-  readFileSync,
-  statSync,
-} from "node:fs"
+import { existsSync, readdirSync, readFileSync, statSync } from "node:fs"
 import { fileURLToPath } from "node:url"
 import { describe, expect, it } from "vitest"
 import {
@@ -15,16 +10,14 @@ import {
   translatedBasePaths,
   type Locale,
 } from "@/i18n"
-import {
-  seoLandingPageByPath,
-  seoLandingPages,
-} from "@/lib/seo-landing-pages"
+import { seoLandingPageByPath, seoLandingPages } from "@/lib/seo-landing-pages"
 import {
   fullyLocalizedFrenchSeoPaths,
   localizedSeoLandingPages,
 } from "@/lib/localized-seo-landing-pages"
 
-const pathFromHere = (path: string) => fileURLToPath(new URL(path, import.meta.url))
+const pathFromHere = (path: string) =>
+  fileURLToPath(new URL(path, import.meta.url))
 
 const readSourceTree = (dir: string): string => {
   return readdirSync(dir)
@@ -46,7 +39,10 @@ const canonicalSlugsIn = (dir: string) =>
     .filter((entry) => entry.endsWith(".md"))
     .map((entry) => {
       const body = readFileSync(`${dir}/${entry}`, "utf8")
-      return body.match(/^canonicalSlug:\s*"([^"]+)"/m)?.[1] ?? entry.replace(/\.md$/, "")
+      return (
+        body.match(/^canonicalSlug:\s*"([^"]+)"/m)?.[1] ??
+        entry.replace(/\.md$/, "")
+      )
     })
     .sort()
 
@@ -75,27 +71,49 @@ describe("landing i18n route helpers", () => {
 
   it("generates hreflang alternates from the unprefixed canonical path", () => {
     expect(alternateLocaleLinks("/fr/pricing/")).toEqual([
-      { hrefLang: "en", href: "https://reception.caleonis.com/pricing/" },
-      { hrefLang: "fr", href: "https://reception.caleonis.com/fr/pricing/" },
-      { hrefLang: "x-default", href: "https://reception.caleonis.com/pricing/" },
-    ])
-    expect(alternateLocaleLinks("/cookie-policy/")).toEqual([
-      { hrefLang: "en", href: "https://reception.caleonis.com/cookie-policy/" },
-      { hrefLang: "fr", href: "https://reception.caleonis.com/fr/cookie-policy/" },
-      { hrefLang: "x-default", href: "https://reception.caleonis.com/cookie-policy/" },
-    ])
-    expect(alternateLocaleLinks("/blog/best-open-source-ai-phone-answering-services/")).toEqual([
       {
         hrefLang: "en",
-        href: "https://reception.caleonis.com/blog/best-open-source-ai-phone-answering-services/",
+        href: "https://caleonis-receptionist-v1-review.willgosse225.chatgpt.site/pricing/",
       },
       {
         hrefLang: "fr",
-        href: "https://reception.caleonis.com/fr/blog/best-open-source-ai-phone-answering-services/",
+        href: "https://caleonis-receptionist-v1-review.willgosse225.chatgpt.site/fr/pricing/",
       },
       {
         hrefLang: "x-default",
-        href: "https://reception.caleonis.com/blog/best-open-source-ai-phone-answering-services/",
+        href: "https://caleonis-receptionist-v1-review.willgosse225.chatgpt.site/pricing/",
+      },
+    ])
+    expect(alternateLocaleLinks("/cookie-policy/")).toEqual([
+      {
+        hrefLang: "en",
+        href: "https://caleonis-receptionist-v1-review.willgosse225.chatgpt.site/cookie-policy/",
+      },
+      {
+        hrefLang: "fr",
+        href: "https://caleonis-receptionist-v1-review.willgosse225.chatgpt.site/fr/cookie-policy/",
+      },
+      {
+        hrefLang: "x-default",
+        href: "https://caleonis-receptionist-v1-review.willgosse225.chatgpt.site/cookie-policy/",
+      },
+    ])
+    expect(
+      alternateLocaleLinks(
+        "/blog/best-open-source-ai-phone-answering-services/"
+      )
+    ).toEqual([
+      {
+        hrefLang: "en",
+        href: "https://caleonis-receptionist-v1-review.willgosse225.chatgpt.site/blog/best-open-source-ai-phone-answering-services/",
+      },
+      {
+        hrefLang: "fr",
+        href: "https://caleonis-receptionist-v1-review.willgosse225.chatgpt.site/fr/blog/best-open-source-ai-phone-answering-services/",
+      },
+      {
+        hrefLang: "x-default",
+        href: "https://caleonis-receptionist-v1-review.willgosse225.chatgpt.site/blog/best-open-source-ai-phone-answering-services/",
       },
     ])
   })

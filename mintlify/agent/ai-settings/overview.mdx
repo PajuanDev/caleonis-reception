@@ -1,80 +1,66 @@
 ---
-title: "Configure voice and behavior"
-description: "Configure the opening line, default customer language, appointment changes, and default transfer number for your AI receptionist."
-sidebarTitle: "AI settings"
-contentType: "How-to"
+title: "Régler l’accueil et la réservation"
+description: "Choisir la langue, l’accueil et les politiques de l’agent."
+sidebarTitle: "Paramètres IA"
 ---
+Ouvrez **Agent > Paramètres IA**. Vérifiez l’entreprise sélectionnée avant de modifier l’accueil ou les politiques.
 
-Open **Agent** > **AI settings** to edit the basic behavior used by the receptionist.
+## Accueil
 
-## Greeting
+Nommez votre entreprise et proposez une aide concrète. Évitez les promesses de réponse universelle, de rendez-vous garanti ou de rappel automatique.
 
-The greeting is the opening line your receptionist uses when answering a call or starting a conversation. Keep it short and specific.
+Préparez l’information sur l’IA et les enregistrements avec la personne responsable de votre dispositif. Le texte d’accueil doit correspondre au fonctionnement réel.
 
-Good greetings usually include the business name, a brief disclosure that the caller is speaking with the AI receptionist, and a clear offer to help.
+## Langue et voix
 
-| Business type | Example greeting |
+Choisissez la langue de repli proposée à l’écran. Elle sert lorsque la langue de l’appelant n’est pas clairement identifiée.
+
+La personnalisation vocale dépend des options effectivement disponibles dans votre version. N’annoncez pas de catalogue de voix, de clonage ou de voix personnalisée si ces contrôles ne sont pas proposés.
+
+## Réservation
+
+Choisissez le mode adapté : désactivé, prise de demandes ou réservation directe. Vérifiez les [services](/agent/services), horaires et [Google Calendar](/integrations/google-calendar).
+
+Les [annulations et déplacements](/agent/ai-settings/appointment-changes) ont leurs propres réglages de vérification.
+
+## Transfert humain
+
+Un numéro de transfert enregistré et une règle permissive ne suffisent pas. La chaîne téléphonique doit aussi accepter le transfert et le parcours doit être testé.
+
+Le transfert du pilote n’est pas qualifié comme opérationnel. Préférez une prise de message lorsque le transfert n’est pas disponible. Ne lancez pas d’essai vers un tiers sans son accord.
+
+## Après l’enregistrement
+
+Démarrez un nouvel appel de test. Contrôlez l’accueil, la langue, les actions réellement réalisées et la fiche d’appel. Les modifications n’altèrent pas les appels passés.
+
+{/* Caléonis qualification */}
+
+## Exemples d'accueil et langue de repli
+
+| Activité | Texte à adapter |
 | --- | --- |
-| Dental clinic | Thanks for calling Bright Smile Dental. I'm the AI receptionist. How can I help? |
-| Salon | Thanks for calling North Loop Salon. I can help with services, availability, and messages for the team. |
-| Home services | Thanks for calling Peak HVAC. I'm the AI receptionist. Are you calling about service, scheduling, or an urgent issue? |
-| Restaurant | Thanks for calling Maple Table. I can help with hours, reservations, and messages for the staff. |
+| Artisan | Bonjour, vous êtes chez Exemple Dépannage. Je peux vous renseigner ou prendre une demande de rappel pour devis. |
+| Salon | Bonjour, vous êtes chez Exemple Salon. Comment puis-je vous aider concernant nos prestations ou une demande de rendez-vous ? |
+| Accueil administratif | Bonjour, vous êtes à l'accueil du cabinet. Merci de ne pas communiquer de détails médicaux à cet assistant. |
 
-<Steps>
-  <Step title="Open AI settings">
-    In the dashboard sidebar, go to **Agent** > **AI settings**.
-  </Step>
-  <Step title="Edit the greeting">
-    Update the **Greeting** field.
-  </Step>
-  <Step title="Save">
-    Click **Save** beside the greeting field.
-  </Step>
-</Steps>
+Les valeurs de repli prévues sont français (`fr`) et anglais (`en`). Ce réglage s'utilise lorsque la langue de l'appelant est incertaine ; il ne constitue pas une certification linguistique. Renseignez les sources utiles dans les langues de vos appelants et testez-les.
 
-## Default customer language
+## Numéro de transfert et repli
 
-The **Default customer language** setting supports:
+Le champ désigne la destination potentielle du transfert humain. Utilisez un numéro complet que votre équipe contrôle, enregistrez et prévoyez la prise de message dans Règles. Une qualification distincte doit couvrir transfert accepté, occupé, absence de réponse et refus par la politique. Tant qu'elle manque, l'agent doit prendre un message.
 
-| Option | Value |
-| --- | --- |
-| English | `en` |
-| French | `fr` |
+Les modes de réservation internes sont `off`, `request` et `instant`. Dans le mode demande, votre équipe doit confirmer ; aucune phrase de l'agent ne doit convertir cette demande en confirmation.
 
-Choose the fallback language your receptionist should use when the caller's language is unclear.
+{/* Latest upstream settings differences */}
 
-<Note>
-  This setting is a fallback, not a limit on conversation language. The receptionist can respond in other languages when the caller's language is clear. Add greeting, knowledge, service, and rule content in the languages your callers are most likely to use.
-</Note>
+## Résumé de l'entreprise
 
-## Default transfer number
+La nouvelle interface candidate de cette PR expose le résumé manuel déjà pris en charge par le backend. Renseignez des faits approuvés dans Résumé de l'entreprise, enregistrez puis vérifiez un nouvel appel. Cette interface candidate ne constitue pas une mise à jour de la production précédemment qualifiée.
 
-The **Default transfer number** is the phone number used when the receptionist performs a live handoff to a human.
+L'amont récent ajoute génération automatique depuis les connaissances et bouton de réécriture IA. Ces deux automatismes ne sont pas implémentés dans cette candidate ; aucun bouton factice n'est présenté. Les Connaissances restent la source des informations à vérifier.
 
-Use a number that is answered during business hours. If different teams handle different requests, keep the default number as the safest general handoff and add rules for when a caller should be transferred.
+## Heures d'ouverture
 
-<Steps>
-  <Step title="Enter a number">
-    Add a complete phone number in the transfer number field.
-  </Step>
-  <Step title="Save">
-    Click **Save** beside the transfer number field.
-  </Step>
-  <Step title="Add rules if needed">
-    Use **Agent** > **Rules** to describe when the receptionist should transfer, take a message, or ask for callback details.
-  </Step>
-</Steps>
+L'amont récent documente extraction automatique, plusieurs plages quotidiennes et fermetures depuis les Paramètres IA. Le sélecteur actuel Caléonis de cette page ne fournit pas ces contrôles. Les horaires existants de l'entreprise et les paramètres nécessaires à la réservation doivent être configurés par l'opérateur via les fonctions disponibles, puis vérifiés dans les disponibilités.
 
-<Note>
-  Add a transfer number when you want live human handoff. Without one, the receptionist takes callback or follow-up details so your team can respond from the dashboard.
-</Note>
-
-## Appointment changes
-
-Use **Appointment changes** to choose whether the AI receptionist can cancel or reschedule appointments automatically.
-
-You can also require a one-time code before any appointment is changed.
-
-<Card title="Learn about appointment changes" icon="calendar-clock" href="/agent/ai-settings/appointment-changes">
-  See how LobbyStack confirms the customer, updates the calendar, and hands off uncertain requests to your team.
-</Card>
+L'API `PATCH /business` documente les champs réellement pris en charge. Ne présentez pas l'extraction ou les nouveaux contrôles amont comme disponibles sans implémentation et qualification spécifiques. De même, le runtime Caléonis expose français/anglais ; les six langues de repli supplémentaires de l'amont récent ne sont pas annoncées comme une option de ce sélecteur.

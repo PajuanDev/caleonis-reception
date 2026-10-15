@@ -11,3 +11,5 @@ AGENTS.md
 .atlas-analysis.json
 CONTRIBUTING.md
 LICENSE
+NOTICE.md
+check-content.mjs

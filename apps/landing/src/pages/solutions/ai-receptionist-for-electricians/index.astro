@@ -1,0 +1,10 @@
+---
+import SeoLandingPage from "@/components/SeoLandingPage.astro"
+import { seoLandingPageByPath } from "@/lib/seo-landing-pages"
+const page = seoLandingPageByPath(
+  "/solutions/ai-receptionist-for-electricians/"
+)
+if (!page) throw new Error("Missing original trade page")
+---
+
+<SeoLandingPage page={page} />

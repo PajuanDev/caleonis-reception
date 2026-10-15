@@ -1,0 +1,285 @@
+---
+title: "Événement call.completed"
+description: "Signature, charge utile et schéma complet pour call.completed."
+---
+
+`call.completed`
+
+Ce webhook envoie un POST signé vers une destination publique HTTPS autorisée. Cette fiche documente le contrat réel de l’événement ; lire la page ne crée aucun abonnement.
+
+## En-têtes et vérification
+| En-tête | Requis | Description |
+| --- | --- | --- |
+| `webhook-id` | Oui | Event id. The same for every retry of this event. |
+| `webhook-timestamp` | Oui | Unix time in seconds when this attempt was signed. |
+| `webhook-signature` | Oui | Space-separated signatures, each v1,&lt;base64 HMAC-SHA256&gt;. |
+
+Vérifiez la signature sur le corps brut avec Standard Webhooks et refusez un horodatage trop ancien. Dédupliquez durablement `id` avant de produire un effet. Les événements peuvent être relivrés ou arriver dans un ordre différent.
+
+## Charge utile
+| Champ | Type | Requis | Description / contraintes |
+| --- | --- | --- | --- |
+| `id` | string (uuid) | Oui | Event id. Also sent as the webhook-id header; use it to ignore duplicates. |
+| `type` | string | Oui |  |
+| `api_version` | string | Oui |  |
+| `created_at` | string (date-time) | Oui | ISO 8601 timestamp in UTC. |
+| `business_id` | string (uuid) | Oui | Stable identifier (UUID). |
+| `data` | object | Oui |  |
+| `data.id` | string (uuid) | Oui | Stable identifier (UUID). |
+| `data.channel` | string | Oui | phone: a phone call. web: a browser call from the website or dashboard. enum=["phone", "web"] |
+| `data.status` | string | Oui |  enum=["in_progress", "completed"] |
+| `data.outcome` | string | Oui |  enum=["appointment_booked", "booking_incomplete", "message_taken", "conversation", "none"] |
+| `data.summary` | string / null | Oui | Short summary of the call, when one is available. |
+| `data.end_reason` | string / null | Oui | Why the call ended, as reported by the call provider or receptionist. |
+| `data.contact_id` | string (uuid) / null | Oui |  |
+| `data.caller_name` | string / null | Oui |  |
+| `data.caller_phone` | string / null | Oui |  |
+| `data.duration_seconds` | integer / null | Oui |  |
+| `data.recording_available` | boolean | Oui |  |
+| `data.started_at` | string (date-time) | Oui | ISO 8601 timestamp in UTC. |
+| `data.ended_at` | string (date-time) / null | Oui |  |
+| `data.created_at` | string (date-time) | Oui | ISO 8601 timestamp in UTC. |
+
+## Contrat et schémas complets
+
+```json
+{
+  "event": "call.completed",
+  "operation": {
+    "summary": "call.completed",
+    "description": "Signed with the Standard Webhooks scheme: verify webhook-signature against webhook-id, webhook-timestamp and the raw body.",
+    "parameters": [
+      {
+        "name": "webhook-id",
+        "in": "header",
+        "required": true,
+        "description": "Event id. The same for every retry of this event.",
+        "schema": {
+          "type": "string"
+        }
+      },
+      {
+        "name": "webhook-timestamp",
+        "in": "header",
+        "required": true,
+        "description": "Unix time in seconds when this attempt was signed.",
+        "schema": {
+          "type": "string"
+        }
+      },
+      {
+        "name": "webhook-signature",
+        "in": "header",
+        "required": true,
+        "description": "Space-separated signatures, each v1,<base64 HMAC-SHA256>.",
+        "schema": {
+          "type": "string"
+        }
+      }
+    ],
+    "requestBody": {
+      "required": true,
+      "content": {
+        "application/json": {
+          "schema": {
+            "$ref": "#/components/schemas/CallCompletedEvent"
+          }
+        }
+      }
+    },
+    "responses": {
+      "200": {
+        "description": "Return any 2xx status within 10 seconds to acknowledge the event."
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "CallCompletedEvent": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "description": "Event id. Also sent as the webhook-id header; use it to ignore duplicates.",
+            "type": "string",
+            "format": "uuid"
+          },
+          "type": {
+            "type": "string",
+            "const": "call.completed"
+          },
+          "api_version": {
+            "type": "string",
+            "const": "v1"
+          },
+          "created_at": {
+            "description": "ISO 8601 timestamp in UTC.",
+            "type": "string",
+            "format": "date-time"
+          },
+          "business_id": {
+            "description": "Stable identifier (UUID).",
+            "type": "string",
+            "format": "uuid"
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "description": "Stable identifier (UUID).",
+                "type": "string",
+                "format": "uuid"
+              },
+              "channel": {
+                "description": "phone: a phone call. web: a browser call from the website or dashboard.",
+                "type": "string",
+                "enum": [
+                  "phone",
+                  "web"
+                ]
+              },
+              "status": {
+                "type": "string",
+                "enum": [
+                  "in_progress",
+                  "completed"
+                ]
+              },
+              "outcome": {
+                "type": "string",
+                "enum": [
+                  "appointment_booked",
+                  "booking_incomplete",
+                  "message_taken",
+                  "conversation",
+                  "none"
+                ]
+              },
+              "summary": {
+                "description": "Short summary of the call, when one is available.",
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "end_reason": {
+                "description": "Why the call ended, as reported by the call provider or receptionist.",
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "contact_id": {
+                "anyOf": [
+                  {
+                    "description": "Stable identifier (UUID).",
+                    "type": "string",
+                    "format": "uuid"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "caller_name": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "caller_phone": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "duration_seconds": {
+                "anyOf": [
+                  {
+                    "type": "integer",
+                    "minimum": -9007199254740991,
+                    "maximum": 9007199254740991
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "recording_available": {
+                "type": "boolean"
+              },
+              "started_at": {
+                "description": "ISO 8601 timestamp in UTC.",
+                "type": "string",
+                "format": "date-time"
+              },
+              "ended_at": {
+                "anyOf": [
+                  {
+                    "description": "ISO 8601 timestamp in UTC.",
+                    "type": "string",
+                    "format": "date-time"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "created_at": {
+                "description": "ISO 8601 timestamp in UTC.",
+                "type": "string",
+                "format": "date-time"
+              }
+            },
+            "required": [
+              "id",
+              "channel",
+              "status",
+              "outcome",
+              "summary",
+              "end_reason",
+              "contact_id",
+              "caller_name",
+              "caller_phone",
+              "duration_seconds",
+              "recording_available",
+              "started_at",
+              "ended_at",
+              "created_at"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "required": [
+          "id",
+          "type",
+          "api_version",
+          "created_at",
+          "business_id",
+          "data"
+        ],
+        "additionalProperties": false
+      }
+    }
+  }
+}
+```
+
+## Accusé de réception et reprises
+
+Acceptez durablement puis répondez 2xx sous 10 secondes. Les échecs sont repris selon le calendrier de la version déployée. Un événement de réservation ne prouve ni synchronisation externe ni SMS/email livré. Voir le [guide complet des webhooks](/api/webhooks) et le [schéma OpenAPI](/api-reference/openapi.json).

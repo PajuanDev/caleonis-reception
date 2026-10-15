@@ -1,0 +1,5 @@
+{
+  "extends": "../tsconfig.base.json",
+  "compilerOptions": { "noEmit": true, "types": ["node"] },
+  "include": ["./p1-pricing-review.ts", "./p1-pricing-review.test.ts", "./p1-routing-policy.ts", "./p1-routing-policy.test.ts"]
+}

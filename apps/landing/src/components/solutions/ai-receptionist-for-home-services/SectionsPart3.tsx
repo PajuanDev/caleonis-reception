@@ -11,8 +11,9 @@ export function SolutionCta() {
           Answer the next job call, even when your crew is already working
         </h2>
         <p className="section-intro mx-auto max-w-lg">
-          Try LobbyStack with included voice minutes, set your trade-specific
-          intake rules, and turn more phone calls into booked jobs.
+          Try Caléonis Receptionist with included voice minutes, set your
+          trade-specific intake rules, and turn more phone calls into booked
+          jobs.
         </p>
         <div className="mt-8 flex flex-wrap items-center justify-center gap-4">
           <a
@@ -22,7 +23,7 @@ export function SolutionCta() {
               "h-11 rounded-full px-7 text-sm"
             )}
           >
-            Try for free
+            Request a trial
             <ArrowRight className="ml-1 size-4" />
           </a>
           <a
@@ -33,7 +34,7 @@ export function SolutionCta() {
           </a>
         </div>
         <p className="mt-5 text-xs text-muted-foreground">
-          No credit card required. Works with your existing business number.
+          Pilot access requires approval. Existing-number forwarding must be tested with your carrier.
         </p>
       </div>
     </section>

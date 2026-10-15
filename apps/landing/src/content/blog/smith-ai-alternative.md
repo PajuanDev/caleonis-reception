@@ -21,7 +21,7 @@ Smith.ai combines AI with access to a North American receptionist network. Lobby
 
 | Area | Smith.ai AI Receptionist | LobbyStack |
 | --- | --- | --- |
-| Free allowance | 25 calls; card required | 30 browser voice minutes, no card, no telephone number |
+| Free allowance | 25 calls; card required | 30 voice minutes, no card, US or Canadian number free for 14 days |
 | Paid entry | Pro from $150 for 75 calls | Starter at $30 for 150 minutes |
 | Human backup | Agent network; some live tasks cost per call | Transfer to your configured team |
 | Booking and intake | Advertised | Included with configurable rules |
@@ -35,7 +35,7 @@ Pricing and features were checked on July 30, 2026.
 
 Smith.ai's live-agent network creates real value for a company with nobody available to take a difficult call. Buyers should confirm which escalations the plan includes and which live-agent verification or scheduling tasks add a per-call charge.
 
-Many small businesses already have an owner, dispatcher, or on-call employee for urgent work. LobbyStack handles routine questions and bookings, then transfers the calls that need judgment to that person with context. The Free plan lets the team test 30 minutes of those conversations in the browser before paying.
+Many small businesses already have an owner, dispatcher, or on-call employee for urgent work. LobbyStack handles routine questions and bookings, then transfers the calls that need judgment to that person's number. The Free plan lets the team test 30 minutes of those conversations in the browser before paying.
 
 LobbyStack also keeps the workflow inspectable. Teams can control providers, retention, prompts, and infrastructure instead of waiting for an enterprise tier to unlock deeper customization.
 
@@ -45,7 +45,7 @@ Smith.ai has spent years building receptionist operations. Its AI product advert
 
 That service model fits law firms, consultancies, and other businesses where a difficult call may need a trained person outside the customer's own staff. It can also reduce the work of building an escalation roster.
 
-LobbyStack transfers a call to the people you configure. It provides context through transcripts, summaries, caller details, and notifications, but it does not include a third-party receptionist workforce. Your staff or chosen answering partner owns the human conversation.
+LobbyStack transfers a call to the one number you set, and the person who answers gets no briefing first. Your team can read the transcript and summary in the dashboard. LobbyStack does not include a third-party receptionist workforce. Your staff or chosen answering partner owns the human conversation.
 
 ## The price includes different labor models
 
@@ -61,7 +61,7 @@ Estimate three numbers:
 2. the share of calls that need a person
 3. the staff cost of taking those transfers
 
-Those figures show whether a managed hybrid service or an AI system connected to your team costs less.
+Those figures show whether a managed hybrid service or an AI system connected to your team costs less. To benchmark the human side, see [what live answering services charge per call and per minute](/blog/how-much-does-an-answering-service-cost/).
 
 ## Customization and ownership separate the products
 
@@ -79,7 +79,7 @@ Smith.ai can suit the firm if it wants access to an external receptionist after 
 
 LobbyStack can suit the firm if employees must handle all sensitive conversations and the AI should only collect approved intake, schedule consultations, or transfer urgent callers. Self-hosting may also matter when the firm sets strict data-retention and access policies.
 
-Both systems need careful instructions. The AI should not give legal advice, promise an outcome, or expose client information. A live human should follow the same limits.
+Both systems need careful instructions. The AI should not give legal advice, promise an outcome, or expose client information. A live human should follow the same limits. For live and AI services built around legal intake, see our guide to [law firm answering services](/blog/law-firm-answering-service/).
 
 ## Choose Smith.ai when
 
@@ -100,4 +100,4 @@ Choose LobbyStack when your staff can take escalations and you want 30 free minu
 
 LobbyStack is the stronger value for a business that already has people for exceptions. Smith.ai deserves its premium only when the external receptionist network solves a staffing problem you need to buy.
 
-[Try LobbyStack free](https://app.lobbystack.com/signup) with your hardest five calls before committing to a $150 entry plan.
+[Try LobbyStack free](https://app.lobbystack.com/en/signup) with your hardest five calls before committing to a $150 entry plan.

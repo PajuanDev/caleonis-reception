@@ -9,6 +9,7 @@ import {
   LandingPageAdditions,
 } from "@/components/LandingPageAdditions"
 import { FaqSection } from "@/components/FaqSection"
+import ProductScreenshots from "@/components/ProductScreenshots.astro"
 import TradeLinks from "@/components/TradeLinks.astro"
 import { CtaSection } from "@/components/CtaSection"
 import { Footer } from "@/components/Footer"
@@ -36,11 +37,11 @@ const seo = getRouteSeo({ locale, path: "/" })
     ...seo,
     canonicalPath,
     locale,
-    image: "/og/lobbystack-og.webp",
+    image: "/og/index.jpg",
     imageAlt:
       locale === "fr"
-        ? "Tableau de bord de réceptionniste IA open source LobbyStack et logo produit"
-        : "LobbyStack open-source AI receptionist dashboard and product logo",
+        ? "Tableau de bord de réceptionniste IA open source Caléonis Receptionist et logo produit"
+        : "Caléonis Receptionist open-source AI receptionist dashboard and product logo",
     imageWidth: 1200,
     imageHeight: 630,
     jsonLd: [
@@ -64,6 +65,7 @@ const seo = getRouteSeo({ locale, path: "/" })
     <ProductExtensionSection locale={locale} />
     <FeatureGrid locale={locale} />
     <LandingPageAdditions locale={locale} />
+    <ProductScreenshots locale={locale} />
     <TradeLinks locale={locale} />
     <FaqSection locale={locale} />
     <CtaSection locale={locale} />

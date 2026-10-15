@@ -1,0 +1,55 @@
+---
+title: "Configure the greeting and booking policy"
+description: "Greeting, fallback language, booking modes and transfer prerequisites."
+sidebarTitle: "AI settings"
+---
+
+Open **Agent > AI settings** and verify the active business. These controls configure one receptionist; they do not create additional agents.
+
+## Greeting
+
+Use the business name and a short explanation of the help offered. Prepare the necessary information about AI and recording with the responsible operator. Do not promise an automatic callback, guaranteed appointment or unqualified action.
+
+| Business | Example to adapt |
+| --- | --- |
+| Tradesperson | Hello, you have reached Example Repairs. I can answer practical questions or take a quote callback request. |
+| Salon | Hello, you have reached Example Salon. How can I help with our services or an appointment request? |
+| Administrative reception | Hello, you have reached the practice's reception. Please do not share medical details with this assistant. |
+
+Edit **Greeting** and use its Save control. Make a new test call; an existing call keeps its starting context.
+
+## Default customer language
+
+The fallback values are English (`en`) and French (`fr`). Choose the language to use when the caller's language is unclear. This is a fallback rather than proof of a certified multilingual service. Add accurate knowledge and service wording in the languages your callers use, then test those languages.
+
+Voice options depend on the controls actually exposed by your version. This guide does not promise voice cloning or an unprovided catalogue.
+
+## Booking mode
+
+Choose whether the receptionist does not book (`off`), takes requests for the team (`request`), or books immediately (`instant`). Check services, opening hours, closures, durations, staff assignment and the [selected Google calendar](/en/integrations/google-calendar).
+
+A request is not a confirmed booking. Check the application result and Google before saying an event is confirmed externally. [Cancellation and rescheduling](/en/agent/ai-settings/appointment-changes) have separate policy and identity controls.
+
+## Default transfer number
+
+The transfer number is the potential destination of a live human handoff. Enter a complete number that your team controls, save it and describe the fallback in Rules. A saved number and permissive rule do not establish a working SIP transfer.
+
+Human transfer remains unqualified in the pilot. Use a callback/follow-up request while unavailable. Test busy, no-answer and denied transfer states in a separately authorized qualification before relying on it. A callback request does not initiate an outbound call.
+
+## Check a change
+
+Save, reload the values and begin a new controlled call. Review the greeting, language, actual action result and call detail. A change does not rewrite historic transcripts or a call already in progress.
+
+{/* Latest upstream settings differences */}
+
+## Business summary
+
+The new candidate UI in this PR exposes the manual business summary already supported by the backend. Enter approved facts, save and verify a new call. This candidate interface does not mean the previously qualified production deployment has changed.
+
+The latest upstream adds automatic generation from knowledge and an AI rewrite button. Neither automation is implemented in this candidate; no dummy rewrite control is shown. Keep Knowledge facts accurate and test the resulting answer.
+
+## Opening hours
+
+The latest upstream guide describes automatic extraction, multiple daily windows and closures in AI settings. The current Caléonis page does not expose those controls. Have the operator configure the business's existing hours and booking prerequisites through available functions, then verify availability.
+
+PATCH /business documents the fields actually supported by this runtime. Do not present extraction or new upstream controls as available without specific implementation and qualification. The Caléonis selector exposes French and English; the latest upstream's six additional fallback languages are not a promised option here.

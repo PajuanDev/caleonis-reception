@@ -3,10 +3,11 @@ import { LobbyStackAuraVoiceDemo } from "@/components/web-voice/LobbyStackAuraVo
 import { hasAnalyticsConsent } from "@/lib/cookie-consent"
 
 // The app starts browser calls on GPT-Live; `pnpm dev` runs it on port 3000.
-const DEFAULT_WEB_CALL_ENDPOINT = "https://app.lobbystack.com/api/voice/live/session"
+const DEFAULT_WEB_CALL_ENDPOINT =
+  "https://receptionist.caleonis.com/api/voice/live/session"
 const DEV_WEB_CALL_ENDPOINT = "http://localhost:3000/api/voice/live/session"
-const DEFAULT_BUSINESS_SLUG = "lobbystack-mp35s9y1"
-const DEV_BUSINESS_SLUG = "lobbystack-qa-motd3txq"
+const DEFAULT_BUSINESS_SLUG = ""
+const DEV_BUSINESS_SLUG = ""
 
 function capturePosthog(
   eventName: string,

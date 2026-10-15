@@ -36,7 +36,7 @@ Run a real call test for each finalist: booking request, pricing question, angry
 
 ### LobbyStack: best full receptionist platform (cloud or self-hosted)
 
-**GitHub:** [lobbystack/lobbystack](https://github.com/lobbystack/lobbystack)
+**GitHub:** [lobbystack/lobbystack](https://gitlab.com/lobbystack-group/lobbystack)
 
 **License:** MIT
 
@@ -123,7 +123,7 @@ Open source removes license mystery. It does not remove:
 - **Compliance thinking.** Recordings, transcripts, and customer data still need retention and access rules.
 - **Provider bills.** Twilio minutes, OpenAI usage, and calendar APIs still show up on invoices unless you go fully local.
 
-If you are deciding between building, buying, and self-hosting, pair this list with [how to choose an AI receptionist](/blog/how-to-choose-an-ai-receptionist/) and [build or buy an AI receptionist](/blog/build-or-buy-ai-receptionist/).
+If you are deciding between building, buying, and self-hosting, pair this list with [how to choose an AI receptionist](/blog/how-to-choose-an-ai-receptionist/) and [build or buy an AI receptionist](/blog/build-or-buy-ai-receptionist/). If you want to start for free without running servers, compare [free AI receptionist plans and trials](/blog/free-ai-receptionist/).
 
 ## Practical next steps
 
@@ -142,4 +142,4 @@ The best **open source AI phone answering service** for you is the one that matc
 - Need a slim Realtime voice agent on LiveKit → **AIReceptionist**
 - Need a home-service front desk → **Hearthline**
 
-If you want to inspect a full stack before you forward your main line, start with the [LobbyStack GitHub repo](https://github.com/lobbystack/lobbystack) or the [open-source AI receptionist stack overview](/blog/open-source-ai-receptionist-stack/).
+If you want to inspect a full stack before you forward your main line, start with the [LobbyStack GitHub repo](https://gitlab.com/lobbystack-group/lobbystack) or the [open-source AI receptionist stack overview](/blog/open-source-ai-receptionist-stack/).

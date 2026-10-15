@@ -38,6 +38,7 @@ export default defineConfig({
   use: {
     baseURL,
     trace: "retain-on-failure",
+    screenshot: "only-on-failure",
   },
   projects: [{ name: "chromium", use: { ...devices["Desktop Chrome"] } }],
   webServer: {
@@ -52,6 +53,9 @@ export default defineConfig({
       ...testSecrets,
       BETTER_AUTH_USE_SECURE_COOKIES: "false",
       REQUIRE_EMAIL_VERIFICATION: "true",
+      // This disposable loopback fixture exercises the retained upstream program.
+      // Production stays opt-in; route tests cover the closed default without writes.
+      AFFILIATE_PROGRAM_ENABLED: "true",
       // The isolated test server is reachable only on localhost, and each spec
       // mints a unique `x-real-ip` per user so auth rate limits stay per-test
       // instead of collapsing into one shared bucket. Never copy this to a

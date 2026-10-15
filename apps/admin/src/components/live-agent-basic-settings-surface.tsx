@@ -8,6 +8,7 @@ import { toast } from "sonner";
 import { useTranslation } from "react-i18next";
 
 import { Button } from "@/components/ui/button";
+import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import {
   Item,
   ItemActions,
@@ -21,6 +22,7 @@ import { Input } from "@/components/ui/input";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Surface } from "@/components/ui/surface";
 import { Switch } from "@/components/ui/switch";
+import { Textarea } from "@/components/ui/textarea";
 import { useTelemetry } from "@/components/product-analytics";
 
 type AgentBasicSettingsPageProps = {
@@ -79,18 +81,21 @@ export function AgentBasicSettingsPage({
   const queryClient = useQueryClient();
   const query = useQuery({
     queryKey: ["agent-settings", businessId],
-    queryFn: () => requestJson<{ business: { defaultLocale: RuntimeLocale } | null; profile: { greeting: string; transferNumber: string | null; transferMode: string; appointmentChangePolicy: AppointmentChangePolicy | null; bookingMode: BookingMode } | null }>(`/api/agent?businessId=${encodeURIComponent(businessId)}`),
+    queryFn: () => requestJson<{ business: { defaultLocale: RuntimeLocale } | null; profile: { greeting: string; summary: string; transferNumber: string | null; transferMode: string; appointmentChangePolicy: AppointmentChangePolicy | null; bookingMode: BookingMode } | null }>(`/api/agent?businessId=${encodeURIComponent(businessId)}`),
     enabled: Boolean(businessId),
   });
   const configuration = query.data;
   const isLoadingConfiguration = !businessId || query.isLoading;
-  async function saveProfile({ defaultLocale: locale, ...patch }: { businessId: string; defaultLocale?: RuntimeLocale; greeting?: string; transferNumber?: string | null; transferMode?: string; appointmentChangePolicy?: AppointmentChangePolicy; bookingMode?: BookingMode }) {
+  async function saveProfile({ defaultLocale: locale, ...patch }: { businessId: string; defaultLocale?: RuntimeLocale; greeting?: string; summary?: string; transferNumber?: string | null; transferMode?: string; appointmentChangePolicy?: AppointmentChangePolicy; bookingMode?: BookingMode }) {
     await requestJson(`/api/agent?businessId=${encodeURIComponent(businessId)}`, { method: "PATCH", body: JSON.stringify({ ...patch, ...(locale ? { locale } : {}) }) });
     await queryClient.invalidateQueries({ queryKey: ["agent-settings", businessId] });
   }
   const persistedProfile = configuration?.profile;
 
   const [greeting, setGreeting] = useState("");
+  const [summary, setSummary] = useState("");
+  const [isSummaryOpen, setIsSummaryOpen] = useState(false);
+  const [isSummarySaving, setIsSummarySaving] = useState(false);
   const [defaultLocale, setDefaultLocale] = useState<RuntimeLocale>("en");
   const [transferNumber, setTransferNumber] = useState("");
   const [transferNumberInputValue, setTransferNumberInputValue] = useState("");
@@ -109,6 +114,10 @@ export function AgentBasicSettingsPage({
   const [isTransferSaving, setIsTransferSaving] = useState(false);
   const [isAppointmentChangeSaving, setIsAppointmentChangeSaving] = useState(false);
   const [transferStatusTone, setTransferStatusTone] = useState<"success" | "error">("success");
+  useEffect(() => {
+    setIsSummaryOpen(false);
+    setSummary("");
+  }, [businessId]);
   useEffect(() => {
     const profile = configuration?.profile;
     if (!profile) {
@@ -192,6 +201,22 @@ export function AgentBasicSettingsPage({
       toast.error(t("agent:actions.saveFailed"));
     } finally {
       setIsGreetingSaving(false);
+    }
+  }
+
+  async function saveSummary(): Promise<void> {
+    const normalized = summary.trim();
+    if (!canManageTenant || !persistedProfile || isSummarySaving || !normalized || normalized.length > 2000) return;
+    setIsSummarySaving(true);
+    try {
+      await saveProfile({ businessId, summary: normalized });
+      telemetry.track("web.agent.settings_saved", { businessId, setting: "summary" });
+      toast.success(t("agent:actions.saved"));
+      setIsSummaryOpen(false);
+    } catch {
+      toast.error(t("agent:actions.saveFailed"));
+    } finally {
+      setIsSummarySaving(false);
     }
   }
 
@@ -340,6 +365,61 @@ export function AgentBasicSettingsPage({
                   {isGreetingSaving ? t("agent:actions.saving") : t("agent:actions.save")}
                 </Button>
               </ItemActions>
+            </Item>
+
+            <Item
+              className="rounded-none border-x-0 border-t-0 border-b border-border last:border-b-0"
+              variant="default"
+            >
+              <ItemContent>
+                <ItemTitle>{t("agent:fields.summary.label")}</ItemTitle>
+                <ItemDescription>{t("agent:fields.summary.hint")}</ItemDescription>
+              </ItemContent>
+              <ItemActions className="w-full justify-end self-center sm:w-auto">
+                <Button
+                  aria-label={t("agent:actions.editField", { field: t("agent:fields.summary.label") })}
+                  disabled={isLoadingConfiguration || !persistedProfile || !canManageTenant}
+                  onClick={() => {
+                    setSummary(persistedProfile?.summary ?? "");
+                    setIsSummaryOpen(true);
+                  }}
+                  size="sm"
+                  type="button"
+                  variant="outline"
+                >
+                  {t("agent:actions.edit")}
+                </Button>
+              </ItemActions>
+              <Dialog onOpenChange={(open) => {
+                if (open || isSummarySaving) return;
+                setIsSummaryOpen(false);
+              }} open={isSummaryOpen}>
+                <DialogContent className="flex flex-col gap-4 sm:max-w-lg">
+                  <DialogHeader><DialogTitle>{t("agent:fields.summary.label")}</DialogTitle></DialogHeader>
+                  <div className="relative overflow-hidden rounded-xl">
+                    <Textarea
+                      aria-label={t("agent:fields.summary.label")}
+                      aria-busy={isSummarySaving || undefined}
+                      disabled={!canManageTenant || isSummarySaving}
+                      id="agent-summary"
+                      maxLength={2000}
+                      onChange={(event) => setSummary(event.target.value)}
+                      placeholder={t("agent:fields.summary.placeholder")}
+                      rows={6}
+                      value={summary}
+                    />
+                  </div>
+                  <DialogFooter className="sm:justify-between">
+                    <span className="hidden sm:block" />
+                    <div className="flex flex-col-reverse gap-2 sm:flex-row">
+                      <Button disabled={isSummarySaving} onClick={() => setIsSummaryOpen(false)} type="button" variant="outline">{t("agent:actions.cancel")}</Button>
+                      <Button disabled={isSummarySaving || !canManageTenant || !summary.trim() || summary.trim().length > 2000} onClick={() => void saveSummary()} type="button">
+                        {isSummarySaving ? t("agent:actions.saving") : t("agent:actions.save")}
+                      </Button>
+                    </div>
+                  </DialogFooter>
+                </DialogContent>
+              </Dialog>
             </Item>
 
             <Item

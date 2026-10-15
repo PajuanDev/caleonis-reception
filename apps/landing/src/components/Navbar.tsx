@@ -60,8 +60,8 @@ const labels = {
     resources: "Resources",
     pricing: "Pricing",
     login: "Log in",
-    github: "Caleonis Reception on GitHub",
-    tryFree: "Try for free",
+    github: "Upstream MIT source",
+    tryFree: "Request a trial",
     blog: "Blog",
     changelog: "Changelog",
     helpCenter: "Help Center",
@@ -74,8 +74,8 @@ const labels = {
     resources: "Ressources",
     pricing: "Tarifs",
     login: "Connexion",
-    github: "Caleonis Reception sur GitHub",
-    tryFree: "Essayer gratuitement",
+    github: "Source d’origine MIT",
+    tryFree: "Demander un essai",
     blog: "Blog",
     changelog: "Journal des changements",
     helpCenter: "Centre d'aide",
@@ -135,7 +135,7 @@ const resourceLinks = (locale: Locale) =>
     { label: labels[locale].changelog, href: "/changelog/", icon: History },
     {
       label: labels[locale].helpCenter,
-      href: "https://docs.reception.caleonis.com/introduction",
+      href: locale === "fr" ? "/aide/" : "/aide/en/",
       external: true,
       icon: BookOpen,
     },
@@ -309,8 +309,8 @@ export function Navbar({ locale = "en" }: NavbarProps) {
           className="flex items-center focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
         >
           <img
-            src="/lobbystack-logo.svg"
-            alt="Caleonis Reception"
+            src="/caleonis-logo.svg"
+            alt="Caléonis Receptionist"
             width={155}
             height={43}
             decoding="async"
@@ -324,9 +324,7 @@ export function Navbar({ locale = "en" }: NavbarProps) {
             <div key={link.label} className="group relative">
               {link.type === "group" ? (
                 <details name="site-nav" className="group/dropdown">
-                  <summary
-                    className="flex cursor-pointer list-none items-center gap-1 rounded-full px-3 py-2 text-sm font-medium text-foreground transition-colors duration-150 group-open/dropdown:bg-muted hover:bg-muted focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none [&::-webkit-details-marker]:hidden"
-                  >
+                  <summary className="flex cursor-pointer list-none items-center gap-1 rounded-full px-3 py-2 text-sm font-medium text-foreground transition-colors duration-150 group-open/dropdown:bg-muted hover:bg-muted focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none [&::-webkit-details-marker]:hidden">
                     {link.label}
                     <ChevronDown
                       className="size-3.5 transition-transform duration-200 ease-(--ease-out) group-open/dropdown:rotate-180"
@@ -432,7 +430,7 @@ export function Navbar({ locale = "en" }: NavbarProps) {
         {/* Desktop CTAs */}
         <div className="hidden items-center gap-1 md:flex">
           <a
-            href="https://github.com/lobbystack/lobbystack"
+            href="https://gitlab.com/lobbystack-group/lobbystack"
             target="_blank"
             rel="noopener noreferrer"
             aria-label={copy.github}
@@ -440,7 +438,7 @@ export function Navbar({ locale = "en" }: NavbarProps) {
             className="inline-flex size-9 items-center justify-center rounded-full text-muted-foreground transition-colors duration-150 hover:bg-muted hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
             data-ph-capture-attribute-section="navbar"
             data-ph-capture-attribute-action="view_github"
-            data-ph-capture-attribute-destination="https://github.com/lobbystack/lobbystack"
+            data-ph-capture-attribute-destination="https://gitlab.com/lobbystack-group/lobbystack"
           >
             <GithubIcon className="size-[18px]" />
           </a>
@@ -466,7 +464,9 @@ export function Navbar({ locale = "en" }: NavbarProps) {
           <summary
             className="inline-flex size-9 cursor-pointer list-none items-center justify-center rounded-md text-muted-foreground transition-colors hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none [&::-webkit-details-marker]:hidden"
             aria-controls={mobileMenuId}
-            aria-label={locale === "fr" ? "Menu de navigation" : "Navigation menu"}
+            aria-label={
+              locale === "fr" ? "Menu de navigation" : "Navigation menu"
+            }
           >
             <Menu
               className="size-5 group-open/mobile-menu:hidden"
@@ -484,7 +484,9 @@ export function Navbar({ locale = "en" }: NavbarProps) {
           >
             <nav
               className="flex flex-col gap-1 px-6 py-4"
-              aria-label={locale === "fr" ? "Navigation mobile" : "Mobile navigation"}
+              aria-label={
+                locale === "fr" ? "Navigation mobile" : "Mobile navigation"
+              }
             >
               {navLinks(locale).map((link) =>
                 link.type === "group" ? (
@@ -585,16 +587,16 @@ export function Navbar({ locale = "en" }: NavbarProps) {
             </nav>
             <div className="flex flex-col gap-2 px-6 pt-2 pb-4">
               <a
-                href="https://github.com/lobbystack/lobbystack"
+                href="https://gitlab.com/lobbystack-group/lobbystack"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center justify-center gap-2 rounded-md px-3 py-2 text-sm font-medium text-foreground hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
                 data-ph-capture-attribute-section="mobile_navbar"
                 data-ph-capture-attribute-action="view_github"
-                data-ph-capture-attribute-destination="https://github.com/lobbystack/lobbystack"
+                data-ph-capture-attribute-destination="https://gitlab.com/lobbystack-group/lobbystack"
               >
                 <GithubIcon className="size-4" />
-                GitHub
+                {locale === "fr" ? "Source d’origine MIT" : "Upstream MIT source"}
               </a>
               <a
                 href={APP_LOGIN_URL}

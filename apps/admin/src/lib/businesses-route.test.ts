@@ -1,7 +1,7 @@
-import { beforeEach, expect, it, vi } from "vitest";
+import { afterEach, beforeEach, expect, it, vi } from "vitest";
 
-const mocks = vi.hoisted(() => ({ createBusiness: vi.fn(), autonomousCreation: vi.fn() }));
-vi.mock("@lobbystack/domain", () => ({ createBusiness: mocks.createBusiness, canCreateAutonomousBusiness: mocks.autonomousCreation }));
+const mocks = vi.hoisted(() => ({ createBusiness: vi.fn(), autonomousCreation: vi.fn(), attributeBusiness: vi.fn() }));
+vi.mock("@lobbystack/domain", () => ({ createBusiness: mocks.createBusiness, canCreateAutonomousBusiness: mocks.autonomousCreation, attributeBusiness: mocks.attributeBusiness }));
 vi.mock("@/lib/api-helpers", () => ({
   requireApiSession: async () => ({ user: { id: "user-1" } }),
   readJson: (request: Request) => request.json(),
@@ -10,7 +10,8 @@ vi.mock("@/lib/api-helpers", () => ({
 vi.mock("@/lib/domain-context", () => ({ createDomainContext: () => ({}) }));
 import { POST } from "../../app/api/businesses/route";
 
-beforeEach(() => { vi.clearAllMocks(); mocks.createBusiness.mockResolvedValue({ businessId: "business-1" }); mocks.autonomousCreation.mockResolvedValue(true); });
+beforeEach(() => { vi.clearAllMocks(); vi.stubEnv("AFFILIATE_PROGRAM_ENABLED", ""); mocks.createBusiness.mockResolvedValue({ businessId: "business-1" }); mocks.autonomousCreation.mockResolvedValue(true); });
+afterEach(() => vi.unstubAllEnvs());
 
 function request(extra: Record<string, unknown>) {
   return new Request("https://app.example.test/api/businesses", { method: "POST", body: JSON.stringify({ name: "Test", timezone: "UTC", businessType: "test", ...extra }) });
@@ -44,4 +45,15 @@ it("keeps autonomous workspace creation available to a non-pilot account", async
   expect((await POST(request({}))).status).toBe(201);
   expect(mocks.autonomousCreation).toHaveBeenCalledWith({}, "user-1");
   expect(mocks.createBusiness).toHaveBeenCalledWith({}, expect.objectContaining({ userId: "user-1" }));
+});
+
+it("ignores a referral code when creating a workspace while affiliation is closed", async () => {
+  expect((await POST(request({ referralCode: "stored-referral" }))).status).toBe(201);
+  expect(mocks.attributeBusiness).not.toHaveBeenCalled();
+});
+
+it("attributes a workspace only when affiliation is explicitly enabled", async () => {
+  vi.stubEnv("AFFILIATE_PROGRAM_ENABLED", "true");
+  expect((await POST(request({ referralCode: "approved-referral" }))).status).toBe(201);
+  expect(mocks.attributeBusiness).toHaveBeenCalledWith({}, expect.objectContaining({ businessId: "business-1", referralCode: "approved-referral" }));
 });

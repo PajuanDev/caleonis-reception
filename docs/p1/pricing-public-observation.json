@@ -1,0 +1,15 @@
+{
+  "capturedAtUtc": "2026-10-15T21:27:09.4605058Z",
+  "url": "https://lobbystack.com/pricing/",
+  "statusCode": 200,
+  "htmlSha256": "63fcdea3409b43a240ae551c36d1f99b32d599152f2275ed7fb04d17d4e25d7b",
+  "retrieval": "DIRECT_HTTP_NOT_SEARCH_CACHE",
+  "freeNumberTrialDays": 14,
+  "knowledgeLimitAdvertisedMB": [
+    1,
+    5,
+    20
+  ],
+  "sourceVersion": "Upstream Git head 46b217807cb251a6679a5e64b8142d2441ccecd3 independently inspected by marketing agent",
+  "note": "Direct HTTP differs from the browser-search cached EN document that said no Free telephone number. Provider availability and Caléonis eligibility are unverified."
+}

@@ -1,31 +1,39 @@
 ---
-title: "Review upcoming appointments"
-description: "Review upcoming appointments for the active business and check their calendar synchronization status."
-sidebarTitle: "Appointments"
+title: "Consulter les rendez-vous à venir"
+description: "Consultez les rendez-vous à venir de l'entreprise active et vérifiez leur état de synchronisation avec le calendrier."
+sidebarTitle: "Rendez-vous"
 contentType: "How-to"
 ---
 
-The **Appointments** page lists upcoming bookings for the active business. Use it to review the schedule and check whether each booking reached the connected calendar.
+La page **Rendez-vous** liste les réservations à venir de l'entreprise active. Utilisez-la pour consulter l'horaire et vérifier que chaque réservation a bien été ajoutée au calendrier connecté.
 
-## Review the schedule
+## Consulter l'horaire
 
-Each row shows:
+Chaque ligne affiche :
 
-- Appointment time
-- Customer name
-- Service
-- Assigned staff member
-- Appointment status
-- Calendar synchronization status
+- L'heure du rendez-vous
+- Le nom du client
+- Le service
+- Le membre de l'équipe assigné
+- Le statut du rendez-vous
+- L'état de synchronisation avec le calendrier
 
-LobbyStack displays each appointment in its saved timezone.
+Caléonis Receptionist affiche chaque rendez-vous dans le fuseau horaire enregistré avec celui-ci.
 
-## Refresh appointment data
+## Actualiser les rendez-vous
 
-Click **Refresh** to request the latest appointment list. The page also updates when LobbyStack receives an appointment event.
+Cliquez sur **Actualiser** pour récupérer la liste à jour des rendez-vous. La page se met aussi à jour quand Caléonis Receptionist reçoit un événement lié à un rendez-vous.
 
-## Investigate a calendar issue
+## Résoudre un problème de calendrier
 
-If the **Calendar** column shows a synchronization issue, check the Google Calendar connection under **Integrations**. Correct any account or permission problem before relying on live availability.
+Si la colonne **Calendrier** signale un problème de synchronisation, vérifiez la connexion Google Calendar dans **Intégrations**. Corrigez tout problème de compte ou d'autorisation avant de vous fier aux disponibilités en direct.
 
-Connect [Google Calendar](/integrations/google-calendar) before allowing the receptionist to offer times. Configure caller cancellation and rescheduling under [Appointment changes](/agent/ai-settings/appointment-changes).
+Connectez [Google Calendar](/integrations/google-calendar) avant de laisser la réceptionniste proposer des créneaux. Configurez l'annulation et le déplacement de rendez-vous par les appelants dans [Modifications de rendez-vous](/agent/ai-settings/appointment-changes).
+
+{/* Caléonis qualification */}
+
+## Demande, confirmation et résultat Google
+
+Le mode `request` produit une demande à confirmer par l'équipe ; `off` interdit la réservation directe ; `instant` permet une confirmation si les conditions sont réunies. Une création dans l'application et une synchronisation Google sont distinctes : ouvrez l'événement directement dans l'agenda choisi et comparez le jour, l'heure, la durée et le fuseau.
+
+Utilisez Europe/Paris, dont le décalage UTC varie selon la saison. Une réservation peut réussir sans invité, SMS, email ni alerte opérateur. Les changements de rendez-vous doivent être qualifiés séparément.

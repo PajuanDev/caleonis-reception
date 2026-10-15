@@ -2,17 +2,16 @@ import { SITE_URL } from "./site-origin.mjs"
 
 export { SITE_URL }
 
-export const SITE_NAME = "Caleonis Reception"
+export const SITE_NAME = "Caléonis Receptionist"
 
-export const DEFAULT_TITLE =
-  "AI Receptionist Software for Small Businesses | Caleonis Reception"
+export const DEFAULT_TITLE = "Accueil téléphonique IA | Caléonis Receptionist"
 
 export const DEFAULT_DESCRIPTION =
-  "Caleonis Reception answers your business calls 24/7, books appointments into your calendar, and transfers urgent calls to your team. Open source, with a free plan."
+  "Caléonis Receptionist accueille vos appels, recueille les demandes et crée des rendez-vous dans Google Calendar selon votre configuration. Pilote et tarifs sur demande."
 
 export const DEFAULT_OG_IMAGE = "/og/index.jpg"
 
-export const HOMEPAGE_OG_IMAGE = "/og/lobbystack-og.webp"
+export const HOMEPAGE_OG_IMAGE = "/og/index.jpg"
 
 export const OG_IMAGE_WIDTH = 1200
 
@@ -20,22 +19,7 @@ export const OG_IMAGE_HEIGHT = 675
 
 export const SEARCH_PATH = "/search/"
 
-const BRAND_ALIASES = [
-  "lobbystack",
-  "Lobby Stack",
-  "Caleonis Reception AI receptionist",
-  "Caleonis Reception open-source AI receptionist",
-]
-
-const BRAND_SAME_AS = [
-  "https://github.com/lobbystack",
-  "https://github.com/lobbystack/lobbystack",
-  "https://www.capterra.com/p/10046185/Caleonis Reception/",
-  "https://sourceforge.net/software/product/Caleonis Reception/",
-  "https://www.g2.com/products/lobbystack/reviews",
-  "https://alternativeto.net/software/lobbystack/about/",
-  "https://www.saashub.com/lobbystack",
-]
+const BRAND_ALIASES = ["Caléonis Receptionist"]
 
 export type JsonLd = Record<string, unknown>
 
@@ -84,9 +68,9 @@ export const plainTextFromMarkdown = (markdown = "", limit = 10000) =>
   markdown
     .replace(/^---[\s\S]*?---/m, "")
     .replace(/```[\s\S]*?```/g, " ")
-    .replace(/`([^`]+)`/g, "$1")
+    .replace(/`([^`]+)`/g, "€1")
     .replace(/!\[[^\]]*]\([^)]*\)/g, " ")
-    .replace(/\[([^\]]+)]\([^)]*\)/g, "$1")
+    .replace(/\[([^\]]+)]\([^)]*\)/g, "€1")
     .replace(/^#{1,6}\s+/gm, "")
     .replace(/^>\s?/gm, "")
     .replace(/[*_~>#-]/g, " ")
@@ -134,32 +118,12 @@ export const organizationJsonLd = (): JsonLd => ({
   "@type": "Organization",
   "@id": absoluteUrl("/#organization"),
   name: SITE_NAME,
-  legalName: "Lobbystack Inc.",
-  alternateName: BRAND_ALIASES,
+  legalName: "William Fabrice Gosse",
+  alternateName: "MrManiac",
   url: absoluteUrl("/"),
-  logo: {
-    "@type": "ImageObject",
-    "@id": absoluteUrl("/#logo"),
-    url: absoluteUrl("/lobbystack-logo-long.webp"),
-    width: 1030,
-    height: 286,
-  },
+  logo: { "@type": "ImageObject", url: absoluteUrl("/caleonis-logo.svg") },
   description:
-    "Caleonis Reception is an open-source AI receptionist platform for small businesses that answers calls, books appointments, captures caller details, and routes urgent requests.",
-  sameAs: BRAND_SAME_AS,
-  knowsAbout: [
-    "AI receptionist software",
-    "AI phone answering",
-    "appointment booking automation",
-    "after-hours call answering",
-    "self-hosted receptionist software",
-  ],
-  contactPoint: {
-    "@type": "ContactPoint",
-    contactType: "customer support",
-    email: "support@caleonis.com",
-    url: "https://docs.reception.caleonis.com",
-  },
+    "Caléonis Receptionist, marque de service de William Fabrice Gosse, entrepreneur individuel sous le nom commercial MrManiac.",
 })
 
 export const webSiteJsonLd = (options: LocaleInput = {}): JsonLd => ({
@@ -261,102 +225,31 @@ export const softwareApplicationJsonLd = (
   "@type": "SoftwareApplication",
   "@id": absoluteUrl("/#software"),
   name: SITE_NAME,
-  alternateName: BRAND_ALIASES,
   applicationCategory: "BusinessApplication",
   operatingSystem: "Web",
   url: absoluteUrl("/"),
   image: absoluteUrl(HOMEPAGE_OG_IMAGE),
   description: DEFAULT_DESCRIPTION,
   inLanguage: localeLanguage(options.locale),
-  isAccessibleForFree: true,
-  keywords:
-    "Caleonis Reception, lobbystack, AI receptionist, open-source AI receptionist, AI phone answering, appointment scheduler",
-  brand: {
-    "@id": absoluteUrl("/#organization"),
-  },
-  creator: {
-    "@id": absoluteUrl("/#organization"),
-  },
-  maintainer: {
-    "@id": absoluteUrl("/#organization"),
-  },
-  publisher: {
-    "@id": absoluteUrl("/#organization"),
-  },
-  sameAs: BRAND_SAME_AS,
-  codeRepository: "https://github.com/lobbystack/lobbystack",
-  softwareHelp: {
-    "@type": "CreativeWork",
-    url: "https://docs.reception.caleonis.com",
-  },
+  publisher: { "@id": absoluteUrl("/#organization") },
   featureList: [
-    "AI phone answering",
-    "appointment booking",
-    "lead qualification",
-    "call routing",
-    "call summaries and owner alerts",
-    "self-hosted deployment",
+    "Voice reception",
+    "Call history, transcripts and summaries",
+    "Google Calendar booking according to configuration",
+    "Business knowledge and instructions",
   ],
-  offers: [
-    {
-      "@type": "Offer",
-      name: "Free",
-      price: "0",
-      priceCurrency: "USD",
-      description:
-        "Test 30 browser voice minutes on Free, with no telephone number. Store up to 25 MB in your knowledge base.",
-      url: absoluteUrl("/pricing/"),
-      availability: "https://schema.org/InStock",
-    },
-    {
-      "@type": "Offer",
-      name: "Starter",
-      price: "30",
-      priceCurrency: "USD",
-      description:
-        "Starter includes 150 voice minutes, 20 transfer attempts, 50 alert SMS segments, and 100 MB knowledge base.",
-      url: absoluteUrl("/pricing/"),
-      availability: "https://schema.org/InStock",
-    },
-    {
-      "@type": "Offer",
-      name: "Pro",
-      price: "100",
-      priceCurrency: "USD",
-      description:
-        "Pro includes 500 voice minutes, 100 transfer attempts, 200 alert SMS segments, and 500 MB knowledge base.",
-      url: absoluteUrl("/pricing/"),
-      availability: "https://schema.org/InStock",
-    },
-  ],
+  softwareHelp: { "@type": "CreativeWork", url: absoluteUrl("/aide/") },
 })
 
 export const productJsonLd = (options: LocaleInput = {}): JsonLd => ({
   "@type": "Product",
   "@id": absoluteUrl("/#product"),
   name: SITE_NAME,
-  alternateName: BRAND_ALIASES,
   url: absoluteUrl("/"),
   image: absoluteUrl(HOMEPAGE_OG_IMAGE),
   description: DEFAULT_DESCRIPTION,
   inLanguage: localeLanguage(options.locale),
-  category: "AI receptionist software",
-  brand: {
-    "@id": absoluteUrl("/#organization"),
-  },
-  manufacturer: {
-    "@id": absoluteUrl("/#organization"),
-  },
-  sameAs: BRAND_SAME_AS,
-  offers: {
-    "@type": "AggregateOffer",
-    url: absoluteUrl("/pricing/"),
-    priceCurrency: "USD",
-    lowPrice: "0",
-    highPrice: "100",
-    offerCount: "3",
-    availability: "https://schema.org/InStock",
-  },
+  brand: { "@id": absoluteUrl("/#organization") },
 })
 
 export const breadcrumbJsonLd = (
@@ -403,7 +296,7 @@ export const blogJsonLd = ({
 }: LocaleInput & { path?: string } = {}): JsonLd => {
   const name =
     locale === "fr"
-      ? "Blog et mises a jour produit Caleonis Reception"
+      ? "Blog et mises a jour produit Caléonis Receptionist"
       : "AI Receptionist Blog and Product Updates"
   const description =
     locale === "fr"

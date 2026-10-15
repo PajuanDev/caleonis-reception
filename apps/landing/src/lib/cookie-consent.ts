@@ -1,6 +1,6 @@
-export const COOKIE_CONSENT_STORAGE_KEY = "lobbystack.cookieConsent.v1"
+export const COOKIE_CONSENT_STORAGE_KEY = "caleonis.cookieConsent.v1"
 export const COOKIE_CONSENT_VERSION = 1
-export const COOKIE_CONSENT_CHANGED_EVENT = "lobbystack:cookie-consent-changed"
+export const COOKIE_CONSENT_CHANGED_EVENT = "caleonis:cookie-consent-changed"
 export const COOKIE_PREFERENCES_TRIGGER_SELECTOR =
   "[data-cookie-preferences-trigger]"
 
@@ -111,7 +111,8 @@ export function onCookieConsentChanged(
   }
 
   window.addEventListener(COOKIE_CONSENT_CHANGED_EVENT, listener)
-  return () => window.removeEventListener(COOKIE_CONSENT_CHANGED_EVENT, listener)
+  return () =>
+    window.removeEventListener(COOKIE_CONSENT_CHANGED_EVENT, listener)
 }
 
 export function clearPostHogClientStorage() {
@@ -181,7 +182,9 @@ function expirePostHogCookies() {
   try {
     const hostname = window.location.hostname
     const parentDomain = hostname.split(".").slice(-2).join(".")
-    const domains = Array.from(new Set(["", hostname, `.${hostname}`, `.${parentDomain}`]))
+    const domains = Array.from(
+      new Set(["", hostname, `.${hostname}`, `.${parentDomain}`])
+    )
 
     document.cookie.split(";").forEach((cookie) => {
       const name = cookie.split("=")[0]?.trim()

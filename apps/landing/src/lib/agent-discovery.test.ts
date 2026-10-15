@@ -1,31 +1,37 @@
 import { describe, expect, it } from "vitest"
-
-import { featuresMarkdown, markdownAlternatePath } from "./agent-discovery"
-
-describe("markdownAlternatePath", () => {
-  it("does not advertise missing Markdown alternates for solution pages", () => {
+import {
+  featuresMarkdown,
+  pricingMarkdown,
+  markdownAlternatePath,
+  mcpServerCard,
+  openApiDocument,
+} from "./agent-discovery"
+describe("private preview discovery", () => {
+  it("advertises reviewed Markdown routes only", () => {
+    expect(markdownAlternatePath("/fr/features/")).toBe("/fr/features.md")
+    expect(markdownAlternatePath("/pricing/")).toBe("/pricing.md")
+    expect(markdownAlternatePath("/about/")).toBeUndefined()
     expect(
-      markdownAlternatePath("/solutions/self-hosted-ai-receptionist/")
-    ).toBeUndefined()
-    expect(
-      markdownAlternatePath("/fr/solutions/self-hosted-ai-receptionist/")
+      markdownAlternatePath("/blog/ai-receptionist-savings/")
     ).toBeUndefined()
   })
-
-  it("keeps Markdown alternates that have generated routes", () => {
-    expect(markdownAlternatePath("/about/")).toBe("/about.md")
-    expect(markdownAlternatePath("/blog/ai-receptionist-savings/")).toBe(
-      "/blog/ai-receptionist-savings.md"
+  it("does not publish inherited plans or unsupported capabilities", () => {
+    expect(pricingMarkdown).toContain("on request")
+    expect(featuresMarkdown).toContain("Voice-only")
+    expect(featuresMarkdown).toContain("no SMS")
+    expect(featuresMarkdown).toContain(
+      "Human transfer not advertised as enabled"
+    )
+    expect(featuresMarkdown).toContain("No established HDS qualification")
+    expect(featuresMarkdown + pricingMarkdown).not.toMatch(
+      /\$30|\$100|30 browser voice minutes|unlimited concurrent/
     )
   })
-})
-
-describe("featuresMarkdown", () => {
-  it("distinguishes Free browser voice from paid telephone features", () => {
-    const everyPlan = featuresMarkdown.split("## Every Plan Includes\n\n")[1]
-    expect(everyPlan).toContain("Free includes 30 browser voice minutes and no telephone number.")
-    expect(everyPlan).toContain("Starter and Pro include a dedicated telephone number for inbound phone calls and call transfers.")
-    expect(everyPlan).not.toMatch(/Every plan includes[^\n]*\b(outbound calls|transfers|telephone call answering)\b/)
-    expect(everyPlan).toContain("unlimited concurrent calls")
+  it("does not advertise an operational SaaS API or WebMCP tools", () => {
+    expect(mcpServerCard.capabilities.tools).toHaveLength(0)
+    expect(Object.keys(openApiDocument.paths)).toEqual(["/api/status"])
+    expect(openApiDocument.info.description).toContain(
+      "not the operational SaaS API"
+    )
   })
 })

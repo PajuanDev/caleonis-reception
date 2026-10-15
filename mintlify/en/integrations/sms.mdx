@@ -1,0 +1,34 @@
+---
+title: "SMS capabilities and consent"
+description: "Voice-only limits, optional consent and the difference between queued and delivered notifications."
+sidebarTitle: "SMS alerts and consent"
+---
+
+The French pilot reception number is **Voice-only**. It neither sends nor receives SMS. This guide documents the controls and prerequisites without promising a French SMS offer or reusing the upstream US/Canada toll-free program.
+
+## Separate the workflows
+
+| Workflow | Prerequisites | Pilot state |
+| --- | --- | --- |
+| Appointment confirmation or reminder | Approved compatible sender, recipient consent and delivery qualification | Not provided by the Voice-only line. |
+| Operator workspace alert | Verified operator phone, alert preference, consent and compatible sender | Must be qualified separately. |
+| Manual SMS conversation | A business number able to receive and send SMS, permissions and compliant configuration | Unavailable on the pilot number. |
+| Account verification code | The configured verification service and a mobile recipient | Separate from appointment and conversation SMS. |
+
+The code can contain provider adapters without a sender being activated or legally approved for your business. Account verification does not add SMS to the reception line. The AI does not automatically reply to inbound SMS.
+
+## Appointment customer consent
+
+Ask for consent before recording an opt-in. A phone number in a booking is not permission to send a text. If the caller refuses, keep the booking and do not send a confirmation or reminder by SMS.
+
+In the qualified no-SMS pilot booking, internal confirmation was `skipped`; no SMS, email or operator alert was sent for that booking. `skipped` is not delivery. A queued action is also not evidence of delivery.
+
+## Operator preferences
+
+Open **Settings > Notifications** and inspect the available controls. An SMS preference needs the verified recipient, disclosure and actual sender to be valid. Respect missing-sender, unverified-number and unavailable-capability states. Email and dashboard use do not require SMS opt-in.
+
+## Delivery and withdrawal
+
+If a separately authorized SMS service is introduced, verify consent records, sender capabilities, opt-out/help handling, suppression and provider delivery results before customer use. The upstream STOP/HELP wording and North American toll-free terms are not final French legal notices.
+
+Do not send a real message merely to explore a setting. An authorized test must use your own recipient and inspect the provider result. See [Messages](/en/dashboard/messages), [Notifications](/en/settings/notifications) and [Availability](/en/support/availability).

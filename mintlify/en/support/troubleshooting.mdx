@@ -1,0 +1,38 @@
+---
+title: "Troubleshoot a pilot issue"
+description: "Locate the affected step and collect useful evidence without repeating side effects."
+---
+
+Check the active business, account role, page, filters and time zone first. Note the exact test time and non-sensitive call or appointment identifier. Do not publish recordings, credentials or customer information.
+
+## Login or permissions
+
+Use the correct account and confirmed email. Check whether an invitation is pending, expired or addressed to another identity. An access denial is not a reason to share an administrator password or reuse another business's key.
+
+## Call missing or incomplete
+
+Check filters and whether the call is still live or processing. Summary, transcript and recording can finish at different times. Confirm the called number and business greeting. Preserve the record identifier; do not place repeated PSTN calls to force processing.
+
+## Audio unavailable
+
+Open the call with an authorized session and allow normal processing. Compare processing, unavailable and failed states. See [Recordings](/en/support/recordings). A temporary signed URL is not a public sharing link.
+
+## Booking or Google issue
+
+Check mode, service, duration, opening hours, time zone, selected calendar, write access and synchronization state. Open Google directly. If the result is uncertain, inspect the existing event before repeating a booking. Use Reconnect only when required, then qualify a controlled operation.
+
+## Messages or notifications
+
+An empty inbox is expected without a supported active conversation source. Voice-only cannot send or receive SMS. Check consent and actual delivery state; skipped, queued and failed are not delivered. Email preferences do not prove sender configuration.
+
+## Widget or browser call
+
+Check an existing authorized key, exact origin, HTTPS, microphone permission and whether the requested feature is enabled. Do not issue a new key or weaken the origin allowlist as a workaround.
+
+## API or webhook
+
+Read the status, error code and Retry-After header. Verify business scope and permissions. Retry a creation with the same idempotency key and unchanged body. Validate webhook signatures against the raw body and inspect the delivery log.
+
+## Escalate
+
+Send the responsible operator the business, role, route, test time with time zone, expected action, observed state and sanitized identifier. Describe whether a side effect might already have happened. Keep a manual callback process while the issue is investigated.

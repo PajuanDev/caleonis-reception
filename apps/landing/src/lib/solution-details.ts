@@ -10,7 +10,7 @@ export const afterHoursRouting: Pick<TradeDetails, "noun" | "routing"> = {
       call: "An emergency your rules define, like no heat or an active leak",
       action: "Transfers",
       detail:
-        "Collects the address and the problem, then connects whoever is on call",
+        "Collects the address and the problem, then connects your on-call number",
     },
     {
       call: "A new customer who wants an appointment",
@@ -45,7 +45,7 @@ export type TimelineCall = {
   at: string
   reason: string
   action: CallAction
-  // The image shows what LobbyStack did, and the alt text describes it.
+  // The image shows what Caléonis Receptionist did, and the alt text describes it.
   image: string
   imageAlt: string
 }
@@ -64,7 +64,7 @@ export const nightCalls: TimelineCall[] = [
     action: "Answers",
     image: "/illustrations/after-hours/service-area.webp",
     imageAlt:
-      "A caller asks if the business comes to Brookline, and LobbyStack replies that it does",
+      "A caller asks if the business comes to Brookline, and Caléonis Receptionist replies that it does",
   },
   {
     at: "10:40 p.m.",
@@ -154,7 +154,7 @@ export const dentalCalls: TimelineCall[] = [
     action: "Answers",
     image: "/illustrations/dental/insurance.webp",
     imageAlt:
-      "A patient asks about insurance, and LobbyStack replies that the plan is in network",
+      "A patient asks about insurance, and Caléonis Receptionist replies that the plan is in network",
   },
   {
     at: "12:20 p.m.",
@@ -211,7 +211,8 @@ export const dentalDetails: Pick<TradeDetails, "noun" | "routing" | "intake"> =
       {
         call: "A patient who needs to reschedule",
         action: "Books",
-        detail: "Finds the appointment, checks who's calling, and moves it",
+        detail:
+          "Moves it if you've turned on appointment changes; otherwise files a request for your team",
       },
       {
         call: "A question about insurance, hours, or parking",
@@ -226,7 +227,8 @@ export const dentalDetails: Pick<TradeDetails, "noun" | "routing" | "intake"> =
       {
         call: "A robocall or sales pitch",
         action: "Ends the call",
-        detail: "Hangs up, and the call doesn't count toward your minutes",
+        detail:
+          "Hangs up, and calls it ends as spam don't count toward your minutes",
       },
     ],
     intake: [

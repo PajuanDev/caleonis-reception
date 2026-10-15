@@ -1,44 +1,52 @@
 ---
-title: "Configure third-party providers"
-description: "See which provider accounts a self-hosted LobbyStack needs: Twilio and OpenAI for live calls, plus optional services like Google Calendar, S3 storage, and PostHog."
-sidebarTitle: "Third-party providers"
+title: "Configurer les fournisseurs tiers"
+description: "Voyez de quels comptes fournisseurs un Caléonis Receptionist auto-hébergé a besoin : Twilio et OpenAI pour les appels en direct, plus des services facultatifs comme Google Calendar, le stockage S3 et PostHog."
+sidebarTitle: "Fournisseurs tiers"
 contentType: "Reference"
 ---
 
-The Docker Compose baseline runs LobbyStack's application, PostgreSQL, Redis, and a shared local-storage volume. Connect your own provider accounts for external capabilities.
+La base Docker Compose exécute l'application Caléonis Receptionist, PostgreSQL, Redis et un volume de stockage local partagé. Connectez vos propres comptes fournisseurs pour les fonctionnalités externes.
 
-## Required for live calls
+## Requis pour les appels en direct
 
 <AccordionGroup>
   <Accordion title="Twilio" icon="phone">
-    Twilio supplies phone numbers, call transfers, and phone verification. An Elastic SIP trunk sends calls for your numbers to OpenAI. Every number must sit on the trunk to answer calls. Keep the Twilio auth token server-side.
+    Twilio fournit les numéros de téléphone, les transferts d'appel et la vérification des numéros de téléphone. Un trunk Elastic SIP envoie à OpenAI les appels reçus sur vos numéros. Chaque numéro doit faire partie du trunk pour répondre aux appels. Gardez le jeton d'authentification Twilio côté serveur.
   </Accordion>
   <Accordion title="OpenAI" icon="waveform">
-    OpenAI's GPT-Live model holds the conversation on phone and browser calls, and OpenAI hosts the audio. When the caller needs business data, such as openings or a booking, GPT-Live asks LobbyStack's worker, which answers with the receptionist agent. Your OpenAI project needs SIP enabled and an incoming-call webhook for phone calls.
+    Le modèle GPT-Live d'OpenAI mène la conversation pendant les appels téléphoniques et les appels dans le navigateur, et OpenAI héberge l'audio. Quand l'appelant a besoin de données de l'entreprise, comme des disponibilités ou une réservation, GPT-Live interroge le worker de Caléonis Receptionist, qui répond avec l'agent réceptionniste. Votre projet OpenAI doit avoir SIP activé et un webhook d'appel entrant pour les appels téléphoniques.
   </Accordion>
 </AccordionGroup>
 
-## Knowledge and automation
+## Connaissances et automatisation
 
 <AccordionGroup>
-  <Accordion title="OpenAI-compatible AI" icon="sparkles">
-    The receptionist agent for website chat and calls runs on `gpt-6-luna` with high reasoning by default. To use another provider or a self-hosted runtime that implements the OpenAI-compatible chat and embeddings APIs, set the `AI_CHAT_*` and `AI_EMBEDDING_*` variables. The model must support tool calls, and embedding models must return exactly 1536 dimensions.
+  <Accordion title="IA compatible OpenAI" icon="sparkles">
+    L'agent réceptionniste pour le chat du site Web et les appels utilise par défaut `gpt-6-luna` avec un raisonnement élevé. Pour utiliser un autre fournisseur ou un environnement d'exécution auto-hébergé qui implémente les API de chat et d'embeddings compatibles OpenAI, définissez les variables `AI_CHAT_*` et `AI_EMBEDDING_*`. Le modèle doit prendre en charge les appels d'outils, et les modèles d'embeddings doivent renvoyer exactement 1536 dimensions.
   </Accordion>
   <Accordion title="Firecrawl" icon="globe">
-    Firecrawl imports public website content into the knowledge pipeline. You can omit it if operators only upload documents and enter knowledge manually.
+    Firecrawl importe le contenu public des sites Web dans le pipeline de connaissances. Vous pouvez vous en passer si les opérateurs se contentent de importer des documents et de saisir les connaissances à la main.
   </Accordion>
 </AccordionGroup>
 
-## Optional integrations
+## Intégrations facultatives
 
-- Google Calendar for availability and booking synchronization
-- SMTP for verification, password reset, and operational email
-- Polar for hosted billing and metered usage
-- PostHog and OpenTelemetry for analytics, error tracking, traces, metrics, and logs
-- AWS S3 or compatible storage for multi-host deployments
-- MinIO through the optional `minio` Compose profile
-- managed PostgreSQL and Redis instead of the included containers
+- Google Calendar pour les disponibilités et la synchronisation des réservations
+- SMTP pour la vérification, la réinitialisation des mots de passe et les emails opérationnels
+- Polar pour la facturation hébergée et l'utilisation mesurée
+- PostHog et OpenTelemetry pour l'analytique, le suivi des erreurs, les traces, les métriques et les journaux
+- AWS S3 ou un stockage compatible pour les déploiements sur plusieurs hôtes
+- MinIO par le profil Compose facultatif `minio`
+- PostgreSQL et Redis gérés à la place des conteneurs inclus
 
-Set `STORAGE_PROVIDER=s3` for AWS S3, MinIO, or another compatible service. Leave `S3_ENDPOINT` empty for AWS S3. MinIO requires its HTTP endpoint and `S3_FORCE_PATH_STYLE=true`.
+Définissez `STORAGE_PROVIDER=s3` pour AWS S3, MinIO ou un autre service compatible. Laissez `S3_ENDPOINT` vide pour AWS S3. MinIO exige son point de terminaison HTTP et `S3_FORCE_PATH_STYLE=true`.
 
-Use the [environment variable reference](/self-hosting/environment-variables) for configuration names and the [Docker Compose guide](/self-hosting/docker-compose) for deployment steps.
+Consultez la [référence des variables d'environnement](/self-hosting/environment-variables) pour les noms de configuration et le [guide Docker Compose](/self-hosting/docker-compose) pour les étapes de déploiement.
+
+{/* Caléonis qualification */}
+
+## Fournisseurs du pilote et limites
+
+L'instance indépendante doit utiliser ses propres comptes et contrats. La production pilote peut utiliser Resend pour les emails transactionnels ; aucun email réel n'est envoyé par la lecture de ce guide. La facturation Polar demeure conditionnelle à l'approbation du catalogue et au mode test.
+
+Un numéro Voice-only ne fournit pas les SMS. La présence d'un adaptateur de transfert ne qualifie pas le parcours SIP. Vérifiez aussi droits Google, renouvellement, accès privé S3 et restauration des sauvegardes.

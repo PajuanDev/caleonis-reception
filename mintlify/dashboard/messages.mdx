@@ -1,51 +1,64 @@
 ---
-title: "Manage customer conversations"
-description: "Review SMS and website chat conversations, send replies, and control AI handoff for website chat."
+title: "Gérer les conversations avec vos clients"
+description: "Consultez les conversations SMS et de chat du site Web, envoyez des réponses et contrôlez la prise en charge par l'IA pour le chat du site Web."
 sidebarTitle: "Messages"
 contentType: "How-to"
 ---
 
-The **Messages** page combines SMS and website chat for the active business. Operators can review inbound and outbound messages, search conversations, send replies, and control AI handoff for website chat.
+La page **Messages** regroupe les SMS et le chat du site Web de l'entreprise active. Vous pouvez y consulter les messages entrants et sortants, chercher des conversations, envoyer des réponses et contrôler la prise en charge par l'IA pour le chat du site Web.
 
-The AI doesn't reply to SMS. Texts sent to your business number wait here for a manual reply. Website chat is restricted and only appears for workspaces that already have widget keys.
+L'IA ne répond pas aux SMS. Les textos envoyés à votre numéro d'entreprise attendent ici une réponse manuelle. Le chat du site Web est restreint et n'apparaît que pour les espaces de travail qui ont déjà des clés de widget.
 
-![LobbyStack Messages page](/images/screenshots/messages.png)
 
-_Use Messages to review SMS and website chat, reply to customers, and control website chat handoff._
+## Trouver une conversation
 
-## Find a conversation
+Le panneau de gauche affiche les conversations et leur dernière activité. Filtrez la liste avec **Tous**, **Web** ou **SMS**.
 
-The left panel shows conversations and their latest activity. Filter the list by **All**, **Web**, or **SMS**.
+Chaque élément affiche :
 
-Each item shows:
+- Le contact, le visiteur, le numéro de téléphone ou l'adresse email.
+- L'aperçu du dernier message.
+- L'heure de la dernière activité.
+- Un repère de chat Web quand la conversation vient du widget.
 
-- The contact, visitor, phone number, or email address.
-- The latest message preview.
-- The latest activity time.
-- A web chat marker when the conversation came from the widget.
+Utilisez la recherche pour trouver des conversations selon les coordonnées du contact ou le dernier message.
 
-Use search to find conversations by contact details or the latest message.
+## Consulter une conversation
 
-## Review a conversation
+Ouvrez une conversation pour voir le fil des messages. Le fil affiche les messages entrants des clients, les messages sortants de l'IA ou d'un membre de l'équipe, et l'heure de chaque message.
 
-Open a conversation to see its message timeline. The thread shows inbound customer messages, outbound AI or operator messages, and the time for each message.
-
-## Send a reply
+## Envoyer une réponse
 
 <Steps>
-  <Step title="Open a conversation">
-    Select an SMS or website chat conversation from the list.
+  <Step title="Ouvrez une conversation">
+    Sélectionnez une conversation SMS ou de chat du site Web dans la liste.
   </Step>
-  <Step title="Write your reply">
-    Use the composer at the bottom of the thread.
+  <Step title="Rédigez votre réponse">
+    Utilisez la zone de saisie au bas du fil.
   </Step>
-  <Step title="Send the message">
-    Click **Send**.
+  <Step title="Envoyez le message">
+    Cliquez sur **Envoyer**.
   </Step>
 </Steps>
 
-## Take over or resume AI
+## Prendre le relais ou réactiver l'IA
 
-Website chat threads show their current automation state in the header. Click **Take over** when an operator should handle the conversation. Click **Resume AI** when the website assistant should respond again.
+Les fils de chat du site Web affichent leur état d'automatisation dans l'en-tête. Cliquez sur **Prendre en charge** quand un membre de l'équipe doit gérer la conversation. Cliquez sur **Réactiver l'IA** quand l'assistante du site Web doit de nouveau répondre.
 
-SMS threads do not show the AI handoff control. Replies from this page are manual.
+Les fils SMS n'affichent pas ce contrôle de prise en charge. Les réponses envoyées depuis cette page sont manuelles.
+
+{/* Caléonis qualification */}
+
+## Numéro français Voice-only
+
+Le numéro pilote ne reçoit ni n'envoie de SMS. La boîte Messages reste accessible mais peut être vide. La réponse manuelle est possible uniquement sur un canal réellement actif et avec les permissions requises ; respectez les états désactivés et SMS indisponible.
+
+Une demande de rappel prise par téléphone se retrouve dans la fiche d'appel et le suivi, pas automatiquement dans un fil SMS. Les nouvelles clés de widget restent désactivées par défaut.
+
+<Frame caption="Messages dans la vraie application candidate Caléonis, données fictives, ordinateur.">
+  <img src="/images/screenshots/caleonis-messages-desktop.png" alt="Messages Caléonis avec indication Voice-only sur ordinateur" width="1440" height="1000" />
+</Frame>
+
+<Frame caption="Même page Messages de la candidate, vue mobile.">
+  <img src="/images/screenshots/caleonis-messages-mobile.png" alt="Messages Caléonis sur mobile, SMS indisponible" width="390" height="844" />
+</Frame>

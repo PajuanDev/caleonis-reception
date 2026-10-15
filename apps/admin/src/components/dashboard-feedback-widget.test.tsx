@@ -30,7 +30,7 @@ vi.mock("react-i18next", () => ({
         "feedback.helpCenter": "Help Center",
         "feedback.contactLink": "Contact us",
         "feedback.helpTextSeparator": "or",
-        "feedback.docsLink": "see docs.",
+        "feedback.docsLink": "get pilot support.",
         "feedback.submit": "Send",
         "feedback.toast.sent": "Feedback sent.",
         "feedback.toast.failed": "We could not save that feedback.",
@@ -68,9 +68,9 @@ describe("DashboardFeedbackWidget", () => {
     fireEvent.click(screen.getByRole("button", { name: "Feedback" }));
 
     expect(screen.getByLabelText("Feedback message")).toBeTruthy();
-    expect(screen.getByRole("link", { name: "Contact us" })).toBeTruthy();
+    expect(screen.getByRole("link", { name: "get pilot support." }).getAttribute("href")).toBe("/fr/essai");
     const helpCenterLink = screen.getByRole("link", { name: "Help Center" });
-    expect(helpCenterLink.getAttribute("href")).toBe("https://docs.lobbystack.com");
+    expect(helpCenterLink.getAttribute("href")).toBe("/fr/essai");
     expect(helpCenterLink.getAttribute("target")).toBe("_blank");
   });
 

@@ -3,12 +3,14 @@ import { desc, eq } from "drizzle-orm";
 
 import { affiliateAttributions, affiliateClicks, affiliateCommissions, affiliatePayoutItems, affiliatePayoutRuns, affiliateProfileStats, affiliateProfiles, withBusinessTransaction } from "@lobbystack/db";
 import { asApiResponse, getAppDatabase, requireApiSession } from "@/lib/api-helpers";
+import { affiliateProgramEnabled } from "@/lib/affiliate-program";
 
 export const dynamic = "force-dynamic";
 
 export async function GET(request: Request) {
   try {
     const session = await requireApiSession(request);
+    if (!affiliateProgramEnabled()) return NextResponse.json({ error: "The affiliate program is not open for this service.", code: "affiliate_program_unavailable" }, { status: 503 });
     return NextResponse.json(await withBusinessTransaction(getAppDatabase().db, { userId: session.user.id, actorType: "operator" }, async (tx) => {
       let profile = (await tx.select({ id: affiliateProfiles.id, referralCode: affiliateProfiles.referralCode, status: affiliateProfiles.status, payoutEmail: affiliateProfiles.payoutEmail }).from(affiliateProfiles).where(eq(affiliateProfiles.userId, session.user.id)).limit(1))[0];
       if (!profile) {
@@ -25,7 +27,7 @@ export async function GET(request: Request) {
         if (profile) await tx.insert(affiliateProfileStats).values({ affiliateProfileId: profile.id }).onConflictDoNothing();
       }
       if (!profile) throw new Error("Affiliate profile could not be created.");
-      const siteUrl = (process.env.SITE_URL ?? process.env.NEXT_PUBLIC_SITE_URL ?? process.env.APP_BASE_URL ?? "https://app.lobbystack.com").replace(/\/$/, "");
+      const siteUrl = (process.env.SITE_URL ?? process.env.NEXT_PUBLIC_SITE_URL ?? process.env.APP_BASE_URL ?? "https://receptionist.caleonis.com").replace(/\/$/, "");
 
       const [stats, clicks, attributions, commissions, payouts] = await Promise.all([
         tx.select({ clickCount: affiliateProfileStats.clickCount, referralCount: affiliateProfileStats.referralCount, conversionCount: affiliateProfileStats.conversionCount, pendingCommissionCents: affiliateProfileStats.pendingCommissionCents, paidCommissionCents: affiliateProfileStats.paidCommissionCents }).from(affiliateProfileStats).where(eq(affiliateProfileStats.affiliateProfileId, profile.id)).limit(1),
@@ -45,6 +47,7 @@ export async function GET(request: Request) {
 export async function PATCH(request: Request) {
   try {
     const session = await requireApiSession(request);
+    if (!affiliateProgramEnabled()) return NextResponse.json({ error: "The affiliate program is not open for this service.", code: "affiliate_program_unavailable" }, { status: 503 });
     const body = await request.json() as { payoutEmail?: unknown };
     const payoutEmail = typeof body.payoutEmail === "string" ? body.payoutEmail.trim().toLowerCase() : "";
     if (!payoutEmail || !/^[^\s@]+@[A-Za-z0-9-]+(?:\.[A-Za-z0-9-]+)+$/.test(payoutEmail)) {

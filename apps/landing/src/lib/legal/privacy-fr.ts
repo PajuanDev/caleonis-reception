@@ -5,16 +5,16 @@ const support = `<a href="mailto:contact@caleonis.com">contact@caleonis.com</a>`
 export const privacyFr: LegalDocument = {
   updated: "Identité de l’exploitant mise à jour : 14 octobre 2026",
   h1: "Politique de confidentialité",
-  intro: `La présente Politique de confidentialité explique comment William Fabrice GOSSE, entrepreneur individuel (EI), exploitant sous le nom commercial MrManiac (« nous », « notre » ou « nos »), recueille, utilise, communique et protège les renseignements personnels lorsque vous visitez nos sites Web, utilisez le service hébergé Caleonis Reception, appelez une entreprise qui utilise Caleonis Reception ou clavardez avec elle, recevez un SMS envoyé au moyen de Caleonis Reception ou communiquez avec nous. Caléonis et Caléonis Réception désignent les services de cette entreprise individuelle, sans constituer une société distincte.`,
+  intro: `La présente Politique de confidentialité explique comment William Fabrice GOSSE, entrepreneur individuel (EI), exploitant sous le nom commercial MrManiac (« nous », « notre » ou « nos »), recueille, utilise, communique et protège les renseignements personnels lorsque vous visitez nos sites Web, utilisez le service hébergé Caléonis Receptionist, appelez une entreprise qui utilise Caléonis Receptionist ou clavardez avec elle, recevez un SMS envoyé au moyen de Caléonis Receptionist ou communiquez avec nous. Caléonis et Caléonis Réception désignent les services de cette entreprise individuelle, sans constituer une société distincte.`,
   sections: [
     {
       id: "scope",
       nav: "Portée",
       title: "1. Qui nous sommes et portée de la présente Politique",
       blocks: [
-        `1.1 Caleonis Reception est un réceptionniste IA pour les petites entreprises. Les entreprises l’utilisent pour répondre aux appels téléphoniques et aux appels depuis le navigateur, clavarder avec les visiteurs de leur site Web, prendre des rendez-vous, prendre des messages et transférer des appels à leur personnel. L’exploitant est domicilié en France, au 10 rue Courbet, 59100 Roubaix, SIREN 929 183 986, SIRET 929 183 986 00017.`,
-        `1.2 La présente Politique vise nos sites Web, dont caleonis.com, le service hébergé Caleonis Reception (le « Service »), notre support et notre programme d’affiliation.`,
-        `1.3 La présente Politique ne vise pas les copies de Caleonis Reception que d’autres personnes exécutent sur leurs propres serveurs. Voir la section 20.`,
+        `1.1 Caléonis Receptionist est un réceptionniste IA pour les petites entreprises. Les entreprises l’utilisent pour répondre aux appels téléphoniques et aux appels depuis le navigateur, clavarder avec les visiteurs de leur site Web, prendre des rendez-vous, prendre des messages et transférer des appels à leur personnel. L’exploitant est domicilié en France, au 10 rue Courbet, 59100 Roubaix, SIREN 929 183 986, SIRET 929 183 986 00017.`,
+        `1.2 La présente Politique vise nos sites Web, dont caleonis.com, le service hébergé Caléonis Receptionist (le « Service »), notre support et notre programme d’affiliation.`,
+        `1.3 La présente Politique ne vise pas les copies de Caléonis Receptionist que d’autres personnes exécutent sur leurs propres serveurs. Voir la section 20.`,
       ],
     },
     {
@@ -23,7 +23,7 @@ export const privacyFr: LegalDocument = {
       title: "2. Notre rôle",
       blocks: [
         `2.1 <strong>Lorsque nous décidons de l’utilisation des données.</strong> Nous sommes responsables, à titre de responsable du traitement ou d’entreprise, des renseignements personnels des visiteurs de nos sites, des titulaires de comptes, des Utilisateurs autorisés des comptes clients, des contacts de facturation, des affiliés et des personnes qui communiquent avec nous.`,
-        `2.2 <strong>Lorsqu’une entreprise décide de l’utilisation des données.</strong> Lorsqu’une entreprise utilise Caleonis Reception pour communiquer avec ses appelants, les visiteurs de son site Web ou ses clients (les « Appelants »), c’est elle qui décide pourquoi et comment leurs renseignements sont traités. Nous agissons comme son fournisseur de services ou sous-traitant et traitons les renseignements des Appelants pour son compte, selon nos <a href="/fr/terms/">Conditions d’utilisation</a>. L’avis de confidentialité de cette entreprise s’applique. Si vous êtes un Appelant, voir la section 18.`,
+        `2.2 <strong>Lorsqu’une entreprise décide de l’utilisation des données.</strong> Lorsqu’une entreprise utilise Caléonis Receptionist pour communiquer avec ses appelants, les visiteurs de son site Web ou ses clients (les « Appelants »), c’est elle qui décide pourquoi et comment leurs renseignements sont traités. Nous agissons comme son fournisseur de services ou sous-traitant et traitons les renseignements des Appelants pour son compte, selon nos <a href="/fr/terms/">Conditions d’utilisation</a>. L’avis de confidentialité de cette entreprise s’applique. Si vous êtes un Appelant, voir la section 18.`,
       ],
     },
     {
@@ -50,7 +50,9 @@ export const privacyFr: LegalDocument = {
         },
         { h3: "3.4 Renseignements de facturation" },
         `Forfait, fréquence de facturation, utilisation, factures, renseignements fiscaux, état des paiements et paramètres du plafond de dépenses. Notre processeur de paiement, Polar, recueille directement les renseignements de carte de paiement. Nous ne recevons ni ne conservons les numéros de carte complets.`,
-        { h3: "3.5 Renseignements sur le site Web, l’appareil et l’utilisation" },
+        {
+          h3: "3.5 Renseignements sur le site Web, l’appareil et l’utilisation",
+        },
         `Adresse IP, type de navigateur et d’appareil, pages consultées, pages de provenance, clics, emplacement approximatif déduit de l’adresse IP, journaux d’erreurs et utilisation du tableau de bord. Avec votre consentement, nous recueillons aussi des enregistrements de session de notre site Web, où les champs de formulaire sont masqués. Voir la section 10 et notre <a href="/fr/cookie-policy/">Politique relative aux cookies</a>.`,
         { h3: "3.6 Communications et support" },
         `Les courriels, demandes de support, commentaires et réponses aux sondages que vous nous envoyez.`,
@@ -97,7 +99,7 @@ export const privacyFr: LegalDocument = {
             `<strong>Obligation légale :</strong> pour conserver les registres fiscaux et comptables et répondre aux demandes légales.`,
           ],
         },
-        `Pour les renseignements des Appelants, l’entreprise qui utilise Caleonis Reception est responsable de choisir et de documenter sa base juridique.`,
+        `Pour les renseignements des Appelants, l’entreprise qui utilise Caléonis Receptionist est responsable de choisir et de documenter sa base juridique.`,
       ],
     },
     {
@@ -117,19 +119,19 @@ export const privacyFr: LegalDocument = {
       nav: "Google Agenda",
       title: "7. Intégration à Google Agenda",
       blocks: [
-        `7.1 Lorsque vous connectez un compte Google dans Caleonis Reception, nous utilisons Google OAuth pour gérer les réservations dans l’agenda que vous choisissez. Nous demandons les autorisations suivantes :`,
+        `7.1 Lorsque vous connectez un compte Google dans Caléonis Receptionist, nous utilisons Google OAuth pour gérer les réservations dans l’agenda que vous choisissez. Nous demandons les autorisations suivantes :`,
         {
           ul: [
             `<strong>openid</strong> et <strong>email</strong>, pour identifier le compte Google connecté;`,
-            `<strong>calendar.calendarlist.readonly</strong>, pour afficher vos agendas afin que vous puissiez choisir celui que Caleonis Reception doit utiliser;`,
-            `<strong>calendar.events</strong>, pour lire les événements de l’agenda choisi afin de trouver les périodes occupées, et pour créer, modifier et supprimer les rendez-vous que Caleonis Reception réserve, déplace ou annule.`,
+            `<strong>calendar.calendarlist.readonly</strong>, pour afficher vos agendas afin que vous puissiez choisir celui que Caléonis Receptionist doit utiliser;`,
+            `<strong>calendar.events</strong>, pour lire les événements de l’agenda choisi afin de trouver les périodes occupées, et pour créer, modifier et supprimer les rendez-vous que Caléonis Receptionist réserve, déplace ou annule.`,
           ],
         },
         `7.2 <strong>Données consultées.</strong> L’identifiant et l’adresse courriel de votre compte Google, la liste de vos agendas et les heures des événements de l’agenda choisi.`,
         `7.3 <strong>Stockage et protection.</strong> Nous conservons les jetons OAuth nécessaires au maintien de la connexion. Nous les chiffrons au repos. Lorsque vous déconnectez Google Agenda, nous arrêtons la synchronisation, supprimons les jetons conservés et supprimons les plages occupées copiées de votre agenda. Les rendez-vous déjà créés restent dans votre Google Agenda; vous pouvez les y supprimer.`,
         `7.4 <strong>Communication.</strong> Nous communiquons les données d’utilisateur Google seulement à l’API Google Agenda pour effectuer les actions que vous avez demandées, et aux hébergeurs qui les stockent pour nous.`,
         `7.5 <strong>Traitement par l’IA.</strong> Nous ne transmettons pas les titres ni les descriptions de vos événements Google Agenda aux fournisseurs d’IA. Le réceptionniste IA reçoit seulement des renseignements de planification dérivés, comme la disponibilité d’une plage horaire et le succès d’une réservation.`,
-        `7.6 <strong>Utilisation limitée.</strong> L’utilisation et le transfert par Caleonis Reception des renseignements reçus des API Google respectent la <a href="https://developers.google.com/terms/api-services-user-data-policy">Google API Services User Data Policy</a>, y compris ses exigences d’utilisation limitée (Limited Use). Nous ne vendons pas les données d’utilisateur Google, ne les utilisons pas à des fins publicitaires et ne les utilisons pas pour entraîner ou améliorer des modèles généraux d’IA ou d’apprentissage automatique.`,
+        `7.6 <strong>Utilisation limitée.</strong> L’utilisation et le transfert par Caléonis Receptionist des renseignements reçus des API Google respectent la <a href="https://developers.google.com/terms/api-services-user-data-policy">Google API Services User Data Policy</a>, y compris ses exigences d’utilisation limitée (Limited Use). Nous ne vendons pas les données d’utilisateur Google, ne les utilisons pas à des fins publicitaires et ne les utilisons pas pour entraîner ou améliorer des modèles généraux d’IA ou d’apprentissage automatique.`,
       ],
     },
     {
@@ -137,7 +139,7 @@ export const privacyFr: LegalDocument = {
       nav: "SMS",
       title: "8. Messages texte (SMS)",
       blocks: [
-        `8.1 Caleonis Reception envoie des SMS non marketing au moyen de Twilio : des alertes au personnel d’une entreprise, un rappel de rendez-vous environ 24 heures avant le rendez-vous aux Appelants qui l’ont accepté au moment de réserver, et des codes de vérification à usage unique. La fréquence des messages varie. Des frais de messagerie et de données peuvent s’appliquer. Répondez <strong>STOP</strong> pour vous désabonner ou <strong>HELP</strong> pour obtenir de l’aide, ou écrivez à ${support}.`,
+        `8.1 Caléonis Receptionist envoie des SMS non marketing au moyen de Twilio : des alertes au personnel d’une entreprise, un rappel de rendez-vous environ 24 heures avant le rendez-vous aux Appelants qui l’ont accepté au moment de réserver, et des codes de vérification à usage unique. La fréquence des messages varie. Des frais de messagerie et de données peuvent s’appliquer. Répondez <strong>STOP</strong> pour vous désabonner ou <strong>HELP</strong> pour obtenir de l’aide, ou écrivez à ${support}.`,
         `8.2 Nous conservons les registres des numéros de téléphone, des consentements, des désabonnements, du contenu des messages et de l’état de livraison pour envoyer les SMS, respecter les désabonnements et satisfaire aux exigences des opérateurs.`,
         `<strong>8.3 Nous ne vendons, ne louons ni ne communiquons les numéros de téléphone mobile, les données d’inscription aux SMS ou les renseignements sur le consentement à des tiers ou à des sociétés affiliées pour leur marketing ou leur promotion.</strong>`,
       ],
@@ -163,8 +165,8 @@ export const privacyFr: LegalDocument = {
             `des fournisseurs de surveillance et de journalisation qui nous aident à détecter les erreurs et à assurer le fonctionnement du Service.`,
           ],
         },
-        `9.2 <strong>L’entreprise que vous joignez.</strong> Lorsque vous appelez une entreprise qui utilise Caleonis Reception ou clavardez avec elle, nous rendons vos renseignements accessibles à cette entreprise dans son tableau de bord, ses alertes et son agenda connecté.`,
-        `9.3 <strong>Raisons juridiques et de sécurité.</strong> Nous pouvons communiquer des renseignements pour respecter la loi, une ordonnance d’un tribunal ou une demande légale des autorités, pour faire respecter nos Conditions, ou pour protéger les droits, les biens ou la sécurité de Caleonis Reception, de nos clients ou d’autres personnes.`,
+        `9.2 <strong>L’entreprise que vous joignez.</strong> Lorsque vous appelez une entreprise qui utilise Caléonis Receptionist ou clavardez avec elle, nous rendons vos renseignements accessibles à cette entreprise dans son tableau de bord, ses alertes et son agenda connecté.`,
+        `9.3 <strong>Raisons juridiques et de sécurité.</strong> Nous pouvons communiquer des renseignements pour respecter la loi, une ordonnance d’un tribunal ou une demande légale des autorités, pour faire respecter nos Conditions, ou pour protéger les droits, les biens ou la sécurité de Caléonis Receptionist, de nos clients ou d’autres personnes.`,
         `9.4 <strong>Transactions d’entreprise.</strong> Nous pouvons communiquer des renseignements à un acheteur, un investisseur ou un successeur dans le cadre d’une fusion, d’une acquisition, d’un financement, d’une réorganisation ou d’une vente d’actifs, sous réserve d’obligations de confidentialité. Nous vous aviserons si vos renseignements deviennent assujettis à une autre politique de confidentialité.`,
         `9.5 <strong>Avec votre consentement.</strong> Nous pouvons communiquer des renseignements à d’autres fins lorsque vous le demandez ou y consentez.`,
         `9.6 <strong>Aucune vente.</strong> Nous ne vendons pas de renseignements personnels et ne les communiquons pas à des fins de publicité comportementale intercontextuelle.`,
@@ -177,7 +179,7 @@ export const privacyFr: LegalDocument = {
       blocks: [
         `10.1 Nous utilisons des cookies nécessaires et le stockage du navigateur pour faire fonctionner notre site Web, mémoriser votre choix en matière de cookies et le protéger contre les abus. Nous utilisons les cookies analytiques et les enregistrements de session de PostHog seulement après que vous les avez acceptés dans notre bandeau de cookies. Avant votre choix, nous comptons les pages vues sans rien enregistrer sur votre appareil. Si vous refusez les cookies facultatifs, nous cessons l’analytique sur notre site Web.`,
         `10.2 Vous pouvez modifier votre choix à tout moment avec le lien <strong>Préférences cookies</strong> dans le pied de page. Notre <a href="/fr/cookie-policy/">Politique relative aux cookies</a> énumère les cookies que nous utilisons.`,
-        `10.3 Le tableau de bord Caleonis Reception utilise PostHog pour comprendre comment les utilisateurs connectés utilisent le produit, seulement lorsque l’analytique du produit est activée dans vos paramètres. Il ne recueille aucune donnée analytique sur les pages désignées comme sensibles.`,
+        `10.3 Le tableau de bord Caléonis Receptionist utilise PostHog pour comprendre comment les utilisateurs connectés utilisent le produit, seulement lorsque l’analytique du produit est activée dans vos paramètres. Il ne recueille aucune donnée analytique sur les pages désignées comme sensibles.`,
       ],
     },
     {
@@ -278,7 +280,7 @@ export const privacyFr: LegalDocument = {
       nav: "Appelants",
       title: "18. Si vous avez appelé une entreprise ou clavardé avec elle",
       blocks: [
-        `18.1 Si vous avez appelé une entreprise qui utilise Caleonis Reception, clavardé avec elle ou reçu un SMS de sa part, c’est elle qui contrôle vos renseignements. Adressez d’abord vos demandes d’accès, de correction, de suppression et vos autres demandes à cette entreprise.`,
+        `18.1 Si vous avez appelé une entreprise qui utilise Caléonis Receptionist, clavardé avec elle ou reçu un SMS de sa part, c’est elle qui contrôle vos renseignements. Adressez d’abord vos demandes d’accès, de correction, de suppression et vos autres demandes à cette entreprise.`,
         `18.2 Si vous communiquez plutôt avec nous, nous transmettrons votre demande à l’entreprise ou vous indiquerons comment la joindre, et nous aiderons l’entreprise à y répondre. Nous ne pouvons pas donner suite à votre demande sans les instructions de l’entreprise, sauf si la loi l’exige.`,
         `18.3 Pour ne plus recevoir de rappels ou de codes de vérification, répondez <strong>STOP</strong> à n’importe quel message.`,
       ],
@@ -294,9 +296,9 @@ export const privacyFr: LegalDocument = {
     {
       id: "self-hosted",
       nav: "Auto-hébergement",
-      title: "20. Caleonis Reception auto-hébergé",
+      title: "20. Caléonis Receptionist auto-hébergé",
       blocks: [
-        `Le code source de Caleonis Reception est ouvert. Lorsqu’une organisation exécute Caleonis Reception sur ses propres serveurs, nous ne recevons, ne consultons ni ne traitons aucune donnée de ce déploiement. L’organisation qui l’exécute est responsable de ses pratiques en matière de confidentialité. Adressez vos questions à cette organisation.`,
+        `Le code source de Caléonis Receptionist est ouvert. Lorsqu’une organisation exécute Caléonis Receptionist sur ses propres serveurs, nous ne recevons, ne consultons ni ne traitons aucune donnée de ce déploiement. L’organisation qui l’exécute est responsable de ses pratiques en matière de confidentialité. Adressez vos questions à cette organisation.`,
       ],
     },
     {

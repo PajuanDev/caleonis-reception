@@ -1,35 +1,35 @@
 ---
-title: "LobbyStack API"
-description: "Read calls, contacts, appointments and messages, book appointments, and receive webhooks."
-sidebarTitle: "Overview"
+title: "API Caléonis Receptionist"
+description: "Lisez les appels, les contacts, les rendez-vous et les messages, réservez des rendez-vous et recevez des webhooks."
+sidebarTitle: "Vue d'ensemble"
 contentType: "Conceptual"
 ---
 
-The LobbyStack API lets your own tools work with a business's receptionist data. Zapier, an MCP server, or a script can read calls and messages, keep contacts in sync, book appointments, add knowledge, and subscribe to webhooks.
+L'API Caléonis Receptionist permet à vos propres outils de travailler avec les données de réceptionniste d'une entreprise. Zapier, un serveur MCP ou un script peuvent lire les appels et les messages, synchroniser les contacts, réserver des rendez-vous, ajouter des connaissances et s'abonner à des webhooks.
 
-## Base URL
+## URL de base
 
 ```text
-https://app.lobbystack.com/api/v1
+https://receptionist.caleonis.com/api/v1
 ```
 
-On a self-hosted deployment, use your `APP_BASE_URL` followed by `/api/v1`.
+Sur un déploiement auto-hébergé, utilisez votre `APP_BASE_URL` suivie de `/api/v1`.
 
-## Make your first request
+## Faire votre première requête
 
 <Steps>
-  <Step title="Create an API key">
-    In the dashboard, go to **Settings** > **API keys** and click **Create API key**. Pick the access the key needs. See [Authentication](/api/authentication).
+  <Step title="Créer une clé API">
+    Dans le tableau de bord, allez dans **Réglages** > **Clés API** et cliquez sur **Créer une clé API**. Choisissez l'accès dont la clé a besoin. Consultez [Authentification](/api/authentication).
   </Step>
-  <Step title="Call the API">
+  <Step title="Appeler l'API">
     ```bash
-    curl https://app.lobbystack.com/api/v1/business \
+    curl https://receptionist.caleonis.com/api/v1/business \
       -H "Authorization: Bearer $LOBBYSTACK_API_KEY"
     ```
   </Step>
 </Steps>
 
-The response wraps the resource in `data`:
+La réponse place la ressource dans `data` :
 
 ```json
 {
@@ -49,23 +49,31 @@ The response wraps the resource in `data`:
 
 ## Conventions
 
-- Requests and responses use JSON. Field names use `snake_case`.
-- IDs are UUIDs and never change.
-- Timestamps use ISO 8601 in UTC, for example `2026-09-29T13:30:00.000Z`. Request bodies also accept a numeric offset such as `-04:00`.
-- Lists return `data`, `next_cursor` and `has_more`. See [Requests and errors](/api/requests).
-- Each key belongs to one business. You never pass a business ID.
+- Les requêtes et les réponses utilisent JSON. Les noms de champs sont en `snake_case`.
+- Les identifiants sont des UUID et ne changent jamais.
+- Les horodatages suivent la norme ISO 8601 en UTC, par exemple `2026-09-29T13:30:00.000Z`. Le corps des requêtes accepte aussi un décalage numérique comme `-04:00`.
+- Les listes renvoient `data`, `next_cursor` et `has_more`. Consultez [Requêtes et erreurs](/api/requests).
+- Chaque clé appartient à une seule entreprise. Vous ne transmettez jamais d'identifiant d'entreprise.
 
 ## OpenAPI
 
-The API publishes an OpenAPI 3.1 document at `GET /api/v1/openapi.json`, with no key required. LobbyStack generates it from the same schemas the server validates against, so it always matches the running version. Import it into Postman, generate a client, or browse the **API reference** section of these docs, which LobbyStack builds from the same file.
+L'API publie un document OpenAPI 3.1 à `GET /api/v1/openapi.json`, sans clé requise. Caléonis Receptionist le génère à partir des mêmes schémas que ceux qu'utilise le serveur pour valider les requêtes. Il correspond donc toujours à la version en service. Importez-le dans Postman, générez un client ou parcourez la section **Référence de l'API** de cette documentation, que Caléonis Receptionist construit à partir du même fichier.
 
-## Versioning
+## Gestion des versions
 
-The version is part of the path: `/api/v1`. Within v1, LobbyStack only makes additive changes:
+La version fait partie du chemin : `/api/v1`. Dans la v1, Caléonis Receptionist n'apporte que des ajouts :
 
-- New endpoints, new optional request fields, and new response fields.
-- New values in lists such as webhook event types and error codes.
+- De nouveaux points de terminaison, de nouveaux champs de requête facultatifs et de nouveaux champs de réponse.
+- De nouvelles valeurs dans des listes comme les types d'événements webhook et les codes d'erreur.
 
-Build clients that ignore fields and event types they don't recognize.
+Concevez des clients qui ignorent les champs et les types d'événements qu'ils ne reconnaissent pas.
 
-LobbyStack releases breaking changes only as a new version, such as `/api/v2`. Removing or renaming a field, changing a type, or adding a required request field counts as breaking. When a new version ships, v1 keeps working alongside it. Webhook payloads carry `api_version` so you can tell which shape you received.
+Caléonis Receptionist publie les changements incompatibles uniquement dans une nouvelle version, comme `/api/v2`. Supprimer ou renommer un champ, changer un type ou ajouter un champ de requête obligatoire constitue un changement incompatible. Quand une nouvelle version sort, la v1 continue de fonctionner en parallèle. Les charges utiles des webhooks contiennent `api_version` pour que vous sachiez quelle forme vous avez reçue.
+
+{/* Caléonis qualification */}
+
+## Périmètre du déploiement Caléonis
+
+Cette référence décrit le code et ses contrats. L'accès à chaque environnement et les actions d'écriture demandent l'autorisation du responsable de l'entreprise. Commencez par `GET /me` et une permission de lecture.
+
+La ressource `messages` décrit les messages de suivi pris pour l'équipe ; elle ne constitue pas une API d'envoi SMS. Voir les [fiches complètes par opération](/api-reference/business/check-an-api-key) et [Capacités](/support/availability).

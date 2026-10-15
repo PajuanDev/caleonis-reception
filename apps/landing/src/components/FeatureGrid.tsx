@@ -11,32 +11,32 @@ const featureGridCopy = {
     headingStart: "Answer calls and book appointments",
     headingEmphasis: "while you work",
     intro:
-      "Answer questions, qualify new customers, book appointments, capture follow-up details, and route urgent calls with context.",
+      "Answer questions, collect caller details, book available appointments and prepare the next step for your team.",
     imageAlt:
-      "LobbyStack AI receptionist capabilities: answers calls, books appointments, qualifies leads, transfers calls, and sends summaries",
+      "Caléonis Receptionist: voice reception, appointment booking, caller details and callback preparation",
     features: [
       {
         title: "Answers your calls",
         description:
-          "LobbyStack can answer all your calls, or only when you're unavailable. It answers questions from your business information and collects what your team needs to follow up.",
+          "Welcome callers on your configured pilot number, answer from your business information and keep the details your team needs to follow up.",
         icon: Phone,
       },
       {
         title: "Books appointments",
         description:
-          "Connect Google Calendar, and LobbyStack checks availability, offers open times, books the appointment, and texts the caller a confirmation.",
+          "With Google Calendar connected, offer available times and record the appointment in your calendar and call history. No SMS is sent on the Voice-only pilot.",
         icon: CalendarCheck,
       },
       {
         title: "Collects caller details",
         description:
-          "LobbyStack collects names, contact info, service needs, timing, and next steps so your team can follow up with context.",
+          "Caléonis Receptionist collects names, contact info, service needs, timing, and next steps so your team can follow up with context.",
         icon: ClipboardList,
       },
       {
-        title: "Transfers when needed",
+        title: "Prepares a human callback",
         description:
-          "When a customer needs a person, LobbyStack can transfer the call or take a clear message with the caller's details and reason for calling.",
+          "Keep a clear message, the caller's details and their reason for calling so your team can call back. Live transfer requires separate qualification.",
         icon: ArrowRightLeft,
       },
     ],
@@ -45,32 +45,32 @@ const featureGridCopy = {
     headingStart: "Répondez aux appels et planifiez les rendez‑vous",
     headingEmphasis: "pendant que vous travaillez",
     intro:
-      "Répondez aux questions, qualifiez les nouveaux clients, planifiez les rendez‑vous, collectez les informations utiles et transférez les appels urgents avec le bon contexte.",
+      "Répondez aux questions, collectez les informations utiles, réservez les créneaux disponibles et préparez le suivi de votre équipe.",
     imageAlt:
-      "Fonctionnalités du réceptionniste IA LobbyStack : réponse aux appels, rendez‑vous, qualification, transferts et résumés",
+      "Caléonis Receptionist : accueil vocal, rendez‑vous, coordonnées et préparation des rappels",
     features: [
       {
         title: "Répond à vos appels",
         description:
-          "LobbyStack peut répondre à tous les appels ou seulement quand vous êtes indisponible. Il répond aux questions, collecte les détails importants et garde la conversation utile.",
+          "Accueillez les appelants sur votre numéro pilote configuré, répondez à partir des informations de votre entreprise et gardez les détails utiles au suivi.",
         icon: Phone,
       },
       {
         title: "Planifie les rendez‑vous",
         description:
-          "Connectez Google Calendar : LobbyStack vérifie les disponibilités, propose des créneaux, planifie le rendez‑vous et envoie la confirmation.",
+          "Avec Google Calendar connecté, proposez les créneaux disponibles et retrouvez le rendez‑vous dans l’agenda et l’historique. Aucun SMS n’est envoyé sur le pilote Voice-only.",
         icon: CalendarCheck,
       },
       {
         title: "Collecte les bonnes informations",
         description:
-          "LobbyStack note le nom, les coordonnées, le besoin, le délai et la prochaine étape pour que votre équipe reprenne avec le contexte.",
+          "Caléonis Receptionist note le nom, les coordonnées, le besoin, le délai et la prochaine étape pour que votre équipe reprenne avec le contexte.",
         icon: ClipboardList,
       },
       {
-        title: "Transfère quand il le faut",
+        title: "Prépare un rappel humain",
         description:
-          "Lorsqu’un client doit parler à quelqu’un, LobbyStack transfère l’appel ou prend un message clair avec les détails et le motif.",
+          "Gardez un message clair, les coordonnées et le motif de l’appel pour que votre équipe puisse rappeler. Le transfert en direct reste à qualifier.",
         icon: ArrowRightLeft,
       },
     ],
@@ -134,7 +134,7 @@ export function FeatureGrid({ locale = "en" }: FeatureGridProps) {
           <div className="flex items-center justify-center">
             <div className="w-full max-w-[480px] overflow-hidden rounded-[1.35rem] bg-[#F4F4F2]">
               <img
-                src="/illustrations/capabilities-receptionist.webp"
+                src="/illustrations/capabilities-network.webp"
                 alt={copy.imageAlt}
                 width={1024}
                 height={1024}
