@@ -1,12 +1,4 @@
 ---
-import SeoLandingPage from "@/components/SeoLandingPage.astro"
-import { getLocalizedSeoLandingPage } from "@/lib/localized-seo-landing-pages"
-
-const page = getLocalizedSeoLandingPage(
-  "fr",
-  "/solutions/ai-receptionist-for-home-services/"
-)
-if (!page) throw new Error("Missing French home services page")
+import LaunchSolutionPage from "@/components/pages/LaunchSolutionPage.astro"
 ---
-
-<SeoLandingPage page={page} locale="fr" />
+<LaunchSolutionPage locale="fr" slug="ai-receptionist-for-home-services"/>

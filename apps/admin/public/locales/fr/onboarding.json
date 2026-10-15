@@ -47,7 +47,7 @@
     "submitFailed": "Impossible d'enregistrer cette entreprise pour le moment. Réessayez."
   },
   "website": {
-    "title": "Entraînons Caleonis Reception avec votre site web",
+    "title": "Entraînons Caléonis Receptionist avec votre site web",
     "description": "",
     "label": "Site web",
     "placeholder": "votreentreprise.com",
@@ -135,7 +135,7 @@
     "continue": "Continuer"
   },
   "attribution": {
-    "title": "Comment avez-vous connu Caleonis Reception ?",
+    "title": "Comment avez-vous connu Caléonis Receptionist ?",
     "description": "Cela nous aide à savoir ce qui fonctionne.",
     "options": {
       "ai_assistant": "ChatGPT, Claude, etc.",
@@ -186,7 +186,7 @@
         "name": "Gratuit",
         "price": "0 $",
         "period": "",
-        "description": "Essayez Caleonis Reception avec assez d'utilisation pour le voir en action.",
+        "description": "Essayez Caléonis Receptionist avec assez d'utilisation pour le voir en action.",
         "cta": "Commencer gratuitement",
         "highlights": {
           "voiceMinutes": "30 minutes vocales dans le navigateur",
@@ -354,6 +354,10 @@
     },
     "continue": "Continuer",
     "continuing": "Continuer...",
-    "continueFailed": "Impossible de continuer maintenant. Réessayez."
+    "continueFailed": "Impossible de continuer maintenant. Réessayez.",
+    "availability": {
+      "continue": "Continuer la configuration du pilote",
+      "unavailable": "Les conditions de cet espace ne peuvent pas être chargées. Réessayez plus tard."
+    }
   }
 }

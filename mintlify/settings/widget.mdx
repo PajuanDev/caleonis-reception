@@ -1,46 +1,39 @@
 ---
-title: "Add the website widget"
-description: "Configure LobbyStack's embeddable chat and web-call widget, then add the loader script to your website."
-sidebarTitle: "Website widget"
-contentType: "How-to"
+title: "Comprendre le widget Web"
+description: "Configurer un widget existant autorisé et tester le chat ou l’appel navigateur."
 ---
-
-The **Settings** > **Widget** page creates and manages keys for the receptionist widget. Visitors can chat, leave contact details, and start a browser call from the widget.
-
 <Note>
-  Website chat is restricted and isn't part of the hosted plans. New widget keys are off by default. On a self-hosted deployment, set `WIDGET_KEY_ISSUANCE_ENABLED=true` to create them. Existing keys keep working.
+Le widget existe dans le code du produit, mais les nouvelles clés sont désactivées par défaut. L’accès n’est pas une fonction publique incluse automatiquement dans une offre Caléonis V1.
 </Note>
 
-## Configure the widget
+Les clés existantes autorisées peuvent conserver leur configuration. La voix dans le navigateur de test et le widget installé sur un site sont deux parcours distincts.
 
-<Steps>
-  <Step title="Open Widget settings">
-    Go to **Settings** > **Widget**.
-  </Step>
-  <Step title="Configure its appearance">
-    Choose the color, position, title, subtitle, greeting, and language behavior.
-  </Step>
-  <Step title="Configure lead capture">
-    Enable the lead form, choose required contact fields, and decide whether it appears before chat.
-  </Step>
-  <Step title="Set allowed websites">
-    Enter each exact public origin that can embed the widget, such as `https://www.example.com`.
-  </Step>
-  <Step title="Copy the installation snippet">
-    Copy the generated loader snippet and add it before the closing `</body>` tag on your website.
-  </Step>
-</Steps>
+## Avant une installation
 
-## Protect web calls
+Faites confirmer l’activation dans votre entreprise. Préparez un site de test HTTPS que vous contrôlez et les origines exactes autorisées.
 
-LobbyStack signs widget sessions and checks the visitor's parent origin against the widget key's allowed origins before it starts a call.
+Ne copiez pas une clé d’une autre entreprise. Une clé de widget n’est pas une clé d’API administrative.
 
-Use an HTTPS website in production. Keep `WIDGET_SESSION_SECRET` and other signing credentials on the server.
+## Configurer une clé existante
 
-## Manage widget keys
+Dans **Réglages > Widget**, si la page est disponible :
 
-Each key has its own origin allowlist and configuration. You can edit an active key, pause it temporarily, or revoke it permanently. Revoking a key stops every embed that uses it.
+1. Choisissez la clé de votre site.
+2. Vérifiez la couleur, la position, le titre, l’accueil et la langue.
+3. Définissez les origines exactes autorisées.
+4. Vérifiez les champs de contact demandés.
+5. Copiez le code d’intégration fourni à l’écran dans votre site de test.
 
-## Verify the installation
+Évitez de collecter des informations inutiles. Ne demandez pas de données de santé dans le pilote.
 
-Open the public website in a private browser window. Confirm that the widget loads, starts a chat, and displays the contact form. If web calls are enabled, grant microphone access and place a test call.
+## Vérifier le parcours
+
+Ouvrez le site comme visiteur. Vérifiez l’affichage sur ordinateur et mobile, le formulaire, une réponse de chat et l’apparition du fil dans **Messages**, si le chat est activé.
+
+Pour un appel Web autorisé, accordez le microphone et contrôlez ensuite la fiche dans **Appels**. Le test doit aussi échouer proprement sur une origine non autorisée.
+
+## Suspendre
+
+Utilisez les actions proposées pour suspendre ou révoquer une clé. La révocation interrompt les sites qui l’utilisent ; préparez cette action avec leur responsable.
+
+La section [auto-hébergement](/self-hosting/overview) documente le contrôle technique d’émission des clés. Elle ne constitue pas une procédure d’activation du SaaS.

@@ -16,10 +16,13 @@ import { useOpenUpgradePlanDialog } from "./upgrade-plan-dialog-context";
 import { SpendingCapSection } from "./billing-spending-cap";
 import { Skeleton } from "./ui/skeleton";
 import { Surface } from "./ui/surface";
+import { BillingPilotNotice } from "./billing-pilot-notice";
 import { Table, TableBody, TableCard, TableCell, TableHead, TableHeader, TableRow } from "./ui/table";
 
 type Business = { businessId: string; name: string; slug: string; role: string; active: boolean };
 type Billing = {
+  checkoutAvailable: boolean;
+  commercialTermsAvailable: boolean;
   availableCheckoutPlans: Array<"starter" | "pro">;
   availableCheckoutIntervals: { starter: string[]; pro: string[] };
   permissions: BillingPermissions;
@@ -78,11 +81,12 @@ export function LivePlanSurface() {
   const canUpgrade = permissions?.hasCheckoutAccess && billing.data?.availableCheckoutPlans.some(target =>
     (plan === "free_cloud" || (plan === "starter" && target === "pro")) && billing.data.availableCheckoutIntervals[target].length > 0);
   const canManage = permissions?.hasCustomerPortalAccess === true;
+  const showCommercialTerms = billing.data.commercialTermsAvailable === true;
 
   return <PageSurface description="" title={t("sections.billing")}>
     <div className="flex w-full flex-col gap-10">
     <SectionBlock title={t("billing.currentPlan.title")}>
-      <Surface className="px-6 py-5">
+      {!showCommercialTerms ? <Surface className="px-6 py-5"><BillingPilotNotice /></Surface> : <Surface className="px-6 py-5">
         <div className="flex flex-col gap-6">
           <div className="grid gap-8 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,1fr)]">
             <div className="flex flex-col gap-3">
@@ -159,7 +163,7 @@ export function LivePlanSurface() {
             </div>
           )}
         </div>
-      </Surface>
+      </Surface>}
     </SectionBlock>
     {plan !== "self_host" ? <><SpendingCapSection key={business.businessId} businessId={business.businessId} locale={i18n.language} t={(key, options) => t(key, options ?? {})} status={{ plan, overageSpendingCapCents: account?.overageSpendingCapCents ?? null, overageSpendCents: billing.data?.usageStatus?.overageSpendCents ?? 0, overageSpendCentsComplete: billing.data?.usageStatus?.usageComplete ?? true, overageSpendingCapReached: billing.data?.usageStatus?.overageSpendingCapReached ?? false, hasBillingManagementAccess: permissions?.hasBillingManagementAccess === true }} /><Transactions locale={i18n.language} transactions={billing.data?.transactions ?? []} t={t} /></> : null}
     </div>

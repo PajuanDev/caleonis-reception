@@ -1,92 +1,40 @@
 ---
-title: "Add business knowledge"
-description: "Add text, documents, and website content so your receptionist can answer common business questions from accurate source material."
-sidebarTitle: "Knowledge"
-contentType: "How-to"
+title: "Ajouter des connaissances fiables"
+description: "Préparer des réponses à partir de textes, documents et imports de pages publiques."
 ---
+Dans **Agent > Connaissances**, ajoutez les faits que l’agent peut utiliser : horaires, coordonnées publiques, zone d’intervention, services et FAQ.
 
-The **Knowledge** page is where you add information the receptionist can use when answering callers. Use it for facts that should be straightforward to retrieve: hours, location, parking, pricing notes, service descriptions, policies, intake requirements, and FAQs.
+## Texte
 
-LobbyStack supports three knowledge sources: text entries, uploaded documents, and public website imports.
+1. Choisissez l’ajout de connaissance puis le type texte.
+2. Donnez un titre précis, par exemple « Zone d’intervention ».
+3. Rédigez une réponse courte et vérifiable.
+4. Enregistrez et contrôlez le statut de traitement.
+5. Posez la question dans un nouvel appel de test.
 
-<Note>
-  Hosted knowledge base is capped at 25 MB on Free, 100 MB on Starter, and 500 MB on Pro. The app also rejects individual document uploads larger than 10 MB.
-</Note>
+Une entrée doit décrire une information. Les consignes de comportement appartiennent aux [Règles](/agent/rules).
 
-## Text entries
+## Documents
 
-Text entries are best for short, authoritative facts.
+Utilisez les types de fichiers acceptés par le formulaire. Le traitement extrait le texte avant de le rendre utilisable. Un document en attente ou en erreur ne constitue pas une source prête.
 
-| Entry title | Good content |
-| --- | --- |
-| Holiday hours | We are closed on statutory holidays. If a caller asks about a specific holiday, take a message so the team can confirm. |
-| Parking | Customers can use the lot behind the building. Street parking is also available on Pine Street after 6 PM. |
-| Cancellation policy | Please call at least 24 hours before the appointment to cancel or reschedule. |
-| New customer intake | New customers should bring ID, insurance information if relevant, and any referral or service notes they have. |
+Relisez le texte extrait, surtout pour un scan ou un tableau. Évitez les informations périmées, les tarifs non validés et les fichiers contenant des données personnelles inutiles.
 
-<Steps>
-  <Step title="Open Knowledge">
-    Go to **Agent** > **Knowledge**.
-  </Step>
-  <Step title="Choose text">
-    Click **Add Knowledge** and choose **Text**.
-  </Step>
-  <Step title="Add title and content">
-    Use a short title and put the full answer in the content field.
-  </Step>
-  <Step title="Save">
-    Click **Save**. The entry appears in the table.
-  </Step>
-</Steps>
+Les limites affichées par votre espace font foi ; les anciens quotas commerciaux LobbyStack ne constituent pas des quotas Caléonis approuvés.
 
-## Document uploads
+## Import d’un site public
 
-Use document uploads for PDFs, Word documents, text files, and Markdown files that contain useful caller-facing information.
+1. Choisissez l’import de site dans les connaissances.
+2. Entrez une URL publique que vous êtes autorisé à utiliser.
+3. Démarrez l’import et attendez son traitement.
+4. Contrôlez les pages retenues et leur statut.
+5. Retirez ou désactivez les contenus sans rapport avec l’accueil.
+6. Testez une question dont la réponse figure dans la source.
 
-| Limit | Value |
-| --- | --- |
-| Supported types | PDF, DOCX, TXT, Markdown |
-| Maximum size | 10 MB per file |
+L’import ne se connecte pas aux espaces privés. Les adresses locales et les ressources réseau internes ne sont pas des sources utilisables. Les pages protégées ou non lisibles peuvent nécessiter un ajout manuel.
 
-Uploaded documents enter a processing flow before they are ready. The table shows status values such as queued, indexing, ready, or error.
+## Entretenir les sources
 
-<Note>
-  Keep uploaded documents caller-ready. Use current, approved material so the receptionist answers with the same information your team would share.
-</Note>
+Corrigez une source quand vos horaires ou services changent. Désactivez un élément obsolète avant d’en ajouter une copie contradictoire. Testez après toute modification importante.
 
-## Website imports
-
-Website import crawls a public URL and adds useful pages to the knowledge base. It is intended for public pages such as services, about, FAQ, hours, locations, menus, pricing, and contact pages.
-
-Website import focuses on public, caller-facing pages and skips:
-
-- Localhost, local network, or direct IP URLs.
-- Pages behind a login.
-- Low-signal pages such as checkout, cart, account, search, privacy, and terms pages.
-- Static assets such as images, PDFs, spreadsheets, ZIP files, scripts, and stylesheets.
-
-<Steps>
-  <Step title="Open the website import dialog">
-    Go to **Agent** > **Knowledge**, click **Add Knowledge**, and choose **Website**.
-  </Step>
-  <Step title="Enter a public URL">
-    Paste the homepage or section URL you want LobbyStack to crawl.
-  </Step>
-  <Step title="Start import">
-    Click **Import Website**. Imported pages appear as they finish processing.
-  </Step>
-</Steps>
-
-## Manage entries
-
-From the Knowledge table you can:
-
-- Search entries.
-- Open a row to view extracted document text.
-- Disable an entry without deleting it.
-- Re-enable a disabled entry.
-- Delete an entry permanently.
-
-<Tip>
-  Prefer a smaller set of accurate entries over a large library of stale content. Caller-facing accuracy matters more than volume.
-</Tip>
+Vous devez disposer des droits sur les documents et pages importés. Dans le pilote, n’ajoutez pas de dossiers médicaux ou de données de santé.

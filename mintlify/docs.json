@@ -1,8 +1,8 @@
 {
   "$schema": "https://mintlify.com/docs.json",
   "theme": "almond",
-  "name": "LobbyStack",
-  "description": "Help Center and developer documentation for LobbyStack.",
+  "name": "Caléonis Receptionist",
+  "description": "Centre d’aide Caléonis Receptionist : démarrage, appels, rendez-vous, connaissances et documentation développeur.",
   "colors": {
     "primary": "#0B0B0D",
     "light": "#FFFFFF",
@@ -19,24 +19,15 @@
   "navbar": {
     "links": [
       {
-        "label": "Lobbystack.com",
-        "href": "https://lobbystack.com"
-      },
-      {
-        "label": "",
-        "icon": "github",
-        "href": "https://github.com/lobbystack/lobbystack"
-      },
-      {
-        "label": "Log in",
-        "href": "https://app.lobbystack.com/login"
+        "label": "Application",
+        "href": "https://receptionist.caleonis.com"
       }
     ],
     "primary": {
       "type": "button",
-      "label": "Try for free",
-      "name": "Try for free",
-      "href": "https://app.lobbystack.com/signup"
+      "label": "Demander un essai",
+      "name": "Demander un essai",
+      "href": "https://receptionist.caleonis.com/fr/essai"
     }
   },
   "redirects": [
@@ -50,101 +41,135 @@
     }
   ],
   "navigation": {
-    "groups": [
+    "tabs": [
       {
-        "group": "Get started",
-        "pages": [
-          "introduction",
-          "quickstart",
-          "getting-started/account-setup",
-          "getting-started/claim-your-number"
-        ]
-      },
-      {
-        "group": "General",
-        "pages": [
-          "dashboard/home",
-          "dashboard/calls",
-          "dashboard/messages",
-          "dashboard/contacts",
-          "dashboard/appointments"
-        ]
-      },
-      {
-        "group": "Agent",
-        "pages": [
-          "agent/overview",
+        "tab": "Aide en français",
+        "groups": [
           {
-            "group": "AI settings",
+            "group": "Premiers pas",
             "pages": [
-              "agent/ai-settings/overview",
-              "agent/ai-settings/appointment-changes"
-            ]
-          },
-          "agent/knowledge",
-          "agent/services",
-          "agent/rules"
-        ]
-      },
-      {
-        "group": "Manage",
-        "pages": [
-          "dashboard/analytics",
-          "integrations/overview",
-          "integrations/google-calendar",
-          "integrations/sms",
-          "integrations/webhooks",
-          {
-            "group": "Settings",
-            "pages": [
-              "settings/overview",
-              "settings/account",
-              "settings/team",
-              "settings/notifications",
-              "settings/phone-number",
-              "settings/widget"
+              "introduction",
+              "quickstart",
+              "getting-started/account-setup",
+              "getting-started/claim-your-number",
+              "support/availability"
             ]
           },
           {
-            "group": "Billing",
+            "group": "Général",
             "pages": [
-              "billing/plans",
-              "billing/usage",
-              "billing/affiliate-program"
+              "dashboard/home",
+              "dashboard/calls",
+              "dashboard/messages",
+              "dashboard/contacts",
+              "dashboard/appointments"
+            ]
+          },
+          {
+            "group": "Agent",
+            "pages": [
+              "agent/overview",
+              {
+                "group": "Paramètres IA",
+                "pages": [
+                  "agent/ai-settings/overview",
+                  "agent/ai-settings/appointment-changes"
+                ]
+              },
+              "agent/knowledge",
+              "agent/services",
+              "agent/rules"
+            ]
+          },
+          {
+            "group": "Gestion",
+            "pages": [
+              "dashboard/analytics",
+              "integrations/overview",
+              "integrations/google-calendar",
+              "integrations/sms",
+              "integrations/webhooks",
+              {
+                "group": "Réglages",
+                "pages": [
+                  "settings/overview",
+                  "settings/account",
+                  "settings/team",
+                  "settings/notifications",
+                  "settings/phone-number",
+                  "settings/widget"
+                ]
+              },
+              {
+                "group": "Usage et offre",
+                "pages": [
+                  "billing/usage",
+                  "billing/plans",
+                  "billing/affiliate-program"
+                ]
+              }
+            ]
+          },
+          {
+            "group": "Aide et confiance",
+            "pages": [
+              "support/faq",
+              "support/troubleshooting",
+              "support/phone-forwarding",
+              "support/recordings",
+              "support/privacy",
+              "attributions"
             ]
           }
         ]
       },
       {
-        "group": "API",
-        "pages": [
-          "api/overview",
-          "api/authentication",
-          "api/requests",
-          "api/webhooks"
+        "tab": "Développeurs",
+        "groups": [
+          {
+            "group": "API",
+            "pages": [
+              "api/overview",
+              "api/authentication",
+              "api/requests",
+              "api/webhooks"
+            ]
+          },
+          {
+            "group": "MCP : intégration facultative",
+            "pages": [
+              "ai/mcp",
+              "ai/connect-claude",
+              "ai/connect-chatgpt",
+              "ai/connect-other-clients",
+              "ai/lobbystack-skill"
+            ]
+          },
+          {
+            "group": "Référence API (EN)",
+            "openapi": "api-reference/openapi.json"
+          },
+          {
+            "group": "Instance indépendante",
+            "pages": [
+              "self-hosting/overview",
+              "self-hosting/docker-compose",
+              "self-hosting/environment-variables",
+              "self-hosting/providers"
+            ]
+          }
         ]
       },
       {
-        "group": "AI assistants",
-        "pages": [
-          "ai/mcp",
-          "ai/connect-claude",
-          "ai/connect-chatgpt",
-          "ai/connect-other-clients",
-          "ai/lobbystack-skill"
-        ]
-      },
-      {
-        "group": "API reference",
-        "openapi": "api-reference/openapi.json"
-      },
-      {
-        "group": "Self-hosting",
-        "pages": [
-          "self-hosting/overview",
-          "self-hosting/docker-compose",
-          "self-hosting/environment-variables",
-          "self-hosting/providers"
+        "tab": "English",
+        "groups": [
+          {
+            "group": "English quick guides",
+            "pages": [
+              "en/overview",
+              "en/quickstart"
+            ]
+          }
         ]
       }
     ]

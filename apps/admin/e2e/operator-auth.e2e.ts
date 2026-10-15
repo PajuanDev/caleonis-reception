@@ -136,10 +136,79 @@ async function completeOnboardingBySkippingOptionalInputs(page: Page): Promise<v
   await expect(page.getByRole("heading", { name: "Choose your plan", exact: true })).toBeVisible();
   await expect(page.getByText("Checkout completed", { exact: true })).toHaveCount(0);
   await expect(page).toHaveURL("/onboarding/plan?checkout=success");
-  await page.getByRole("button", { name: "Start free" }).click();
+  await page.getByRole("button", { name: /^(Start free|Continue pilot setup)$/ }).click();
   await expect(page).toHaveURL("/onboarding/attribution");
   await page.getByRole("button", { name: "Skip", exact: true }).click();
   await expect(page).toHaveURL("/");
+}
+
+async function verifyVoiceOnlyMessages(page: Page, businessId: string, testInfo: TestInfo): Promise<void> {
+  let hasThread = false;
+  let outboundRequests = 0;
+  const phoneRoute = "**/api/phone-numbers?*";
+  const messagesRoute = "**/api/messages?*";
+  await page.route(phoneRoute, async route => {
+    expect(new URL(route.request().url()).searchParams.get("businessId")).toBe(businessId);
+    await route.fulfill({ json: { phoneNumbers: [{ id: "voice-only-fixture", e164: "+33900000000", voiceEnabled: true, smsEnabled: false, status: "active", reclaimScheduledAt: null }], activeClaim: null, replacement: { usedAt: null, activeClaim: null } } });
+  });
+  await page.route(messagesRoute, async route => {
+    expect(new URL(route.request().url()).searchParams.get("businessId")).toBe(businessId);
+    if (route.request().method() !== "GET") { outboundRequests += 1; await route.abort(); return; }
+    await route.fulfill({ json: { messages: hasThread ? [{ id: "message-fixture", conversationId: "conversation-fixture", contactName: "Contact de démonstration", contactPhone: "+33600000000", visitorName: null, visitorEmail: null, channel: "sms", automationState: "ai_active", body: "Bonjour, je souhaite un devis.", direction: "inbound", status: "received", createdAt: "2026-10-15T10:00:00Z" }] : [] } });
+  });
+  const locale = async (value: "fr" | "en") => {
+    const status = await page.evaluate(async value => {
+      const response = await fetch("/api/preferences/locale", { method: "PATCH", credentials: "include", headers: { "content-type": "application/json" }, body: JSON.stringify({ locale: value }) });
+      localStorage.setItem("lobbystack.locale", value);
+      return response.status;
+    }, value);
+    expect(status).toBe(200);
+  };
+  try {
+    await locale("fr");
+    await page.setViewportSize({ width: 1440, height: 1000 });
+    await page.goto("/calls");
+    await page.getByRole("link", { name: "Messages", exact: true }).click();
+    await expect(page).toHaveURL("/messages");
+    await expect(page.getByText("Numéro Voice-only : appels uniquement", { exact: true })).toBeVisible();
+    await expect(page.getByText("Aucune conversation pour le moment", { exact: true })).toBeVisible();
+    await expect(page.getByRole("link", { name: "Voir les réglages du numéro" })).toHaveAttribute("href", "/settings/phone-number");
+    const desktopEmpty = testInfo.outputPath("p1-messages-voice-only-desktop-empty.png");
+    await page.screenshot({ path: desktopEmpty, fullPage: true });
+    await testInfo.attach("Messages FR — desktop, numéro Voice-only (données de test)", { path: desktopEmpty, contentType: "image/png" });
+
+    hasThread = true;
+    await page.reload();
+    await page.getByRole("button", { name: /Contact de démonstration/ }).click();
+    await expect(page.getByRole("textbox", { name: "Votre réponse", exact: true })).toBeDisabled();
+    await expect(page.getByRole("button", { name: "Envoyer", exact: true })).toBeDisabled();
+
+    await page.setViewportSize({ width: 390, height: 844 });
+    await page.goto("/calls");
+    await page.getByRole("button", { name: "Toggle sidebar" }).click();
+    await page.getByRole("dialog").getByRole("button", { name: "Messages", exact: true }).click();
+    await expect(page.getByRole("dialog")).toHaveCount(0);
+    await expect(page.getByRole("heading", { name: "Messages", exact: true })).toBeVisible();
+    const mobileList = testInfo.outputPath("p1-messages-voice-only-mobile-list.png");
+    await page.screenshot({ path: mobileList, fullPage: true });
+    await testInfo.attach("Messages FR — mobile, liste (données de test)", { path: mobileList, contentType: "image/png" });
+    await page.getByRole("button", { name: /Contact de démonstration/ }).click();
+    await expect(page.getByRole("textbox", { name: "Votre réponse", exact: true })).toBeDisabled();
+    await expect(page.getByRole("button", { name: "Revenir aux conversations" })).toBeVisible();
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
+    const mobileThread = testInfo.outputPath("p1-messages-voice-only-mobile-thread.png");
+    await page.screenshot({ path: mobileThread, fullPage: true });
+    await testInfo.attach("Messages FR — mobile, fil en lecture seule (données de test)", { path: mobileThread, contentType: "image/png" });
+    await page.getByRole("button", { name: "Revenir aux conversations" }).click();
+    await expect(page.getByRole("heading", { name: "Messages", exact: true })).toBeVisible();
+    expect(outboundRequests).toBe(0);
+  } finally {
+    await page.unroute(phoneRoute);
+    await page.unroute(messagesRoute);
+    await locale("en");
+    await page.setViewportSize({ width: 1280, height: 720 });
+    await page.goto("/");
+  }
 }
 
 async function close(context: BrowserContext): Promise<void> {
@@ -159,6 +228,7 @@ test("operator authentication, workspace access, isolation, and revocation", asy
   await completeOnboardingBySkippingOptionalInputs(page);
   await page.goto("/");
   await expect(page.getByRole("button", { name: /Replacement E2E owner-a/ })).toBeVisible();
+  await verifyVoiceOnlyMessages(page, ownBusinessId, testInfo);
 
   await page.goto("/agent/integrations");
   await expect(page).toHaveURL("/agent");

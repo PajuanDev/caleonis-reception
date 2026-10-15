@@ -1,98 +1,80 @@
 ---
-title: "Configure environment variables"
-description: "Key environment variables for the LobbyStack admin, worker, voice calls, storage, and providers."
-sidebarTitle: "Environment variables"
-contentType: "Reference"
+title: "Variables d’une instance indépendante"
+description: "Identifier les groupes de configuration sans renommer les paramètres internes."
 ---
+`.env.example` et les fichiers de déploiement de la version utilisée font foi. Les variables internes gardent leurs noms LobbyStack ; le rebranding ne doit pas les casser.
 
-Use `.env.example` as the source of truth. Store production values in your deployment secret manager or a permission-restricted `.env` file.
+## Application et accès
 
-## Application and database
-
-| Variable | Purpose |
+| Variables | Usage |
 | --- | --- |
-| `APP_BASE_URL` | Public HTTPS URL for the dashboard and API. |
-| `DEPLOYMENT_MODE` | `cloud`, `self_hosted_standard`, or `development`. |
-| `DATABASE_URL` | PostgreSQL connection for the service's main role: `lobbystack_app` for the admin, `lobbystack_worker` for the worker. |
-| `LOBBYSTACK_AUTH_PASSWORD`, `LOBBYSTACK_WORKER_PASSWORD`, `LOBBYSTACK_DISPATCHER_PASSWORD` | Passwords for the other roles. A service connects as each role by combining `DATABASE_URL`'s host and database with that role's password. |
-| `LOBBYSTACK_<ROLE>_DATABASE_URL` | Optional. Overrides the built connection string for one role, for example to use a different host. |
-| `BETTER_AUTH_SECRET` | Better Auth signing secret. Use at least 32 random characters. |
-| `ENCRYPTION_KEY` | Encrypts stored application credentials. |
-| `OTP_HASH_SECRET` | Hashes one-time verification codes. |
+| `APP_BASE_URL` | URL HTTPS de votre instance. |
+| `DEPLOYMENT_MODE` | Mode cloud, standard auto-hébergé ou développement selon le code. |
+| `DATABASE_URL` | Connexion du rôle principal de chaque service. |
+| `LOBBYSTACK_AUTH_PASSWORD`, `LOBBYSTACK_WORKER_PASSWORD`, `LOBBYSTACK_DISPATCHER_PASSWORD` | Accès aux rôles séparés. |
+| `LOBBYSTACK_<ROLE>_DATABASE_URL` | Surcharge de connexion d’un rôle si nécessaire. |
+| `BETTER_AUTH_SECRET` | Signature de l’authentification. |
+| `ENCRYPTION_KEY` | Chiffrement et usages cryptographiques du runtime. |
+| `OTP_HASH_SECRET` | Protection des codes de vérification. |
 
-## Internal services
+Ne remplacez pas `ENCRYPTION_KEY` à la légère : des identifiants stockés et secrets d’intégration peuvent devenir inutilisables.
 
-| Variable | Purpose |
+## Admin et worker
+
+| Variables | Usage |
 | --- | --- |
-| `INTERNAL_SERVICE_SECRET` | Signs browser call end tokens and other short-lived internal values. |
-| `INTERNAL_SERVICE_TOKEN` | Authenticates the admin's call handoff to the worker and protected internal health routes. Set the same value on admin and worker. |
-| `WORKER_INTERNAL_URL` | Private URL of the worker's HTTP port, used by the admin to hand each call to the worker. Compose sets this to `http://worker:3002`. |
+| `INTERNAL_SERVICE_SECRET` | Signatures internes et jetons courts. |
+| `INTERNAL_SERVICE_TOKEN` | Authentification des échanges internes protégés. |
+| `WORKER_INTERNAL_URL` | Adresse privée du worker. |
+| `REDIS_URL` | Fonctions partagées, dont limites d’accès selon le parcours. |
 
-## Voice calls
+Vérifiez les valeurs communes nécessaires aux deux services. Ne publiez pas les routes internes.
 
-OpenAI's GPT-Live model answers browser calls and phone calls. Phone calls reach it through your Twilio SIP trunk. The admin starts each call and the worker runs it.
+## Voix
 
-| Variable | Purpose |
+| Variables | Usage |
 | --- | --- |
-| `LIVE_PROTOTYPE_ENABLED` | Set to `true` on admin and worker. Compose sets it by default. Browser calls fail without it. |
-| `OPENAI_WEBHOOK_SECRET` | Verifies OpenAI's incoming-call webhook at `/api/webhooks/openai/live`. Phone calls only. |
-| `TWILIO_SIP_TRUNK_SID` | The Twilio Elastic SIP trunk that sends calls to your OpenAI project. New numbers join it, and the worker won't provision a number without it. |
-| `WEB_CALL_MAX_DURATION_MS` | Optional cap on browser call length. |
-| `WEB_CALL_PUBLIC_BUSINESS_SLUG` | Business that answers the public demo call on your marketing site. |
-| `WEB_CALL_ALLOWED_ORIGINS` | Comma-separated sites allowed to start that public demo call. Website widget calls use each widget key's allowed origins instead. |
+| `LIVE_PROTOTYPE_ENABLED` | Activation du runtime vocal sur les services concernés. |
+| `OPENAI_API_KEY` | Accès fournisseur vocal et éventuels replis IA. |
+| `OPENAI_WEBHOOK_SECRET` | Vérification du webhook d’appels entrants OpenAI. |
+| `TWILIO_SIP_TRUNK_SID` | Trunk configuré pour la chaîne téléphonique. |
+| `WEB_CALL_MAX_DURATION_MS` | Limite de durée des appels navigateur. |
+| `WEB_CALL_PUBLIC_BUSINESS_SLUG` | Entreprise de démo publique de votre instance. |
+| `WEB_CALL_ALLOWED_ORIGINS` | Origines autorisées pour cette démo. |
 
-## Redis and file storage
+Une variable configurée ne qualifie pas le transfert humain. Contrôlez aussi la politique effective du fournisseur.
 
-| Variable | Purpose |
+## Fichiers
+
+| Variables | Usage |
 | --- | --- |
-| `REDIS_URL` | Redis connection URL used by admin and worker runtimes. |
-| `STORAGE_PROVIDER` | `local` by default. Set to `s3` for AWS S3, MinIO, or another compatible service. |
-| `LOCAL_STORAGE_PATH` | Filesystem path shared by the admin and worker. Compose mounts its persistent volume at `/var/lib/lobbystack/storage`. |
-| `LOCAL_STORAGE_SIGNING_SECRET` | Signs short-lived local upload and download URLs. Use a long random value. Falls back to `INTERNAL_SERVICE_SECRET` outside Compose. |
-| `S3_ENDPOINT` | Optional S3-compatible endpoint. Leave empty for AWS S3. |
-| `S3_BUCKET` | Bucket for recordings and uploads. |
-| `S3_REGION` | S3 region. Defaults to `us-east-1`. |
-| `S3_ACCESS_KEY_ID`, `S3_SECRET_ACCESS_KEY` | Object-storage credentials. |
-| `S3_FORCE_PATH_STYLE` | Set to `true` for MinIO. |
+| `STORAGE_PROVIDER` | Choix local ou S3 selon le déploiement. |
+| `LOCAL_STORAGE_PATH` | Répertoire persistant partagé si stockage local. |
+| `LOCAL_STORAGE_SIGNING_SECRET` | Signature des accès temporaires locaux. |
+| `S3_ENDPOINT`, `S3_BUCKET`, `S3_REGION` | Destination du stockage compatible S3. |
+| `S3_ACCESS_KEY_ID`, `S3_SECRET_ACCESS_KEY`, `S3_FORCE_PATH_STYLE` | Accès et compatibilité du fournisseur. |
 
-Local storage fits a single-host deployment. Use S3 when the admin and worker run on different hosts or when you need storage managed outside the Docker host.
+Préservez des sauvegardes cohérentes avec la base et testez leur restauration.
 
-## Public API and webhooks
+## IA, intégrations et observabilité
 
-| Variable | Purpose |
+| Variables | Usage |
 | --- | --- |
-| `PUBLIC_API_RATE_LIMIT_PER_MINUTE` | Requests per minute for each API key on `/api/v1`. Defaults to `120`. Set it on the admin. The limit uses `REDIS_URL`; in production, requests fail with `503` when Redis is unreachable. |
-| `ENCRYPTION_KEY` | Also encrypts webhook signing secrets and keys the HMAC that stores API key hashes. Set the same value on the admin and the worker, or the worker can't sign deliveries. Changing it invalidates every API key and webhook secret. |
+| `AI_CHAT_*`, `AI_SUMMARY_*`, `AI_EMBEDDING_*` | Modèles, points d’accès et accès IA. |
+| `GOOGLE_*` | OAuth et calendrier. |
+| `TWILIO_*` | Opérateur et vérification des requêtes. |
+| `WIDGET_SESSION_SECRET` | Signature des sessions widget. |
+| `WIDGET_KEY_ISSUANCE_ENABLED` | Émission de nouvelles clés, désactivée par défaut. |
+| `FIRECRAWL_*` | Import de pages Web. |
+| `EMAIL_*`, `SMTP_*` et paramètres Resend du fichier exemple | Email transactionnel selon fournisseur. |
+| `PUBLIC_API_RATE_LIMIT_PER_MINUTE` | Limite API configurée. |
+| `POLAR_*` | Facturation si configurée et validée pour votre instance. |
+| `POSTHOG_*`, `OTEL_EXPORTER_OTLP_*` | Analyse, erreurs et export de télémétrie selon configuration. |
 
-Webhook deliveries refuse private, loopback, link-local and cloud metadata addresses on every deployment, including self-hosted ones. Point endpoints at a public HTTPS URL. Plain `http://` URLs work only when `NODE_ENV=development`.
+N’utilisez pas des prix ou clés fictifs comme données réelles. Vérifiez la redaction des informations sensibles dans les journaux.
 
-## Observability
+## Secrets
 
-| Variable | Purpose |
-| --- | --- |
-| `OTEL_EXPORTER_OTLP_ENDPOINT` | OTLP base URL. LobbyStack appends `/v1/traces`, `/v1/metrics`, and `/v1/logs`. Leave empty to disable export. |
-| `OTEL_EXPORTER_OTLP_HEADERS` | Optional comma-separated `key=value` headers sent with each OTLP request. For PostHog, use `Authorization=Bearer your_posthog_project_token_here`. |
+Conservez les secrets côté serveur. Les variables `NEXT_PUBLIC_*` sont destinées aux données publiques et ne doivent contenir aucune clé privée.
 
-An empty OTLP endpoint does not disable container stdout logs, application health endpoints, direct product analytics, or direct error reporting.
-
-## Providers
-
-| Variable group | Purpose |
-| --- | --- |
-| `TWILIO_*` | Voice, verification, number provisioning, and webhook authentication. |
-| `OPENAI_API_KEY` | GPT-Live calls and the fallback key for `AI_CHAT_*` and `AI_EMBEDDING_*`. |
-| `AI_CHAT_API_KEY`, `AI_CHAT_BASE_URL`, `AI_CHAT_MODEL`, `AI_CHAT_PROVIDER_NAME` | The receptionist agent for website chat and calls. Leave `AI_CHAT_MODEL` blank on OpenAI to use `gpt-6-luna`. Set it for any other OpenAI-compatible endpoint. |
-| `AI_CHAT_REASONING_EFFORT` | OpenAI only: `none`, `minimal`, `low`, `medium`, `high`, or `xhigh`. Defaults to `high`. |
-| `AI_SUMMARY_MODEL` | The model the worker uses on the `AI_CHAT_*` endpoint to write the one-line summary of each finished call and pick up the caller's name. Leave it blank to use `AI_CHAT_MODEL`. With a different model, the call summary's AI cost stays unknown, because the `AI_CHAT_*` prices describe the chat model. Without any text model, calls fall back to a summary taken from the transcript. |
-| `AI_SUMMARY_REASONING_EFFORT` | OpenAI only: reasoning effort for call summaries. Defaults to `low`. |
-| `AI_EMBEDDING_API_KEY`, `AI_EMBEDDING_BASE_URL`, `AI_EMBEDDING_MODEL`, `AI_EMBEDDING_PROVIDER_NAME`, `AI_EMBEDDING_REVISION` | OpenAI-compatible 1536-dimensional embeddings. |
-| `WIDGET_SESSION_SECRET` | Signs cross-origin website-widget sessions. |
-| `FIRECRAWL_*` | Website knowledge ingestion. |
-| `GOOGLE_*` | Google Calendar OAuth. |
-| `SMTP_*`, `EMAIL_*` | Transactional email. |
-| `POLAR_*` | Hosted billing and usage meters. |
-| `POSTHOG_*` | Direct product analytics and error reporting. |
-
-<Warning>
-  Never place secrets in `NEXT_PUBLIC_*` variables. Next.js includes those values in browser bundles.
-</Warning>
+L’activation d’un fournisseur peut générer un coût. Gardez les tests sans envoi, achat ou facturation réels tant qu’ils ne sont pas autorisés.

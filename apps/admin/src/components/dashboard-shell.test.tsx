@@ -34,11 +34,19 @@ describe("original shared navigation", () => {
     setup();
     // The sidebar header carries the workspace switcher alone; no brand mark.
     expect(screen.queryByRole("img", { name: "LobbyStack" })).toBeNull();
-    expect(screen.getAllByRole("link").map(link => link.getAttribute("href"))).toEqual(["#dashboard-main-content", "/", "/calls", "/contacts", "/agent", "/agent/knowledge", "/agent/services", "/agent/rules", "/analytics", "/integrations", "/settings/usage"]);
+    expect(screen.getAllByRole("link").map(link => link.getAttribute("href"))).toEqual(["#dashboard-main-content", "/", "/calls", "/messages", "/contacts", "/agent", "/agent/knowledge", "/agent/services", "/agent/rules", "/analytics", "/integrations", "/settings/usage"]);
     expect(document.getElementById("dashboard-main-content")?.tabIndex).toBe(-1);
   });
   it("keeps integrations visible for viewers", () => {
     setup("viewer"); expect(screen.getByRole("link", { name: "settings:sections.integrations" })).toBeTruthy();
+  });
+  it("keeps Messages discoverable across routes without adding a widget sidebar category", () => {
+    const view = setup("viewer");
+    for (const pathname of ["/", "/calls", "/agent", "/settings/phone-number", "/messages", "/settings/widget"]) {
+      view.navigate(pathname);
+      expect(screen.getByRole("link", { name: "nav:items.messages" }).getAttribute("href")).toBe("/messages");
+      expect(screen.queryByRole("link", { name: "settings:sections.widget" })).toBeNull();
+    }
   });
   it("resets the content scroll position after navigation", () => {
     const view = setup(); const main = view.container.querySelector('[data-slot="sidebar-inset"]') as HTMLElement;
@@ -48,7 +56,7 @@ describe("original shared navigation", () => {
   it("supports repeated mobile navigation across every original group", async () => {
     window.innerWidth = 390;
     const view = setup();
-    for (const [label, href] of [["nav:items.calls", "/calls"], ["agent:sections.knowledge.title", "/agent/knowledge"], ["settings:sections.integrations", "/integrations"]]) {
+    for (const [label, href] of [["nav:items.calls", "/calls"], ["nav:items.messages", "/messages"], ["agent:sections.knowledge.title", "/agent/knowledge"], ["settings:sections.integrations", "/integrations"]]) {
       await userEvent.click(screen.getByRole("button", { name: "Toggle sidebar" }));
       const dialog = await screen.findByRole("dialog");
       await userEvent.click(within(dialog).getByRole("button", { name: label! }));

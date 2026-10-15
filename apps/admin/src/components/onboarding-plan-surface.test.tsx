@@ -26,10 +26,10 @@ beforeEach(() => {
   });
 });
 afterEach(() => { cleanup(); clients.forEach(client => client.clear()); clients.length = 0; vi.unstubAllGlobals(); vi.clearAllMocks(); });
-function setup(synced: boolean | "error" = false, monthlyOnly = false) {
+function setup(synced: boolean | "error" = false, monthlyOnly = false, checkoutAvailable = true, emptyIntervals = false) {
   const client = new QueryClient({ defaultOptions: { queries: { retry: false, staleTime: Infinity } } }); clients.push(client);
   client.setQueryData(["businesses"], { businesses: [{ businessId: "business", active: true }] });
-  client.setQueryData(["billing", "business"], { checkoutAvailable: true, availableCheckoutPlans: ["pro"], availableCheckoutIntervals: { starter: [], pro: monthlyOnly ? ["monthly"] : ["monthly", "annual"] } });
+  client.setQueryData(["billing", "business"], { checkoutAvailable, availableCheckoutPlans: ["pro"], availableCheckoutIntervals: { starter: [], pro: emptyIntervals ? [] : monthlyOnly ? ["monthly"] : ["monthly", "annual"] } });
   const fetchMock = vi.fn(async (url: string, init?: RequestInit) => {
     if (url.includes("/api/onboarding/stage?")) return Response.json({ ok: true });
     if (url === "/api/billing/checkout" && init?.method === "POST") return Response.json({ requestId: "new-checkout" });
@@ -42,6 +42,20 @@ function setup(synced: boolean | "error" = false, monthlyOnly = false) {
   return fetchMock;
 }
 describe("original onboarding plan behavior with asynchronous checkout", () => {
+  it("uses assisted pilot setup without advertising unapproved prices when checkout is closed", async () => {
+    const fetchMock = setup(false, false, false);
+    expect(screen.getByText("billing.availability.title")).toBeTruthy();
+    expect(screen.queryByText("plan.tiers.pro.price.annual")).toBeNull();
+    await userEvent.click(screen.getByRole("button", { name: "plan.availability.continue" }));
+    await waitFor(() => expect(fetchMock).toHaveBeenCalledWith("/api/onboarding/stage?businessId=business", expect.objectContaining({ method: "POST" })));
+    expect(fetchMock.mock.calls.some(([url]) => url === "/api/billing/checkout")).toBe(false);
+  });
+  it("keeps price cards closed when the provider reports access without a configured product interval", () => {
+    setup(false, false, true, true);
+    expect(screen.getByText("billing.availability.title")).toBeTruthy();
+    expect(screen.queryByText("plan.tiers.pro.price.annual")).toBeNull();
+    expect(screen.queryByRole("button", { name: "plan.tiers.pro.cta.annual" })).toBeNull();
+  });
   it("reconciles a paid return once under StrictMode before advancing onboarding", async () => {
     route.search = new URLSearchParams("checkout=success&requestId=returned-checkout");
     const fetchMock = setup(true);

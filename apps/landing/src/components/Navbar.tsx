@@ -1,619 +1,168 @@
+import { Menu, X, ChevronDown, ArrowRight } from "lucide-react"
 import { buttonVariants } from "@/components/ui/button"
 import { APP_LOGIN_URL, APP_SIGNUP_URL } from "@/lib/app-links"
-import { GithubIcon } from "@/components/GithubIcon"
-import { localizeHref, localizePath, type Locale } from "@/lib/i18n"
+import { launchCopy, launchSolutions } from "@/lib/launch-content"
+import { localizePath, type Locale } from "@/i18n"
 import { cn } from "@/lib/utils"
-import {
-  BookOpen,
-  CalendarCheck,
-  Building2,
-  Calculator,
-  ChevronDown,
-  CloudHail,
-  DoorOpen,
-  ExternalLink,
-  Gift,
-  Hammer,
-  History,
-  Home,
-  KeyRound,
-  Menu,
-  Moon,
-  Newspaper,
-  PhoneCall,
-  Scissors,
-  Server,
-  Stethoscope,
-  WashingMachine,
-  Wind,
-  Wrench,
-  X,
-  Zap,
-  type LucideIcon,
-} from "lucide-react"
-
-type NavChildLink = {
-  label: string
-  href: string
-  external?: boolean
-  icon?: LucideIcon
-}
-
-type NavColumn = {
-  title: string
-  links: NavChildLink[]
-  highlighted?: boolean
-}
-
-type NavLink =
-  | (NavChildLink & { type: "link" })
-  | {
-      type: "group"
-      label: string
-      columns: NavColumn[]
-    }
-
-const labels = {
-  en: {
-    solutions: "Solutions",
-    features: "Features",
-    resources: "Resources",
-    pricing: "Pricing",
-    login: "Log in",
-    github: "Caleonis Reception on GitHub",
-    tryFree: "Try for free",
-    blog: "Blog",
-    changelog: "Changelog",
-    helpCenter: "Help Center",
-    calculator: "Missed call calculator",
-    affiliateProgram: "Affiliate Program",
-  },
-  fr: {
-    solutions: "Solutions",
-    features: "Fonctionnalités",
-    resources: "Ressources",
-    pricing: "Tarifs",
-    login: "Connexion",
-    github: "Caleonis Reception sur GitHub",
-    tryFree: "Essayer gratuitement",
-    blog: "Blog",
-    changelog: "Journal des changements",
-    helpCenter: "Centre d'aide",
-    calculator: "Calculateur d'appels manqués",
-    affiliateProgram: "Programme d'affiliation",
-  },
-} satisfies Record<Locale, Record<string, string>>
-
-const solutionLabelMap = {
-  en: {
-    solutions: "Top Uses",
-    industries: "By Industry",
-    aiPhoneAnswering: "AI phone answering",
-    aiAppointmentScheduler: "AI appointment scheduler",
-    homeServices: "Home services",
-    afterHours: "After-hours answering",
-    dental: "Dental offices",
-    salons: "Salons and spas",
-    selfHosted: "Self-hosted AI receptionist",
-    trades: "By Trade",
-    plumbers: "Plumbers",
-    hvac: "HVAC",
-    electricians: "Electricians",
-    garageDoor: "Garage door repair",
-    applianceRepair: "Appliance repair",
-    restoration: "Restoration",
-    locksmiths: "Locksmiths",
-    roofing: "Roofing",
-    propertyManagement: "Property management",
-  },
-  fr: {
-    solutions: "Solutions",
-    industries: "Industries",
-    aiPhoneAnswering: "Réponse téléphonique IA",
-    aiAppointmentScheduler: "Planification de rendez‑vous IA",
-    homeServices: "Services à domicile",
-    afterHours: "Réponse hors horaires",
-    dental: "Cabinets dentaires",
-    salons: "Salons et spas",
-    selfHosted: "Réceptionniste IA auto-hébergé",
-    trades: "Métiers",
-    plumbers: "Plombiers",
-    hvac: "CVC",
-    electricians: "Électriciens",
-    garageDoor: "Réparation de portes de garage",
-    applianceRepair: "Réparation d'électroménagers",
-    restoration: "Restauration",
-    locksmiths: "Serruriers",
-    roofing: "Toiture",
-    propertyManagement: "Gestion immobilière",
-  },
-} satisfies Record<Locale, Record<string, string>>
-
-const resourceLinks = (locale: Locale) =>
-  [
-    { label: labels[locale].blog, href: "/blog/", icon: Newspaper },
-    { label: labels[locale].changelog, href: "/changelog/", icon: History },
+export function Navbar({ locale = "fr" }: { locale?: Locale }) {
+  const copy = launchCopy[locale]
+  const links = [
     {
-      label: labels[locale].helpCenter,
-      href: "https://docs.reception.caleonis.com/introduction",
-      external: true,
-      icon: BookOpen,
+      path: "/features/",
+      label: locale === "fr" ? "Fonctionnalités" : "Features",
     },
+    { path: "/pricing/", label: locale === "fr" ? "Tarifs" : "Pricing" },
     {
-      label: labels[locale].calculator,
-      href: "/missed-call-revenue-calculator/",
-      icon: Calculator,
-    },
-    {
-      label: labels[locale].affiliateProgram,
-      href: "/affiliate-program/",
-      icon: Gift,
-    },
-  ] satisfies NavChildLink[]
-
-const solutionLinks = (locale: Locale) =>
-  [
-    {
-      label: solutionLabelMap[locale].aiPhoneAnswering,
-      href: "/solutions/ai-phone-answering/",
-      icon: PhoneCall,
-    },
-    {
-      label: solutionLabelMap[locale].aiAppointmentScheduler,
-      href: "/solutions/ai-appointment-scheduler/",
-      icon: CalendarCheck,
-    },
-    {
-      label: solutionLabelMap[locale].afterHours,
-      href: "/solutions/after-hours-answering-service/",
-      icon: Moon,
-    },
-    {
-      label: solutionLabelMap[locale].selfHosted,
-      href: "/solutions/self-hosted-ai-receptionist/",
-      icon: Server,
-    },
-  ] satisfies NavChildLink[]
-
-const industryLinks = (locale: Locale) =>
-  [
-    {
-      label: solutionLabelMap[locale].homeServices,
-      href: "/solutions/ai-receptionist-for-home-services/",
-      icon: Home,
-    },
-    {
-      label: solutionLabelMap[locale].dental,
-      href: "/solutions/ai-receptionist-for-dental-offices/",
-      icon: Stethoscope,
-    },
-    {
-      label: solutionLabelMap[locale].salons,
-      href: "/solutions/ai-receptionist-for-salons-and-spas/",
-      icon: Scissors,
-    },
-  ] satisfies NavChildLink[]
-
-const tradeLinks = (locale: Locale) =>
-  [
-    {
-      label: solutionLabelMap[locale].plumbers,
-      href: "/solutions/ai-receptionist-for-plumbers/",
-      icon: Wrench,
-    },
-    {
-      label: solutionLabelMap[locale].hvac,
-      href: "/solutions/ai-receptionist-for-hvac/",
-      icon: Wind,
-    },
-    {
-      label: solutionLabelMap[locale].electricians,
-      href: "/solutions/ai-receptionist-for-electricians/",
-      icon: Zap,
-    },
-    {
-      label: solutionLabelMap[locale].garageDoor,
-      href: "/solutions/ai-receptionist-for-garage-door-repair/",
-      icon: DoorOpen,
-    },
-    {
-      label: solutionLabelMap[locale].applianceRepair,
-      href: "/solutions/ai-receptionist-for-appliance-repair/",
-      icon: WashingMachine,
-    },
-    {
-      label: solutionLabelMap[locale].restoration,
-      href: "/solutions/ai-receptionist-for-restoration-companies/",
-      icon: Hammer,
-    },
-    {
-      label: solutionLabelMap[locale].locksmiths,
-      href: "/solutions/ai-receptionist-for-locksmiths/",
-      icon: KeyRound,
-    },
-    {
-      label: solutionLabelMap[locale].roofing,
-      href: "/solutions/roofing-answering-service/",
-      icon: CloudHail,
-    },
-    {
-      label: solutionLabelMap[locale].propertyManagement,
-      href: "/solutions/property-management-answering-service/",
-      icon: Building2,
-    },
-  ] satisfies NavChildLink[]
-
-const tradeColumns = (locale: Locale): NavColumn[] => {
-  const links = tradeLinks(locale)
-
-  if (links.length === 0) {
-    return []
-  }
-
-  return [
-    {
-      title: solutionLabelMap[locale].trades,
-      links,
-      highlighted: true,
+      path: "/resources/",
+      label: locale === "fr" ? "Ressources" : "Resources",
     },
   ]
-}
-
-const solutionColumns = (locale: Locale) =>
-  [
-    {
-      title: solutionLabelMap[locale].solutions,
-      links: solutionLinks(locale),
-    },
-    ...tradeColumns(locale),
-    {
-      title: solutionLabelMap[locale].industries,
-      links: industryLinks(locale),
-    },
-  ].filter(Boolean) as NavColumn[]
-
-const navLinks = (locale: Locale): NavLink[] => [
-  {
-    type: "group",
-    label: labels[locale].solutions,
-    columns: solutionColumns(locale),
-  },
-  { type: "link", label: labels[locale].features, href: "/features/" },
-  {
-    type: "group",
-    label: labels[locale].resources,
-    columns: [
-      {
-        title: labels[locale].resources,
-        links: resourceLinks(locale),
-      },
-    ],
-  },
-  { type: "link", label: labels[locale].pricing, href: "/pricing/" },
-]
-
-type NavbarProps = {
-  locale?: Locale
-}
-
-export function Navbar({ locale = "en" }: NavbarProps) {
-  const mobileMenuId = "site-mobile-menu"
-  const copy = labels[locale]
-
   return (
     <header className="site-header sticky top-0 z-50 w-full border-b border-border/60">
-      <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-6">
-        {/* Logo */}
+      <div className="mx-auto flex h-16 max-w-7xl items-center justify-between gap-4 px-6">
         <a
           href={localizePath(locale, "/")}
-          className="flex items-center focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
+          className="flex min-w-0 items-center rounded-md focus-visible:ring-2 focus-visible:ring-ring"
         >
           <img
-            src="/lobbystack-logo.svg"
-            alt="Caleonis Reception"
-            width={155}
-            height={43}
-            decoding="async"
-            className="h-7 w-auto"
+            src="/caleonis-logo.svg"
+            width="220"
+            height="40"
+            alt="Caléonis Receptionist"
+            className="h-8 w-auto max-w-52"
           />
         </a>
-
-        {/* Desktop Nav */}
-        <nav className="hidden items-center gap-1 md:flex">
-          {navLinks(locale).map((link) => (
-            <div key={link.label} className="group relative">
-              {link.type === "group" ? (
-                <details name="site-nav" className="group/dropdown">
-                  <summary
-                    className="flex cursor-pointer list-none items-center gap-1 rounded-full px-3 py-2 text-sm font-medium text-foreground transition-colors duration-150 group-open/dropdown:bg-muted hover:bg-muted focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none [&::-webkit-details-marker]:hidden"
-                  >
-                    {link.label}
-                    <ChevronDown
-                      className="size-3.5 transition-transform duration-200 ease-(--ease-out) group-open/dropdown:rotate-180"
-                      aria-hidden="true"
-                    />
-                  </summary>
-                  <div
-                    className={cn(
-                      "nav-popover absolute top-full left-0 z-50 grid min-w-56 origin-top-left translate-y-1 gap-3 rounded-lg border border-border/70 bg-popover p-1.5 text-popover-foreground shadow-lg",
-                      link.columns.length === 2 && "w-[31rem] grid-cols-2",
-                      // Wide menus start left of their trigger so they
-                      // stay inside a 1024px window.
-                      link.columns.length === 3 &&
-                        "w-max origin-[25%_0] -translate-x-1/4 grid-cols-[minmax(13rem,max-content)_minmax(13rem,max-content)_minmax(13rem,max-content)] gap-x-8 p-4",
-                      link.columns.length === 4 &&
-                        "w-max origin-[25%_0] -translate-x-1/4 grid-cols-[minmax(13rem,max-content)_minmax(13rem,max-content)_minmax(13rem,max-content)_minmax(13rem,max-content)] gap-x-8 p-4"
-                    )}
-                  >
-                    {link.columns.map((column, columnIndex) => (
-                      <div
-                        key={`${column.title || "column"}-${columnIndex}`}
-                        className={cn(
-                          "min-w-0",
-                          column.highlighted && "rounded-lg bg-muted/45 p-2"
-                        )}
-                      >
-                        <p
-                          className={cn(
-                            "px-3 pt-2 pb-1 text-sm text-muted-foreground",
-                            !column.title && "invisible"
-                          )}
-                        >
-                          {column.title || solutionLabelMap[locale].trades}
-                        </p>
-                        {column.links.map((resourceLink) => {
-                          const LinkIcon = resourceLink.icon
-
-                          return (
-                            <a
-                              key={resourceLink.label}
-                              href={localizeHref(locale, resourceLink.href)}
-                              target={
-                                resourceLink.external ? "_blank" : undefined
-                              }
-                              rel={
-                                resourceLink.external
-                                  ? "noopener noreferrer"
-                                  : undefined
-                              }
-                              data-ph-capture-attribute-section="navbar"
-                              data-ph-capture-attribute-action="navigate"
-                              data-ph-capture-attribute-destination={
-                                resourceLink.href
-                              }
-                              data-ph-capture-attribute-label={
-                                resourceLink.label
-                              }
-                              className="group/link flex min-w-0 items-center justify-between gap-4 rounded-md px-3 py-2.5 text-sm text-foreground transition-colors hover:bg-muted hover:text-foreground focus-visible:bg-muted focus-visible:text-foreground focus-visible:outline-none"
-                            >
-                              <span className="flex min-w-0 items-center gap-2.5">
-                                {LinkIcon && (
-                                  <span className="flex size-6 shrink-0 items-center justify-center rounded-md bg-muted text-muted-foreground transition-colors group-hover/link:text-foreground">
-                                    <LinkIcon
-                                      className="size-3.5"
-                                      aria-hidden="true"
-                                      strokeWidth={2}
-                                    />
-                                  </span>
-                                )}
-                                <span className="min-w-0">
-                                  {resourceLink.label}
-                                </span>
-                              </span>
-                              {resourceLink.external && (
-                                <ExternalLink
-                                  className="size-3.5 shrink-0"
-                                  aria-hidden="true"
-                                />
-                              )}
-                            </a>
-                          )
-                        })}
-                      </div>
-                    ))}
-                  </div>
-                </details>
-              ) : (
+        <nav
+          className="hidden items-center gap-1 lg:flex"
+          aria-label={
+            locale === "fr" ? "Navigation principale" : "Main navigation"
+          }
+        >
+          <details className="group relative">
+            <summary className="flex cursor-pointer list-none items-center gap-2 rounded-full px-3 py-2 text-sm font-medium hover:bg-muted focus-visible:ring-2 focus-visible:ring-ring">
+              Solutions
+              <ChevronDown className="size-4" aria-hidden="true" />
+            </summary>
+            <div className="nav-popover absolute top-full left-0 min-w-64 rounded-xl border border-border bg-popover p-2 shadow-lg">
+              <a
+                className="block rounded-md px-3 py-3 text-sm hover:bg-muted"
+                href={localizePath(locale, "/solutions/")}
+              >
+                {locale === "fr" ? "Tous les métiers" : "All industries"}
+              </a>
+              {launchSolutions.map((item) => (
                 <a
-                  href={localizeHref(locale, link.href)}
-                  data-ph-capture-attribute-section="navbar"
-                  data-ph-capture-attribute-action="navigate"
-                  data-ph-capture-attribute-destination={link.href}
-                  data-ph-capture-attribute-label={link.label}
-                  className="block rounded-full px-3 py-2 text-sm font-medium text-foreground transition-colors duration-150 hover:bg-muted focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
+                  key={item.slug}
+                  className="block rounded-md px-3 py-3 text-sm hover:bg-muted"
+                  href={localizePath(locale, `/solutions/${item.slug}/`)}
                 >
-                  {link.label}
+                  {item[locale]}
                 </a>
-              )}
+              ))}
             </div>
+          </details>
+          {links.map((item) => (
+            <a
+              key={item.path}
+              className="rounded-full px-3 py-2 text-sm font-medium hover:bg-muted focus-visible:ring-2 focus-visible:ring-ring"
+              href={localizePath(locale, item.path)}
+            >
+              {item.label}
+            </a>
           ))}
         </nav>
-
-        {/* Desktop CTAs */}
-        <div className="hidden items-center gap-1 md:flex">
+        <div className="hidden items-center gap-3 lg:flex">
           <a
-            href="https://github.com/lobbystack/lobbystack"
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label={copy.github}
-            title={copy.github}
-            className="inline-flex size-9 items-center justify-center rounded-full text-muted-foreground transition-colors duration-150 hover:bg-muted hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
-            data-ph-capture-attribute-section="navbar"
-            data-ph-capture-attribute-action="view_github"
-            data-ph-capture-attribute-destination="https://github.com/lobbystack/lobbystack"
+            className="rounded-md px-2 py-2 text-sm hover:underline"
+            href={locale === "fr" ? "/" : "/fr/"}
+            lang={locale === "fr" ? "en" : "fr"}
+            aria-label={
+              locale === "fr" ? "English version" : "Version française"
+            }
           >
-            <GithubIcon className="size-[18px]" />
+            {locale === "fr" ? "EN" : "FR"}
           </a>
           <a
             href={APP_LOGIN_URL}
-            className="rounded-full px-3 py-2 text-sm font-medium text-foreground transition-colors duration-150 hover:bg-muted focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
+            className="rounded-full px-3 py-2 text-sm hover:bg-muted"
           >
             {copy.login}
           </a>
           <a
             href={APP_SIGNUP_URL}
-            className={cn(buttonVariants(), "ml-2 rounded-full px-5")}
+            className={cn(buttonVariants(), "rounded-full")}
             data-ph-signup-cta
-            data-ph-capture-attribute-section="navbar"
-            data-ph-capture-attribute-action="try_for_free"
-            data-ph-capture-attribute-destination={APP_SIGNUP_URL}
           >
-            {copy.tryFree}
+            {copy.cta}
           </a>
         </div>
-
-        <details className="group/mobile-menu md:hidden">
+        <details className="group/mobile lg:hidden">
           <summary
-            className="inline-flex size-9 cursor-pointer list-none items-center justify-center rounded-md text-muted-foreground transition-colors hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none [&::-webkit-details-marker]:hidden"
-            aria-controls={mobileMenuId}
-            aria-label={locale === "fr" ? "Menu de navigation" : "Navigation menu"}
+            className="flex size-11 cursor-pointer list-none items-center justify-center rounded-md focus-visible:ring-2 focus-visible:ring-ring"
+            aria-label={
+              locale === "fr" ? "Menu de navigation" : "Navigation menu"
+            }
           >
             <Menu
-              className="size-5 group-open/mobile-menu:hidden"
+              className="size-5 group-open/mobile:hidden"
               aria-hidden="true"
             />
             <X
-              className="hidden size-5 group-open/mobile-menu:block"
+              className="hidden size-5 group-open/mobile:block"
               aria-hidden="true"
             />
           </summary>
-
-          <div
-            id={mobileMenuId}
-            className="mobile-menu-sheet fixed inset-x-0 top-16 max-h-[calc(100svh-4rem)] overflow-y-auto border-t border-border/60 bg-background shadow-sm"
+          <nav
+            className="mobile-menu-sheet fixed inset-x-0 top-16 max-h-[calc(100svh-4rem)] overflow-y-auto border-t border-border bg-background p-6 shadow-lg"
+            aria-label={
+              locale === "fr" ? "Navigation mobile" : "Mobile navigation"
+            }
           >
-            <nav
-              className="flex flex-col gap-1 px-6 py-4"
-              aria-label={locale === "fr" ? "Navigation mobile" : "Mobile navigation"}
+            <a
+              className="block rounded-md px-3 py-3 font-medium hover:bg-muted"
+              href={localizePath(locale, "/solutions/")}
             >
-              {navLinks(locale).map((link) =>
-                link.type === "group" ? (
-                  <details
-                    key={link.label}
-                    className="disclosure group/mobile-submenu py-1"
-                  >
-                    <summary className="flex cursor-pointer list-none items-center justify-between gap-4 rounded-md px-3 py-2.5 text-sm font-medium text-foreground transition-colors hover:bg-muted hover:text-foreground focus-visible:bg-muted focus-visible:text-foreground focus-visible:outline-none [&::-webkit-details-marker]:hidden">
-                      <span>{link.label}</span>
-                      <ChevronDown
-                        className="size-4 shrink-0 transition-transform duration-200 ease-(--ease-out) group-open/mobile-submenu:rotate-180"
-                        aria-hidden="true"
-                      />
-                    </summary>
-                    <div className="mt-1 flex flex-col gap-2 pl-3">
-                      {link.columns.map((column, columnIndex) => (
-                        <div
-                          key={`${column.title || "column"}-${columnIndex}`}
-                          className={cn(
-                            "flex flex-col gap-1",
-                            column.highlighted && "rounded-lg bg-muted/45 p-2"
-                          )}
-                        >
-                          <p
-                            className={cn(
-                              "px-3 pt-2 text-xs font-medium text-muted-foreground",
-                              !column.title && "invisible"
-                            )}
-                          >
-                            {column.title || solutionLabelMap[locale].trades}
-                          </p>
-                          {column.links.map((resourceLink) => {
-                            const LinkIcon = resourceLink.icon
-
-                            return (
-                              <a
-                                key={resourceLink.label}
-                                href={localizeHref(locale, resourceLink.href)}
-                                target={
-                                  resourceLink.external ? "_blank" : undefined
-                                }
-                                rel={
-                                  resourceLink.external
-                                    ? "noopener noreferrer"
-                                    : undefined
-                                }
-                                data-ph-capture-attribute-section="mobile_navbar"
-                                data-ph-capture-attribute-action="navigate"
-                                data-ph-capture-attribute-destination={
-                                  resourceLink.href
-                                }
-                                data-ph-capture-attribute-label={
-                                  resourceLink.label
-                                }
-                                className="group/link flex min-w-0 items-center justify-between gap-4 rounded-md px-3 py-2.5 text-sm text-muted-foreground transition-colors hover:bg-muted hover:text-foreground focus-visible:bg-muted focus-visible:text-foreground focus-visible:outline-none"
-                              >
-                                <span className="flex min-w-0 items-center gap-2.5">
-                                  {LinkIcon && (
-                                    <span className="flex size-6 shrink-0 items-center justify-center rounded-md bg-muted text-muted-foreground transition-colors group-hover/link:text-foreground">
-                                      <LinkIcon
-                                        className="size-3.5"
-                                        aria-hidden="true"
-                                        strokeWidth={2}
-                                      />
-                                    </span>
-                                  )}
-                                  <span className="min-w-0">
-                                    {resourceLink.label}
-                                  </span>
-                                </span>
-                                {resourceLink.external && (
-                                  <ExternalLink
-                                    className="size-3.5 shrink-0"
-                                    aria-hidden="true"
-                                  />
-                                )}
-                              </a>
-                            )
-                          })}
-                        </div>
-                      ))}
-                    </div>
-                  </details>
-                ) : (
-                  <a
-                    key={link.label}
-                    href={localizeHref(locale, link.href)}
-                    data-ph-capture-attribute-section="mobile_navbar"
-                    data-ph-capture-attribute-action="navigate"
-                    data-ph-capture-attribute-destination={link.href}
-                    data-ph-capture-attribute-label={link.label}
-                    className="rounded-md px-3 py-2.5 text-sm font-medium text-foreground transition-colors hover:bg-muted hover:text-foreground focus-visible:bg-muted focus-visible:text-foreground focus-visible:outline-none"
-                  >
-                    {link.label}
-                  </a>
-                )
-              )}
-            </nav>
-            <div className="flex flex-col gap-2 px-6 pt-2 pb-4">
+              Solutions
+            </a>
+            {launchSolutions.map((item) => (
               <a
-                href="https://github.com/lobbystack/lobbystack"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center justify-center gap-2 rounded-md px-3 py-2 text-sm font-medium text-foreground hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
-                data-ph-capture-attribute-section="mobile_navbar"
-                data-ph-capture-attribute-action="view_github"
-                data-ph-capture-attribute-destination="https://github.com/lobbystack/lobbystack"
+                key={item.slug}
+                className="block rounded-md px-6 py-3 text-sm hover:bg-muted"
+                href={localizePath(locale, `/solutions/${item.slug}/`)}
               >
-                <GithubIcon className="size-4" />
-                GitHub
+                {item[locale]}
               </a>
+            ))}
+            {links.map((item) => (
               <a
-                href={APP_LOGIN_URL}
-                className="rounded-md px-3 py-2 text-center text-sm font-medium text-foreground hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
+                key={item.path}
+                className="block rounded-md px-3 py-3 font-medium hover:bg-muted"
+                href={localizePath(locale, item.path)}
               >
-                {copy.login}
+                {item.label}
               </a>
-              <a
-                href={APP_SIGNUP_URL}
-                className={cn(buttonVariants(), "rounded-full")}
-                data-ph-signup-cta
-                data-ph-capture-attribute-section="mobile_navbar"
-                data-ph-capture-attribute-action="try_for_free"
-                data-ph-capture-attribute-destination={APP_SIGNUP_URL}
-              >
-                {copy.tryFree}
-              </a>
-            </div>
-          </div>
+            ))}
+            <a
+              className="block px-3 py-3"
+              href={locale === "fr" ? "/" : "/fr/"}
+            >
+              {locale === "fr" ? "English" : "Français"}
+            </a>
+            <a
+              href={APP_LOGIN_URL}
+              className="mt-4 block rounded-full border border-border px-4 py-3 text-center"
+            >
+              {copy.login}
+            </a>
+            <a
+              href={APP_SIGNUP_URL}
+              className={cn(buttonVariants(), "mt-3 flex rounded-full")}
+              data-ph-signup-cta
+            >
+              {copy.cta}
+              <ArrowRight className="ml-2 size-4" aria-hidden="true" />
+            </a>
+          </nav>
         </details>
       </div>
     </header>

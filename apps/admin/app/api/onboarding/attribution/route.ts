@@ -3,6 +3,7 @@ import { NextResponse } from "next/server";
 import { submitOnboardingAttribution } from "@lobbystack/domain";
 import { asApiResponse, businessIdFromRequest, readJson, requireApiSession } from "@/lib/api-helpers";
 import { createDomainContext } from "@/lib/domain-context";
+import { affiliateProgramEnabled } from "@/lib/affiliate-program";
 
 export const dynamic = "force-dynamic";
 
@@ -13,7 +14,7 @@ export async function POST(request: Request) {
     if (!businessId) return NextResponse.json({ error: "A businessId is required." }, { status: 400 });
     const body = await readJson(request);
     const source = typeof body === "object" && body !== null && !Array.isArray(body) && typeof (body as { source?: unknown }).source === "string" ? (body as { source: string }).source : null;
-    const referralCode = typeof body === "object" && body !== null && !Array.isArray(body) && typeof (body as { referralCode?: unknown }).referralCode === "string" ? (body as { referralCode: string }).referralCode : null;
+    const referralCode = affiliateProgramEnabled() && typeof body === "object" && body !== null && !Array.isArray(body) && typeof (body as { referralCode?: unknown }).referralCode === "string" ? (body as { referralCode: string }).referralCode : null;
     await submitOnboardingAttribution(createDomainContext(), { userId: session.user.id, businessId, source, referralCode });
     return NextResponse.json({ ok: true, stage: "complete" });
   } catch (error) {

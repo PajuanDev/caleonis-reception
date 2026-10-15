@@ -1,32 +1,26 @@
-# LobbyStack Mintlify docs instructions
+# Instructions du centre d’aide Caléonis Receptionist
 
-Use these instructions when you change the public LobbyStack Help Center.
+Ce répertoire adapte les guides LobbyStack à Caléonis Receptionist, conformément à la demande de l’utilisateur. L’attribution et la licence MIT du socle restent conservées.
 
-## About this project
+## Structure
 
-- This is the source for [docs.lobbystack.com](https://docs.lobbystack.com/).
-- Pages are MDX files with YAML frontmatter.
-- Configuration lives in `docs.json`.
-- Run `mint dev` from this directory to preview locally.
-- Run `mint broken-links` from this directory to check links.
+- Pages MDX avec frontmatter YAML ; configuration dans `docs.json`.
+- Aide SaaS en français en priorité.
+- Guides développeurs et auto-hébergement séparés du produit géré.
+- Anglais de synthèse dans `en/` ; ne pas prétendre à une traduction intégrale.
 
-## Terminology
+## Rédaction
 
-- Use "LobbyStack" for the product name.
-- Use "Help Center" for customer-facing docs.
-- Use "AI receptionist" for the caller-facing automation.
-- Use "dashboard" for the operator web app.
+- Adressez-vous au lecteur avec « vous ».
+- Utilisez les noms français de l’interface et des étapes concrètes.
+- Distinguez code présent, activation et parcours testé.
+- Un seul agent par entreprise, sans nouvelle rubrique Canaux ou Agent Builder.
+- Aucune promesse SMS sur un numéro Voice-only, de transfert, d’OAuth durable, de portabilité, de notifications, de prix ou d’affiliation sans preuve.
+- Aucun usage médical qualifié ou HDS annoncé.
+- Conservez les identifiants internes, clés, variables et noms de packages attendus par le runtime.
 
-## Style preferences
+## Vérifier
 
-- Use active voice and second person ("you")
-- Keep sentences concise: one idea per sentence
-- Use sentence case for headings
-- Bold for UI elements: Click **Settings**
-- Code formatting for file names, commands, paths, and code references
-- Write customer-facing help first; save implementation detail for self-hosting and developer pages.
+Exécutez `pnpm docs:validate` et `pnpm docs:broken-links`. Vérifiez aussi l’export statique, ses liens et son affichage mobile/desktop.
 
-## Content boundaries
-
-- Document customer setup, receptionist configuration, dashboard workflows, billing, integrations, and self-hosting.
-- Do not publish internal architecture notes, ADRs, planning docs, or Linear tracking content here unless they are rewritten as public developer documentation.
+Ne publiez pas d’informations internes, de secrets ou de données clients. Ne configurez pas de domaine ou de publication automatique sans validation.

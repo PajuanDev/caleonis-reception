@@ -2,7 +2,6 @@
 import Layout from "@/layouts/main.astro"
 import { Navbar } from "@/components/Navbar"
 import { HeroSection } from "@/components/HeroSection"
-import { LobbyStackHeroVoiceDemo } from "@/components/web-voice/LobbyStackWebVoiceWidget"
 import { FeatureGrid } from "@/components/FeatureGrid"
 import {
   ProductExtensionSection,
@@ -36,11 +35,8 @@ const seo = getRouteSeo({ locale, path: "/" })
     ...seo,
     canonicalPath,
     locale,
-    image: "/og/lobbystack-og.webp",
-    imageAlt:
-      locale === "fr"
-        ? "Tableau de bord de réceptionniste IA open source LobbyStack et logo produit"
-        : "LobbyStack open-source AI receptionist dashboard and product logo",
+    image: "/og/index.jpg",
+    imageAlt: "Caléonis Receptionist",
     imageWidth: 1200,
     imageHeight: 630,
     jsonLd: [
@@ -58,14 +54,20 @@ const seo = getRouteSeo({ locale, path: "/" })
 >
   <Navbar locale={locale} />
   <main id="main-content">
-    <HeroSection locale={locale}>
-      <LobbyStackHeroVoiceDemo client:idle locale={locale} />
-    </HeroSection>
+    <HeroSection locale={locale} />
     <ProductExtensionSection locale={locale} />
     <FeatureGrid locale={locale} />
     <LandingPageAdditions locale={locale} />
     <TradeLinks locale={locale} />
     <FaqSection locale={locale} />
+    <p class="mx-auto max-w-7xl px-6 text-sm text-muted-foreground">
+      <a href="/fr/confidentialite/" class="underline underline-offset-4"
+        >{
+          locale === "fr"
+            ? "Confidentialité SaaS et Google : notice en cours de validation"
+            : "SaaS and Google privacy: draft notice under review"
+        }</a>
+    </p>
     <CtaSection locale={locale} />
   </main>
   <Footer locale={locale} />

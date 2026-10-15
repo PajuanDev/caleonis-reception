@@ -1,96 +1,50 @@
 ---
-title: "Authenticate with API keys"
-description: "Create API keys, choose scopes, send the key with each request, and stay within rate limits."
-sidebarTitle: "Authentication"
-contentType: "How-to"
+title: "Authentifier les requêtes API"
+description: "Créer des clés par entreprise et limiter les permissions des intégrations."
 ---
+Les propriétaires et administrateurs peuvent gérer les clés depuis **Réglages > Clés d’API** si cette page leur est ouverte.
 
-Every request needs an API key for one business. Owners and admins create and revoke keys in the dashboard. The same keys connect AI assistants through the [MCP server](/ai/mcp).
+## Créer une clé
 
-## Create a key
+1. Vérifiez l’entreprise active.
+2. Donnez un nom reconnaissable à l’intégration.
+3. Choisissez uniquement les permissions nécessaires.
+4. Copiez la clé lorsqu’elle est affichée.
+5. Placez-la dans le gestionnaire de secrets du serveur destinataire.
 
-<Steps>
-  <Step title="Open API keys">
-    Go to **Settings** > **API keys**. Only owners and admins see the page.
-  </Step>
-  <Step title="Name the key and pick its access">
-    Use a name you'll recognize later, such as `Zapier`. Select only the scopes the tool needs.
-  </Step>
-  <Step title="Copy the key">
-    LobbyStack shows the full key once. Store it in your tool or a password manager. LobbyStack keeps only a hash, so nobody can show the key again.
-  </Step>
-</Steps>
+Les clés conservent le préfixe technique `lsk_`. Ne le renommez pas pour le rebranding. La clé complète n’est pas destinée à être affichée à nouveau.
 
-Keys look like `lsk_1a2b3c4d_` followed by 32 random characters. The dashboard lists each key by its prefix, `lsk_1a2b3c4d`, with its scopes, who created it, and when it was last used.
+## Appeler une route
 
-## Send the key
-
-Put the key in the `Authorization` header:
+L’exemple utilise une variable locale choisie pour votre intégration ; il ne s’agit pas d’une variable interne à renommer dans l’application.
 
 ```bash
-curl https://app.lobbystack.com/api/v1/calls \
-  -H "Authorization: Bearer $LOBBYSTACK_API_KEY"
+curl https://receptionist.caleonis.com/api/v1/me \
+  -H "Authorization: Bearer $CALEONIS_API_KEY"
 ```
 
-A missing, unknown or revoked key returns `401` with the code `unauthorized`.
+Vérifiez que la réponse concerne l’entreprise attendue. Une clé absente, inconnue ou révoquée doit être refusée.
 
-## Test a key
+## Permissions
 
-`GET /me` works with any valid key, whatever its scopes. It returns the key and its business, so an integration can check a connection before it needs a specific scope:
-
-```json
-{
-  "data": {
-    "api_key": {
-      "id": "0b7c1d2e-3f40-4a51-8b62-7c83d94ea5b6",
-      "name": "Zapier",
-      "prefix": "lsk_1a2b3c4d",
-      "scopes": ["appointments:read", "appointments:write"],
-      "created_at": "2026-09-27T16:58:00.000Z"
-    },
-    "business": { "id": "75795511-9ee2-4cb2-a89d-f173ec1dd82d", "name": "Maple Salon" }
-  }
-}
-```
-
-## Scopes
-
-Each endpoint except `GET /me` requires one scope. A key without it gets `403` with the code `insufficient_scope`, and the message names the missing scope.
-
-| Scope | Allows |
+| Permission | Accès |
 | --- | --- |
-| `business:read` | `GET /business`, `GET /services`, `GET /staff` |
-| `business:write` | `PATCH /business` |
-| `calls:read` | `GET /calls`, `GET /calls/{call_id}` |
-| `contacts:read` | `GET /contacts`, `GET /contacts/{contact_id}` |
-| `contacts:write` | `POST /contacts`, `PATCH /contacts/{contact_id}` |
-| `appointments:read` | `GET /appointments`, `GET /appointments/{appointment_id}`, `GET /availability` |
-| `appointments:write` | `POST /appointments`, `POST /appointments/{appointment_id}/cancel`, `POST /appointments/{appointment_id}/reschedule` |
-| `messages:read` | `GET /messages` |
-| `knowledge:write` | `POST /knowledge` |
-| `webhooks:manage` | `GET`, `POST`, `PATCH` and `DELETE` on `/webhooks`, and `POST /webhooks/{webhook_id}/test` |
+| `business:read` | Entreprise, services et intervenants. |
+| `business:write` | Modification de l’entreprise. |
+| `calls:read` | Liste et détail des appels. |
+| `contacts:read`, `contacts:write` | Lecture ou modification des contacts. |
+| `appointments:read` | Rendez-vous et disponibilités. |
+| `appointments:write` | Création, annulation et déplacement. |
+| `messages:read` | Messages de suivi pris pour l’équipe. |
+| `knowledge:write` | Ajout de connaissances. |
+| `webhooks:manage` | Gestion et test des destinations webhook. |
 
-## Revoke a key
+`GET /me` sert au contrôle de toute clé valide. Une route sans permission suffisante répond `403` ; ne remplacez pas une clé limitée par une clé générale pour contourner ce résultat.
 
-On **Settings** > **API keys**, click **Revoke** next to the key. Requests with it fail right away, and you can't undo it. Create a new key if you still need access.
+## Limites et révocation
 
-## Rate limits
+La limite du code est de 120 requêtes par minute par défaut ; elle peut varier avec la configuration. Lisez les en-têtes de limite et respectez `Retry-After`.
 
-Each key can make 120 requests per minute. Self-hosted deployments can change this with `PUBLIC_API_RATE_LIMIT_PER_MINUTE`. The window resets at the start of each minute.
+Révoquez une clé qui n’est plus nécessaire ou a été exposée, puis remplacez-la dans les services autorisés. Vérifiez ensuite que l’ancienne clé est refusée.
 
-Every response carries these headers:
-
-| Header | Meaning |
-| --- | --- |
-| `X-RateLimit-Limit` | Requests allowed per minute. |
-| `X-RateLimit-Remaining` | Requests left in the current minute. |
-| `X-RateLimit-Reset` | Unix time, in seconds, when the window resets. |
-
-Past the limit, the API returns `429` with the code `rate_limited` and a `Retry-After` header with the seconds to wait.
-
-## Keep keys safe
-
-- Use one key per tool so you can revoke one without breaking the others.
-- Give each key the fewest scopes that work.
-- Never put a key in browser code or a mobile app. Call the API from a server.
-- LobbyStack logs each request with the key's ID, never the key itself, and records changes made with a key in the business's audit log.
+Ne placez jamais une clé dans un widget, une application mobile publique, une capture d’écran ou une URL. La validation d’isolation doit inclure le refus d’une ressource appartenant à une autre entreprise.

@@ -3,9 +3,11 @@ import { NextResponse } from "next/server";
 import { recordAffiliateClick } from "@lobbystack/domain";
 import { asApiResponse, readJson } from "@/lib/api-helpers";
 import { createDomainContext } from "@/lib/domain-context";
+import { affiliateProgramEnabled } from "@/lib/affiliate-program";
 
 export async function POST(request: Request) {
   try {
+    if (!affiliateProgramEnabled()) return NextResponse.json({ recorded: false, code: "affiliate_program_unavailable" }, { status: 503 });
     const parsed = await readJson(request);
     const body = typeof parsed === "object" && parsed !== null && !Array.isArray(parsed) ? parsed as Record<string, unknown> : {};
     if (typeof body.referralCode !== "string") return NextResponse.json({ error: "A referralCode is required." }, { status: 400 });

@@ -136,7 +136,7 @@ function ReplacementSidebar({ user }: Pick<DashboardShellProps, "user">) {
   const general: NavigationItem[] = [
     { label: t("nav:items.home"), href: "/", icon: HomeIcon },
     { label: t("nav:items.calls"), href: "/calls", icon: PhoneAnimatedIcon },
-    ...(["/messages", "/settings/widget"].some(route => pathname === route || pathname.startsWith(`${route}/`)) ? [{ label: t("nav:items.messages"), href: "/messages", icon: MessageSquareMoreIcon }] : []),
+    { label: t("nav:items.messages"), href: "/messages", icon: MessageSquareMoreIcon },
     { label: t("nav:items.contacts"), href: "/contacts", icon: UsersIcon },
   ];
   const receptionist: NavigationItem[] = [
@@ -149,7 +149,6 @@ function ReplacementSidebar({ user }: Pick<DashboardShellProps, "user">) {
     { label: t("nav:items.analytics"), href: "/analytics", icon: ChartColumnIncreasingIcon },
     { label: t("settings:sections.integrations"), href: "/integrations", icon: BlocksIcon },
     { label: t("nav:items.settings"), href: "/settings/usage", icon: SettingsIcon },
-    ...(["/messages", "/settings/widget"].some(route => pathname === route || pathname.startsWith(`${route}/`)) ? [{ label: t("settings:sections.widget"), href: "/settings/widget", icon: SettingsIcon }] : []),
   ];
 
   return (

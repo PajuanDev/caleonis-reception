@@ -1,31 +1,12 @@
-# LobbyStack Mintlify docs
+# Centre d’aide Caléonis Receptionist
 
-This directory contains the source for [docs.lobbystack.com](https://docs.lobbystack.com/).
+Sources MDX du centre d’aide, en français en priorité. La navigation sépare l’aide SaaS, la documentation développeur et deux guides de synthèse en anglais.
 
-Mintlify is configured in the dashboard to read this repository with **Docs are in a subdirectory** enabled and the docs path set to:
+Aucun domaine d’aide public ni branche de publication automatique n’est configuré par cette passe. Ne connectez pas cette branche à une publication de production sans validation.
 
-```txt
-mintlify
-```
+## Prévisualiser et vérifier
 
-The site uses `docs.json` for navigation, branding, colors, and global settings. Public pages are written as MDX files next to that config.
-
-## Preview the Help Center
-
-Preview documentation changes locally with the Mintlify CLI:
-
-```bash
-pnpm docs:dev
-```
-
-The preview starts at `http://localhost:3000` and reloads as you edit. You can also run it from this directory:
-
-```bash
-cd mintlify
-pnpm dev
-```
-
-Useful commands:
+Depuis la racine du dépôt :
 
 ```bash
 pnpm docs:dev:no-open
@@ -33,6 +14,19 @@ pnpm docs:validate
 pnpm docs:broken-links
 ```
 
-## Publish changes
+Le port de l’aperçu est indiqué par la commande. Utilisez un port distinct de l’application si nécessaire.
 
-Mintlify deploys from the connected GitHub repository. Push changes to the configured branch to publish updates.
+Le script `scripts/build-help-preview.mjs` prépare aussi un aperçu statique sous `/aide/`, à intégrer au preview isolé du site marketing. Il ne requiert ni achat Mintlify ni publication SaaS.
+
+## Contenu et validation
+
+- Les 41 guides hérités sont adaptés ; aucun remplacement global de marque ne définit la disponibilité.
+- La navigation reste centrée sur un agent par entreprise.
+- Les plans sont sur demande ; Voice-only n’offre pas de SMS.
+- Les transferts, le renouvellement Google et les autres parcours non qualifiés restent identifiés.
+- Les guides développeurs conservent les noms internes de packages et variables.
+- Les captures historiques ne sont pas utilisées comme preuves de l’interface Caléonis.
+- Les logos Caléonis reprennent les actifs locaux fournis par l’opérateur.
+- `LICENSE` conserve la notice Mintlify ; `NOTICE.md` et la page `attributions.mdx` conservent l’attribution LobbyStack MIT.
+
+Les textes de confidentialité sont des guides d’usage. Ils ne constituent pas des CGV ni une notice légale finale approuvée.

@@ -24,15 +24,21 @@ export async function GET(request: Request) {
       const cap = account[0]?.overageSpendingCapCents ?? null;
       const [business] = await tx.select({ managedPilot: businesses.managedPilot }).from(businesses).where(eq(businesses.id, businessId)).limit(1);
       const managedPilot = business?.managedPilot === true;
-      const permissions = billingAccess(membership.role, account[0] ?? null, !managedPilot && Boolean(process.env.POLAR_ACCESS_TOKEN && process.env.POLAR_ORGANIZATION_ID));
-      const availableCheckoutIntervals: HostedCheckoutPlanIntervals = { starter: [], pro: [] };
-      if (permissions.hasCheckoutAccess) for (const plan of ["starter", "pro"] as const) {
+      const providerConfigured = !managedPilot && Boolean(process.env.POLAR_ACCESS_TOKEN && process.env.POLAR_ORGANIZATION_ID);
+      const permissions = billingAccess(membership.role, account[0] ?? null, providerConfigured);
+      const configuredIntervals: HostedCheckoutPlanIntervals = { starter: [], pro: [] };
+      if (providerConfigured) for (const plan of ["starter", "pro"] as const) {
         for (const interval of ["monthly", "annual"] as const) {
-          if (process.env[`POLAR_${plan.toUpperCase()}_${interval.toUpperCase()}_PRODUCT_ID`] || (plan === "pro" && interval === "monthly" && process.env.POLAR_PRO_PRODUCT_ID)) availableCheckoutIntervals[plan].push(interval);
+          if (process.env[`POLAR_${plan.toUpperCase()}_${interval.toUpperCase()}_PRODUCT_ID`] || (plan === "pro" && interval === "monthly" && process.env.POLAR_PRO_PRODUCT_ID)) configuredIntervals[plan].push(interval);
         }
       }
+      const commercialTermsAvailable = configuredIntervals.starter.length > 0 || configuredIntervals.pro.length > 0;
+      const availableCheckoutIntervals: HostedCheckoutPlanIntervals = { starter: [], pro: [] };
+      if (permissions.hasCheckoutAccess) for (const plan of ["starter", "pro"] as const) {
+        availableCheckoutIntervals[plan] = configuredIntervals[plan];
+      }
       const availableCheckoutPlans = (["starter", "pro"] as const).filter(plan => availableCheckoutIntervals[plan].length > 0);
-      return { availableCheckoutPlans, availableCheckoutIntervals, account: account[0] ?? null, knowledgeStorageBytesUsed, permissions, checkoutAvailable: permissions.hasCheckoutAccess, widgetIssuanceEnabled: isWidgetKeyIssuanceEnabled(process.env), usage, usageStatus: month ? { ...month, usageComplete: Number(incompleteUsage[0]?.count ?? 0) === 0, overageSpendingCapCents: cap, overageSpendingCapReached: cap !== null && month.overageSpendCents > 0 && month.overageSpendCents >= cap } : null, transactions: permissions.hasBillingManagementAccess ? transactions : [] };
+      return { commercialTermsAvailable, availableCheckoutPlans, availableCheckoutIntervals, account: account[0] ?? null, knowledgeStorageBytesUsed, permissions, checkoutAvailable: permissions.hasCheckoutAccess && commercialTermsAvailable, widgetIssuanceEnabled: isWidgetKeyIssuanceEnabled(process.env), usage, usageStatus: month ? { ...month, usageComplete: Number(incompleteUsage[0]?.count ?? 0) === 0, overageSpendingCapCents: cap, overageSpendingCapReached: cap !== null && month.overageSpendCents > 0 && month.overageSpendCents >= cap } : null, transactions: permissions.hasBillingManagementAccess ? transactions : [] };
     }));
   } catch (error) {
     return asApiResponse(error);

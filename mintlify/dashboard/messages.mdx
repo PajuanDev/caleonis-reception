@@ -1,51 +1,41 @@
 ---
-title: "Manage customer conversations"
-description: "Review SMS and website chat conversations, send replies, and control AI handoff for website chat."
-sidebarTitle: "Messages"
-contentType: "How-to"
+title: "Utiliser Messages"
+description: "Comprendre la boîte Messages et les limites SMS d’un numéro Voice-only."
 ---
+**Général > Messages** donne accès aux conversations autorisées de votre entreprise. Un espace peut afficher cette page sans disposer d’un numéro SMS ou d’un widget actif.
 
-The **Messages** page combines SMS and website chat for the active business. Operators can review inbound and outbound messages, search conversations, send replies, and control AI handoff for website chat.
+<Note>
+Le numéro pilote français est Voice-only. Il n’envoie ni ne reçoit de SMS. Une boîte vide est donc normale en l’absence d’autre source de conversation active.
+</Note>
 
-The AI doesn't reply to SMS. Texts sent to your business number wait here for a manual reply. Website chat is restricted and only appears for workspaces that already have widget keys.
+## Distinguer les demandes
 
-![LobbyStack Messages page](/images/screenshots/messages.png)
+| Élément | Où le retrouver |
+| --- | --- |
+| Conversation SMS, si numéro et service compatibles | Messages, filtre SMS |
+| Conversation du widget existant et activé | Messages, filtre Web |
+| Demande de rappel prise pendant un appel | Fiche d’appel et suivi du tableau de bord |
+| Email ou messagerie sociale | Aucun canal V1 annoncé dans cette boîte |
 
-_Use Messages to review SMS and website chat, reply to customers, and control website chat handoff._
+La page **Messages** ne transforme pas un message vocal en SMS. L’IA ne répond pas automatiquement aux SMS entrants.
 
-## Find a conversation
+## Rechercher et lire
 
-The left panel shows conversations and their latest activity. Filter the list by **All**, **Web**, or **SMS**.
+1. Ouvrez [Messages](https://receptionist.caleonis.com/messages).
+2. Vérifiez l’entreprise et le filtre **Tous**, **Web** ou **SMS** lorsqu’il est proposé.
+3. Sélectionnez une conversation.
+4. Relisez le fil et les horaires avant de répondre.
 
-Each item shows:
+## Répondre quand le canal le permet
 
-- The contact, visitor, phone number, or email address.
-- The latest message preview.
-- The latest activity time.
-- A web chat marker when the conversation came from the widget.
+La réponse manuelle nécessite un canal actif et les droits correspondants. Une action désactivée ou un état « SMS indisponible » doit être respecté.
 
-Use search to find conversations by contact details or the latest message.
+Pour un fil Web autorisé, la prise en charge humaine permet de suspendre les réponses IA puis de les reprendre. Ce contrôle ne s’applique pas aux SMS.
 
-## Review a conversation
+Une réponse soumise n’est pas nécessairement livrée : vérifiez l’état retourné. Ne promettez pas de confirmation SMS depuis un numéro Voice-only.
 
-Open a conversation to see its message timeline. The thread shows inbound customer messages, outbound AI or operator messages, and the time for each message.
+## Entrée absente ou boîte vide
 
-## Send a reply
+L’entrée peut dépendre de la version déployée et des permissions. Si elle manque, signalez le problème avec l’URL, l’entreprise et votre rôle ; n’achetez pas un numéro pour la faire apparaître.
 
-<Steps>
-  <Step title="Open a conversation">
-    Select an SMS or website chat conversation from the list.
-  </Step>
-  <Step title="Write your reply">
-    Use the composer at the bottom of the thread.
-  </Step>
-  <Step title="Send the message">
-    Click **Send**.
-  </Step>
-</Steps>
-
-## Take over or resume AI
-
-Website chat threads show their current automation state in the header. Click **Take over** when an operator should handle the conversation. Click **Resume AI** when the website assistant should respond again.
-
-SMS threads do not show the AI handoff control. Replies from this page are manual.
+Les nouvelles activations de [widget](/settings/widget) sont restreintes. Consultez aussi les [capacités et limites](/support/availability).

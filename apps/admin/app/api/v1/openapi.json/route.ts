@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 
-import { buildOpenApiDocument } from "@lobbystack/shared";
+import { buildCaleonisOpenApiDocument } from "@/lib/public-api/openapi";
 
 import { methodNotAllowed } from "@/lib/public-api/http";
 
@@ -11,7 +11,7 @@ export const dynamic = "force-dynamic";
 export function GET(request: Request) {
   const configured = process.env.APP_BASE_URL?.trim().replace(/\/$/, "");
   const origin = configured || new URL(request.url).origin;
-  return NextResponse.json(buildOpenApiDocument({ serverUrl: `${origin}/api/v1` }), { headers: { "Cache-Control": "public, max-age=300", "Access-Control-Allow-Origin": "*" } });
+  return NextResponse.json(buildCaleonisOpenApiDocument({ serverUrl: `${origin}/api/v1` }), { headers: { "Cache-Control": "public, max-age=300", "Access-Control-Allow-Origin": "*" } });
 }
 
 const notAllowed = methodNotAllowed(["GET"]);

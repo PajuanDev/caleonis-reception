@@ -5,7 +5,7 @@ import {
   readCookieConsent,
 } from "@/lib/cookie-consent"
 
-const DEFAULT_POSTHOG_HOST = "https://ts.lobbystack.com"
+const DEFAULT_POSTHOG_HOST = "https://us.i.posthog.com"
 const DEFAULT_POSTHOG_UI_HOST = "https://us.posthog.com"
 const SIGNUP_CTA_SELECTOR = "[data-ph-signup-cta]"
 

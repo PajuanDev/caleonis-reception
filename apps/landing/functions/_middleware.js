@@ -1,11 +1,15 @@
 const MARKDOWN_TOKEN_COUNT = "120"
 const CONTENT_SIGNAL = "ai-train=yes, search=yes, ai-input=yes"
-const CANONICAL_HOST = "lobbystack.com"
-const WWW_HOST = "www.lobbystack.com"
-const PAGES_HOST = "lobbystack-landing.pages.dev"
+const CANONICAL_HOST = "caleonis-receptionist-v1-review.willgosse225.chatgpt.site"
+const WWW_HOST = "www.caleonis-receptionist-v1-review.willgosse225.chatgpt.site"
+const PAGES_HOST = "caleonis-receptionist-preview.pages.dev"
 const DEFAULT_LOCALE = "en"
 const TRANSLATED_PATHS = new Set([
   "/",
+  "/resources/",
+  "/confidentialite/",
+  "/solutions/ai-receptionist-for-garages/",
+  "/solutions/ai-receptionist-for-medical-offices/",
   "/features/",
   "/pricing/",
   "/solutions/",

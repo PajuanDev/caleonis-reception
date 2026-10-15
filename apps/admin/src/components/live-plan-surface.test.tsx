@@ -11,10 +11,10 @@ vi.mock("react-i18next", () => ({ useTranslation: () => ({ i18n: { language: "en
 const clients: QueryClient[] = [];
 beforeEach(() => { route.search = new URLSearchParams(); });
 afterEach(() => { cleanup(); clients.forEach(client => client.clear()); clients.length = 0; vi.unstubAllGlobals(); vi.clearAllMocks(); });
-function setup({ synced = false, checkoutFails = false, billingFails = false, plan = "pro", admin = true, configured = false, transactions = false, accountMissing = false } = {}) {
+function setup({ synced = false, checkoutFails = false, billingFails = false, plan = "pro", admin = true, configured = false, transactions = false, accountMissing = false, commercialTerms = true } = {}) {
   const client = new QueryClient({ defaultOptions: { queries: { retry: false, staleTime: Infinity } } }); clients.push(client);
   client.setQueryData(["businesses"], { businesses: [{ businessId: "business", active: true }] });
-  const billing = { permissions: { hasBillingManagementAccess: admin, hasCheckoutAccess: admin, hasCustomerPortalAccess: admin }, account: accountMissing ? null : { plan, billingInterval: "monthly", subscriptionState: "active", overageSpendingCapCents: null }, availableCheckoutPlans: configured ? ["pro"] : [], availableCheckoutIntervals: { starter: [], pro: configured ? ["monthly"] : [] }, transactions: transactions ? [{ kind: "refund", sourceId: "refund", status: "succeeded", amountCents: 1250, currency: "usd", description: "Usage credit", invoiceUrl: "https://example.invalid/invoice", occurredAt: "2026-09-04T12:00:00Z" }] : [] };
+  const billing = { commercialTermsAvailable: commercialTerms, checkoutAvailable: admin, permissions: { hasBillingManagementAccess: admin, hasCheckoutAccess: admin, hasCustomerPortalAccess: admin }, account: accountMissing ? null : { plan, billingInterval: "monthly", subscriptionState: "active", overageSpendingCapCents: null }, availableCheckoutPlans: configured ? ["pro"] : [], availableCheckoutIntervals: { starter: [], pro: configured ? ["monthly"] : [] }, transactions: transactions ? [{ kind: "refund", sourceId: "refund", status: "succeeded", amountCents: 1250, currency: "usd", description: "Usage credit", invoiceUrl: "https://example.invalid/invoice", occurredAt: "2026-09-04T12:00:00Z" }] : [] };
   if (!billingFails) client.setQueryData(["billing", "business"], billing);
   const fetchMock = vi.fn(async (url: string) => url.includes("/checkout?") ? checkoutFails ? Response.json({ error: "Provider unavailable" }, { status: 503 }) : Response.json({ synced }) : Response.json(billing));
   if (billingFails) fetchMock.mockResolvedValueOnce(Response.json({ error: "Unavailable" }, { status: 503 }));
@@ -35,10 +35,10 @@ describe("original billing overview behavior", () => {
     await userEvent.click(screen.getByRole("button", { name: "billing.actions.retry" }));
     expect(await screen.findByText("billing.planLabels.proCard")).toBeTruthy();
   });
-  it("renders the free plan when the tenant has no billing account yet", () => {
-    setup({ accountMissing: true, admin: false });
-    expect(screen.getByText("billing.planLabels.freeCloudCard")).toBeTruthy();
-    expect(screen.getByText("$0")).toBeTruthy();
+  it("shows pricing on request when no approved commercial checkout exists", () => {
+    setup({ accountMissing: true, admin: false, commercialTerms: false });
+    expect(screen.getByText("billing.availability.title")).toBeTruthy();
+    expect(screen.queryByText("$0")).toBeNull();
     expect(screen.queryByText("billing.spendingCap.title")).toBeNull();
   });
   it("shows paid plan PAYG copy and hides empty transaction history", () => {
@@ -65,6 +65,8 @@ describe("original billing overview behavior", () => {
   });
   it("keeps billing management read-only for members", () => {
     setup({ admin: false, configured: true });
+    expect(screen.getByText("billing.planLabels.proCard")).toBeTruthy();
+    expect(screen.queryByText("billing.availability.title")).toBeNull();
     expect(screen.queryByRole("button", { name: "billing.actions.manageSubscription" })).toBeNull();
     expect(screen.queryByRole("textbox")).toBeNull();
   });

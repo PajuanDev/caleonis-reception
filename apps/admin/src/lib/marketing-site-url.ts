@@ -1,6 +1,6 @@
-const LANDING_SITE_URL =
-  process.env.NEXT_PUBLIC_LANDING_SITE_URL?.replace(/\/$/, "") ??
-  "https://caleonis.com";
+function landingSiteUrl(): string {
+  return process.env.NEXT_PUBLIC_LANDING_SITE_URL?.trim().replace(/\/$/, "") || "https://caleonis.com";
+}
 
 const DEFAULT_LOCALE = "en";
 
@@ -117,5 +117,5 @@ export function localizeMarketingHref(
   }
   const localizedPath = localizeMarketingPath(locale, pathname || "/");
 
-  return new URL(`${localizedPath}${suffix}`, LANDING_SITE_URL).toString();
+  return new URL(`${localizedPath}${suffix}`, landingSiteUrl()).toString();
 }

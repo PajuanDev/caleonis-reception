@@ -1,41 +1,28 @@
 ---
-title: "Configure your AI receptionist"
-description: "Use the Agent section to configure AI settings, knowledge, services, and rules for your receptionist."
-sidebarTitle: "Agent overview"
-contentType: "Conceptual"
+title: "Configurer l’agent de votre entreprise"
+description: "Un seul réceptionniste IA, quatre rubriques pour préparer ses réponses."
 ---
-
-The **Agent** section controls how your AI receptionist behaves. It is split into AI settings, Knowledge, Services, and Rules.
-
-Changes apply to new calls and website chat responses. They do not rewrite calls or messages that already happened.
+Caléonis Receptionist V1 utilise **un seul agent pour votre entreprise**. Vous configurez ses informations et son comportement dans la rubrique **Agent**.
 
 <CardGroup cols={2}>
-  <Card title="AI settings" icon="comment-dots" href="/agent/ai-settings/overview">
-    Set the opening line, fallback language, appointment changes, and default transfer number.
-  </Card>
-  <Card title="Knowledge" icon="book-open" href="/agent/knowledge">
-    Add business information from text entries, documents, or a website import.
-  </Card>
-  <Card title="Services" icon="calendar-check" href="/agent/services">
-    Add appointment types and the service information callers need.
-  </Card>
-  <Card title="Rules" icon="list-check" href="/agent/rules">
-    Add operating instructions for transfers, callback requests, fallback behavior, and special cases.
-  </Card>
+  <Card title="Paramètres IA" icon="sliders" href="/agent/ai-settings/overview">Accueil, langue et règles structurées de réservation.</Card>
+  <Card title="Connaissances" icon="book-open" href="/agent/knowledge">Informations fiables issues de textes, documents ou pages publiques.</Card>
+  <Card title="Services" icon="calendar-check" href="/agent/services">Prestations, durées et conditions de réservation.</Card>
+  <Card title="Règles" icon="list-check" href="/agent/rules">Instructions pour les demandes et situations particulières.</Card>
 </CardGroup>
 
-## How configuration is used
+## Préparer les informations
 
-LobbyStack prepares the saved Agent settings for each live call, so callers get stable behavior for the duration of the conversation.
+Commencez par les faits : horaires, adresse, zone desservie, services et procédure de rappel. Ajoutez les consignes de comportement ensuite.
 
-For website chat, LobbyStack uses the current business context and saved conversation state when generating replies.
+Les réglages sont utilisés pour les nouveaux échanges. Un appel déjà démarré conserve son contexte ; une modification n’en réécrit pas la transcription.
 
-## Minimum setup for real callers
+## Vérifier une modification
 
-Before forwarding production calls, check that:
+Enregistrez, attendez le traitement des connaissances si nécessaire, puis démarrez un **nouveau** test. Posez une question correspondant exactement à la modification.
 
-- Your greeting names your business and sets the right expectation.
-- The fallback language is set for cases where the caller's language is unclear.
-- A transfer number is saved if you want live human handoff.
-- Your knowledge entries include hours, location, services, pricing, policies, and common caller questions.
-- Your service entries and Google Calendar connection are ready before you rely on appointment booking or appointment changes.
+Si l’agent invente une réponse, corrigez la source ou ajoutez une règle de prise de message. Ne lui donnez pas une instruction qui promet un canal ou une action indisponible.
+
+## Limites V1
+
+Il n’existe ni catalogue multi-agents ni Agent Builder dans ce parcours. Les intégrations techniques et assistants développeurs documentés séparément ne créent pas de nouveaux agents métier dans votre tableau de bord.

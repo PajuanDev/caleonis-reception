@@ -1,0 +1,51 @@
+---
+title: "Résoudre un problème"
+description: "Les vérifications utiles pour connexion, voix, Messages et Google Calendar."
+---
+Commencez par noter l’entreprise active, l’heure, la page et l’identifiant de la fiche concernée. Ne joignez jamais de mot de passe, clé ou jeton au signalement.
+
+## L’appel navigateur ne démarre pas
+
+- Vérifiez la permission microphone du site et le périphérique choisi.
+- Fermez un autre onglet qui utilise le micro.
+- Vérifiez le contexte HTTPS et réessayez depuis le même parcours autorisé.
+- Si la démo est limitée à la prise de message, n’attendez pas de réservation.
+- Consultez **Appels** pour vérifier si une session a malgré tout été créée.
+
+## L’appel téléphonique n’aboutit pas
+
+Vérifiez le numéro exact, son attribution et l’heure du test. Un numéro en cours d’approbation ou mal rattaché ne doit pas être communiqué aux clients.
+
+Ne modifiez pas les réglages opérateur, le trunk ou les webhooks sans coordination avec l’équipe technique. Prévoyez un accueil humain pendant l’incident.
+
+## Messages est vide ou l’envoi SMS est bloqué
+
+Le numéro pilote est Voice-only : la boîte peut être vide et l’envoi SMS doit rester indisponible. Vérifiez les filtres et l’entreprise.
+
+Les demandes de rappel vocales sont à rechercher dans la fiche d’appel et les suivis. Elles ne sont pas nécessairement des conversations SMS.
+
+## Google demande une reconnexion
+
+Vérifiez le bon compte et les droits sur l’agenda. Utilisez la reconnexion proposée, sélectionnez l’agenda puis testez une lecture ou action autorisée.
+
+Une connexion immédiate réussie ne garantit pas le renouvellement dans le temps. Consultez [Google Calendar](/integrations/google-calendar).
+
+## Un rendez-vous n’apparaît pas chez Google
+
+Vérifiez le mode de réservation, le statut de l’action, l’agenda sélectionné et le fuseau. Recherchez l’événement directement chez Google avant de refaire la demande.
+
+Un état de synchronisation en attente n’est pas une confirmation externe. Confiez les cas ambigus à votre équipe.
+
+## L’agent répond avec une information ancienne
+
+Relisez les sources actives et leur traitement. Corrigez les contradictions, puis démarrez un nouvel appel : une session en cours peut conserver son contexte initial.
+
+## Enregistrement ou notification absent
+
+Attendez la fin du traitement, puis vérifiez le statut. Un refus SMS ou un état « skipped » indique qu’aucun envoi n’est attendu.
+
+Les étapes de [lecture audio](/support/recordings) et de [notifications](/settings/notifications) donnent les contrôles propres à chaque parcours.
+
+## Transmettre un signalement exploitable
+
+Indiquez le résultat attendu, le résultat observé, les étapes minimales, l’heure avec fuseau et l’identifiant de fiche. Masquez les données personnelles dans les captures.

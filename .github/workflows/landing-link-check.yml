@@ -8,6 +8,9 @@ on:
       - "apps/landing/public/**"
       - "apps/landing/scripts/**"
       - "apps/landing/astro.config.mjs"
+      - "mintlify/**"
+      - "scripts/build-help-preview.mjs"
+      - "scripts/verify-v1-preview.mjs"
       - ".github/workflows/landing-link-check.yml"
   schedule:
     - cron: "17 10 * * 1"
@@ -36,6 +39,10 @@ jobs:
       - run: pnpm install --frozen-lockfile
       - run: pnpm --filter @lobbystack/landing build
       - run: pnpm --filter @lobbystack/landing seo:validate
+      - name: Export help and check every rendered local target
+        run: |
+          node scripts/build-help-preview.mjs apps/landing/dist/aide
+          node scripts/verify-v1-preview.mjs apps/landing/dist
       - name: Start landing preview server
         run: |
           npx --yes serve apps/landing/dist -l 4173 &
@@ -51,6 +58,7 @@ jobs:
             --verbose
             --no-progress
             --base-url http://127.0.0.1:4173
+            --remap '^https://caleonis-receptionist-v1-review\.willgosse225\.chatgpt\.site(.*) http://127.0.0.1:4173$1'
             --remap '^https://reception\.caleonis\.com(.*) http://127.0.0.1:4173$1'
             --remap '^https://lobbystack\.com(.*) http://127.0.0.1:4173$1'
             --exclude '^https://app\.lobbystack\.com/'
@@ -60,8 +68,5 @@ jobs:
             --exclude '^https://www\.hhs\.gov/hipaa/for-professionals/special-topics/health-information-technology/cloud-computing/$'
             --exclude '^https://openai\.com/api/pricing/$'
             --exclude '^https://www\.twilio\.com/'
-            './apps/landing/src/**/*.astro'
-            './apps/landing/src/**/*.tsx'
-            './apps/landing/src/content/**/*.md'
-            './apps/landing/public/llms.txt'
+            './apps/landing/dist/**/*.html'
           fail: true

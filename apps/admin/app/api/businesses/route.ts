@@ -4,6 +4,7 @@ import { z } from "zod";
 import { attributeBusiness, canCreateAutonomousBusiness, createBusiness, listUserBusinesses, updateBusiness } from "@lobbystack/domain";
 import { getAppDatabase, asApiResponse, businessIdFromRequest, readJson, requireApiSession } from "@/lib/api-helpers";
 import { createDomainContext } from "@/lib/domain-context";
+import { affiliateProgramEnabled } from "@/lib/affiliate-program";
 
 export const dynamic = "force-dynamic";
 const businessPatchSchema = z.object({
@@ -38,7 +39,7 @@ export async function POST(request: Request) {
     const created = await createBusiness(context, { userId: session.user.id, name: body.name, ...(body.slug !== undefined ? { slug: body.slug } : {}), timezone: body.timezone, businessType: body.businessType });
     // Attribute at creation, before the plan step can take a payment, so the
     // referrer earns commission on the first order too.
-    if (typeof body.referralCode === "string" && body.referralCode) {
+    if (affiliateProgramEnabled() && typeof body.referralCode === "string" && body.referralCode) {
       await attributeBusiness(context, { businessId: created.businessId, referredUserId: session.user.id, referralCode: body.referralCode, source: "referral_link" });
     }
     return NextResponse.json(created, { status: 201 });

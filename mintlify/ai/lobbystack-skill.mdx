@@ -1,0 +1,30 @@
+---
+title: "Consignes pour une intégration MCP"
+description: "Règles d’usage du serveur existant, avec les identifiants techniques hérités."
+---
+Cette route historique est conservée pour les anciens liens. Le produit présenté aux utilisateurs s’appelle **Caléonis Receptionist**.
+
+## Consignes à donner au client
+
+- Vérifier l’entreprise avant toute lecture ou écriture.
+- Utiliser seulement les outils et permissions accordés.
+- Commencer par les lectures nécessaires au contexte.
+- Obtenir l’autorisation de l’opérateur pour une écriture qui produit un effet réel.
+- Ne jamais présenter une demande de rendez-vous comme une réservation confirmée.
+- Ne jamais déduire un SMS, un email ou un transfert d’un simple succès métier.
+- Respecter les refus de capacité et de consentement.
+- Utiliser la même clé d’idempotence pour reprendre une création dont le résultat est inconnu.
+- Répondre à une erreur avec son résultat réel, sans annoncer de succès.
+- Ne pas transmettre de secret ou de donnée de santé dans le pilote.
+
+## Exemple de séquence
+
+Pour rechercher un créneau, lisez le service et le mode de réservation, puis interrogez les disponibilités. Ne réservez que sur demande autorisée, avec les coordonnées vérifiées et une confirmation du créneau.
+
+Après l’action, vérifiez le résultat retourné et l’état de synchronisation. Le message oral ou écrit de l’assistant ne constitue pas une preuve externe.
+
+## Conserver les identifiants
+
+Les packages `@lobbystack/*`, préfixes de clés et noms internes restent inchangés tant que leur migration n’est pas prévue. Ne renommez pas les paramètres attendus par l’API.
+
+Voir les [outils MCP](/ai/mcp), [permissions](/api/authentication) et [erreurs](/api/requests).

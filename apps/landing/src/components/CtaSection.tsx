@@ -1,64 +1,36 @@
+import { ArrowRight } from "lucide-react"
 import { buttonVariants } from "@/components/ui/button"
 import { APP_SIGNUP_URL } from "@/lib/app-links"
+import { launchCopy } from "@/lib/launch-content"
 import { cn } from "@/lib/utils"
-import { getCopy, type Locale } from "@/i18n"
-import { ArrowRight } from "lucide-react"
-
-type CtaSectionProps = {
-  locale?: Locale
-}
-
-const ctaCopy = {
-  en: {
-    headingStart: "Never miss another",
-    headingMiddle: "ready-to-book",
-    headingEnd: "caller",
-    body: "Test 30 browser voice minutes for free. No telephone number included.",
-  },
-  fr: {
-    headingStart: "Ne manquez plus aucun",
-    headingMiddle: "appel prêt à réserver",
-    headingEnd: "",
-    body: "Testez 30 minutes vocales dans le navigateur gratuitement. Aucun numéro de téléphone inclus.",
-  },
-} satisfies Record<Locale, Record<string, string>>
-
-export function CtaSection({ locale = "en" }: CtaSectionProps) {
-  const copy = getCopy(locale)
-  const localCopy = ctaCopy[locale]
-
+import type { Locale } from "@/i18n"
+export function CtaSection({ locale = "fr" }: { locale?: Locale }) {
+  const copy = launchCopy[locale]
   return (
-    <section className="flex min-h-[360px] items-center bg-background py-16 md:min-h-[440px] md:py-20 lg:min-h-[500px]">
+    <section className="flex min-h-80 items-center py-16 md:py-24">
       <div className="mx-auto max-w-3xl px-6 text-center">
         <h2 className="section-heading">
-          {localCopy.headingStart}{" "}
-          <span className="whitespace-nowrap">{localCopy.headingMiddle}</span>{" "}
-          {localCopy.headingEnd && (
-            <span className="underline decoration-2 underline-offset-4">
-              {localCopy.headingEnd}
-            </span>
-          )}
+          {locale === "fr"
+            ? "Testons votre parcours d’appel"
+            : "Test your own call workflow"}
         </h2>
-        <p className="section-intro mx-auto max-w-[56ch]">{localCopy.body}</p>
-        <div className="mt-8">
-          <a
-            href={APP_SIGNUP_URL}
-            className={cn(
-              buttonVariants({ size: "lg" }),
-              "h-11 rounded-full px-7 text-sm"
-            )}
-            data-ph-signup-cta
-            data-ph-capture-attribute-section="final_cta"
-            data-ph-capture-attribute-action="try_for_free"
-            data-ph-capture-attribute-destination={APP_SIGNUP_URL}
-          >
-            {copy.common.tryFree}
-            <ArrowRight className="ml-1 size-4 transition-transform duration-200 ease-(--ease-out) group-hover/button:translate-x-0.5" />
-          </a>
-        </div>
-        <p className="fine-print mt-3">
-          {copy.common.noCreditCardCancelAnytime}
+        <p className="section-intro">
+          {locale === "fr"
+            ? "Préparez vos horaires, vos services et un scénario de rappel. Un pilote accompagné permet de vérifier ce qui convient à votre activité."
+            : "Prepare your opening hours, services and a callback scenario. An assisted pilot helps verify what fits your business."}
         </p>
+        <a
+          href={APP_SIGNUP_URL}
+          className={cn(
+            buttonVariants({ size: "lg" }),
+            "mt-8 rounded-full px-8"
+          )}
+          data-ph-signup-cta
+        >
+          {copy.cta}
+          <ArrowRight className="ml-2 size-4" aria-hidden="true" />
+        </a>
+        <p className="fine-print mt-4">{copy.note}</p>
       </div>
     </section>
   )

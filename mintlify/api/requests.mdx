@@ -1,134 +1,59 @@
 ---
-title: "Requests and errors"
-description: "Page through lists with cursors, retry safely with Idempotency-Key, and handle errors and booking rules."
-sidebarTitle: "Requests and errors"
-contentType: "Reference"
+title: "Requêtes, erreurs et reprises"
+description: "Paginer, traiter les refus et éviter les doublons de création."
 ---
+Les exemples utilisent des identifiants fictifs. Vérifiez les champs exacts dans la référence OpenAPI de la version déployée.
 
 ## Pagination
 
-List endpoints return up to 25 items per page, newest first. Pass `limit` to ask for 1 to 100 items.
+Les listes paginées retournent `data`, `next_cursor` et `has_more`. Renvoyez les mêmes filtres avec le curseur reçu pour charger la suite.
 
-```json
-{
-  "data": [{ "id": "0cabb07b-ea18-4e9f-8f7b-356405838770", "name": "Ada Lovelace" }],
-  "next_cursor": "your_next_cursor",
-  "has_more": true
-}
+Le paramètre `limit` est borné par l’API. Les services, intervenants, disponibilités et destinations webhook peuvent utiliser une liste non paginée.
+
+Traitez les curseurs comme opaques. Les dates doivent inclure un fuseau ou un décalage explicite ; encodez le signe `+` d’un paramètre URL.
+
+## Répéter une création sans doublon
+
+Les créations de contacts, rendez-vous, connaissances et webhooks prennent en charge `Idempotency-Key`.
+
+```http
+POST /api/v1/contacts
+Authorization: Bearer <clé conservée côté serveur>
+Content-Type: application/json
+Idempotency-Key: <identifiant unique de votre opération>
 ```
 
-List filters, such as `status`, `starts_after`, `starts_before` and `contact_id` on `GET /appointments`, combine with each other and with pagination. To get the next page, send the same request, filters included, with `cursor` set to `next_cursor`. On the last page, `next_cursor` is `null` and `has_more` is `false`. Treat the cursor as an opaque string; its format can change.
+Réessayez avec la **même clé et le même contenu** après une interruption dont le résultat est inconnu. Une même clé avec un contenu différent est rejetée.
 
-```bash
-curl "https://app.lobbystack.com/api/v1/contacts?limit=50&cursor=your_next_cursor" \
-  -H "Authorization: Bearer $LOBBYSTACK_API_KEY"
-```
+La rétention d’idempotence du code est de 24 heures. Les opérations MCP correspondantes partagent ce mécanisme. Vérifiez toujours l’état métier après une erreur ambiguë.
 
-`GET /services`, `GET /staff`, `GET /availability` and `GET /webhooks` return every item on one page.
+## Erreurs usuelles
 
-## Filter lists
-
-Some list endpoints take filters as query parameters. Filters combine with each other and with `cursor`.
-
-| Endpoint | Parameter | Returns |
+| HTTP | Code | Action |
 | --- | --- | --- |
-| `GET /calls` | `started_after`, `started_before` | Calls that started in that range. Send ISO 8601 times with a `Z` or an offset. |
-| `GET /contacts` | `phone` | The contact with this E.164 number |
-| `GET /contacts` | `email` | Contacts with this email address, ignoring case |
-| `GET /contacts` | `name` | Contacts whose name contains this text, ignoring case. Up to 200 characters. |
-| `GET /appointments` | `status`, `starts_after`, `starts_before` | Appointments with that status or start time |
-| `GET /messages` | `status` | Messages that are `open` or `done` |
+| 400 | `invalid_request` | Corriger le corps, les paramètres ou l’identifiant. |
+| 401 | `unauthorized` | Vérifier la clé ou sa révocation. |
+| 403 | `insufficient_scope` | Accorder seulement la permission nécessaire après validation. |
+| 404 | `not_found` | Vérifier l’entreprise et l’identifiant, sans chercher à contourner l’isolation. |
+| 409 | `booking_disabled` | La réservation est désactivée. |
+| 409 | `booking_requires_confirmation` | La demande doit être confirmée par l’équipe. |
+| 409 | `slot_unavailable` | Rechercher une autre disponibilité. |
+| 409 | `idempotency_request_in_progress` | Attendre avant la reprise de la même opération. |
+| 422 | `idempotency_key_reused` | Utiliser la bonne clé pour le contenu initial. |
+| 429 | `rate_limited` | Attendre la durée de `Retry-After`. |
+| 503 | `rate_limit_unavailable` | Réessayer plus tard sans désactiver les protections. |
+| 500 | `internal_error` | Conserver la référence de l’erreur pour le support. |
 
-To list yesterday's calls for a business in Toronto:
+Basez la logique sur `error.code`, pas sur la formulation de `error.message`.
 
-```bash
-curl "https://app.lobbystack.com/api/v1/calls?started_after=2026-09-26T00:00:00-04:00&started_before=2026-09-27T00:00:00-04:00" \
-  -H "Authorization: Bearer $LOBBYSTACK_API_KEY"
-```
+## Réservation
 
-URL-encode the `+` in an offset such as `+01:00` as `%2B01:00`.
+La création et le déplacement doivent respecter le mode `instant`, les horaires, les fermetures, les disponibilités et la synchronisation calendrier.
 
-## Retry safely with Idempotency-Key
+Une clé d’entreprise agit pour l’entreprise ; elle ne remplace pas le parcours de vérification d’identité d’un appelant. Gardez les permissions d’écriture limitées.
 
-Network errors can leave you unsure whether a request worked. Send an `Idempotency-Key` header on requests that create things, and retry with the same key:
+Ne déduisez aucune notification du succès d’une réservation. SMS, email et Google ont chacun leur état. Le numéro pilote Voice-only ne permet pas de confirmation SMS.
 
-- `POST /contacts`
-- `POST /appointments`
-- `POST /knowledge`
-- `POST /webhooks`
+## Intervenants
 
-```bash
-curl https://app.lobbystack.com/api/v1/appointments \
-  -H "Authorization: Bearer $LOBBYSTACK_API_KEY" \
-  -H "Idempotency-Key: 7d4a6c6e-booking-for-order-1182" \
-  -H "Content-Type: application/json" \
-  -d '{"service_id":"df8a2c34-d306-4292-a055-1b739ef74991","starts_at":"2026-09-29T09:30:00-04:00","contact_phone":"+14165550134"}'
-```
-
-LobbyStack remembers each key for 24 hours, per API key and operation. The [MCP server](/ai/mcp) shares these keys: `book_appointment`, `create_contact` and `add_knowledge` count as `POST /appointments`, `POST /contacts` and `POST /knowledge`.
-
-- A retry with the same body gets the first response again, with the header `Idempotent-Replayed: true`. The API doesn't create a second appointment. LobbyStack compares the JSON values, so key order and spacing don't matter.
-- The same key with a different body returns `422` with the code `idempotency_key_reused`.
-- A retry that arrives while the first request is still running waits for it, then gets its response.
-- LobbyStack saves the key and the change together. If the first request failed with an error, nothing was saved, so your retry runs again.
-
-Use a unique value per operation, such as a UUID or your own order ID.
-
-## Errors
-
-Errors use one shape:
-
-```json
-{
-  "error": {
-    "code": "invalid_request",
-    "message": "The request body is invalid.",
-    "details": [{ "path": "contact_phone", "message": "Use E.164 format, for example +14165550134." }]
-  }
-}
-```
-
-`details` appears only on validation errors. Match on `code`; the `message` wording can change.
-
-| Status | Code | When |
-| --- | --- | --- |
-| 400 | `invalid_request` | The body, a query parameter or a path is invalid, for example an ID that isn't a UUID. |
-| 401 | `unauthorized` | The key is missing, unknown or revoked. |
-| 403 | `insufficient_scope` | The key lacks the scope the endpoint needs. |
-| 404 | `not_found` | The resource doesn't exist in this key's business. |
-| 409 | `conflict` | The request conflicts with current data, such as a duplicate phone number. |
-| 409 | `booking_disabled` | The business turned booking off. |
-| 409 | `booking_requires_confirmation` | The business takes appointment requests that its team confirms, so the API can't book directly. |
-| 409 | `slot_unavailable` | The time isn't open. Pick another from `GET /availability`. |
-| 405 | `method_not_allowed` | The endpoint doesn't support the HTTP method. The `Allow` header lists the ones it does. |
-| 409 | `idempotency_request_in_progress` | A request with the same `Idempotency-Key` is still running. Retry shortly. |
-| 422 | `idempotency_key_reused` | The `Idempotency-Key` was used with a different body. |
-| 429 | `rate_limited` | The key made too many requests. Wait for `Retry-After` seconds. |
-| 503 | `rate_limit_unavailable` | LobbyStack can't check the rate limit right now. Retry shortly. |
-| 500 | `internal_error` | Something failed on LobbyStack's side. The message includes a reference to share with support. |
-
-## Booking through the API
-
-The API follows the same rules as the AI receptionist:
-
-- `POST /appointments` and `POST /appointments/{appointment_id}/reschedule` work only when the business's `booking_mode` is `instant`. Read it from `GET /business`.
-- The requested time must fall within opening hours, avoid closures and other appointments, and be free on a connected Google Calendar. When LobbyStack can't confirm the calendar is up to date, it treats the time as busy.
-- New bookings sync to the connected calendar and queue the usual confirmation and reminder texts. LobbyStack sends them only to contacts who agreed to texts. Pass `"sms_consent": true` when the customer agreed while booking.
-- To book with a specific person, pass `staff_id`. Without it, LobbyStack picks a free staff member who takes the service.
-- Cancelling works in any booking mode. Cancelling an appointment that is already cancelled returns it unchanged.
-
-API keys act for the business, so the API skips the caller verification the receptionist uses on the phone.
-
-## Staff
-
-`GET /staff` lists everyone who takes appointments, with `active` and the `service_ids` each person can be booked for. A service with no staff assigned in the dashboard is open to every active staff member.
-
-A business that never set up staff still has one active staff member, named after the business. Bookings go to that person, so `GET /staff` returns it like any other staff member, and you can pass its `id` as `staff_id`.
-
-Pass `staff_id` to:
-
-- `GET /availability`, to list only the times that person is free.
-- `POST /appointments`, to book with that person.
-- `POST /appointments/{appointment_id}/reschedule`, to move the appointment to that person. Without it, the appointment keeps its staff member.
-
-A `staff_id` that isn't an active staff member of the business, or who doesn't take the service, returns `400` with the code `invalid_request`. Moving an appointment to another staff member returns `409` `conflict` when either person has their own connected calendar; cancel it and book a new one instead.
+`GET /staff` décrit les intervenants réservables du modèle existant. Ce modèle technique n’est pas un système multi-agents. Utilisez les identifiants retournés plutôt que des valeurs inventées.

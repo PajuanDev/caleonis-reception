@@ -12,6 +12,8 @@ import { FieldError } from "@/components/ui/field";
 import { OnboardingPlanComparison } from "@/components/onboarding-plan-comparison";
 import { useTelemetry } from "@/components/product-analytics";
 import { cn } from "@/lib/utils";
+import { helpSiteUrl } from "@/lib/help-site-url";
+import { BillingPilotNotice } from "./billing-pilot-notice";
 
 type Business = { businessId: string; active: boolean };
 type BillingInterval = "monthly" | "annual";
@@ -135,7 +137,12 @@ export function OnboardingPlanSurface() {
       telemetry.track("web.onboarding.plan_checkout_started", { businessId: business.businessId, plan });
       startCheckout.mutate(plan);
     }
-    else window.location.assign(`mailto:hello@lobbystack.ai?subject=${encodeURIComponent(t("plan.enterpriseSubject"))}`);
+    else window.location.assign(helpSiteUrl());
+  }
+
+  const checkoutConfigured = billing.data?.checkoutAvailable === true && billing.data.availableCheckoutPlans?.some(plan => (billing.data?.availableCheckoutIntervals?.[plan]?.length ?? 0) > 0);
+  if (!checkoutConfigured) {
+    return <div className="flex flex-col gap-6 rounded-xl border p-6"><BillingPilotNotice /><Button className="self-start" disabled={!business || billing.isPending || billing.isError || Boolean(pendingPlan)} onClick={() => act("free_cloud")} type="button">{t("plan.availability.continue")}</Button>{billing.isError ? <FieldError>{t("plan.availability.unavailable")}</FieldError> : null}{selectFree.isError ? <FieldError>{t("plan.continueFailed")}</FieldError> : null}</div>;
   }
 
   return (

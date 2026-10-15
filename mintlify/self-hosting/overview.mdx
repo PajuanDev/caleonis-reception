@@ -1,55 +1,33 @@
 ---
-title: "Understand self-hosting"
-description: "Learn which services a self-hosted LobbyStack deployment runs, how call data moves between them, and which parts you operate, from Railway to your own servers."
-sidebarTitle: "Self-hosting overview"
-contentType: "Conceptual"
+title: "Auto-hébergement : périmètre développeur"
+description: "Déployer une instance indépendante du SaaS avec ses propres responsabilités d’exploitation."
 ---
+Cette partie s’adresse aux développeurs et exploitants. Elle concerne une **installation indépendante**, pas l’administration de la production Caléonis.
 
-LobbyStack can run on one Docker host or as separate managed services. Self-hosting gives you control over application data, credentials, provider usage, backups, and upgrades.
+Le socle est issu de LobbyStack sous licence MIT. Conservez **Copyright (c) 2026 LobbyStack contributors** et le texte de licence dans toute redistribution. Les noms internes `@lobbystack/*` restent utiles à la compatibilité.
 
-<Note>
-  Live calls still require Twilio, OpenAI, and a public HTTPS endpoint for the dashboard. Phone calls also need a Twilio Elastic SIP trunk that sends calls to your OpenAI project.
-</Note>
+## Composants
 
-## Deploy on Railway
+- L’application d’administration et l’API.
+- Le worker pour les traitements, appels et intégrations.
+- PostgreSQL comme stockage canonique.
+- Redis pour les fonctions qui le nécessitent.
+- Un stockage de fichiers persistant local ou compatible S3.
 
-The [LobbyStack Railway template](https://railway.com/deploy/lobbystack) deploys the admin, worker, and migration services with PostgreSQL, Redis, and a storage bucket. Railway generates every secret and database password. You enter an OpenAI API key and your Twilio credentials, then create your account on the admin domain.
+Les schémas, secrets, comptes fournisseurs et procédures de reprise appartiennent à votre installation. Ne réutilisez pas ceux du SaaS.
 
-[![Deploy on Railway](https://railway.com/button.svg)](https://railway.com/deploy/lobbystack)
+## Préparer un déploiement
 
-## Official baseline
+Commencez par [Docker Compose](/self-hosting/docker-compose). Lisez [.env et variables](/self-hosting/environment-variables) ainsi que les [fournisseurs](/self-hosting/providers).
 
-The repository's [`docker-compose.yml`](https://github.com/lobbystack/lobbystack/blob/main/docker-compose.yml) runs:
+Utilisez un environnement de test sans destinataires clients. Aucun appel réel, achat de numéro ou email ne doit résulter involontairement d’un démarrage.
 
-- PostgreSQL with pgvector for durable data, authentication state, and knowledge embeddings
-- Redis for queues, rate limits, and realtime coordination
-- a persistent Docker volume for recordings and uploaded documents
-- the Next.js admin dashboard and HTTP API
-- the background worker and transactional outbox dispatcher, which also runs each GPT-Live call
-- Caddy to route the dashboard hostname over plain HTTP, behind the proxy or load balancer that terminates HTTPS
+## Responsabilités
 
-LobbyStack does not add monitoring containers to the Compose stack. Server runtimes can send traces, metrics, and OpenTelemetry logs to a configured OTLP-compatible backend.
+L’opérateur assure la configuration, les accès, les mises à jour, les sauvegardes, leur restauration et le cadre de traitement des données.
 
-## Data flow
+La disponibilité du code ne constitue ni un service géré Caléonis, ni une certification de sécurité, ni une qualification HDS.
 
-1. The dashboard and API read and write PostgreSQL through role-specific connections and row-level security.
-2. Durable side effects enter the PostgreSQL outbox in the same transaction as business state changes.
-3. The worker dispatches queued jobs and refreshes business context snapshots.
-4. OpenAI hosts call audio. The admin starts each call with the business snapshot, and the worker answers GPT-Live's requests for bookings, messages, and transfers.
-5. The admin and worker share the configured storage provider. Single-host Compose deployments use a persistent local volume by default.
+## Avant un usage réel
 
-## Responsibilities
-
-You are responsible for:
-
-- PostgreSQL, Redis, and file-storage durability
-- backups, restore drills, upgrades, and monitoring
-- public DNS and TLS for the dashboard
-- Twilio, OpenAI, email, calendar, billing, and analytics credentials
-- secret rotation and least-privilege database roles
-
-Continue with the [Docker Compose deployment guide](/self-hosting/docker-compose), [environment variables](/self-hosting/environment-variables), and [provider reference](/self-hosting/providers).
-
-<Warning>
-  Local storage requires the admin and worker to run on the same Docker host. Deployments with application containers on more than one host must set `STORAGE_PROVIDER=s3` and use AWS S3 or a compatible service.
-</Warning>
+Vérifiez l’isolation des entreprises, les rôles PostgreSQL, le stockage privé, les intégrations et la reprise après incident. Une application qui démarre n’est pas une chaîne téléphonique ou calendrier qualifiée.

@@ -1,7 +1,13 @@
 {
-  "appName": "Caleonis Reception",
-  "accessibility": { "close": "Fermer", "toggleSidebar": "Afficher ou masquer la barre latérale", "skipToContent": "Aller au contenu principal" },
-  "errors": { "unexpected": "Une erreur est survenue. Veuillez réessayer." },
+  "appName": "Caléonis Receptionist",
+  "accessibility": {
+    "close": "Fermer",
+    "toggleSidebar": "Afficher ou masquer la barre latérale",
+    "skipToContent": "Aller au contenu principal"
+  },
+  "errors": {
+    "unexpected": "Une erreur est survenue. Veuillez réessayer."
+  },
   "loading": {
     "title": "Chargement...",
     "retry": "Réessayer le chargement",
@@ -41,13 +47,13 @@
     "title": "Envoyer un commentaire",
     "description": "Dites-nous ce qui améliorerait ce tableau de bord.",
     "label": "Message de feedback",
-    "placeholder": "Une idée pour améliorer Caleonis Reception ? Dites-le à l’équipe.",
+    "placeholder": "Une idée pour améliorer Caléonis Receptionist ? Dites-le à l’équipe.",
     "characterCount": "{{count}} / {{max}} caractères",
     "helpText": "Besoin d’aide ?",
-    "helpCenter": "Centre d’aide",
+    "helpCenter": "Aide et accompagnement",
     "contactLink": "Contactez-nous",
     "helpTextSeparator": "ou",
-    "docsLink": "consultez la doc.",
+    "docsLink": "obtenir de l’aide.",
     "submit": "Envoyer",
     "toast": {
       "sent": "Feedback envoyé.",
@@ -92,7 +98,7 @@
       "microphoneNotFound": "Aucun microphone n’a été trouvé sur cet appareil.",
       "microphoneInUse": "Le microphone est déjà utilisé par une autre application.",
       "gatewayTimeout": "L’appel a mis trop de temps à se connecter.",
-      "gatewayUnreachable": "Cette page ne peut pas joindre Caleonis Reception pour lancer l’appel.",
+      "gatewayUnreachable": "Cette page ne peut pas joindre Caléonis Receptionist pour lancer l’appel.",
       "connectionDropped": "La connexion vocale a été interrompue.",
       "browserNoMicrophone": "Ce navigateur ne prend pas en charge les appels avec microphone.",
       "browserNoWebRtc": "Ce navigateur ne prend pas en charge les appels vocaux en direct.",
@@ -159,5 +165,20 @@
     "doneHint_other": "{{count}} pages sont prêtes à répondre.",
     "failedTitle": "Nous n'avons pas pu lire {{host}}",
     "failedHint": "Ajoutez vos informations à la main, ou relancez l'import depuis votre tableau de bord."
+  },
+  "publicDemo": {
+    "badge": "Démonstration",
+    "eyebrow": "Votre réceptionniste IA",
+    "title": "Parlez à Caléonis Receptionist.",
+    "description": "Testez directement la réceptionniste IA depuis votre navigateur. Elle peut répondre aux questions, qualifier une demande et prendre un message comme elle le ferait pour votre entreprise.",
+    "requestTitle": "Essayez une demande fictive",
+    "requestDescription": "Demandez les services, laissez un message ou simulez un prospect.",
+    "aiTitle": "Vous parlez à une IA",
+    "aiDescription": "La démonstration l’indique clairement et ne remplace pas un service d’urgence.",
+    "examples": "Exemples : « Que peut faire Caléonis Receptionist ? » · « Je voudrais laisser un message » · « Comment pourriez-vous répondre aux appels de mon entreprise ? »",
+    "start": "Cliquez sur le téléphone pour commencer",
+    "microphone": "Votre navigateur vous demandera l’accès au microphone.",
+    "recordingNotice": "La conversation est enregistrée et transcrite, puis consultable dans l’historique du compte de démonstration. Utilisez uniquement des informations fictives, sans données de santé.",
+    "footer": "Caléonis Receptionist · Démonstration vocale IA"
   }
 }

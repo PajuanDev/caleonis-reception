@@ -7,12 +7,16 @@ import { toast } from "sonner";
 import { isPaidSubscription, type BillingInterval, type BillingPlanSlug, type HostedCheckoutPlanIntervals } from "@lobbystack/shared";
 import { requestJson } from "@/lib/request-json";
 import { selectActiveBusiness } from "@/lib/active-business";
+import { helpSiteUrl } from "@/lib/help-site-url";
 import type { WorkspaceViewModel } from "@/lib/page-view-models";
 import { UpgradePlanDialog, type HostedUpgradePlan } from "./upgrade-plan-dialog";
 import { UpgradePlanDialogProvider } from "./upgrade-plan-dialog-context";
+import { BillingPilotNotice } from "./billing-pilot-notice";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "./ui/dialog";
 
 type WorkspaceResponse = { businesses: WorkspaceViewModel[] };
 type Billing = {
+  checkoutAvailable: boolean;
   account: { plan: string | null; billingInterval: string | null; subscriptionState: string | null } | null;
   availableCheckoutPlans: HostedUpgradePlan[];
   availableCheckoutIntervals: HostedCheckoutPlanIntervals;
@@ -51,9 +55,10 @@ export function LiveUpgradePlanProvider({ children }: { children: ReactNode }) {
   // card as current leaves them unable to start the tier they just lost.
   const plan: BillingPlanSlug = rawPlan === "self_hosted_standard" || rawPlan === "self_host" ? "self_host" : isPaidSubscription(rawPlan, billing.data?.account?.subscriptionState) ? rawPlan as BillingPlanSlug : "free_cloud";
   const pending = mutation.isPending && mutation.variables.businessId === businessId || checkout?.businessId === businessId;
+  const checkoutConfigured = billing.data?.checkoutAvailable === true && billing.data.availableCheckoutPlans.some(target => (billing.data?.availableCheckoutIntervals[target]?.length ?? 0) > 0);
   return <UpgradePlanDialogProvider onOpen={() => setOpen(true)}>
     {children}
-    {businessId && billing.data ? <UpgradePlanDialog
+    {businessId && billing.data && checkoutConfigured ? <UpgradePlanDialog
       availableCheckoutPlans={billing.data.availableCheckoutPlans ?? []}
       availableCheckoutIntervals={billing.data.availableCheckoutIntervals ?? { starter: [], pro: [] }}
       billingInterval={interval}
@@ -61,11 +66,11 @@ export function LiveUpgradePlanProvider({ children }: { children: ReactNode }) {
       loading={pending ? "checkout" : null}
       loadingPlan={checkout?.target ?? (mutation.isPending ? mutation.variables.target : null)}
       onBillingIntervalChange={setInterval}
-      onContactEnterprise={() => window.location.assign(`mailto:hello@lobbystack.ai?subject=${encodeURIComponent(t("billing.upgradeDialog.enterpriseSubject"))}`)}
+      onContactEnterprise={() => window.location.assign(helpSiteUrl())}
       onOpenChange={setOpen}
       onStartCheckout={(target, billingInterval) => mutation.mutate({ businessId, target, billingInterval })}
       open={open}
       t={t}
-    /> : null}
+    /> : <Dialog open={open} onOpenChange={setOpen}><DialogContent><DialogHeader><DialogTitle>{t("billing.availability.title")}</DialogTitle><DialogDescription>{t("billing.availability.description")}</DialogDescription></DialogHeader><BillingPilotNotice /></DialogContent></Dialog>}
   </UpgradePlanDialogProvider>;
 }

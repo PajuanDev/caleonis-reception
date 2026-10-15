@@ -9,8 +9,10 @@ import { translatedBasePaths } from "./src/i18n/translated-base-paths.ts"
 import { indexNowChangedPages } from "./src/lib/indexnow.ts"
 import { SITE_URL } from "./src/lib/site-origin.mjs"
 import { stableLastmodForUrl } from "./src/lib/sitemap.ts"
+import { isReviewedPath } from "./src/lib/launch-content.ts"
 
-const INDEXNOW_KEY = process.env.INDEXNOW_KEY
+// No search-engine submission from a private preview.
+const INDEXNOW_KEY = undefined
 const DEFAULT_LOCALE = "en"
 const translatedPathSet = new Set(translatedBasePaths)
 const NOINDEX_PATHS = new Set([
@@ -130,14 +132,14 @@ export default defineConfig({
           "'self'",
           "https://app.cal.com",
           "https://static.cloudflareinsights.com",
-          "https://ts.lobbystack.com",
+          "https://us.i.posthog.com",
         ],
       },
       directives: [
         "default-src 'self'",
-        "connect-src 'self' https://app.cal.com https://app.lobbystack.com http://localhost:3000 http://127.0.0.1:3000 https://cloudflareinsights.com https://ts.lobbystack.com https://us.i.posthog.com",
+        "connect-src 'self' https://app.cal.com https://receptionist.caleonis.com http://localhost:3000 http://127.0.0.1:3000 https://cloudflareinsights.com https://us.i.posthog.com https://us.i.posthog.com",
         "frame-src 'self' https://app.cal.com",
-        "img-src 'self' data: https://app.cal.com https://images.unsplash.com https://i.pravatar.cc https://ts.lobbystack.com https://us.i.posthog.com",
+        "img-src 'self' data: https://app.cal.com https://images.unsplash.com https://i.pravatar.cc https://us.i.posthog.com https://us.i.posthog.com",
       ],
     },
   },
@@ -167,7 +169,7 @@ export default defineConfig({
       entryLimit: 1000,
       filter: (page) => {
         const pathname = new URL(page).pathname
-        return !isNoindexPath(pathname)
+        return !["/aide/", "/fr/aide/"].includes(pathname) && isReviewedPath(pathname) && !isNoindexPath(pathname)
       },
       serialize(item) {
         const lastmod = stableLastmodForUrl(item.url)

@@ -1,5 +1,7 @@
 ---
 import "@/styles/global.css"
+import ReviewNotice from "@/components/pages/ReviewNotice.astro"
+import { isReviewedPath, launchSeo } from "@/lib/launch-content"
 import { Font } from "astro:assets"
 import Seo from "@jdevalk/astro-seo-graph/Seo.astro"
 import {
@@ -34,14 +36,23 @@ interface Props {
   seo?: PageSeo
 }
 
-const { seo } = Astro.props
+const reviewed = isReviewedPath(Astro.url.pathname)
+const incomingSeo = Astro.props.seo
+const pageLocale =
+  incomingSeo?.locale ?? (Astro.url.pathname.startsWith("/fr/") ? "fr" : "en")
+const seo = {
+  ...incomingSeo,
+  ...launchSeo(pageLocale, Astro.url.pathname),
+  noindex: true,
+  ...(reviewed ? {} : { jsonLd: [] }),
+}
 
 const title = seo?.title ?? DEFAULT_TITLE
 const description = seo?.description ?? DEFAULT_DESCRIPTION
 const pageType = seo?.type ?? "website"
 const pagePath = seo?.canonicalPath ?? Astro.url.pathname
 const indexingPagePath = pagePath.replace(/^\/fr(?=\/|$)/, "") || "/"
-const canonicalPath = seo?.noindex ? undefined : pagePath
+const canonicalPath = pagePath
 const locale = (seo?.locale ??
   Astro.currentLocale ??
   localeFromPath(pagePath)) as Locale
@@ -50,15 +61,14 @@ const skipLabel =
   locale === "fr" ? "Aller au contenu principal" : "Skip to main content"
 const canonicalUrl = canonicalPath ? absoluteUrl(canonicalPath) : undefined
 const generatedOgImage = ogImagePath(pagePath)
-const pageImage =
-  seo?.image ?? (seo?.noindex ? DEFAULT_OG_IMAGE : generatedOgImage)
+const pageImage = seo?.image ?? (reviewed ? generatedOgImage : DEFAULT_OG_IMAGE)
 const imageUrl = absoluteUrl(pageImage)
 const imageAlt = seo?.imageAlt ?? title
 const imageWidth = seo?.imageWidth ?? OG_IMAGE_WIDTH
 const imageHeight = seo?.imageHeight ?? OG_IMAGE_HEIGHT
 const markdownPath = seo?.noindex ? undefined : markdownAlternatePath(pagePath)
 const markdownUrl = markdownPath ? absoluteUrl(markdownPath) : undefined
-const localeAlternates = seo?.noindex ? [] : alternateLocaleLinks(pagePath)
+const localeAlternates = reviewed ? alternateLocaleLinks(pagePath) : []
 const graphItems = [
   webPageJsonLd({
     title,
@@ -114,10 +124,11 @@ Astro.response.headers.set("Content-Signal", CONTENT_SIGNAL)
     <Font cssVariable="--font-geist" preload />
     <Font cssVariable="--font-geist-mono" preload />
 
+    {seo.noindex && canonicalUrl && <link rel="canonical" href={canonicalUrl} />}
     <Seo
       title={title}
       description={description}
-      canonical={canonicalUrl}
+      canonical={seo.noindex ? undefined : canonicalUrl}
       noindex={seo?.noindex}
       ogType={pageType}
       ogImage={imageUrl}
@@ -143,7 +154,7 @@ Astro.response.headers.set("Content-Signal", CONTENT_SIGNAL)
           rel: "alternate",
           type: "application/rss+xml",
           href: "/feed.xml",
-          title: "LobbyStack RSS feed",
+          title: "Caléonis Receptionist resources",
         },
         ...(markdownUrl
           ? [{ rel: "alternate", type: "text/markdown", href: markdownUrl }]
@@ -160,23 +171,34 @@ Astro.response.headers.set("Content-Signal", CONTENT_SIGNAL)
   </head>
   <body class="antialiased">
     <a href="#main-content" class="skip-link">{skipLabel}</a>
-    <slot />
+    {
+      reviewed ? (
+        <slot />
+      ) : (
+        <ReviewNotice locale={locale} path={Astro.url.pathname} />
+      )
+    }
     <CookieConsentBanner locale={locale} client:load />
-    <script is:inline src="/webmcp.js" defer></script>
+
     <script>
       const main = document.querySelector<HTMLElement>("#main-content")
       if (main) main.tabIndex = -1
       // Menus built on <details> stay open until toggled, so close them when
       // a press lands anywhere outside.
       document.addEventListener("pointerdown", (event) => {
-        document.querySelectorAll<HTMLDetailsElement>("header details[open]").forEach((details) => {
-          const isTopLevel = !details.parentElement?.closest("details")
-          if (isTopLevel && !details.contains(event.target as Node)) details.open = false
-        })
+        document
+          .querySelectorAll<HTMLDetailsElement>("header details[open]")
+          .forEach((details) => {
+            const isTopLevel = !details.parentElement?.closest("details")
+            if (isTopLevel && !details.contains(event.target as Node))
+              details.open = false
+          })
       })
       document.addEventListener("keydown", (event) => {
         if (event.key !== "Escape") return
-        const details = (event.target as Element | null)?.closest<HTMLDetailsElement>("header details[open]")
+        const details = (
+          event.target as Element | null
+        )?.closest<HTMLDetailsElement>("header details[open]")
         if (!details) return
         details.open = false
         details.querySelector<HTMLElement>("summary")?.focus()

@@ -1,10 +1,10 @@
 {
   "eyebrow": "Affiliate program",
   "title": "Affiliate program",
-  "description": "Share Caleonis Reception with operators and agencies. We track referrals, commissions, and monthly PayPal payouts from here.",
+  "description": "Share Caléonis Receptionist with operators and agencies. We track referrals, commissions, and monthly PayPal payouts from here.",
   "referral": {
     "title": "Referral link",
-    "description": "Share this link anywhere you recommend Caleonis Reception.",
+    "description": "Share this link anywhere you recommend Caléonis Receptionist.",
     "active": "Active",
     "copy": "Copy link",
     "code": "Referral code: {{code}}"
@@ -49,7 +49,7 @@
     },
     "resources": {
       "title": "Use accurate claims",
-      "description": "Describe Caleonis Reception honestly and disclose that you may earn a commission."
+      "description": "Describe Caléonis Receptionist honestly and disclose that you may earn a commission."
     },
     "receive": {
       "title": "Receive earnings",
@@ -105,7 +105,7 @@
     },
     "method": {
       "question": "How are payouts sent?",
-      "answer": "Caleonis Reception pays affiliates through PayPal using the PayPal email saved in settings."
+      "answer": "Caléonis Receptionist pays affiliates through PayPal using the PayPal email saved in settings."
     },
     "refunds": {
       "question": "What happens after a refund?",
@@ -117,5 +117,11 @@
     "copied": "Referral link copied.",
     "paypalSaved": "PayPal email saved.",
     "paypalFailed": "Could not save PayPal email."
+  },
+  "availability": {
+    "title": "Affiliate program",
+    "description": "The program is not open for this service.",
+    "notice": "Caléonis Receptionist affiliate terms, commissions and payment arrangements still require approval. No affiliate agreement or payment is offered during the pilot.",
+    "help": "Help and pilot support"
   }
 }

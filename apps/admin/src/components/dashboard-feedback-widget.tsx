@@ -27,6 +27,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
+import { helpSiteUrl } from "@/lib/help-site-url";
 
 const MAX_FEEDBACK_MESSAGE_LENGTH = 2_000;
 
@@ -126,13 +127,9 @@ export function DashboardFeedbackWidget({ businessId, className }: FeedbackWidge
               <div className="flex items-center justify-between gap-3">
                 <p className="min-w-0 text-sm text-muted-foreground">
                   {t("feedback.helpText")}{" "}
-                  <a className="text-primary underline underline-offset-4" href="mailto:support@lobbystack.com">
-                    {t("feedback.contactLink")}
-                  </a>{" "}
-                  {t("feedback.helpTextSeparator")}{" "}
                   <a
                     className="text-primary underline underline-offset-4"
-                    href="https://docs.lobbystack.com"
+                    href={helpSiteUrl()}
                     rel="noreferrer"
                     target="_blank"
                   >
@@ -158,7 +155,7 @@ export function DashboardFeedbackWidget({ businessId, className }: FeedbackWidge
               render={
                 <a
                   aria-label={t("feedback.helpCenter")}
-                  href="https://docs.lobbystack.com"
+                  href={helpSiteUrl()}
                   rel="noreferrer"
                   target="_blank"
                 />

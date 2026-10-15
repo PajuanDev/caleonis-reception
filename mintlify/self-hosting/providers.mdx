@@ -1,44 +1,37 @@
 ---
-title: "Configure third-party providers"
-description: "See which provider accounts a self-hosted LobbyStack needs: Twilio and OpenAI for live calls, plus optional services like Google Calendar, S3 storage, and PostHog."
-sidebarTitle: "Third-party providers"
-contentType: "Reference"
+title: "Configurer les fournisseurs"
+description: "Préparer les comptes externes nécessaires à votre instance indépendante."
 ---
+Cette page concerne l’auto-hébergement. Les comptes fournisseurs de la production Caléonis ne doivent pas être réutilisés.
 
-The Docker Compose baseline runs LobbyStack's application, PostgreSQL, Redis, and a shared local-storage volume. Connect your own provider accounts for external capabilities.
+| Fournisseur | Rôle | Vérification |
+| --- | --- | --- |
+| PostgreSQL | Données canoniques, rôles et isolation. | Migrations, droits et restauration. |
+| Redis | Fonctions partagées et limitations selon runtime. | Accès privé et reprise. |
+| OpenAI / fournisseur IA compatible | Voix ou texte selon parcours. | Modèle, accès, limites et coûts. |
+| Twilio | Numéros et téléphonie. | Attribution, voix/SMS, trunk et signatures. |
+| Google | Calendar et OAuth. | Droits, agenda, renouvellement et événements. |
+| Stockage S3 compatible ou local | Documents et audio. | Confidentialité, disponibilité et sauvegarde. |
+| Resend / SMTP selon adaptateur | Email transactionnel. | Domaine, expéditeur, destinataire et livraison. |
+| Import Web configuré | Extraction de pages publiques. | Accès aux seules sources autorisées. |
+| Analyse et télémétrie | Mesure et diagnostic. | Consentement/configuration appropriés et données minimales. |
 
-## Required for live calls
+## Téléphonie
 
-<AccordionGroup>
-  <Accordion title="Twilio" icon="phone">
-    Twilio supplies phone numbers, call transfers, and phone verification. An Elastic SIP trunk sends calls for your numbers to OpenAI. Every number must sit on the trunk to answer calls. Keep the Twilio auth token server-side.
-  </Accordion>
-  <Accordion title="OpenAI" icon="waveform">
-    OpenAI's GPT-Live model holds the conversation on phone and browser calls, and OpenAI hosts the audio. When the caller needs business data, such as openings or a booking, GPT-Live asks LobbyStack's worker, which answers with the receptionist agent. Your OpenAI project needs SIP enabled and an incoming-call webhook for phone calls.
-  </Accordion>
-</AccordionGroup>
+Un numéro doit être compatible avec les usages souhaités et conforme aux exigences de l’opérateur. Un numéro Voice-only ne fournit pas de SMS.
 
-## Knowledge and automation
+L’achat, le transfert ou le changement d’un numéro est une opération distincte d’un démarrage technique. Faites-les autoriser et testez avec vos propres lignes.
 
-<AccordionGroup>
-  <Accordion title="OpenAI-compatible AI" icon="sparkles">
-    The receptionist agent for website chat and calls runs on `gpt-6-luna` with high reasoning by default. To use another provider or a self-hosted runtime that implements the OpenAI-compatible chat and embeddings APIs, set the `AI_CHAT_*` and `AI_EMBEDDING_*` variables. The model must support tool calls, and embedding models must return exactly 1536 dimensions.
-  </Accordion>
-  <Accordion title="Firecrawl" icon="globe">
-    Firecrawl imports public website content into the knowledge pipeline. You can omit it if operators only upload documents and enter knowledge manually.
-  </Accordion>
-</AccordionGroup>
+## Google
 
-## Optional integrations
+Vérifiez le statut du projet OAuth, les utilisateurs autorisés, les permissions demandées, les URI de retour et le renouvellement des accès. Ne déduisez pas la durabilité d’une autorisation immédiatement après connexion.
 
-- Google Calendar for availability and booking synchronization
-- SMTP for verification, password reset, and operational email
-- Polar for hosted billing and metered usage
-- PostHog and OpenTelemetry for analytics, error tracking, traces, metrics, and logs
-- AWS S3 or compatible storage for multi-host deployments
-- MinIO through the optional `minio` Compose profile
-- managed PostgreSQL and Redis instead of the included containers
+## Email, paiements et analyses
 
-Set `STORAGE_PROVIDER=s3` for AWS S3, MinIO, or another compatible service. Leave `S3_ENDPOINT` empty for AWS S3. MinIO requires its HTTP endpoint and `S3_FORCE_PATH_STYLE=true`.
+Un adaptateur présent n’est pas un fournisseur configuré. Gardez les envois et paiements en mode de test jusqu’à validation des destinataires et conditions.
 
-Use the [environment variable reference](/self-hosting/environment-variables) for configuration names and the [Docker Compose guide](/self-hosting/docker-compose) for deployment steps.
+La facturation du SaaS Caléonis et ses offres ne sont pas définies par les exemples de votre installation.
+
+## Qualifier
+
+Pour chaque service, vérifiez le cas nominal et un refus attendu, puis documentez le résultat sans exposer de secrets. Une réponse du fournisseur n’est pas une preuve de succès métier sans contrôle du résultat.

@@ -1,60 +1,35 @@
 ---
-title: "Write receptionist rules"
-description: "Use plain text rules to define how your agent should act during calls and conversations."
-sidebarTitle: "Rules"
-contentType: "How-to"
+title: "Écrire les règles de l’agent"
+description: "Donner des consignes précises pour les demandes, les incertitudes et le suivi humain."
 ---
+Les **Règles** indiquent comment agir. Utilisez les [Connaissances](/agent/knowledge) pour les faits et les [Services](/agent/services) pour les prestations.
 
-The **Rules** page lets you shape your agent's behavior in plain text. Instead of building workflows or maintaining decision trees, write the instruction the way you would explain it to a teammate.
+## Ajouter une règle
 
-Rules are useful for actions, policies, and judgment calls: when to transfer a caller, when to take a callback message, what to do after hours, and how to handle questions that need a human response.
+1. Ouvrez **Agent > Règles**.
+2. Ajoutez un titre court et une consigne concrète.
+3. Précisez le cas qui déclenche la consigne.
+4. Enregistrez puis testez un nouvel échange qui correspond à ce cas.
+5. Vérifiez le résultat dans la fiche d’appel.
 
-## What to put in rules
+## Exemples à adapter
 
-Good rules are specific and action-oriented:
-
-- "If a caller says there is an emergency, transfer to the default transfer number."
-- "If the caller asks for a human and transfer is unavailable, take a callback message with their name, phone number, and preferred callback time."
-- "If the receptionist is not sure of an answer, say that the team will follow up instead of guessing."
-- "For after-hours callers, take a message and include the caller's preferred callback window."
-
-<Note>
-  Rules let you define agent behavior in clear language. Keep each rule updated as your process changes.
-</Note>
-
-## Rule templates
-
-| Scenario | Template |
+| Situation | Instruction |
 | --- | --- |
-| Live transfer | If a caller asks for a human or describes an urgent issue, transfer to the default transfer number. |
-| Callback | If the caller wants a callback, collect their name, phone number, reason for calling, and preferred callback window. |
-| Uncertain answer | If the receptionist is not confident, take a message for the team instead of guessing. |
-| After-hours | Outside business hours, take a message and tell the caller the team will follow up during the next business day. |
-| Pricing questions | If pricing depends on the customer's situation, explain the starting point and offer to have the team follow up with details. |
+| Réponse incertaine | Si l’information manque, dites-le et prenez un message pour l’équipe. |
+| Devis | Recueillez le nom, le numéro et l’objet général de la demande. Ne promettez pas de prix non validé. |
+| Rappel | Demandez le créneau de rappel souhaité sans promettre un appel automatique. |
+| Hors horaires | Prenez un message et indiquez les horaires validés de l’entreprise. |
+| Refus SMS | Respectez le refus et ne promettez pas d’envoi de confirmation. |
 
-## Add a rule
+Évitez les consignes contradictoires et les règles trop longues. Un cas et une action par règle sont plus faciles à vérifier.
 
-<Steps>
-  <Step title="Open Rules">
-    In the dashboard sidebar, go to **Agent** > **Rules**.
-  </Step>
-  <Step title="Add a rule">
-    Click **Add Rule**.
-  </Step>
-  <Step title="Write the instruction">
-    Add a short title and the full instruction in the content field. Use tags if they help you find the rule later.
-  </Step>
-  <Step title="Save">
-    Click **Save**. The rule is available to the receptionist after it is saved and indexed.
-  </Step>
-</Steps>
+## Les règles ne débloquent pas les capacités
 
-## Transfers and callbacks
+Une règle ne peut pas activer un numéro SMS, un transfert téléphonique, une intégration désactivée ou un créneau indisponible.
 
-Transfers use the default transfer number in **Agent** > **AI settings**. When a live handoff is not the right next step, the receptionist can create a follow-up task with callback details. Those tasks appear in the dashboard and on call detail pages.
+Les politiques structurées de réservation, de vérification et de transfert restent prioritaires. Écrire « transfère toujours » ne qualifie pas la chaîne téléphonique.
 
-## Recording and transcripts
+## Qualifier une règle
 
-LobbyStack stores call transcripts and can store call recordings. Operators review recordings from the **Calls** page when a recording is available.
-
-Use rules for call-handling behavior. Manage recording and retention policy in your workspace and compliance settings.
+Testez le cas nominal et un cas où l’action doit être refusée. Si l’action échoue, l’agent doit expliquer qu’elle n’a pas été réalisée et proposer une prise de message appropriée.

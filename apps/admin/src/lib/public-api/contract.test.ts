@@ -3,6 +3,7 @@ import { fileURLToPath } from "node:url";
 
 import { apiKeyScopes, apiOperations, buildOpenApiDocument, webhookEventTypes } from "@lobbystack/shared";
 import { describe, expect, it } from "vitest";
+import { buildCaleonisOpenApiDocument } from "./openapi";
 
 const adminRoot = fileURLToPath(new URL("../../../", import.meta.url));
 const repositoryRoot = fileURLToPath(new URL("../../../../../", import.meta.url));
@@ -35,7 +36,7 @@ describe("v1 contract", () => {
 
   it("keeps the committed Mintlify OpenAPI file in sync with the schemas", () => {
     const committed = JSON.parse(readFileSync(`${repositoryRoot}mintlify/api-reference/openapi.json`, "utf8")) as unknown;
-    const generated = buildOpenApiDocument({ serverUrl: "https://app.lobbystack.com/api/v1" });
+    const generated = buildCaleonisOpenApiDocument({ serverUrl: "https://receptionist.caleonis.com/api/v1" });
     expect(committed, "Run pnpm api:openapi to regenerate mintlify/api-reference/openapi.json.").toEqual(JSON.parse(JSON.stringify(generated)));
   });
 });

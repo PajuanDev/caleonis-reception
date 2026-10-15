@@ -1,80 +1,33 @@
 ---
-title: "Configure voice and behavior"
-description: "Configure the opening line, default customer language, appointment changes, and default transfer number for your AI receptionist."
-sidebarTitle: "AI settings"
-contentType: "How-to"
+title: "Régler l’accueil et la réservation"
+description: "Choisir la langue, l’accueil et les politiques de l’agent."
 ---
+Ouvrez **Agent > Paramètres IA**. Vérifiez l’entreprise sélectionnée avant de modifier l’accueil ou les politiques.
 
-Open **Agent** > **AI settings** to edit the basic behavior used by the receptionist.
+## Accueil
 
-## Greeting
+Nommez votre entreprise et proposez une aide concrète. Évitez les promesses de réponse universelle, de rendez-vous garanti ou de rappel automatique.
 
-The greeting is the opening line your receptionist uses when answering a call or starting a conversation. Keep it short and specific.
+Préparez l’information sur l’IA et les enregistrements avec la personne responsable de votre dispositif. Le texte d’accueil doit correspondre au fonctionnement réel.
 
-Good greetings usually include the business name, a brief disclosure that the caller is speaking with the AI receptionist, and a clear offer to help.
+## Langue et voix
 
-| Business type | Example greeting |
-| --- | --- |
-| Dental clinic | Thanks for calling Bright Smile Dental. I'm the AI receptionist. How can I help? |
-| Salon | Thanks for calling North Loop Salon. I can help with services, availability, and messages for the team. |
-| Home services | Thanks for calling Peak HVAC. I'm the AI receptionist. Are you calling about service, scheduling, or an urgent issue? |
-| Restaurant | Thanks for calling Maple Table. I can help with hours, reservations, and messages for the staff. |
+Choisissez la langue de repli proposée à l’écran. Elle sert lorsque la langue de l’appelant n’est pas clairement identifiée.
 
-<Steps>
-  <Step title="Open AI settings">
-    In the dashboard sidebar, go to **Agent** > **AI settings**.
-  </Step>
-  <Step title="Edit the greeting">
-    Update the **Greeting** field.
-  </Step>
-  <Step title="Save">
-    Click **Save** beside the greeting field.
-  </Step>
-</Steps>
+La personnalisation vocale dépend des options effectivement disponibles dans votre version. N’annoncez pas de catalogue de voix, de clonage ou de voix personnalisée si ces contrôles ne sont pas proposés.
 
-## Default customer language
+## Réservation
 
-The **Default customer language** setting supports:
+Choisissez le mode adapté : désactivé, prise de demandes ou réservation directe. Vérifiez les [services](/agent/services), horaires et [Google Calendar](/integrations/google-calendar).
 
-| Option | Value |
-| --- | --- |
-| English | `en` |
-| French | `fr` |
+Les [annulations et déplacements](/agent/ai-settings/appointment-changes) ont leurs propres réglages de vérification.
 
-Choose the fallback language your receptionist should use when the caller's language is unclear.
+## Transfert humain
 
-<Note>
-  This setting is a fallback, not a limit on conversation language. The receptionist can respond in other languages when the caller's language is clear. Add greeting, knowledge, service, and rule content in the languages your callers are most likely to use.
-</Note>
+Un numéro de transfert enregistré et une règle permissive ne suffisent pas. La chaîne téléphonique doit aussi accepter le transfert et le parcours doit être testé.
 
-## Default transfer number
+Le transfert du pilote n’est pas qualifié comme opérationnel. Préférez une prise de message lorsque le transfert n’est pas disponible. Ne lancez pas d’essai vers un tiers sans son accord.
 
-The **Default transfer number** is the phone number used when the receptionist performs a live handoff to a human.
+## Après l’enregistrement
 
-Use a number that is answered during business hours. If different teams handle different requests, keep the default number as the safest general handoff and add rules for when a caller should be transferred.
-
-<Steps>
-  <Step title="Enter a number">
-    Add a complete phone number in the transfer number field.
-  </Step>
-  <Step title="Save">
-    Click **Save** beside the transfer number field.
-  </Step>
-  <Step title="Add rules if needed">
-    Use **Agent** > **Rules** to describe when the receptionist should transfer, take a message, or ask for callback details.
-  </Step>
-</Steps>
-
-<Note>
-  Add a transfer number when you want live human handoff. Without one, the receptionist takes callback or follow-up details so your team can respond from the dashboard.
-</Note>
-
-## Appointment changes
-
-Use **Appointment changes** to choose whether the AI receptionist can cancel or reschedule appointments automatically.
-
-You can also require a one-time code before any appointment is changed.
-
-<Card title="Learn about appointment changes" icon="calendar-clock" href="/agent/ai-settings/appointment-changes">
-  See how LobbyStack confirms the customer, updates the calendar, and hands off uncertain requests to your team.
-</Card>
+Démarrez un nouvel appel de test. Contrôlez l’accueil, la langue, les actions réellement réalisées et la fiche d’appel. Les modifications n’altèrent pas les appels passés.
