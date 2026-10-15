@@ -3,6 +3,7 @@ import Layout from "@/layouts/main.astro"
 import { Navbar } from "@/components/Navbar"
 import { Footer } from "@/components/Footer"
 import { FeatureGrid } from "@/components/FeatureGrid"
+import ProductScreenshots from "@/components/ProductScreenshots.astro"
 import { CtaSection } from "@/components/CtaSection"
 import { assertLocale, localizePath, type Locale } from "@/i18n"
 const locale = assertLocale(
@@ -26,7 +27,7 @@ const locale = assertLocale(
             : "The pilot brings together voice reception, business information, call review and a connected calendar. Each activation is checked with your configuration."
         }
       </p>
-    </section><FeatureGrid locale={locale} /><section
+    </section><FeatureGrid locale={locale} /><ProductScreenshots locale={locale} /><section
       class="mx-auto max-w-7xl px-6 py-16"
     >
       <h2 class="section-heading">

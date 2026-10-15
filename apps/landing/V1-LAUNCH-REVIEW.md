@@ -32,7 +32,7 @@ This is not a claim that the entire inherited editorial library has been rebrand
 
 ## Assets and attribution
 
-The MIT license and `Copyright (c) 2026 LobbyStack contributors` are retained in the repository and `/third-party-notices.txt`. The Caléonis logo is taken from the user's existing corporate source at `audit-twilio/vercel-corporate-source/brand-assets/caleonis-logo-on-light.svg`, with a Receptionist text suffix. Its provenance is recorded; final campaign rights review remains with the operator. Upstream illustrations, third-party logos and product screenshots are retained in source but are not used on the reviewed pages. No fabricated product screenshot is included. A current authorised product capture can be added when available.
+The MIT license and `Copyright (c) 2026 LobbyStack contributors` are retained in the repository and `/third-party-notices.txt`. The Caléonis logo is taken from the user's existing corporate source at `audit-twilio/vercel-corporate-source/brand-assets/caleonis-logo-on-light.svg`, with a Receptionist text suffix. Its provenance is recorded; final campaign rights review remains with the operator. Upstream illustrations, third-party logos and product screenshots are retained in source but are not used on the reviewed pages. The Features page includes real French desktop/mobile Messages captures from the isolated browser fixture on `207dc2c`, explicitly labelled synthetic data. Their source, dimensions and SHA256 hashes are recorded in `docs/p1/screenshots.json`. No fabricated product screenshot is included.
 
 ## Validation
 

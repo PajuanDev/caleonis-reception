@@ -1,0 +1,103 @@
+---
+import type { Locale } from "@/i18n"
+
+interface Props {
+  locale?: Locale
+  id?: string
+}
+
+const { locale = "fr", id = "product-screenshots" } = Astro.props
+const copy = {
+  fr: {
+    heading: "Messages reste accessible, même sans SMS",
+    description:
+      "Retrouvez la boîte Messages sur ordinateur et sur mobile. Les conversations disponibles dépendent des canaux activés pour votre entreprise. Le numéro pilote Voice-only ne permet aucun envoi de SMS.",
+    provenance:
+      "Captures réelles de l’application en français, exécutée avec des données synthétiques de test. Elles ne contiennent aucune conversation de client réel.",
+    desktopAlt:
+      "Page Messages de Caléonis Receptionist en français sur ordinateur : état vide avec un numéro Voice-only.",
+    desktopCaption: "Ordinateur : boîte Messages vide, numéro Voice-only.",
+    mobileAlt:
+      "Page Messages de Caléonis Receptionist en français sur mobile : conversation contenant des données synthétiques de test.",
+    mobileCaption:
+      "Mobile : conversation de test. L’affichage d’un fil ne rend pas le numéro compatible SMS.",
+    openDesktop: "Ouvrir la capture ordinateur en taille originale",
+    openMobile: "Ouvrir la capture mobile en taille originale",
+  },
+  en: {
+    heading: "Messages stays accessible, even without SMS",
+    description:
+      "View the Messages inbox on desktop and mobile. Available conversations depend on the channels enabled for your business. The Voice-only pilot number cannot send SMS.",
+    provenance:
+      "Real application screenshots using synthetic test data. The French interface is shown on both language versions. No real customer conversation is included.",
+    desktopAlt:
+      "Caléonis Receptionist Messages page in French on desktop: empty inbox with a Voice-only number.",
+    desktopCaption: "Desktop: empty Messages inbox, Voice-only number.",
+    mobileAlt:
+      "Caléonis Receptionist Messages page in French on mobile: a conversation containing synthetic test data.",
+    mobileCaption:
+      "Mobile: test conversation. Displaying a thread does not make the number SMS-capable.",
+    openDesktop: "Open the desktop screenshot at its original size",
+    openMobile: "Open the mobile screenshot at its original size",
+  },
+}[locale]
+
+const desktopImage = "/screenshots/messages-voice-only-fr-desktop.png"
+const mobileImage = "/screenshots/messages-voice-only-fr-mobile.png"
+---
+
+<section
+  class="section-spacing border-y border-border/60 bg-muted/15"
+  aria-labelledby={`${id}-title`}
+  id={id}
+>
+  <div class="mx-auto max-w-7xl px-6">
+    <div class="max-w-3xl">
+      <h2 class="section-heading" id={`${id}-title`}>{copy.heading}</h2>
+      <p class="body-copy mt-6">{copy.description}</p>
+      <p class="fine-print mt-4">{copy.provenance}</p>
+    </div>
+    <div class="mt-12 grid items-start gap-8 lg:grid-cols-4">
+      <figure class="min-w-0 lg:col-span-3">
+        <a
+          href={desktopImage}
+          class="block overflow-hidden rounded-xl border border-border/70 bg-background focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label={copy.openDesktop}
+        >
+          <img
+            src={desktopImage}
+            alt={copy.desktopAlt}
+            width={1440}
+            height={1000}
+            class="h-auto w-full"
+            loading="lazy"
+            decoding="async"
+          />
+        </a>
+        <figcaption class="fine-print mt-4">{copy.desktopCaption}</figcaption>
+      </figure>
+      <figure class="mx-auto w-full max-w-64 lg:col-span-1">
+        <a
+          href={mobileImage}
+          class="block overflow-hidden rounded-xl border border-border/70 bg-background focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label={copy.openMobile}
+        >
+          <img
+            src={mobileImage}
+            alt={copy.mobileAlt}
+            width={390}
+            height={844}
+            class="h-auto w-full"
+            loading="lazy"
+            decoding="async"
+          />
+        </a>
+        <figcaption class="fine-print mt-4">{copy.mobileCaption}</figcaption>
+      </figure>
+    </div>
+  </div>
+</section>

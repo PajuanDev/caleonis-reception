@@ -41,9 +41,14 @@ try {
         }
       }
       if (path === "/aide/") {
+        const allGuides = await page.locator("nav a").count();
         await page.getByRole("searchbox").fill("Messages");
-        if (!await page.locator('nav a:not([hidden])').count()) errors.push("Help search returned no Messages guide");
+        if (!await page.getByRole("link", { name: "Utiliser Messages", exact: true }).isVisible()) errors.push("Help search hid the matching Messages guide");
+        if (await page.getByRole("link", { name: "Préparer votre premier appel", exact: true }).isVisible()) errors.push("Help search left an unrelated guide visible");
+        await page.getByRole("searchbox").fill("aucun-guide-xyz");
+        if (await page.locator("nav a:visible").count()) errors.push("Help search left guides visible for an unmatched query");
         await page.getByRole("searchbox").fill("");
+        if (await page.locator("nav a:visible").count() !== allGuides) errors.push("Clearing help search did not restore every guide");
       }
       const screenshot = `${path.replace(/[^a-z0-9]+/gi, "-").replace(/^-|-$/g, "") || "home-en"}-${viewport.width}.png`;
       await page.screenshot({ path: join(output, screenshot), fullPage: true, animations: "disabled" });

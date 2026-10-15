@@ -37,13 +37,15 @@ Le site réutilise Astro, ses composants et styles, avec les assets Caléonis pr
 | Tests globaux CI | 2 107 PASS, 110 ignorés sur `f50075f` ; aucun test ignoré présenté comme exécuté |
 | PostgreSQL/RLS | 113 tests PASS dans la CI Linux isolée ; aucun accès à une base de production depuis cette passe |
 | Images Docker | Admin, worker et migrateur construits et scannés avec succès sur `f50075f` |
-| Navigateur dashboard | Première CI : 12 PASS, 2 ignorés, 2 échecs. Les fixtures ont été corrigées ; résultat final à lire sur le HEAD de la PR |
+| Navigateur dashboard | Relance `207dc2c` : 14 PASS, 2 ignorés, 0 échec. Messages FR depuis Appels, desktop/mobile, composer SMS fermé et isolation/revocation vérifiés dans un environnement jetable |
 
-La [CI de la branche](https://github.com/PajuanDev/caleonis-reception/actions?query=branch%3Acodex%2Freceptionist-v1-parity-2026-10-15) porte le statut courant du SHA proposé. La description de PR et le relevé de livraison final identifient le SHA et les résultats acquis. Les captures du dashboard doivent provenir des fixtures de cette CI, identifiées comme données de test. L'artefact de la première CI contient uniquement trois captures d'affiliation : aucune capture Messages n'en est déduite.
+La [CI de la branche](https://github.com/PajuanDev/caleonis-reception/actions?query=branch%3Acodex%2Freceptionist-v1-parity-2026-10-15) porte le statut courant du SHA proposé. La description de PR et le relevé de livraison final identifient le SHA et les résultats acquis. Les captures Messages desktop/mobile du [parcours réussi](https://github.com/PajuanDev/caleonis-reception/actions/runs/38803741713/artifacts/12005352465) ont été téléchargées, vérifiées par SHA256 et inspectées. Deux sont intégrées aux pages Fonctionnalités FR/EN, avec données fictives explicitement indiquées. Leur provenance pérenne est conservée dans [screenshots.json](screenshots.json), car les artefacts CI expirent après sept jours.
 
 La fixture Playwright jetable active explicitement le programme d'affiliation hérité pour conserver son scénario de régression. Cela ne l'active pas en production ; les tests de routes vérifient séparément le défaut fermé et l'absence d'effets de bord.
 
 La reprise des E2E corrige le nom accessible de la marque, utilise l'entrée de langue explicite `/calls?lng=fr` et des identités uniques à chaque tentative pour éviter le cooldown Redis laissé par une précédente vérification d'e-mail. Les attentes Voice-only, le composer désactivé et les contrôles d'isolation restent en place. Les captures d'échec sont désormais conservées pour distinguer un problème de fixture d'un défaut visible.
+
+Une vérification du site effectivement déployé a aussi révélé que le CSS de l'export d'aide gardait les liens filtrés visibles. La règle `nav a[hidden]` corrige ce défaut. Le smoke navigateur contrôle désormais la visibilité réelle d'un résultat, le masquage des autres liens, une recherche sans résultat et leur réapparition après effacement.
 
 Sur Windows, `mint broken-links` émet quatre faux positifs sur les chemins imbriqués ; la cause séparateurs `\\` contre `/`, les cibles présentes et le contrôle indépendant sont documentés. La CI exécute aussi le vérificateur natif sur Linux. Le contrôle navigateur est un smoke d'accessibilité et de responsive, pas une certification WCAG exhaustive.
 
