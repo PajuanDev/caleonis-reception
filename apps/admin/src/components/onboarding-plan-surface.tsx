@@ -10,6 +10,7 @@ import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
 import { FieldError } from "@/components/ui/field";
 import { OnboardingPlanComparison } from "@/components/onboarding-plan-comparison";
+import { BillingVoiceAllowance } from "./billing-voice-allowance";
 import { useTelemetry } from "@/components/product-analytics";
 import { cn } from "@/lib/utils";
 import { helpSiteUrl } from "@/lib/help-site-url";
@@ -152,7 +153,7 @@ export function OnboardingPlanSurface() {
             {tier.highlight ? <div className="absolute -top-3 left-8 rounded-full bg-foreground px-3 py-0.5 text-xs font-medium text-background">{t("plan.popular")}</div> : null}
             <div className="mb-6"><h3 className="font-heading text-lg font-semibold tracking-tight">{t(`plan.tiers.${tier.slug}.name`)}</h3><div className="mt-3 flex items-baseline gap-1"><span className="font-heading text-4xl font-semibold tracking-tighter">{price}</span><span className="text-sm text-muted-foreground">{period}</span></div><p className="mt-3 text-sm leading-relaxed text-muted-foreground">{description}</p></div>
             <Button className="mb-6 w-full rounded-full" disabled={!business || Boolean(pendingPlan) || (paid && (!billing.data?.checkoutAvailable || (configuredIntervals && !configuredIntervals[tier.slug as "starter" | "pro"].includes(interval))))} onClick={() => act(tier.slug)} type="button" variant={tier.highlight ? "default" : "outline"}>{busy ? <LoaderCircle className="size-4 animate-spin" /> : <>{cta}<ArrowRight className="ml-1 size-4" /></>}</Button>
-            <div className="flex-1 border-t border-border/50 pt-5"><ul className="space-y-2.5">{tier.features.map((feature) => <li className="flex items-start gap-2.5 text-sm" key={feature}><Check className="mt-0.5 size-3.5 shrink-0 text-foreground/60" /><span className="whitespace-pre-line">{t(`plan.tiers.${tier.slug}.highlights.${feature}`)}</span></li>)}</ul></div>
+            <div className="flex-1 border-t border-border/50 pt-5"><ul className="space-y-2.5">{tier.features.map((feature) => <li className="flex items-start gap-2.5 text-sm" key={feature}><Check className="mt-0.5 size-3.5 shrink-0 text-foreground/60" /><span className="whitespace-pre-line">{feature === "voiceMinutes" && (tier.slug === "starter" || tier.slug === "pro") ? <BillingVoiceAllowance plan={tier.slug} /> : t(`plan.tiers.${tier.slug}.highlights.${feature}`)}</span></li>)}</ul></div>
           </section>;
         })}
       </div>

@@ -5,7 +5,11 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 import type { ComponentProps } from "react";
 import { UpgradePlanDialog } from "./upgrade-plan-dialog";
 
-vi.mock("react-i18next", () => ({ useTranslation: () => ({ i18n: { language: "en" } }) }));
+vi.mock("react-i18next", () => ({ useTranslation: () => ({ i18n: { language: "en" }, t: (key: string, options?: Record<string, unknown>) => {
+  let text = typeof options?.defaultValue === "string" ? options.defaultValue : key;
+  for (const [name, value] of Object.entries(options ?? {})) text = text.replaceAll(`{{${name}}}`, String(value));
+  return text;
+} }) }));
 type Props = ComponentProps<typeof UpgradePlanDialog>;
 afterEach(cleanup);
 function setup(overrides: Partial<Props> = {}) {
@@ -31,6 +35,9 @@ describe("main upgrade dialog", () => {
     expect(screen.getByText(/€288 billed annually/)).toBeTruthy();
     expect(screen.getByText(/€960 billed annually/)).toBeTruthy();
     expect(screen.getByRole("note").textContent).toContain("exclude tax");
+    expect(screen.getByText(/150 voice minutes included/).textContent).toContain("€0.20/min excl. tax");
+    expect(screen.getByText(/500 voice minutes included/).textContent).toContain("€0.18/min excl. tax");
+    expect(screen.getByRole("dialog").textContent).not.toContain("$");
     await userEvent.click(screen.getByRole("button", { name: "billing.upgradeDialog.actions.starter" }));
     expect(props.onStartCheckout).toHaveBeenCalledWith("starter", "annual");
   });

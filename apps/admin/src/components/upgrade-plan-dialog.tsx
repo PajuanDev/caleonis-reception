@@ -5,6 +5,7 @@ import type { TFunction } from "i18next";
 import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { BillingVoiceAllowance } from "./billing-voice-allowance";
 import { cn } from "@/lib/utils";
 import { commercialCopy, formatOfferMoney, offerAmounts } from "@/lib/billing-presentation";
 import type { BillingInterval, BillingPlanSlug, HostedCheckoutPlanIntervals } from "@lobbystack/shared";
@@ -111,7 +112,7 @@ export function UpgradePlanDialog({
                     {card.highlights.map(highlight => (
                       <li className="flex items-start gap-2.5 text-sm" key={highlight}>
                         <Check className="mt-0.5 size-3.5 shrink-0 text-emerald-500" />
-                        <span className="whitespace-pre-line">{t(`billing.upgradeDialog.plans.${card.slug}.highlights.${highlight}`)}</span>
+                        <span className="whitespace-pre-line">{highlight === "voiceMinutes" && checkoutPlan !== null ? <BillingVoiceAllowance plan={checkoutPlan} /> : t(`billing.upgradeDialog.plans.${card.slug}.highlights.${highlight}`)}</span>
                       </li>
                     ))}
                   </ul>
