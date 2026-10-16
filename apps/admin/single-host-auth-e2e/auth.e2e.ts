@@ -36,13 +36,22 @@ for (const locale of ["fr", "en"] as const) {
     });
     try {
       const page = await context.newPage();
+      page.setDefaultTimeout(20000);
       await isolateAuthRateLimit(page, email, testInfo);
-      // Entry through the real marketing header (FR) or docs topbar (EN mobile).
+      // Use the actual responsive entry points: marketing login on desktop,
+      // and the visible trial/signup CTA in the mobile docs topbar.
       const entry = await page.goto(`${origin}${locale === "fr" ? "/fr/" : "/aide/en/"}`);
       expect(entry?.status()).toBe(200);
       expect(entry?.headers()["x-robots-tag"]).toBe("noindex, nofollow");
-      const loginLink = page.locator(`a[href="${origin}/login"]`).filter({ visible: true }).first();
-      await loginLink.click();
+      if (locale === "en") {
+        // The narrow docs header intentionally keeps only the primary CTA.
+        // Follow it normally, then use the existing signup-to-login link.
+        await page.locator(`.toplinks a.primary[href="${origin}/signup"]`).click();
+        await expect(page).toHaveURL(new RegExp(`/${locale}/signup`));
+        await page.locator(`a[href^="/${locale}/login"]`).click();
+      } else {
+        await page.locator(`a[href="${origin}/login"]`).filter({ visible: true }).first().click();
+      }
       await expect(page).toHaveURL(new RegExp(`/${locale}/login`));
       await page.locator(`a[href^="/${locale}/signup"]`).click();
       await expect(page).toHaveURL(new RegExp(`/${locale}/signup`));
