@@ -3,6 +3,7 @@ import type { DelegationCreatedEvent } from "openai/resources/live/live";
 import { SidebandWS } from "openai/resources/live/sideband/ws";
 
 import type { ReceptionistAgent } from "../agent";
+import { describePlannerExecution, type PlannerExecution, type PlannerRequestedEffort } from "../plannerExecution";
 import { LiveLatencyTracker, type LiveCallLatency } from "./latency";
 
 type Turn = { role: "caller" | "receptionist"; text: string; endMs: number };
@@ -16,6 +17,7 @@ export type DelegationTiming = {
   tools: string[];
   answer: string;
   failed: boolean;
+  execution?: PlannerExecution;
 };
 
 export type LiveCallSummary = {
@@ -38,6 +40,8 @@ export type LiveCallControllerOptions = {
   client: OpenAI;
   sessionId: string;
   agent: ReceptionistAgent;
+  /** Server configuration for attribution only; never inferred from a response. */
+  requestedPlannerEffort?: PlannerRequestedEffort;
   /** Spoken as soon as the call connects, so the caller doesn't have to speak first. */
   greeting?: string;
   /** Hang up after this long without either side speaking. */
@@ -237,6 +241,7 @@ export class LiveCallController {
     let answer = FALLBACK_ANSWER;
     let tools: string[] = [];
     let failed = false;
+    let execution: PlannerExecution | undefined;
     try {
       const result = await this.options.agent.generate({
         prompt: this.delegationPrompt(),
@@ -244,6 +249,8 @@ export class LiveCallController {
       });
       tools = result.steps.flatMap((step) => step.toolCalls.map((call) => call.toolName));
       if (result.text.trim()) answer = result.text.trim().slice(0, MAX_ANSWER_CHARS);
+      // Telemetry must never turn a completed action into an error/fallback.
+      this.measure(() => { execution = describePlannerExecution(result.steps, this.options.requestedPlannerEffort); });
     } catch (error) {
       failed = true;
       if (this.abort.signal.aborted) return;
@@ -262,6 +269,7 @@ export class LiveCallController {
       tools,
       answer,
       failed,
+      ...(execution ? { execution } : {}),
     };
     this.delegations.push(timing);
     this.options.onDelegation?.(timing);

@@ -18,7 +18,7 @@ vi.mock("openai/resources/live/sideband/ws", () => ({
 
 import { LiveCallController, type LiveCallSummary, type LiveCallTurn } from "./callController";
 
-function setup(options: { silenceTimeoutMs?: number } = {}) {
+function setup(options: { silenceTimeoutMs?: number; requestedPlannerEffort?: "high" | "medium" } = {}) {
   const generate = vi.fn(async () => ({ text: "We're open until 5.", steps: [{ toolCalls: [{ toolName: "getBusinessHours" }] }] }));
   const turns: LiveCallTurn[] = [];
   const closed: LiveCallSummary[] = [];
@@ -83,6 +83,23 @@ describe("LiveCallController", () => {
     socket.emit("session.delegation.created", { delegation: { id: "item_1" }, offset_ms: 900 });
     await vi.waitFor(() => expect(socket.sent).toContainEqual(expect.objectContaining({ type: "session.commentary.append", delegation_id: "item_1", content: "We're open until 5." })));
     expect(generate).toHaveBeenCalledWith(expect.objectContaining({ prompt: expect.stringContaining("Caller: Are you open today?") }));
+  });
+
+  it("reports only whitelisted execution observations without changing the final answer", async () => {
+    const { socket, generate, closed } = setup({ requestedPlannerEffort: "medium" });
+    generate.mockResolvedValueOnce({ text: "PRIVATE_ANSWER", steps: [{ toolCalls: [{ toolName: "getBusinessHours" }],
+      performance: { responseTimeMs: 80, toolExecutionMs: { PRIVATE_TOOL_ID: 20 } },
+      usage: { inputTokens: 30, outputTokens: 10, totalTokens: 40 },
+      providerMetadata: { openai: { serviceTier: "default", responseId: "PRIVATE_RESPONSE" } },
+    }] } as never);
+    socket.emit("session.input_transcript.delta", { delta: "PRIVATE_CALLER", end_ms: 1000 });
+    socket.emit("session.delegation.created", { delegation: { id: "private-delegation" }, offset_ms: 900 });
+    await vi.waitFor(() => expect(socket.sent).toContainEqual(expect.objectContaining({ type: "session.commentary.append", content: "PRIVATE_ANSWER" })));
+    socket.emit("session.closed", { reason: "remote_hangup", usage: { seconds: 42 } });
+    await vi.waitFor(() => expect(closed).toHaveLength(1));
+    const execution = closed[0]!.delegations[0]!.execution;
+    expect(execution).toMatchObject({ modelSteps: 1, modelMs: 80, toolMs: 20, requestedEffort: "medium", inputTokens: 30, estimatedCostUsd: null, steps: [{ actualTier: "default" }] });
+    expect(JSON.stringify(execution)).not.toMatch(/PRIVATE|private|providerMetadata|toolExecutionMs/);
   });
 
   it("reports finished turns in order and the billed seconds on close", () => {
