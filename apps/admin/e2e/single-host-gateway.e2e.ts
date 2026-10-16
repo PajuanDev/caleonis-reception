@@ -143,20 +143,58 @@ test("real Next preserves sessions and legacy routes behind the local static gat
     expect(proxiedCalls.status()).toBe(directCalls.status());
     expect(proxiedCalls.status()).toBe(200);
     expect(await proxiedCalls.json()).toEqual(await directCalls.json());
-    for (const method of ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"]) {
-      const path = "/api/p1-never-existing-gateway-route?opaque=%2Fkeep%2Braw";
-      const options = { method, maxRedirects: 0, ...(method === "GET" ? {} : { data: "raw=one%2Btwo&line=%0A" }) };
-      const upstream = await context.request.fetch(`${direct.origin}${path}`, options);
-      const proxied = await context.request.fetch(`${origin}${path}`, options);
-      expect(proxied.status()).toBe(upstream.status());
-      expect(proxied.status()).toBe(404);
-      expect(proxied.headers()["content-type"]).toBe(upstream.headers()["content-type"]);
+
+    // APIRequestContext does not add the browser's Origin automatically. The
+    // real Next proxy rejects unsafe API methods BEFORE resolving a missing
+    // route. Verify that security contract instead of weakening it to get 404.
+    const unsafeMethods = new Set(["POST", "PUT", "PATCH", "DELETE"]);
+    type OriginCase = "missing" | "trusted-next" | "foreign";
+    const apiProbeResults: Array<{ method: string; originCase: OriginCase; expectedStatus: number; directStatus: number; proxiedStatus: number }> = [];
+    async function probeMissingApi(method: string, originCase: OriginCase): Promise<void> {
+      await test.step(`${method} missing API route with ${originCase} origin`, async () => {
+        const path = "/api/p1-never-existing-gateway-route?opaque=%2Fkeep%2Braw";
+        const originHeader = originCase === "trusted-next" ? direct.origin : originCase === "foreign" ? "https://untrusted.example.invalid" : undefined;
+        const options = {
+          method, maxRedirects: 0,
+          ...(originHeader ? { headers: { Origin: originHeader } } : {}),
+          ...(["GET", "HEAD"].includes(method) ? {} : { data: "raw=one%2Btwo&line=%0A" }),
+        };
+        const upstream = await context.request.fetch(`${direct.origin}${path}`, options);
+        const proxied = await context.request.fetch(`${origin}${path}`, options);
+        const expectedStatus = unsafeMethods.has(method) && originCase !== "trusted-next" ? 403 : 404;
+        expect(upstream.status()).toBe(expectedStatus);
+        expect(proxied.status()).toBe(upstream.status());
+        expect(proxied.headers()["content-type"]).toBe(upstream.headers()["content-type"]);
+        expect(proxied.headers()["x-robots-tag"]).toBe("noindex, nofollow");
+        if (expectedStatus === 403) {
+          // A generic 403 or a fabricated gateway response must not hide a
+          // changed CSRF policy in the actual application.
+          const error = { error: "CSRF origin validation failed." };
+          expect(await upstream.json()).toEqual(error);
+          expect(await proxied.json()).toEqual(error);
+        }
+        apiProbeResults.push({ method, originCase, expectedStatus, directStatus: upstream.status(), proxiedStatus: proxied.status() });
+      });
     }
+    for (const method of ["GET", "HEAD", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"]) {
+      await probeMissingApi(method, "missing");
+    }
+    for (const method of unsafeMethods) {
+      // Explicit trusted headers belong to these synthetic loopback requests
+      // only. Neither production config nor gateway Origin forwarding changes.
+      await probeMissingApi(method, "trusted-next");
+      await probeMissingApi(method, "foreign");
+    }
+    expect(apiProbeResults).toHaveLength(15);
+
     const missing = await context.request.get(`${origin}/p1-never-existing-public-route`, { maxRedirects: 0 });
     expect(missing.status()).toBe(404);
     const invalidBody = "{\n  invalid-json";
-    const malformedDirect = await context.request.post(`${direct.origin}/api/businesses`, { maxRedirects: 0, headers: { "content-type": "application/json" }, data: invalidBody });
-    const malformedProxy = await context.request.post(`${origin}/api/businesses`, { maxRedirects: 0, headers: { "content-type": "application/json" }, data: invalidBody });
+    // Supply a trusted Origin so this case reaches JSON parsing, rather than
+    // stopping at the independently tested CSRF check before the handler.
+    const malformedOptions = { maxRedirects: 0, headers: { "content-type": "application/json", Origin: direct.origin }, data: invalidBody };
+    const malformedDirect = await context.request.post(`${direct.origin}/api/businesses`, malformedOptions);
+    const malformedProxy = await context.request.post(`${origin}/api/businesses`, malformedOptions);
     expect(malformedProxy.status()).toBe(malformedDirect.status());
     expect(malformedProxy.status()).toBe(400);
     expect(await malformedProxy.json()).toEqual(await malformedDirect.json());
@@ -165,7 +203,7 @@ test("real Next preserves sessions and legacy routes behind the local static gat
       status: "PARTIAL_QUALIFIED_REAL_NEXT_LOCAL_ONLY", directOrigin: direct.origin, gatewayOrigin: origin,
       marketingAndHelp: "Real builds copied to temporary directory; only receptionist.caleonis.com origin rebased to loopback in HTML/navigation bundles/JSON for consistent links, never published.",
       rebasedFiles, sessionAndLegacyCalls: "PASS with cookie created by direct Next signup + local OTP",
-      apiGetAndMethodsAnd404: "PASS", originGuard: { status: rejected.status(), preserved: true },
+      apiGetAndMethodsAnd404: "PASS", apiProbeResults, malformedBodyStatus: malformedProxy.status(), originGuard: { status: rejected.status(), preserved: true },
       authRedirect: { status: redirected.status(), location: redirected.headers().location, xRobotsTag: redirected.headers()["x-robots-tag"] },
       nextApiResponse: { status: proxiedCalls.status(), contentType: proxiedCalls.headers()["content-type"], cacheControl: proxiedCalls.headers()["cache-control"], xRobotsTag: proxiedCalls.headers()["x-robots-tag"] },
       pending: ["Login/signup POST through gateway require separately approved Next staging trusted origin.", "appHome staging flag remains false; /dashboard and default post-login root mapping are not qualified.", "Real Google OAuth/provider signatures/voice/WS remain outside this isolated fixture."],
