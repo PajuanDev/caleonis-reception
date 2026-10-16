@@ -27,7 +27,7 @@ beforeAll(async () => {
       if not exists (select from pg_roles where rolname = 'lobbystack_app') then create role lobbystack_app; end if;
     end $$;
     create schema ${schema};
-    create table ${schema}.users (id uuid primary key, email text, email_verified boolean);
+    create table ${schema}.users (id uuid primary key, email text, email_verified boolean, preferred_locale text not null default 'en');
     create table ${schema}.verifications (id uuid primary key, identifier text not null, value text not null, expires_at timestamptz not null, created_at timestamptz not null, updated_at timestamptz not null);
     grant usage on schema ${schema} to lobbystack_auth, lobbystack_app;
     grant select on ${schema}.users to lobbystack_auth;
@@ -52,7 +52,7 @@ afterAll(async () => {
 describe.skipIf(!url)("auth issuance with PostgreSQL", () => {
   it("persists with the locked adapter inside signup and rejects overlapping issuance", async () => {
     const email = `${randomUUID()}@example.invalid`;
-    await admin!.pool.query(`insert into ${schema}.users values ($1, $2, false)`, [randomUUID(), email]);
+    await admin!.pool.query(`insert into ${schema}.users (id, email, email_verified, preferred_locale) values ($1, $2, false, 'fr')`, [randomUUID(), email]);
     let release!: () => void;
     state.enqueue.mockImplementationOnce(() => new Promise<void>(resolve => { release = resolve; }));
     const { issueEmailVerificationCode } = await import("./auth");
@@ -61,6 +61,11 @@ describe.skipIf(!url)("auth issuance with PostgreSQL", () => {
     const first = runWithAdapter(outer, () => issueEmailVerificationCode(email));
     try {
       await vi.waitFor(() => expect(state.enqueue).toHaveBeenCalledOnce());
+      expect(state.enqueue.mock.calls[0]![1].payload).toMatchObject({
+        template: "verify_email", to: email,
+        subject: "Votre code de vérification Caléonis Receptionist",
+        variables: { locale: "fr" },
+      });
       expect((await admin!.pool.query(`select * from ${schema}.verifications`)).rows).toHaveLength(0);
       await expect(issueEmailVerificationCode(email.toUpperCase())).rejects.toThrow("Please wait");
     } finally { release?.(); }
