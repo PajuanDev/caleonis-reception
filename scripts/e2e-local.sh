@@ -6,6 +6,7 @@
 # containers on tmpfs, applies migrations and seed data with the real
 # unprivileged roles, builds the admin standalone server, and runs the
 # supported EN/FR journey subset against it with no live provider keys.
+# The default full run also rebuilds for a separate trusted single-host auth rehearsal.
 #
 # Usage:
 #   scripts/e2e-local.sh                 # full lifecycle: up, test, tear down
@@ -31,6 +32,7 @@ MAILPIT_UI_PORT="${E2E_MAILPIT_UI_PORT:-28025}"
 
 KEEP=0
 SKIP_BUILD=0
+RUN_AUTH_REHEARSAL=1
 TESTS=(
   e2e/affiliate-program.e2e.ts
   e2e/auth-pages.e2e.ts
@@ -47,7 +49,7 @@ while [[ $# -gt 0 ]]; do
   case "$1" in
     --keep) KEEP=1; shift ;;
     --skip-build) SKIP_BUILD=1; shift ;;
-    --) shift; TESTS=("$@"); break ;;
+    --) shift; TESTS=("$@"); RUN_AUTH_REHEARSAL=0; break ;;
     *) echo "Unknown argument: $1" >&2; exit 2 ;;
   esac
 done
@@ -107,3 +109,8 @@ pnpm --filter @lobbystack/db exec tsx src/cli.ts seed
 
 echo "==> Running the supported browser journeys"
 CI=1 pnpm --filter @lobbystack/admin exec playwright test "${TESTS[@]}"
+
+if [[ "$KEEP" -eq 0 && "$SKIP_BUILD" -eq 0 && "$RUN_AUTH_REHEARSAL" -eq 1 ]]; then
+  echo "==> Rebuilding for the isolated trusted single-host auth journeys"
+  CI=1 bash scripts/e2e-single-host-auth.sh
+fi
