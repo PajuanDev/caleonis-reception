@@ -12,14 +12,17 @@ const nextOrigin = `http://127.0.0.1:${internalPort}`;
 const original = base.webServer;
 if (!original || Array.isArray(original)) throw new Error("Expected exactly one original Next fixture.");
 
-export default defineConfig(base, {
+// Compose one object: defineConfig(base, overrides) concatenates webServer
+// arrays and would also start the original Next server on the gateway port.
+const rehearsal = defineConfig({
+  ...base,
   testDir: "./single-host-auth-e2e",
   testMatch: "**/*.e2e.ts",
   testIgnore: [],
   retries: 0,
   workers: 1,
   outputDir: "test-results/single-host-auth",
-  use: { baseURL, trace: "off" }, // No reusable session values in artifacts.
+  use: { ...base.use, baseURL, trace: "off" }, // No reusable session values in artifacts.
   webServer: [
     {
       ...original,
@@ -45,3 +48,6 @@ export default defineConfig(base, {
     },
   ],
 });
+
+if (!Array.isArray(rehearsal.webServer) || rehearsal.webServer.length !== 2) throw new Error("Expected exactly the isolated Next server and its gateway.");
+export default rehearsal;
