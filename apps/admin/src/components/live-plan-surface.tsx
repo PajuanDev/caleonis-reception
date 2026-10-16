@@ -8,6 +8,7 @@ import { toast } from "sonner";
 import type { BillingPermissions } from "./billing-past-due-banner";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useTranslation } from "react-i18next";
+import { commercialCopy, formatOfferMoney, formatRecordedMoney, offerAmounts } from "@/lib/billing-presentation";
 
 import { PageSurface } from "./page-surface";
 import { SectionBlock } from "./section-block";
@@ -34,14 +35,13 @@ type Billing = {
 
 async function getJson<T>(url: string): Promise<T> { const response = await fetch(url, { credentials: "include" }); if (!response.ok) throw new Error("Unable to load billing data."); return await response.json() as T; }
 async function postJson<T>(url: string, body: Record<string, unknown>): Promise<T> { const response = await fetch(url, { method: "POST", credentials: "include", headers: { "content-type": "application/json" }, body: JSON.stringify(body) }); if (!response.ok) throw new Error((await response.json().catch(() => null) as { error?: string } | null)?.error ?? "Unable to update billing."); return await response.json() as T; }
-function formatMoney(cents: number, currency = "usd", locale = "en"): string { return new Intl.NumberFormat(locale, { style: "currency", currency: currency.toUpperCase(), minimumFractionDigits: cents % 100 === 0 ? 0 : 2, maximumFractionDigits: 2 }).format(cents / 100); }
 function formatBillingDate(value: string | null, locale = "en"): string { return value ? new Intl.DateTimeFormat(locale, { month: "short", day: "numeric", year: "numeric" }).format(new Date(value)) : "—"; }
 function planSlug(value: string | null | undefined): BillingPlanSlug { return value === "self_hosted_standard" ? "self_host" : value === "self_host" || value === "starter" || value === "pro" || value === "enterprise" ? value : "free_cloud"; }
 
-
 export function LivePlanSurface() {
   const { i18n, t } = useTranslation("settings");
-  const money = (cents: number, currency = "usd") => formatMoney(cents, currency, i18n.language);
+  const locale = i18n?.resolvedLanguage ?? i18n?.language ?? "en";
+  const copy = commercialCopy(locale);
   const searchParams = useSearchParams();
   const router = useRouter();
   const queryClient = useQueryClient();
@@ -50,7 +50,6 @@ export function LivePlanSurface() {
   const businesses = useQuery({ queryKey: ["businesses"], queryFn: () => getJson<{ businesses: Business[] }>("/api/businesses") });
   const business = businesses.data?.businesses.find((item) => item.active) ?? businesses.data?.businesses[0];
   const billing = useQuery({ queryKey: ["billing", business?.businessId], queryFn: () => getJson<Billing>(`/api/billing?businessId=${encodeURIComponent(business!.businessId)}`), enabled: Boolean(business?.businessId) });
-
 
   const returnRequestId = searchParams.get("checkout") === "success" ? searchParams.get("requestId") : null;
   const returnedCheckout = useQuery({
@@ -75,8 +74,10 @@ export function LivePlanSurface() {
   const account = billing.data?.account;
   const plan = planSlug(account?.plan);
   const catalog = billingPlanCatalog[plan];
-  const monthlyPrice = account?.billingInterval === "annual" ? catalog.annualEffectiveMonthlyChargeCents : catalog.monthlyChargeCents;
-  const included = [catalog.voiceSecondsIncluded === null ? t("billing.currentPlan.includedVoiceCustom") : `${Math.round(catalog.voiceSecondsIncluded / 60)} ${t("billing.currentPlan.includedVoiceLabel")}`, catalog.outboundCallAttemptsIncluded === null ? t("billing.currentPlan.includedOutboundCustom") : `${catalog.outboundCallAttemptsIncluded} ${t("billing.currentPlan.includedOutboundLabel")}`, catalog.alertSmsSegmentsIncluded === null ? t("billing.currentPlan.includedSmsCustom") : `${catalog.alertSmsSegmentsIncluded} ${t("billing.currentPlan.includedSmsLabel")}`, catalog.knowledgeStorageBytes === null ? t("billing.currentPlan.includedStorageCustom") : t("billing.currentPlan.includedStorage", { amount: (catalog.knowledgeStorageBytes / (catalog.knowledgeStorageBytes >= 1024 ** 3 ? 1024 ** 3 : 1024 ** 2)).toLocaleString(i18n.language), unit: catalog.knowledgeStorageBytes >= 1024 ** 3 ? "GB" : "MB" })];
+  const interval = account?.billingInterval === "annual" ? "annual" : "monthly";
+  const amounts = offerAmounts(plan, interval);
+  const monthlyPrice = amounts.monthlyEquivalentCents;
+  const included = [catalog.voiceSecondsIncluded === null ? t("billing.currentPlan.includedVoiceCustom") : `${Math.round(catalog.voiceSecondsIncluded / 60)} ${t("billing.currentPlan.includedVoiceLabel")}`, catalog.outboundCallAttemptsIncluded === null ? t("billing.currentPlan.includedOutboundCustom") : `${catalog.outboundCallAttemptsIncluded} ${t("billing.currentPlan.includedOutboundLabel")}`, catalog.alertSmsSegmentsIncluded === null ? t("billing.currentPlan.includedSmsCustom") : `${catalog.alertSmsSegmentsIncluded} ${t("billing.currentPlan.includedSmsLabel")}`, catalog.knowledgeStorageBytes === null ? t("billing.currentPlan.includedStorageCustom") : t("billing.currentPlan.includedStorage", { amount: (catalog.knowledgeStorageBytes / (catalog.knowledgeStorageBytes >= 1024 ** 3 ? 1024 ** 3 : 1024 ** 2)).toLocaleString(locale), unit: catalog.knowledgeStorageBytes >= 1024 ** 3 ? "GB" : "MB" })];
   const permissions = billing.data?.permissions;
   const canUpgrade = permissions?.hasCheckoutAccess && billing.data?.availableCheckoutPlans.some(target =>
     (plan === "free_cloud" || (plan === "starter" && target === "pro")) && billing.data.availableCheckoutIntervals[target].length > 0);
@@ -97,7 +98,7 @@ export function LivePlanSurface() {
                 <div className="flex flex-wrap items-end gap-2">
                   {monthlyPrice !== null ? (
                     <span className="text-4xl font-semibold tracking-tight text-foreground">
-                      {money(monthlyPrice!)}
+                      {formatOfferMoney(monthlyPrice, locale)}
                     </span>
                   ) : (
                     <span className="text-base text-muted-foreground">
@@ -106,16 +107,26 @@ export function LivePlanSurface() {
                   )}
                   {monthlyPrice !== null ? (
                     <span className="pb-1 text-base text-muted-foreground">
-                      {account?.billingInterval === "annual"
+                      {plan === "starter" || plan === "pro" ? `${t("billing.commercial.excludingTax", { defaultValue: copy.excludingTax })} ` : ""}
+                      {interval === "annual"
                         ? t("billing.currentPlan.annualEffectiveSuffix")
                         : t("billing.currentPlan.monthlySuffix")}
                     </span>
                   ) : null}
                 </div>
                 {(plan === "starter" || plan === "pro") && (
-                  <span className="text-base text-muted-foreground">
-                    {t("billing.currentPlan.paygMonthlySuffix")}
-                  </span>
+                  <>
+                    <span className="text-base text-muted-foreground">
+                      {t("billing.currentPlan.paygMonthlySuffix")}
+                    </span>
+                    <p className="text-sm leading-6 text-muted-foreground" role="note">
+                      {t(`billing.commercial.${interval}Description`, {
+                        defaultValue: interval === "annual" ? copy.annualDescription : copy.monthlyDescription,
+                        amount: formatOfferMoney(amounts.invoiceCents!, locale),
+                        equivalent: formatOfferMoney(monthlyPrice!, locale),
+                      })}
+                    </p>
+                  </>
                 )}
               </div>
             </div>
@@ -137,26 +148,13 @@ export function LivePlanSurface() {
           {(canUpgrade || canManage) && (
             <div className="flex flex-col gap-2 sm:flex-row sm:flex-wrap">
               {canUpgrade && (
-                <Button
-                  className="w-full sm:w-auto"
-                  size="sm"
-                  variant="outline"
-                  onClick={openUpgradePlanDialog}
-                >
+                <Button className="w-full sm:w-auto" size="sm" variant="outline" onClick={openUpgradePlanDialog}>
                   {t("billing.actions.upgradeToPro")}
                 </Button>
               )}
               {canManage && (
-                <Button
-                  className="w-full sm:w-auto"
-                  size="sm"
-                  variant="outline"
-                  disabled={portalPending}
-                  onClick={() => void openPortal()}
-                >
-                  {portalPending
-                    ? t("billing.actions.openingPortal")
-                    : t("billing.actions.manageSubscription")}
+                <Button className="w-full sm:w-auto" size="sm" variant="outline" disabled={portalPending} onClick={() => void openPortal()}>
+                  {portalPending ? t("billing.actions.openingPortal") : t("billing.actions.manageSubscription")}
                   <ArrowUpRight className="size-3.5" />
                 </Button>
               )}
@@ -165,7 +163,7 @@ export function LivePlanSurface() {
         </div>
       </Surface>}
     </SectionBlock>
-    {plan !== "self_host" ? <><SpendingCapSection key={business.businessId} businessId={business.businessId} locale={i18n.language} t={(key, options) => t(key, options ?? {})} status={{ plan, overageSpendingCapCents: account?.overageSpendingCapCents ?? null, overageSpendCents: billing.data?.usageStatus?.overageSpendCents ?? 0, overageSpendCentsComplete: billing.data?.usageStatus?.usageComplete ?? true, overageSpendingCapReached: billing.data?.usageStatus?.overageSpendingCapReached ?? false, hasBillingManagementAccess: permissions?.hasBillingManagementAccess === true }} /><Transactions locale={i18n.language} transactions={billing.data?.transactions ?? []} t={t} /></> : null}
+    {plan !== "self_host" ? <><SpendingCapSection key={business.businessId} businessId={business.businessId} locale={locale} t={(key, options) => t(key, options ?? {})} status={{ plan, overageSpendingCapCents: account?.overageSpendingCapCents ?? null, overageSpendCents: billing.data?.usageStatus?.overageSpendCents ?? 0, overageSpendCentsComplete: billing.data?.usageStatus?.usageComplete ?? true, overageSpendingCapReached: billing.data?.usageStatus?.overageSpendingCapReached ?? false, hasBillingManagementAccess: permissions?.hasBillingManagementAccess === true }} /><Transactions locale={locale} transactions={billing.data?.transactions ?? []} t={t} /></> : null}
     </div>
   </PageSurface>;
 }
@@ -175,29 +173,16 @@ function Transactions({ transactions, t, locale }: { transactions: Billing["tran
   if (!transactions || transactions.length === 0) return null;
 
   return (
-    <SectionBlock
-      title={t("billing.transactions.title")}
-      description={t("billing.transactions.description")}
-    >
+    <SectionBlock title={t("billing.transactions.title")} description={t("billing.transactions.description")}>
       <TableCard>
         <Table className="min-w-[42rem]">
           <TableHeader>
             <TableRow className="hover:bg-transparent">
-              <TableHead className="text-[13px] font-medium text-muted-foreground">
-                {t("billing.transactions.columns.date")}
-              </TableHead>
-              <TableHead className="text-[13px] font-medium text-muted-foreground">
-                {t("billing.transactions.columns.description")}
-              </TableHead>
-              <TableHead className="text-right text-[13px] font-medium text-muted-foreground">
-                {t("billing.transactions.columns.amount")}
-              </TableHead>
-              <TableHead className="text-[13px] font-medium text-muted-foreground">
-                {t("billing.transactions.columns.status")}
-              </TableHead>
-              <TableHead className="text-right text-[13px] font-medium text-muted-foreground">
-                {t("billing.transactions.columns.invoice")}
-              </TableHead>
+              <TableHead className="text-[13px] font-medium text-muted-foreground">{t("billing.transactions.columns.date")}</TableHead>
+              <TableHead className="text-[13px] font-medium text-muted-foreground">{t("billing.transactions.columns.description")}</TableHead>
+              <TableHead className="text-right text-[13px] font-medium text-muted-foreground">{t("billing.transactions.columns.amount")}</TableHead>
+              <TableHead className="text-[13px] font-medium text-muted-foreground">{t("billing.transactions.columns.status")}</TableHead>
+              <TableHead className="text-right text-[13px] font-medium text-muted-foreground">{t("billing.transactions.columns.invoice")}</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -205,42 +190,20 @@ function Transactions({ transactions, t, locale }: { transactions: Billing["tran
               const isRefund = tx.kind === "refund";
               return (
                 <TableRow key={tx.sourceId}>
-                  <TableCell className="text-sm tabular-nums text-muted-foreground">
-                    {formatBillingDate(tx.occurredAt, locale)}
-                  </TableCell>
-                  <TableCell className="text-sm text-foreground">
-                    {tx.description ?? "—"}
-                  </TableCell>
+                  <TableCell className="text-sm tabular-nums text-muted-foreground">{formatBillingDate(tx.occurredAt, locale)}</TableCell>
+                  <TableCell className="text-sm text-foreground">{tx.description ?? "—"}</TableCell>
                   <TableCell className="text-right text-sm tabular-nums font-medium text-foreground">
                     {isRefund ? "−" : ""}
-                    {formatMoney(tx.amountCents, tx.currency, locale)}
+                    {formatRecordedMoney(tx.amountCents, tx.currency, locale)}
                   </TableCell>
-                  <TableCell>
-                    <span className="text-sm text-muted-foreground capitalize">
-                      {tx.status}
-                    </span>
-                  </TableCell>
+                  <TableCell><span className="text-sm text-muted-foreground capitalize">{tx.status}</span></TableCell>
                   <TableCell className="text-right">
                     {tx.invoiceUrl ? (
-                      <Button
-                        render={
-                          <a
-                            aria-label={t("billing.transactions.invoice")}
-                            href={tx.invoiceUrl}
-                            rel="noopener noreferrer"
-                            target="_blank"
-                          />
-                        }
-                        variant="ghost"
-                        size="sm"
-                        className="h-auto gap-1 px-1.5 py-0.5 text-xs text-muted-foreground hover:text-foreground"
-                      >
+                      <Button render={<a aria-label={t("billing.transactions.invoice")} href={tx.invoiceUrl} rel="noopener noreferrer" target="_blank" />} variant="ghost" size="sm" className="h-auto gap-1 px-1.5 py-0.5 text-xs text-muted-foreground">
                         {t("billing.transactions.invoice")}
                         <ArrowUpRight className="size-3" />
                       </Button>
-                    ) : (
-                      <span className="text-sm text-muted-foreground">—</span>
-                    )}
+                    ) : (<span className="text-sm text-muted-foreground">—</span>)}
                   </TableCell>
                 </TableRow>
               );
@@ -252,99 +215,55 @@ function Transactions({ transactions, t, locale }: { transactions: Billing["tran
   );
 }
 
-function PlanSectionSkeleton({
-  t,
-}: {
-  t: Translate;
-}) {
+function PlanSectionSkeleton({ t }: { t: Translate }) {
   return (
     <SectionBlock title={t("billing.currentPlan.title")}>
       <Surface className="px-6 py-5">
         <div className="flex items-center justify-between gap-4">
-          <div className="flex flex-1 flex-col gap-2">
-            <Skeleton className="h-5 w-28" />
-            <Skeleton className="h-4 w-48" />
-          </div>
+          <div className="flex flex-1 flex-col gap-2"><Skeleton className="h-5 w-28" /><Skeleton className="h-4 w-48" /></div>
           <Skeleton className="h-5 w-20" />
         </div>
-        <div className="mt-3 flex gap-2">
-          <Skeleton className="h-9 w-28 rounded-md" />
-          <Skeleton className="h-9 w-36 rounded-md" />
-        </div>
+        <div className="mt-3 flex gap-2"><Skeleton className="h-9 w-28 rounded-md" /><Skeleton className="h-9 w-36 rounded-md" /></div>
       </Surface>
     </SectionBlock>
   );
 }
 
-function SpendingCapSectionSkeleton({
-  t,
-}: {
-  t: Translate;
-}) {
+function SpendingCapSectionSkeleton({ t }: { t: Translate }) {
   return (
     <SectionBlock title={t("billing.spendingCap.title")}>
       <Surface className="px-6 py-5">
         <div className="flex flex-col gap-6">
           <Skeleton className="h-12 w-full rounded-xl" />
-          <div className="flex items-end gap-3">
-            <Skeleton className="h-10 max-w-xs flex-1 rounded-xl" />
-            <Skeleton className="h-8 w-24 rounded-xl" />
-          </div>
+          <div className="flex items-end gap-3"><Skeleton className="h-10 max-w-xs flex-1 rounded-xl" /><Skeleton className="h-8 w-24 rounded-xl" /></div>
         </div>
       </Surface>
     </SectionBlock>
   );
 }
 
-function TransactionsSectionSkeleton({
-  t,
-}: {
-  t: Translate;
-}) {
+function TransactionsSectionSkeleton({ t }: { t: Translate }) {
   return (
-    <SectionBlock
-      title={t("billing.transactions.title")}
-      description={t("billing.transactions.description")}
-    >
+    <SectionBlock title={t("billing.transactions.title")} description={t("billing.transactions.description")}>
       <TableCard>
         <Table className="min-w-[42rem]">
           <TableHeader>
             <TableRow className="hover:bg-transparent">
-              <TableHead className="text-[13px] font-medium text-muted-foreground">
-                {t("billing.transactions.columns.date")}
-              </TableHead>
-              <TableHead className="text-[13px] font-medium text-muted-foreground">
-                {t("billing.transactions.columns.description")}
-              </TableHead>
-              <TableHead className="text-right text-[13px] font-medium text-muted-foreground">
-                {t("billing.transactions.columns.amount")}
-              </TableHead>
-              <TableHead className="text-[13px] font-medium text-muted-foreground">
-                {t("billing.transactions.columns.status")}
-              </TableHead>
-              <TableHead className="text-right text-[13px] font-medium text-muted-foreground">
-                {t("billing.transactions.columns.invoice")}
-              </TableHead>
+              <TableHead className="text-[13px] font-medium text-muted-foreground">{t("billing.transactions.columns.date")}</TableHead>
+              <TableHead className="text-[13px] font-medium text-muted-foreground">{t("billing.transactions.columns.description")}</TableHead>
+              <TableHead className="text-right text-[13px] font-medium text-muted-foreground">{t("billing.transactions.columns.amount")}</TableHead>
+              <TableHead className="text-[13px] font-medium text-muted-foreground">{t("billing.transactions.columns.status")}</TableHead>
+              <TableHead className="text-right text-[13px] font-medium text-muted-foreground">{t("billing.transactions.columns.invoice")}</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {Array.from({ length: 3 }).map((_, index) => (
               <TableRow key={index}>
-                <TableCell>
-                  <Skeleton className="h-4 w-20" />
-                </TableCell>
-                <TableCell>
-                  <Skeleton className="h-4 w-40" />
-                </TableCell>
-                <TableCell className="text-right">
-                  <Skeleton className="ml-auto h-4 w-16" />
-                </TableCell>
-                <TableCell>
-                  <Skeleton className="h-4 w-16" />
-                </TableCell>
-                <TableCell className="text-right">
-                  <Skeleton className="ml-auto h-4 w-12" />
-                </TableCell>
+                <TableCell><Skeleton className="h-4 w-20" /></TableCell>
+                <TableCell><Skeleton className="h-4 w-40" /></TableCell>
+                <TableCell className="text-right"><Skeleton className="ml-auto h-4 w-16" /></TableCell>
+                <TableCell><Skeleton className="h-4 w-16" /></TableCell>
+                <TableCell className="text-right"><Skeleton className="ml-auto h-4 w-12" /></TableCell>
               </TableRow>
             ))}
           </TableBody>
@@ -354,16 +273,6 @@ function TransactionsSectionSkeleton({
   );
 }
 
-function BillingSkeleton({
-  t,
-}: {
-  t: Translate;
-}) {
-  return (
-    <div className="flex w-full flex-col gap-10">
-      <PlanSectionSkeleton t={t} />
-      <SpendingCapSectionSkeleton t={t} />
-      <TransactionsSectionSkeleton t={t} />
-    </div>
-  );
+function BillingSkeleton({ t }: { t: Translate }) {
+  return <div className="flex w-full flex-col gap-10"><PlanSectionSkeleton t={t} /><SpendingCapSectionSkeleton t={t} /><TransactionsSectionSkeleton t={t} /></div>;
 }

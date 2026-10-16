@@ -16,23 +16,25 @@ function setup(locale = "en", cap: number | null = null, admin = true, complete 
   render(<QueryClientProvider client={client}><SpendingCapSection businessId="business" locale={locale} t={key => key} status={{ plan, overageSpendingCapCents: cap, overageSpendCents: 250, overageSpendCentsComplete: complete, overageSpendingCapReached: false, hasBillingManagementAccess: admin }} /></QueryClientProvider>);
   return fetchMock;
 }
-describe("original billing cap behavior", () => {
+describe("original billing cap behavior with EUR HT presentation", () => {
   it.each([["en", "12.50"], ["fr", "12,50"]])("saves localized %s input as exact cents", async (locale, value) => {
     const fetchMock = setup(locale);
-    await userEvent.type(screen.getByLabelText("billing.spendingCap.amountLabel"), value!);
+    await userEvent.type(screen.getByLabelText("billing.commercial.capAmountLabel"), value!);
+    expect(screen.getByText("€")).toBeTruthy();
+    expect(screen.getByText("billing.commercial.capTaxNotice")).toBeTruthy();
     await userEvent.click(screen.getByRole("button", { name: "billing.spendingCap.save" }));
     await waitFor(() => expect(fetchMock).toHaveBeenCalledWith("/api/billing?businessId=business", expect.objectContaining({ body: JSON.stringify({ capCents: 1250 }) })));
     expect(toast.success).toHaveBeenCalledWith("billing.spendingCap.saved");
   });
   it("removes the cap explicitly instead of interpreting an empty save as removal", async () => {
     const fetchMock = setup("fr", 1250);
-    expect((screen.getByLabelText("billing.spendingCap.amountLabel") as HTMLInputElement).value).toBe("12,50");
+    expect((screen.getByLabelText("billing.commercial.capAmountLabel") as HTMLInputElement).value).toBe("12,50");
     await userEvent.click(screen.getByRole("button", { name: "billing.spendingCap.remove" }));
     await waitFor(() => expect(fetchMock).toHaveBeenCalledWith("/api/billing?businessId=business", expect.objectContaining({ body: JSON.stringify({ capCents: null }) })));
   });
   it("rejects grouping without silently changing the amount", async () => {
     const fetchMock = setup();
-    await userEvent.type(screen.getByLabelText("billing.spendingCap.amountLabel"), "1,000");
+    await userEvent.type(screen.getByLabelText("billing.commercial.capAmountLabel"), "1,000");
     await userEvent.click(screen.getByRole("button", { name: "billing.spendingCap.save" }));
     expect(fetchMock).not.toHaveBeenCalled();
     expect(toast.error).toHaveBeenCalledWith("billing.spendingCap.invalidAmount");
