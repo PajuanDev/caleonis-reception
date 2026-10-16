@@ -1,0 +1,11 @@
+import assert from "node:assert/strict";
+import test from "node:test";
+import { validateAuthRehearsal } from "./p1-single-host-auth-server.mjs";
+const good = { CI: "1", LOBBYSTACK_SKIP_ENV_FILES: "true", E2E_SINGLE_HOST_GATEWAY_REHEARSAL: "loopback-disposable", P1_SINGLE_HOST_STAGING: "true", RAILWAY_ENVIRONMENT_NAME: "certification", PLAYWRIGHT_BASE_URL: "http://localhost:13000", DATABASE_URL: "postgres://fixture:fixture@127.0.0.1:25433/lobbystack" };
+test("accepts only the explicitly isolated configuration", () => assert.deepEqual(validateAuthRehearsal(good), { publicOrigin: "http://localhost:13000", nextOrigin: "http://127.0.0.1:13001", port: 13000 }));
+for (const key of ["CI", "LOBBYSTACK_SKIP_ENV_FILES", "E2E_SINGLE_HOST_GATEWAY_REHEARSAL", "P1_SINGLE_HOST_STAGING", "RAILWAY_ENVIRONMENT_NAME"]) test(`rejects missing ${key}`, () => assert.throws(() => validateAuthRehearsal({ ...good, [key]: "" })));
+for (const origin of ["https://receptionist.caleonis.com", "http://example.com:13000", "http://localhost:13000/path", "http://u:p@localhost:13000", "http://localhost:13000?x=1", "http://localhost:13000#x", "http://localhost:80"]) test(`rejects unsafe origin ${origin}`, () => assert.throws(() => validateAuthRehearsal({ ...good, PLAYWRIGHT_BASE_URL: origin })));
+for (const port of ["0", "65536", "13000", "NaN", "13001.5"]) test(`rejects unsafe port ${port}`, () => assert.throws(() => validateAuthRehearsal({ ...good, E2E_SINGLE_HOST_NEXT_PORT: port })));
+test("rejects a remote main database", () => assert.throws(() => validateAuthRehearsal({ ...good, DATABASE_URL: "postgres://db.example.com/prod" })));
+test("rejects a remote role override", () => assert.throws(() => validateAuthRehearsal({ ...good, LOBBYSTACK_AUTH_DATABASE_URL: "postgres://db.example.com/prod" })));
+for (const key of ["OPENAI_API_KEY", "TWILIO_AUTH_TOKEN", "POLAR_ACCESS_TOKEN", "RESEND_API_KEY", "GOOGLE_CLIENT_SECRET", "FIRECRAWL_API_KEY", "POSTHOG_API_KEY", "AI_CHAT_API_KEY", "AI_EMBEDDING_API_KEY"]) test(`rejects external provider ${key} without leaking it`, () => { assert.throws(() => validateAuthRehearsal({ ...good, [key]: "private-fixture-value" }), error => !error.message.includes("private-fixture-value")); });
