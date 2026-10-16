@@ -16,6 +16,7 @@ import { ensureMcpResource, isDisabledOAuthEndpoint, mcpOAuthPlugins, needsMcpRe
 import { hashReplacementPassword, isLegacyScryptHash, meetsPasswordRequirements, verifyLegacyPassword } from "./password";
 import { trustedClientIp, trustedClientIpFromHeaders, trustedClientIpHeader } from "./trusted-client-ip";
 import { verifyTurnstileForSignUp } from "./turnstile";
+import { authEmailSubject } from "./auth-email-copy";
 
 let instance: any;
 let authRedis: Redis | undefined;
@@ -133,11 +134,9 @@ async function enqueueAuthEmail(input: {
   url: string;
 }): Promise<void> {
   const urlHash = createHash("sha256").update(input.url).digest("hex");
-  const subject = input.purpose === "verification"
-    ? "Verify your Caleonis Reception email"
-    : input.purpose === "password_reset"
-      ? "Reset your Caleonis Reception password"
-      : "Confirm your Caleonis Reception email change";
+  const stored = (await getAuthDatabase().db.select({ preferredLocale: users.preferredLocale }).from(users).where(eq(users.id, input.userId)).limit(1))[0];
+  const locale = stored?.preferredLocale === "fr" ? "fr" : "en";
+  const subject = authEmailSubject(input.purpose, locale);
   await withBusinessTransaction(getEmailDatabase().db, { actorType: "system" }, async (tx) => {
     await enqueueOutbox(tx, {
       topic: "email.send",
@@ -148,13 +147,13 @@ async function enqueueAuthEmail(input: {
         template: input.purpose === "verification" ? "verify_email" : input.purpose === "password_reset" ? "password_reset" : "verify_email",
         to: input.email,
         subject,
-        variables: { url: input.url },
+        variables: { url: input.url, locale },
       },
     });
   });
 }
 
-async function enqueueEmailVerificationCode(input: { userId: string; email: string; otp: string; issuanceId: string }): Promise<boolean> {
+async function enqueueEmailVerificationCode(input: { userId: string; email: string; otp: string; issuanceId: string; locale: "fr" | "en" }): Promise<boolean> {
   await withBusinessTransaction(getEmailDatabase().db, { actorType: "system" }, async (tx) => {
     await enqueueOutbox(tx, {
       topic: "email.send",
@@ -164,8 +163,8 @@ async function enqueueEmailVerificationCode(input: { userId: string; email: stri
       payload: {
         template: "verify_email",
         to: input.email,
-        subject: "Your Caleonis Reception verification code",
-        variables: { code: input.otp },
+        subject: authEmailSubject("verification_code", input.locale),
+        variables: { code: input.otp, locale: input.locale },
       },
     });
   });
@@ -183,7 +182,7 @@ export async function issueEmailVerificationCode(email: string, remoteIp?: strin
     const lock = await tx.execute<{ acquired: boolean }>(sql`select pg_try_advisory_xact_lock(hashtextextended(${`email-verification:${normalizedEmail}`}, 0)) as acquired`);
     if (!lock.rows[0]?.acquired) throw new EmailVerificationRateLimitError();
     await assertEmailVerificationSendAllowed({ email: normalizedEmail, ...(remoteIp ? { remoteIp } : {}) });
-    const user = (await tx.select({ id: users.id, emailVerified: users.emailVerified }).from(users).where(eq(users.email, normalizedEmail)).limit(1))[0];
+    const user = (await tx.select({ id: users.id, emailVerified: users.emailVerified, preferredLocale: users.preferredLocale }).from(users).where(eq(users.email, normalizedEmail)).limit(1))[0];
     if (!user || user.emailVerified) return false;
     const issuanceId = randomUUID();
     const issuer = createAuth(tx);
@@ -191,7 +190,7 @@ export async function issueEmailVerificationCode(email: string, remoteIp?: strin
     // Signup runs inside Better Auth's adapter AsyncLocalStorage. A nested
     // instance alone does not replace that adapter for internal writes.
     const otp = await runWithAdapter(adapter, () => issuer.api.createVerificationOTP({ body: { email: normalizedEmail, type: "email-verification" } }));
-    return await enqueueEmailVerificationCode({ userId: user.id, email: normalizedEmail, otp, issuanceId });
+    return await enqueueEmailVerificationCode({ userId: user.id, email: normalizedEmail, otp, issuanceId, locale: user.preferredLocale === "fr" ? "fr" : "en" });
   });
 }
 
@@ -263,7 +262,7 @@ function createAuth(adapterDatabase?: Parameters<typeof drizzleAdapter>[0]) {
       allowedAttempts: 3,
       sendVerificationOTP: async ({ email, otp, type }) => {
         if (type !== "forget-password") throw new Error("Only password recovery codes use the public OTP sender.");
-        const user = (await database.db.select({ id: users.id }).from(users).where(eq(users.email, email)).limit(1))[0];
+        const user = (await database.db.select({ id: users.id, preferredLocale: users.preferredLocale }).from(users).where(eq(users.email, email)).limit(1))[0];
         if (!user) return;
         await withBusinessTransaction(getEmailDatabase().db, { actorType: "system" }, async (tx) => {
           await enqueueOutbox(tx, {
@@ -271,7 +270,7 @@ function createAuth(adapterDatabase?: Parameters<typeof drizzleAdapter>[0]) {
             aggregateType: "auth_email",
             aggregateId: user.id,
             dedupeKey: `auth-reset-code:${user.id}:${randomUUID()}`,
-            payload: { template: "password_reset", to: email, subject: "Reset your Caleonis Reception password", variables: { code: otp } },
+            payload: { template: "password_reset", to: email, subject: authEmailSubject("password_reset", user.preferredLocale), variables: { code: otp, locale: user.preferredLocale === "fr" ? "fr" : "en" } },
           });
         });
       },
@@ -297,7 +296,7 @@ function createAuth(adapterDatabase?: Parameters<typeof drizzleAdapter>[0]) {
               topic: "email.send", aggregateType: "auth_email", aggregateId: user.id,
               dedupeKey: `auth-existing-account:${user.id}:${randomUUID()}`,
               payload: { template: "existing_account", to: user.email,
-                subject: locale === "fr" ? "Votre compte Caleonis Reception existe déjà" : "You already have a Caleonis Reception account",
+                subject: authEmailSubject("existing_account", locale),
                 variables: { locale, signInUrl: new URL(`/${locale}/login`, base).href, resetUrl: new URL(`/${locale}/forgot-password`, base).href } },
             });
           });

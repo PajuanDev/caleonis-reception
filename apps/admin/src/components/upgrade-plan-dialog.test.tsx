@@ -5,6 +5,7 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 import type { ComponentProps } from "react";
 import { UpgradePlanDialog } from "./upgrade-plan-dialog";
 
+vi.mock("react-i18next", () => ({ useTranslation: () => ({ i18n: { language: "en" } }) }));
 type Props = ComponentProps<typeof UpgradePlanDialog>;
 afterEach(cleanup);
 function setup(overrides: Partial<Props> = {}) {
@@ -12,23 +13,31 @@ function setup(overrides: Partial<Props> = {}) {
     availableCheckoutPlans: ["starter", "pro"], availableCheckoutIntervals: { starter: ["monthly", "annual"], pro: ["monthly", "annual"] },
     billingInterval: "annual", currentPlan: "free_cloud", loading: null, loadingPlan: null,
     onBillingIntervalChange: vi.fn(), onContactEnterprise: vi.fn(), onOpenChange: vi.fn(), onStartCheckout: vi.fn(), open: true,
-    t: ((key: string) => key) as Props["t"], ...overrides,
+    t: ((key: string, options?: Record<string, unknown>) => {
+      let text = typeof options?.defaultValue === "string" ? options.defaultValue : key;
+      for (const [name, value] of Object.entries(options ?? {})) text = text.replaceAll(`{{${name}}}`, String(value));
+      return text;
+    }) as Props["t"], ...overrides,
   };
   render(<UpgradePlanDialog {...props} />);
   return props;
 }
 describe("main upgrade dialog", () => {
-  it("renders all four original plans and annual checkout pricing", async () => {
+  it("renders all four original plans, tax treatment and annual totals", async () => {
     const props = setup();
     expect(screen.getAllByRole("heading", { level: 3 })).toHaveLength(4);
-    expect(screen.getByText("$24")).toBeTruthy();
-    expect(screen.getByText("$80")).toBeTruthy();
+    expect(screen.getByText("€24")).toBeTruthy();
+    expect(screen.getByText("€80")).toBeTruthy();
+    expect(screen.getByText(/€288 billed annually/)).toBeTruthy();
+    expect(screen.getByText(/€960 billed annually/)).toBeTruthy();
+    expect(screen.getByRole("note").textContent).toContain("exclude tax");
     await userEvent.click(screen.getByRole("button", { name: "billing.upgradeDialog.actions.starter" }));
     expect(props.onStartCheckout).toHaveBeenCalledWith("starter", "annual");
   });
   it("falls back to an available interval without offering an unconfigured checkout", async () => {
     const props = setup({ availableCheckoutPlans: ["pro"], availableCheckoutIntervals: { starter: [], pro: ["monthly"] } });
     expect(screen.getAllByRole("tab")).toHaveLength(1);
+    expect(screen.getByText("€100")).toBeTruthy();
     const unavailable = screen.getByRole("button", { name: "billing.upgradeDialog.actions.starter" });
     expect(unavailable.hasAttribute("disabled")).toBe(true);
     await userEvent.click(screen.getByRole("button", { name: "billing.upgradeDialog.actions.pro" }));
